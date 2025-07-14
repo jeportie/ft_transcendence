@@ -16,8 +16,10 @@ services:
 
   frontend:
     container_name: frontend
-    volumes:
-      - ./services/frontend:/app
+    env_file:
+      - services/frontend/.env.frontend
+    # volumes:
+      # - ./services/frontend:/app
     networks:
       - transc
     ports:
@@ -27,8 +29,10 @@ services:
 
   api:
     container_name: api
-    volumes:
-      - ./services/api:/app
+    env_file:
+      - services/api/.env.api
+    # volumes:
+    #   - ./services/api:/app
     networks:
       - transc
     ports:
@@ -36,13 +40,13 @@ services:
     build: ./services/api
     restart: always # or on-failure or unless
 
-volumes:
-  SQLite:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/${USER}/data/SQLite
+# volumes:
+#   SQLite:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: /home/${USER}/data/SQLite
 
 networks:
   transc:

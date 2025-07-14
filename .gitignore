@@ -1,1 +1,2 @@
-.env
+services/frontend/.env.frontend
+services/api/.env.api

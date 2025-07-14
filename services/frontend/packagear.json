@@ -1,0 +1,18 @@
+{
+	"name": "frontend",
+	"scripts": {
+		"dev": "dotenv -e .env.frontend -- esbuild src/main.ts --bundle --outfile=public/bundle.js --servedir=public --watch --define:process.env.API_URL=\\\"$API_URL\\\""
+	},
+	"dependencies": {
+		"autoprefixer": "^10.4.14",
+		"dotenv": "^17.2.0",
+		"esbuild": "^0.19.0",
+		"http-server": "^14.1.1",
+		"postcss": "^8.4.24",
+		"tailwindcss": "^3.4.0",
+		"typescript": "^5.0.0"
+	},
+	"devDependencies": {
+		"dotenv-cli": "^8.0.0"
+	}
+}
