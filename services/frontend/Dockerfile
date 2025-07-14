@@ -26,8 +26,9 @@ COPY postcss.config.js /app/postcss.config.js
 COPY tailwind.config.js /app/tailwind.config.js
 COPY tsconfig.json /app/tsconfig.json
 
-# Run esbuild in watch mode AND http-server to serve public/ on 0.0.0.0:3000
-CMD ["sh", "-c", "\
+# 3. Build-once, then watch in background, then serve
+CMD ["sh","-c", "\
+  npx esbuild src/main.ts --bundle --outfile=public/bundle.js && \
   npx esbuild src/main.ts --bundle --outfile=public/bundle.js --watch & \
   npx http-server public -p 3000 -a 0.0.0.0 \
 "]
