@@ -10,17 +10,18 @@
 #                                                                              #
 # **************************************************************************** #
 
-DC      = docker-compose -f docker-compose.yml
+DCLOC   = docker-compose.yml
+DC      = docker-compose -f ${DCLOC}
 ENVFILE = .env
-DATADIR = ./data
+DATADIR = ~/data/
 
 .PHONY: all prepare build up down clean logs re
 
 all: prepare build up
 
 prepare:
-	mkdir -p $(DATADIR)/sqlite
-	chown -R 1000:1000 $(DATADIR)/sqlite
+	mkdir -p $(DATADIR)/SQLite
+	# chown -R 1000:1000 $(DATADIR)/sqlite
 
 build:
 	$(DC) --env-file $(ENVFILE) build
@@ -33,6 +34,7 @@ down:
 
 clean: down
 	docker system prune -af
+	$(DC) --env-file $(ENV) down -v --rmi all --remove-orphans
 
 logs:
 	$(DC) --env-file $(ENVFILE) logs -f
