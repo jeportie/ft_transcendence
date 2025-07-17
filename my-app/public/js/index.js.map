@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/index.ts"],
+  "sourcesContent": ["// ************************************************************************** //\n//                                                                            //\n//                                                        :::      ::::::::   //\n//   index.ts                                           :+:      :+:    :+:   //\n//                                                    +:+ +:+         +:+     //\n//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //\n//                                                +#+#+#+#+#+   +#+           //\n//   Created: 2025/07/17 14:04:05 by jeportie          #+#    #+#             //\n//   Updated: 2025/07/17 14:16:41 by jeportie         ###   ########.fr       //\n//                                                                            //\n// ************************************************************************** //\n\nconst el = document.getElementById('app')!;\nel.textContent = 'Hello World from TypeScript!';\n"],
+  "mappings": ";;;AAYA,MAAM,KAAK,SAAS,eAAe,KAAK;AACxC,KAAG,cAAc;",
+  "names": []
+}
