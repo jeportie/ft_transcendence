@@ -27,18 +27,18 @@ services:
     build: ./services/frontend
     restart: always
 
-  api:
-    container_name: api
-    env_file:
-      - services/api/.env.api
-    # volumes:
-    #   - ./services/api:/app
-    networks:
-      - transc
-    ports:
-      - "8000:5000"
-    build: ./services/api
-    restart: always # or on-failure or unless
+  # api:
+  #   container_name: api
+  #   env_file:
+  #     - services/api/.env.api
+  #   # volumes:
+  #   #   - ./services/api:/app
+  #   networks:
+  #     - transc
+  #   ports:
+  #     - "8000:5000"
+  #   build: ./services/api
+  #   restart: always # or on-failure or unless
 
 # volumes:
 #   SQLite:
