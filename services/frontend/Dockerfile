@@ -16,7 +16,7 @@ EXPOSE 3000
 WORKDIR /app
 
 COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+# COPY package-lock.json /app/package-lock.json
 RUN npm install
 
 # 3) Copy your source files one by one
@@ -28,7 +28,7 @@ COPY tsconfig.json /app/tsconfig.json
 
 # 3. Build-once, then watch in background, then serve
 CMD ["sh","-c", "\
-  npx esbuild src/main.ts --bundle --outfile=public/bundle.js && \
-  npx esbuild src/main.ts --bundle --outfile=public/bundle.js --watch & \
-  npx http-server public -p 3000 -a 0.0.0.0 \
-"]
+	npx esbuild src/main.ts --bundle --outfile=public/bundle.js && \
+	npx esbuild src/main.ts --bundle --outfile=public/bundle.js --watch & \
+	npx http-server public -p 3000 -a 0.0.0.0 \
+	"]
