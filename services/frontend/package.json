@@ -1,18 +1,24 @@
 {
 	"name": "frontend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
 	"scripts": {
-		"dev": "dotenv -e .env.frontend -- esbuild src/main.ts --bundle --outfile=public/bundle.js --servedir=public --watch --define:process.env.API_URL=\\\"$API_URL\\\""
+		"build:css": "tailwindcss -i src/start.css -o public/styles.css",
+		"watch:css": "tailwindcss -i src/start.css -o public/styles.css --watch",
+		"build:js": "esbuild src/main.ts --bundle --outfile=public/bundle.js",
+		"watch:js": "esbuild src/main.ts --bundle --outfile=public/bundle.js --watch",
+		"serve": "python3 -m http.server 3000 --directory public",
+		"dev": "npm run build:css && npm run build:js && npm run watch:css & npm run watch:js & npm run serve"
 	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
 	"dependencies": {
-		"autoprefixer": "^10.4.14",
-		"dotenv": "^17.2.0",
-		"esbuild": "^0.19.0",
-		"http-server": "^14.1.1",
-		"postcss": "^8.4.24",
-		"tailwindcss": "^3.4.0",
-		"typescript": "^5.0.0"
-	},
-	"devDependencies": {
-		"dotenv-cli": "^8.0.0"
+		"autoprefixer": "^10.4.21",
+		"esbuild": "^0.25.8",
+		"postcss": "^8.5.6",
+		"tailwindcss": "^3.4.17",
+		"typescript": "^5.8.3"
 	}
 }

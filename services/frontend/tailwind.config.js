@@ -1,19 +1,12 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   tailwind.config.js                                 :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/07/15 19:39:22 by jeportie          #+#    #+#             //
-//   Updated: 2025/07/15 19:39:40 by jeportie         ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
-
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./public/index.html', './src/**/*.{js,jsx,ts,tsx}'],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
+	content: [
+		"./public/**/*.html",
+		"./src/**/*.{ts,tsx}",
+	],
+	theme: {
+		extend: {},
+	},
+	plugins: [],
+}
+
