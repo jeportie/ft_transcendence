@@ -15,20 +15,25 @@ EXPOSE 3000
 
 WORKDIR /app
 
+RUN npm init -y
+RUN npm install \
+	autoprefixer \
+	esbuild \
+	postcss \
+	tailwindcss@3 \
+	typescript \
+	http-server
 COPY package.json /app/package.json
-# COPY package-lock.json /app/package-lock.json
-RUN npm install
+
+RUN npx tailwindcss init -p
+COPY tailwind.config.js /app/tailwind.config.js
+
+RUN npx tsc --init
+COPY tsconfig.json /app/tsconfig.json
 
 # 3) Copy your source files one by one
 COPY src /app/src
 COPY public /app/public
-COPY postcss.config.js /app/postcss.config.js
-COPY tailwind.config.js /app/tailwind.config.js
-COPY tsconfig.json /app/tsconfig.json
 
 # 3. Build-once, then watch in background, then serve
-CMD ["sh","-c", "\
-	npx esbuild src/main.ts --bundle --outfile=public/bundle.js && \
-	npx esbuild src/main.ts --bundle --outfile=public/bundle.js --watch & \
-	npx http-server public -p 3000 -a 0.0.0.0 \
-	"]
+CMD ["npm", "run", "dev"]

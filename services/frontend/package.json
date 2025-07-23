@@ -4,11 +4,11 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build:css": "tailwindcss -i src/start.css -o public/styles.css",
-		"watch:css": "tailwindcss -i src/start.css -o public/styles.css --watch",
+		"build:css": "tailwindcss -i src/input.css -o public/styles.css",
+		"watch:css": "tailwindcss -i src/input.css -o public/styles.css --watch",
 		"build:js": "esbuild src/main.ts --bundle --outfile=public/bundle.js",
 		"watch:js": "esbuild src/main.ts --bundle --outfile=public/bundle.js --watch",
-		"serve": "python3 -m http.server 3000 --directory public",
+		"serve": "npx http-server public -p 3000",
 		"dev": "npm run build:css && npm run build:js && npm run watch:css & npm run watch:js & npm run serve"
 	},
 	"keywords": [],
