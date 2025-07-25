@@ -23,13 +23,13 @@ RUN npm install \
 	tailwindcss@3 \
 	typescript \
 	http-server
-COPY package.json /app/package.json
+COPY config/package.json /app/package.json
 
 RUN npx tailwindcss init -p
-COPY tailwind.config.js /app/tailwind.config.js
+COPY config/tailwind.config.js /app/tailwind.config.js
 
 RUN npx tsc --init
-COPY tsconfig.json /app/tsconfig.json
+COPY config/tsconfig.json /app/tsconfig.json
 
 # 3) Copy your source files one by one
 COPY src /app/src

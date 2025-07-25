@@ -18,8 +18,9 @@ services:
     container_name: frontend
     env_file:
       - services/frontend/.env.frontend
-    # volumes:
-      # - ./services/frontend:/app
+    volumes:
+      - ./services/frontend/src:/app/src:delegated
+      - ./services/frontend/public:/app/public:delegated
     networks:
       - transc
     ports:
