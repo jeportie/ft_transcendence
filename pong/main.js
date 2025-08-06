@@ -6,47 +6,18 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/04 17:53:15 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/05 19:04:36 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/06 18:06:31 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import Ball from "./class/Ball.js";
-import Paddle from "./class/Paddle.js";
-import Position from "./class/Position.js";
-import Vector from "./class/Vector.js";
-import Draw2D from "./class/Draw2D.js";
+import Ball from "./game/Ball.js";
+import Paddle from "./game/Paddle.js";
 
+import Position from "./lib2D/Position.js";
+import Vector from "./lib2D/Vector.js";
+import Draw2D from "./lib2D/Draw2D.js";
 
-function drawBackground(draw, canvas) {
-
-    draw.rect(
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-        { fillStyle: "#000000" });
-
-    draw.line(
-        canvas.width / 2,
-        0,
-        canvas.width / 2,
-        canvas.height,
-        { strokeStyle: "#555555", lineWidth: 4, dash: [10, 10] }
-    );
-}
-
-// Main loop
-function gameLoop(paddle, ball, draw, canvas) {
-
-    drawBackground(draw, canvas);
-
-    paddle.update();
-    paddle.draw();
-    ball.update(paddle);
-    ball.draw();
-
-    requestAnimationFrame(() => gameLoop(paddle, ball, draw, canvas));
-}
+import { gameLoop } from "./game/gameLoop.js"
 
 function main() {
     const canvas = document.querySelector("#gameCanvas");

@@ -1,26 +1,29 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Position.class.js                                  :+:      :+:    :+:   //
+//   drawBG.js                                          :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/04 18:06:58 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/04 18:26:24 by jeportie         ###   ########.fr       //
+//   Created: 2025/08/06 18:01:49 by jeportie          #+#    #+#             //
+//   Updated: 2025/08/06 18:07:38 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-// A simple 2D position: only holds x/y, and can be moved by a Vector
-export default class Position {
+export default function drawBackground(draw, canvas) {
 
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
+    draw.rect(
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+        { fillStyle: "#000000" });
 
-    // Move this position by the given vector (in-place)
-    translate(vector) {
-        this.x += vector.x;
-        this.y += vector.y;
-    }
+    draw.line(
+        canvas.width / 2,
+        0,
+        canvas.width / 2,
+        canvas.height,
+        { strokeStyle: "#555555", lineWidth: 4, dash: [10, 10] }
+    );
 }
