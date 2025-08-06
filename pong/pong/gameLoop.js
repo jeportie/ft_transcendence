@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/06 17:58:19 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/06 18:03:26 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/06 18:14:11 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import drawBG from "./drawBG.js"
 
-export function gameLoop(paddle, ball, draw, canvas) {
+export default function gameLoop(paddle, ball, draw, canvas) {
 
     drawBG(draw, canvas);
 
