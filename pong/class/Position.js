@@ -13,14 +13,14 @@
 // A simple 2D position: only holds x/y, and can be moved by a Vector
 export default class Position {
 
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-	}
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
 
-	// Move this position by the given vector (in-place)
-	translate(vector) {
-		this.x += vector.x;
-		this.y += vector.y;
-	}
+    // Move this position by the given vector (in-place)
+    translate(vector) {
+        this.x += vector.x;
+        this.y += vector.y;
+    }
 }

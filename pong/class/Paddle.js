@@ -22,7 +22,8 @@ export default class Paddle {
         this.maxSpeed = 6;      // top speed
         this.acceleration = 0.3;    // how fast we speed up
         this.friction = 0.2;    // how fast we slow down when no key
-        this.height = 50;     // paddle height (match your draw call)
+        this.height = 10;
+        this.width = 50;     // paddle height (match your draw call)
 
         // which keys are held?
         this.upPressed = false;
@@ -71,8 +72,8 @@ export default class Paddle {
         this.drawer.rect(
             this.position.x,
             this.position.y,
-            10,
-            50,
+            this.height,
+            this.width,
             {
                 fillStyle: "#FFFFFF",
                 strokeStyle: "#555555",
