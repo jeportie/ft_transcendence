@@ -10,7 +10,6 @@
 //                                                                            //
 // ************************************************************************** //
 
-// A true 2D vector: holds dx/dy but also has magnitude, normalization, inversion, rotation, etc.
 export default class Vector {
     constructor(x, y) {
         this.x = x;
