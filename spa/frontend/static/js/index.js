@@ -40,7 +40,6 @@ async function router() {
         { path: "/settings", view: Settings },
     ];
 
-    //Test each route for potential match
     const potentialMatches = routes.map(route => {
         return ({
             route,
@@ -58,10 +57,7 @@ async function router() {
         }
     }
     const view = new match.route.view(getParams(match));
-
     document.querySelector("#app").innerHTML = await view.getHTML();
-
-    //console.log(match.route.view());
 };
 
 window.addEventListener("popstate", router);
