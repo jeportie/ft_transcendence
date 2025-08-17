@@ -6,19 +6,21 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 18:15:08 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/14 19:23:18 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/16 19:55:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import Dashboard from "./views/Dashboard.js";
 import Posts from "./views/Posts.js";
 import Settings from "./views/Settings.js";
+import NotFound from "./views/NotFound.js";
 
 const routes = [
     { path: "/", view: Dashboard },
     { path: "/posts", view: Posts },
     { path: "/posts/:id", view: Posts },
     { path: "/settings", view: Settings },
+    { path: "*", view: NotFound },
 ];
 
 function pathToRegex(path) {
