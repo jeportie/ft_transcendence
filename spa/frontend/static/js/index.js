@@ -23,6 +23,8 @@ const routes = [
     { path: "*", view: NotFound },
 ];
 
+let currentView = null; // tracks the mounted view
+
 function pathToRegex(path) {
     return (new RegExp("^" + path
         .replace(/\//g, "\\/")
@@ -30,7 +32,8 @@ function pathToRegex(path) {
 }
 
 function getParams(match) {
-    const values = match.result.slice(1);
+    const res = match.result || [];
+    const values = res.slice(1);
     const keys = Array.from(match.route.path
         .matchAll(/:(\w+)/g))
         .map(result => result[1]);
@@ -52,25 +55,45 @@ function navigateTo(url) {
     router();
 }
 
+function matchRoute(path, pathname) {
+    if (path === "*") return null;
+    return pathname.match(pathToRegex(path));
+}
+
 async function router() {
     const pathname = normalize(location.pathname);
-    const potentialMatches = routes.map(route => {
-        return ({
-            route,
-            result: pathname.match(pathToRegex(route.path)),
-        });
-    });
+
+    const potentialMatches = routes.map(route => ({
+        route,
+        result: matchRoute(route.path, pathname),
+    }));
 
     let match;
     match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);
     if (!match) {
-        match = {
-            route: routes[0], //for now goes back to dashboard but need to redirect to 404 cutome page or something like that
-            isMatch: true,
-        }
+        const notFound = routes.find(r => r.path === "*");
+        // provide a non-null "result" so getParams() won’t crash
+        match = { route: notFound, result: [pathname] };
     }
-    const view = new match.route.view(getParams(match));
-    document.querySelector("#app").innerHTML = await view.getHTML();
+
+    const ctx = {
+        path: pathname,
+        params: getParams(match),
+        query: Object.fromEntries(new URLSearchParams(location.search).entries()),
+        hash: location.hash,
+        state: history.state,
+    };
+
+    currentView?.destroy?.();
+
+    // create + render
+    const view = new match.route.view(ctx);
+    const app = document.querySelector("#app");
+    app.innerHTML = await view.getHTML();
+
+    currentView = view;
+
+    view.mount?.();
 };
 
 window.addEventListener("popstate", router);

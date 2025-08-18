@@ -25,4 +25,8 @@ export default class {
     async getHTML() {
         return "";
     }
+
+    mount() { }                       // bind DOM events here
+
+    destroy() { }                     // cleanup timers/sockets/listeners
 }

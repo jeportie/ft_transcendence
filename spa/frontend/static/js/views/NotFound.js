@@ -19,7 +19,7 @@ export default class NotFound extends AbstractView {
     }
     async getHTML() {
         return (`
-      <div class="notfound">
+      <div class="dashboard">
         <aside class="sidebar">
           <h2>Menu</h2>
           <a href="/" class="nav-link" data-link>Dashboard</a>
@@ -28,7 +28,7 @@ export default class NotFound extends AbstractView {
         </aside>
         <main class="main">
           <h1>NotFound</h1>
-          <p>This page was not found</p>
+          <div class="card">Sorry, the page you are looking for was not found</div>
         </main>
       </div>
     `)

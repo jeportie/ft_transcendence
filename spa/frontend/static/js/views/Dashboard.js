@@ -15,6 +15,7 @@ import AbstractView from "./AbstractView.js";
 export default class Dashboard extends AbstractView {
     constructor(params) {
         super(params);
+        this.params = params;
         this.setTitle("Dashboard");
     };
 

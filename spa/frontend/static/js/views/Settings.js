@@ -49,4 +49,21 @@ export default class Settings extends AbstractView {
       </div>
     `)
     };
+
+
+    mount() {
+        const form = document.getElementById("settings-form");
+        form?.addEventListener("submit", async (e) => {
+            e.preventDefault();                            // no full page reload ✅
+            const data = Object.fromEntries(new FormData(form).entries());
+            console.log("Settings submit:", data);
+
+            // Later: real API call
+            // await fetch("/api/settings", {
+            //   method: "POST",
+            //   headers: { "Content-Type": "application/json" },
+            //   body: JSON.stringify(data),
+            // });
+        });
+    }
 }
