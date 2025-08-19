@@ -6,25 +6,23 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/13 15:56:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/19 13:34:05 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/19 14:37:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import { getDb } from "./db.js"
 
 const app = Fastify({ logger: false });
 
-// CORS: dev-friendly (adjust in prod / behind Nginx)
 await app.register(cors, { origin: true });
 
-/**
- * Basic health route
- * (Optional) If you later plug SQLite, you can read from DB here.
- */
 app.get('/health', async () => {
-    return { status: 'ok', service: 'api', time: new Date().toISOString() };
+    const db = await getDb();
+    const row = await db.get('SELECT status, updated_at FROM health WHERE id = 1');
+    return { status: row?.status ?? 'unknown', updated_at: row?.updated_at ?? null };
 });
 
 const PORT = Number(process.env.PORT) || 5000;

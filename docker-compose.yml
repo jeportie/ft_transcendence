@@ -6,7 +6,7 @@
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/12 17:28:24 by jeportie          #+#    #+#              #
-#    Updated: 2025/07/12 17:28:49 by jeportie         ###   ########.fr        #
+#    Updated: 2025/08/19 14:41:31 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,18 +28,18 @@ services:
     build: ./services/frontend
     restart: always
 
-  # api:
-  #   container_name: api
-  #   env_file:
-  #     - services/api/.env.api
-  #   # volumes:
-  #   #   - ./services/api:/app
-  #   networks:
-  #     - transc
-  #   ports:
-  #     - "8000:5000"
-  #   build: ./services/api
-  #   restart: always # or on-failure or unless
+  api:
+    container_name: api
+    env_file:
+      - services/api/.env.api
+    volumes:
+      - ./data/sqlite:/data:delegated
+    networks:
+      - transc
+    ports:
+      - "8000:5000"
+    build: ./services/api
+    restart: always # or on-failure or unless
 
 # volumes:
 #   SQLite:
@@ -47,7 +47,7 @@ services:
 #     driver_opts:
 #       type: none
 #       o: bind
-#       device: /home/${USER}/data/SQLite
+#       device: ./data/sqlite
 
 networks:
   transc:

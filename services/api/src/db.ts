@@ -1,0 +1,40 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   db.ts                                              :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/08/19 14:33:46 by jeportie          #+#    #+#             //
+//   Updated: 2025/08/19 14:35:17 by jeportie         ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
+import sqlite3 from 'sqlite3';
+import { open, Database } from 'sqlite';
+
+sqlite3.verbose();
+
+let db: Database | null = null;
+
+export async function getDb() {
+    if (db) return db;
+    db = await open({
+        filename: '/data/app.db', // map a volume here in compose if you want persistence
+        driver: sqlite3.Database
+    });
+    await db.exec(`
+    CREATE TABLE IF NOT EXISTS health (
+      id INTEGER PRIMARY KEY,
+      status TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+  `);
+    const row = await db.get('SELECT * FROM health WHERE id = 1');
+    if (!row) {
+        await db.run('INSERT INTO health (id, status, updated_at) VALUES (1, ?, ?)', [
+            'ok', new Date().toISOString()
+        ]);
+    }
+    return db;
+}
