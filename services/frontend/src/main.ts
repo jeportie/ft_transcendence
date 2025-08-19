@@ -18,7 +18,8 @@ fetch('http://localhost:8000/health')
     .then(console.log)
     .catch(console.error);
 
-console.log("TS is RUNNING!");
+window.addEventListener("popstate", router);
+window.addEventListener("hashchange", router);
 
 document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", (e) => {

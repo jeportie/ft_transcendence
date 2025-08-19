@@ -246,7 +246,8 @@
 
   // src/main.ts
   fetch("http://localhost:8000/health").then((r) => r.json()).then(console.log).catch(console.error);
-  console.log("TS is RUNNING!");
+  window.addEventListener("popstate", router);
+  window.addEventListener("hashchange", router);
   document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", (e) => {
       if (e.defaultPrevented)
