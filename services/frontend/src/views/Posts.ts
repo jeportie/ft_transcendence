@@ -19,29 +19,32 @@ export default class Posts extends AbstractView {
     }
 
     async getHTML() {
-        return (`
-    <div class="min-h-screen grid grid-cols-[220px_1fr]">
-      <aside class="bg-slate-800 text-white p-4">
-        <h2 class="text-lg font-semibold mb-4">Menu</h2>
+        return /*html*/ `
+    <div class="grid md:grid-cols-[220px_1fr] gap-6 p-6">
+      <aside class="bg-slate-800/60 rounded-xl p-4 border border-slate-700">
+        <h2 class="text-lg font-semibold mb-3">Menu</h2>
         <nav class="flex flex-col gap-2">
-          <a href="/" class="hover:underline" data-link>Dashboard</a>
-          <a href="/posts" class="hover:underline" data-link>Posts</a>
-          <a href="/settings" class="hover:underline" data-link>Settings</a>
+          <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
+          <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
+          <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
         </nav>
       </aside>
-      <main class="p-6">
-        <h1 class="text-2xl font-bold mb-4">Posts</h1>
-        <div class="rounded-lg bg-slate-800 text-white p-4">
-          <p class="mb-2 text-slate-300">Recent posts</p>
+
+      <main class="space-y-4">
+        <h1 class="text-2xl font-bold">Posts</h1>
+
+        <div class="rounded-xl border border-slate-700 bg-slate-800/60 p-4">
+          <p class="text-slate-300 mb-2">Recent posts</p>
           <ul class="space-y-2">
-            <li><a href="/posts/1" data-link class="text-blue-400 hover:underline">Routing without frameworks</a></li>
-            <li><a href="/posts/2" data-link class="text-blue-400 hover:underline">State management 101</a></li>
-            <li><a href="/posts/3" data-link class="text-blue-400 hover:underline">Fastify tips</a></li>
+            <li><a href="/posts/1" data-link class="px-3 py-2 rounded hover:bg-slate-700/60 inline-block">Routing without frameworks</a></li>
+            <li><a href="/posts/2" data-link class="px-3 py-2 rounded hover:bg-slate-700/60 inline-block">State management 101</a></li>
+            <li><a href="/posts/3" data-link class="px-3 py-2 rounded hover:bg-slate-700/60 inline-block">Fastify tips</a></li>
           </ul>
         </div>
       </main>
     </div>
-  `)
+  `;
     }
+
 
 }

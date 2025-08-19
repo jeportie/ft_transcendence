@@ -6,10 +6,11 @@
     "scripts": {
         "build:css": "tailwindcss -i src/input.css -o public/styles.css",
         "watch:css": "tailwindcss -i src/input.css -o public/styles.css --watch",
-        "build:js": "esbuild src/main.ts --bundle --outfile=public/bundle.js",
-        "watch:js": "esbuild src/main.ts --bundle --outfile=public/bundle.js --watch",
+        "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --log-level=info",
+        "watch:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --watch --log-level=info",
         "serve": "live-server public --port=3000 --entry-file=index.html",
-        "dev": "npm run watch:css & npm run watch:js & npm run serve"
+        "predev": "npm run build:css && npm run build:js",
+        "dev": "npm run predev && (npm run watch:css & npm run watch:js & npm run serve)"
     },
     "keywords": [],
     "author": "",
