@@ -15,15 +15,8 @@ EXPOSE 3000
 
 WORKDIR /app
 
-RUN npm init -y
-RUN npm install \
-	autoprefixer \
-	esbuild \
-	postcss \
-	tailwindcss@3 \
-	typescript \
-	http-server
 COPY config/package.json /app/package.json
+RUN npm install
 
 RUN npx tailwindcss init -p
 COPY config/tailwind.config.js /app/tailwind.config.js
