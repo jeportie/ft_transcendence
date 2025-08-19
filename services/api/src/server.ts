@@ -10,28 +10,23 @@
 //                                                                            //
 // ************************************************************************** //
 
-import Fastify from "fastify";
-import fastifyStatic from "@fastify/static";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import { promises as fs } from "fs";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import 'dotenv/config';
+import Fastify from 'fastify';
+import cors from '@fastify/cors';
 
 const app = Fastify({ logger: false });
-const PORT = Number(process.env.PORT) || 8000;
 
-app.register(fastifyStatic, {
-    root: join(__dirname, "frontend", "static"),
-    prefix: "/static/",
-    cacheControl: false,
+// CORS: dev-friendly (adjust in prod / behind Nginx)
+await app.register(cors, { origin: true });
+
+/**
+ * Basic health route
+ * (Optional) If you later plug SQLite, you can read from DB here.
+ */
+app.get('/health', async () => {
+    return { status: 'ok', service: 'api', time: new Date().toISOString() };
 });
 
-app.get("/*", async (_req, reply) => {
-    const html = await fs.readFile(join(__dirname, "frontend", "index.html"), "utf8");
-    return reply.type("text/html").send(html);
-});
-
-await app.listen({ port: PORT, host: "0.0.0.0" });
-console.log(`http://localhost:${PORT}`);
+const PORT = Number(process.env.PORT) || 5000;
+await app.listen({ host: '0.0.0.0', port: PORT });
+console.log(`[api] listening on :${PORT}`);

@@ -16,6 +16,7 @@
         "fastify": "^5.5.0"
     },
     "devDependencies": {
+        "@types/node": "^22.7.4",
         "tsx": "^4.20.4",
         "typescript": "^5.9.2"
     }

@@ -15,22 +15,13 @@ EXPOSE 5000
 
 WORKDIR /app
 
-RUN npm init -y
-RUN npm install \
-    fastify@^5.0.0 \
-    @fastify/cors@^10.0.0 \
-    dotenv@^16.4.5
+COPY config/package.json ./package.json
+RUN npm install
 
-RUN npm install -D \
-    typescript@^5.8.3 \
-    tsx@^4.16.2
+# 2) Compiler config
+COPY config/tsconfig.json ./tsconfig.json
 
-COPY config/package.json /app/package.json
-
-RUN npx tsc --init
-COPY config/tsconfig.json /app/tsconfig.json
-
-COPY src /app/src
+COPY src ./src
 
 RUN npm run build
 
