@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Settings.js                                        :+:      :+:    :+:   //
+//   Settings.ts                                        :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 19:19:28 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/14 19:22:37 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/19 20:06:17 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,6 +27,7 @@ export default class Settings extends AbstractView {
           <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
           <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
           <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
+          <a href="/game" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
         </nav>
       </aside>
 

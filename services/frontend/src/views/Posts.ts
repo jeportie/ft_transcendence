@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Posts.js                                           :+:      :+:    :+:   //
+//   Posts.ts                                           :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 19:12:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/14 19:17:53 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/19 20:06:05 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,6 +27,7 @@ export default class Posts extends AbstractView {
           <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
           <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
           <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
+          <a href="/game" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
         </nav>
       </aside>
 

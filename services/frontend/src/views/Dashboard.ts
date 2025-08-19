@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Dashboard.js                                       :+:      :+:    :+:   //
+//   Dashboard.ts                                       :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 18:39:16 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/14 19:08:24 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/19 20:05:42 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -28,6 +28,7 @@ export default class Dashboard extends AbstractView {
             <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
             <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
             <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
+            <a href="/game" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
           </nav>
         </aside>
         <main class="space-y-4">

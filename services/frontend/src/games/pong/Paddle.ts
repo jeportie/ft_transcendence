@@ -30,6 +30,8 @@ export default class Paddle {
         this.downPressed = false;
 
         // listen for keys
+        this._keydown = this._onKeyDown.bind(this);
+        this._keyup = this._onKeyUp.bind(this);
         window.addEventListener('keydown', event => this._onKeyDown(event));
         window.addEventListener('keyup', event => this._onKeyUp(event));
     }
@@ -42,6 +44,11 @@ export default class Paddle {
     _onKeyUp(event) {
         if (event.key === 'ArrowUp') this.upPressed = false;
         if (event.key === 'ArrowDown') this.downPressed = false;
+    }
+
+    destroy() {
+        window.removeEventListener('keydown', this._keydown);
+        window.removeEventListener('keyup', this._keyup);
     }
 
     update() {

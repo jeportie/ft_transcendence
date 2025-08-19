@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import drawBG from "./drawBG.js"
+import drawBG from "./drawBG.ts"
 
 export default function gameLoop(paddle, ball, draw, canvas) {
 
