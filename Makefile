@@ -11,9 +11,12 @@
 # **************************************************************************** #
 
 DCLOC   = docker-compose.yml
-DC      = docker-compose -f ${DCLOC}
 ENVFILE = .env
 DATADIR = ~/data/
+
+# Detect docker compose (plugin) or docker-compose (standalone)
+DOCKER_COMPOSE := $(shell command -v docker compose >/dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
+DC      = $(DOCKER_COMPOSE) -f $(DCLOC)
 
 .PHONY: all prepare build up down clean logs re
 
