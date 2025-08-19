@@ -13,46 +13,57 @@
 import AbstractView from "./AbstractView.js";
 
 export default class Settings extends AbstractView {
-    constructor(params) {
-        super(params);
+    constructor(ctx: any) {
+        super(ctx);
         this.setTitle("Settings");
     };
 
     async getHTML() {
-        return (`
-      <div class="dashboard">
-        <aside class="sidebar">
-          <h2>Menu</h2>
-          <a href="/" class="nav-link" data-link>Dashboard</a>
-          <a href="/posts" class="nav-link" data-link>Posts</a>
-          <a href="/settings" class="nav-link" data-link>Settings</a>
+        return /*html*/ `
+      <div class="grid md:grid-cols-[220px_1fr] gap-6 p-6">
+        <aside class="bg-slate-800/60 rounded-xl p-4 border border-slate-700">
+          <h2 class="text-lg font-semibold mb-3">Menu</h2>
+          <nav class="flex flex-col gap-2">
+            <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
+            <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
+            <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
+          </nav>
         </aside>
-        <main class="main">
-          <h1>Settings</h1>
-          <div class="card">
-            <form id="settings-form">
-              <div style="margin-bottom: .75rem;">
-                <label for="name">Display name</label><br>
-                <input id="name" name="name" type="text" placeholder="Your name" style="width:100%;padding:.5rem;border-radius:6px;border:0;outline:none;">
-              </div>
-              <div style="margin-bottom: .75rem;">
-                <label for="theme">Theme</label><br>
-                <select id="theme" name="theme" style="width:100%;padding:.5rem;border-radius:6px;border:0;outline:none;">
-                  <option value="dark">Dark</option>
-                  <option value="light">Light</option>
-                </select>
-              </div>
-              <button type="submit" class="nav-link" style="display:inline-block;background:#334155;">Save</button>
-            </form>
-          </div>
+
+        <main class="space-y-4">
+          <h1 class="text-2xl font-bold">Settings</h1>
+
+          <form id="settings-form" class="rounded-xl border border-slate-700 bg-slate-800/60 p-5 space-y-4 max-w-lg">
+            <div>
+              <label for="name" class="block text-sm mb-1">Display name</label>
+              <input id="name" name="name" type="text" placeholder="Your name"
+                     class="w-full px-3 py-2 rounded border border-slate-700 bg-slate-900 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+            </div>
+
+            <div>
+              <label for="theme" class="block text-sm mb-1">Theme</label>
+              <select id="theme" name="theme"
+                      class="w-full px-3 py-2 rounded border border-slate-700 bg-slate-900 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+              </select>
+            </div>
+
+            <button type="submit"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white">
+              Save
+            </button>
+
+            <p id="settings-msg" class="text-sm text-slate-400"></p>
+          </form>
         </main>
       </div>
-    `)
-    };
+    `;
+    }
 
 
     mount() {
-        const form = document.getElementById("settings-form");
+        const form = document.getElementById("settings-form") as HTMLFormElement | null;
         form?.addEventListener("submit", async (e) => {
             e.preventDefault();                            // no full page reload ✅
             const data = Object.fromEntries(new FormData(form).entries());

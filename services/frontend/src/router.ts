@@ -14,6 +14,7 @@ import Dashboard from "./views/Dashboard.ts";
 import Posts from "./views/Posts.ts";
 import Settings from "./views/Settings.ts";
 import NotFound from "./views/NotFound.ts";
+import type AbstractView from "./views/AbstractView.ts";
 
 const routes = [
     { path: "/", view: Dashboard },
@@ -23,9 +24,9 @@ const routes = [
     { path: "*", view: NotFound },
 ];
 
-let currentView = null; // tracks the mounted view
+let currentView: AbstractView | null = null;
 
-function pathToRegex(path) {
+function pathToRegex(path: string) {
     return (new RegExp("^" + path
         .replace(/\//g, "\\/")
         .replace(/:\w+/g, "([^\\/]+)") + "$"));
@@ -43,19 +44,19 @@ function getParams(match) {
     })));
 }
 
-function normalize(path) {
+function normalize(path: string) {
     if (path !== "/")
         return (path.replace(/\/+$/, ""));
     else
         return (path);
 }
 
-export function navigateTo(url) {
-    history.pushState(null, null, url);
+export function navigateTo(url: string) {
+    history.pushState(null, "", url);
     router();
 }
 
-function matchRoute(path, pathname) {
+function matchRoute(path: string, pathname: string) {
     if (path === "*") return null;
     return pathname.match(pathToRegex(path));
 }
@@ -68,8 +69,7 @@ export async function router() {
         result: matchRoute(route.path, pathname),
     }));
 
-    let match;
-    match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);
+    let match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);
     if (!match) {
         const notFound = routes.find(r => r.path === "*");
         // provide a non-null "result" so getParams() won’t crash

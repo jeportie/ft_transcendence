@@ -10,15 +10,24 @@
 //                                                                            //
 // ************************************************************************** //
 
-export default class {
+export type ViewCtx = {
+    path: string;
+    params: Record<string, string>;
+    query: Record<string, string>;
+    hash: string;
+    state: any;
+};
 
-    constructor(params) {
-        this.params = params;
+export default class AbstractView {
+    protected ctx: ViewCtx;
 
-        console.log(this.params);
+    constructor(ctx: ViewCtx) {
+        this.ctx = ctx;
+
+        console.log(this.ctx);
     };
 
-    setTitle(title) {
+    setTitle(title: string) {
         document.title = title;
     };
 
@@ -26,7 +35,7 @@ export default class {
         return "";
     }
 
-    mount() { }                       // bind DOM events here
+    mount(): void { }                       // bind DOM events here
 
-    destroy() { }                     // cleanup timers/sockets/listeners
+    destroy(): void { }                     // cleanup timers/sockets/listeners
 }
