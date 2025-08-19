@@ -245,7 +245,14 @@
   }
 
   // src/main.ts
-  fetch("http://localhost:8000/health").then((r) => r.json()).then(console.log).catch(console.error);
+  fetch("http://localhost:8000/health").then((res) => {
+    if (!res.ok) throw new Error(`Health check failed: ${res.status}`);
+    return res.json();
+  }).then((data) => {
+    console.log("\u2705 Health check:", data);
+  }).catch((err) => {
+    console.error("\u274C Health check error:", err);
+  });
   window.addEventListener("popstate", router);
   window.addEventListener("hashchange", router);
   document.addEventListener("DOMContentLoaded", () => {
