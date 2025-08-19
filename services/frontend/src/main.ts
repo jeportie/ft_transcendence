@@ -13,11 +13,8 @@
 import { router } from "./router.ts"
 import { navigateTo } from "./router.ts"
 
-fetch('/health.json')
-    .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-    })
+fetch('http://localhost:8000/health')
+    .then(r => r.json())
     .then(console.log)
     .catch(console.error);
 

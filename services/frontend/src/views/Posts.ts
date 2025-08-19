@@ -20,7 +20,7 @@ export default class Posts extends AbstractView {
 
     async getHTML() {
         return (`
-    <div class="grid grid-cols-[200px_1fr] min-h-screen">
+    <div class="min-h-screen grid grid-cols-[220px_1fr]">
       <aside class="bg-slate-800 text-white p-4">
         <h2 class="text-lg font-semibold mb-4">Menu</h2>
         <nav class="flex flex-col gap-2">
@@ -42,5 +42,6 @@ export default class Posts extends AbstractView {
       </main>
     </div>
   `)
-    };
+    }
+
 }

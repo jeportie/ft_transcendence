@@ -18,48 +18,46 @@ export default class Settings extends AbstractView {
         this.setTitle("Settings");
     };
 
+
     async getHTML() {
-        return /*html*/ `
-      <div class="grid md:grid-cols-[220px_1fr] gap-6 p-6">
-        <aside class="bg-slate-800/60 rounded-xl p-4 border border-slate-700">
-          <h2 class="text-lg font-semibold mb-3">Menu</h2>
-          <nav class="flex flex-col gap-2">
-            <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
-            <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
-            <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
-          </nav>
-        </aside>
-
-        <main class="space-y-4">
-          <h1 class="text-2xl font-bold">Settings</h1>
-
-          <form id="settings-form" class="rounded-xl border border-slate-700 bg-slate-800/60 p-5 space-y-4 max-w-lg">
+        return (`
+    <div class="min-h-screen grid grid-cols-[220px_1fr]">
+      <aside class="bg-slate-800 text-white p-4">
+        <h2 class="text-lg font-semibold mb-4">Menu</h2>
+        <nav class="flex flex-col gap-2">
+          <a href="/" class="hover:underline" data-link>Dashboard</a>
+          <a href="/posts" class="hover:underline" data-link>Posts</a>
+          <a href="/settings" class="hover:underline" data-link>Settings</a>
+        </nav>
+      </aside>
+      <main class="p-6">
+        <h1 class="text-2xl font-bold mb-4">Settings</h1>
+        <div class="rounded-lg bg-slate-800 text-white p-4">
+          <form id="settings-form" class="space-y-4">
             <div>
-              <label for="name" class="block text-sm mb-1">Display name</label>
+              <label for="name" class="block mb-1">Display name</label>
               <input id="name" name="name" type="text" placeholder="Your name"
-                     class="w-full px-3 py-2 rounded border border-slate-700 bg-slate-900 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                     class="w-full px-3 py-2 rounded border border-slate-600 bg-slate-900 focus:outline-none" />
             </div>
-
             <div>
-              <label for="theme" class="block text-sm mb-1">Theme</label>
+              <label for="theme" class="block mb-1">Theme</label>
               <select id="theme" name="theme"
-                      class="w-full px-3 py-2 rounded border border-slate-700 bg-slate-900 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                      class="w-full px-3 py-2 rounded border border-slate-600 bg-slate-900 focus:outline-none">
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
               </select>
             </div>
-
             <button type="submit"
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white">
+                    class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white">
               Save
             </button>
-
-            <p id="settings-msg" class="text-sm text-slate-400"></p>
           </form>
-        </main>
-      </div>
-    `;
+        </div>
+      </main>
+    </div>
+  `)
     }
+
 
 
     mount() {

@@ -17,29 +17,26 @@ export default class NotFound extends AbstractView {
         super(ctx);
         this.setTitle("NotFound");
     }
-    async getHTML() {
-        return /*html*/ `
-      <div class="grid md:grid-cols-[220px_1fr] gap-6 p-6">
-        <aside class="bg-slate-800/60 rounded-xl p-4 border border-slate-700">
-          <h2 class="text-lg font-semibold mb-3">Menu</h2>
-          <nav class="flex flex-col gap-2">
-            <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
-            <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
-            <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
-          </nav>
-        </aside>
 
-        <main class="space-y-4">
-          <h1 class="text-2xl font-bold">404</h1>
-          <div class="rounded-xl border border-rose-800 bg-rose-900/40 p-4 text-rose-50">
-            Sorry, the page you are looking for was not found.
-          </div>
-          <a href="/" data-link
-             class="inline-flex items-center gap-2 px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white">
-            ⟵ Go back home
-          </a>
-        </main>
-      </div>
-    `;
-    }
+    async getHTML() {
+        return (`
+    <div class="min-h-screen grid grid-cols-[220px_1fr]">
+      <aside class="bg-slate-800 text-white p-4">
+        <h2 class="text-lg font-semibold mb-4">Menu</h2>
+        <nav class="flex flex-col gap-2">
+          <a href="/" class="hover:underline" data-link>Dashboard</a>
+          <a href="/posts" class="hover:underline" data-link>Posts</a>
+          <a href="/settings" class="hover:underline" data-link>Settings</a>
+        </nav>
+      </aside>
+      <main class="p-6">
+        <h1 class="text-2xl font-bold mb-4">Not Found</h1>
+        <div class="rounded-lg bg-rose-900 text-rose-100 p-4">
+          Sorry, the page you are looking for was not found
+        </div>
+      </main>
+    </div>
+    `)
+    };
+
 }
