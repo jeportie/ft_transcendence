@@ -19,18 +19,18 @@ import { promises as fs } from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const app  = Fastify({ logger: true });
+const app = Fastify({ logger: false });
 const PORT = Number(process.env.PORT) || 8000;
 
 app.register(fastifyStatic, {
-  root: join(__dirname, "frontend", "static"),
-  prefix: "/static/",
-  cacheControl: false,
+    root: join(__dirname, "frontend", "static"),
+    prefix: "/static/",
+    cacheControl: false,
 });
 
 app.get("/*", async (_req, reply) => {
-  const html = await fs.readFile(join(__dirname, "frontend", "index.html"), "utf8");
-  return reply.type("text/html").send(html);
+    const html = await fs.readFile(join(__dirname, "frontend", "index.html"), "utf8");
+    return reply.type("text/html").send(html);
 });
 
 await app.listen({ port: PORT, host: "0.0.0.0" });

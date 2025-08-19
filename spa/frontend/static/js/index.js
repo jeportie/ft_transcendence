@@ -85,14 +85,10 @@ async function router() {
     };
 
     currentView?.destroy?.();
-
-    // create + render
     const view = new match.route.view(ctx);
     const app = document.querySelector("#app");
     app.innerHTML = await view.getHTML();
-
     currentView = view;
-
     view.mount?.();
 };
 
@@ -100,23 +96,21 @@ window.addEventListener("popstate", router);
 
 document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", (e) => {
-        // 1) ignore if already handled (e.g., inside another handler)
-        if (e.defaultPrevented) return;
-        // 2) only left-clicks (0). let middle/right clicks behave normally
-        if (e.button !== 0) return;
-        // 3) respect modifier keys (Cmd/Ctrl/Shift/Alt) — users expect new tab/window
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-        // 4) support clicks on nested elements inside the link
+        if (e.defaultPrevented)
+            return;
+        if (e.button !== 0)
+            return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+            return;
         const a = e.target.closest("[data-link]");
-        if (!a) return;
-        // 5) let “real” external links go through (don’t hijack)
+        if (!a)
+            return;
         const url = new URL(a.href, window.location.origin);
-        if (url.origin !== window.location.origin) return;
-        // 6) respect links meant to open a new tab or download files
-        if (a.target === "_blank" || a.hasAttribute("download") || a.getAttribute("rel") === "external") return;
-        // 7) we’re handling it as an SPA nav; prevent full page reload
+        if (url.origin !== window.location.origin)
+            return;
+        if (a.target === "_blank" || a.hasAttribute("download") || a.getAttribute("rel") === "external")
+            return;
         e.preventDefault();
-        // 8) keep query and hash if present
         navigateTo(url.pathname + url.search + url.hash);
     });
     router();
