@@ -20,3 +20,10 @@ sqlite port : 8191
 This chain ensures you get type-safe, modular code; ultra-fast builds;
 utility-first, minimal CSS; and broad browser support—all with a tiny config
 and lightning-fast iteration.
+
+### TODO LIST
+
+1. fix tailwind issue when /knownpath/unknown path (css no rendered on pathes like http://localhost:3000/game/lost )
+2. fix tailwind issues when path/ (css not rendered for pathes like http://localhost:3000/game/)
+3. fix redirection issues when /posts/lost -> we dont call nofound vew, we stay on posts view but without css
+4. convert 2dlib and pong src files from .js to .ts and add type checks

@@ -13,8 +13,8 @@
 import Dashboard from "./views/Dashboard.ts";
 import Posts from "./views/Posts.ts";
 import Settings from "./views/Settings.ts";
-import NotFound from "./views/NotFound.ts";
 import Game from "./views/Game.ts";
+import NotFound from "./views/NotFound.ts";
 import type AbstractView from "./views/AbstractView.ts";
 
 const routes = [

@@ -44,7 +44,8 @@ export default class Game extends AbstractView {
                 <button id="start-button" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">Start</button>
                 <button id="stop-button"  class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-700/60">Stop</button>
               </div>
-              <p class="text-slate-300 text-sm">Controls: ↑ / ↓</p>
+              <p class="text-slate-300 text-sm">Controls Left Player: w ↑ / s ↓</p>
+              <p class="text-slate-300 text-sm">Controls Right Player: Arrow ↑ / Arrow ↓</p>
             </div>
           </div>
         </main>
