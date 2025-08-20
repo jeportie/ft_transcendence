@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/04 18:25:36 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/07 15:03:42 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/20 14:07:36 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -106,6 +106,81 @@ export default class Vector extends Coord {
             throw new TypeError("Vector.cross requires a Vector");
         }
         return this.x * other.y - this.y * other.x;
+    }
+
+    /**
+     * Renders this vector as an arrow from an origin point (ox, oy).
+     * If no origin is provided, the vector is drawn from (0,0).
+     * @param {CanvasRenderingContext2D} ctx - The 2D drawing context.
+     * @param {Object} [options] - Rendering options.
+     * @param {number} [options.ox=0] - X coordinate of the origin.
+     * @param {number} [options.oy=0] - Y coordinate of the origin.
+     * @param {string} [options.strokeStyle="#0ff"] - Color of the arrow line.
+     * @param {number} [options.lineWidth=2] - Thickness of the arrow line.
+     * @param {number} [options.headSize=8] - Size of the arrow head.
+     * @returns {void}
+     */
+    render(ctx, { ox = 0, oy = 0, color = "#0ff", lineWidth = 2, headSize = 8 } = {}) {
+        // draw line
+        ctx.beginPath();
+        ctx.moveTo(ox, oy);
+        ctx.lineTo(ox + this.x, oy + this.y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+        ctx.closePath();
+
+        // draw head
+        const angle = Math.atan2(this.y, this.x);
+        const endX = ox + this.x;
+        const endY = oy + this.y;
+        ctx.beginPath();
+        ctx.moveTo(endX, endY);
+        ctx.lineTo(endX - headSize * Math.cos(angle - Math.PI / 6),
+            endY - headSize * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(endX - headSize * Math.cos(angle + Math.PI / 6),
+            endY - headSize * Math.sin(angle + Math.PI / 6));
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    /**
+     * (Optional) Render only the vector endpoint as a single pixel (like Point).
+     * Useful for a “pixel philosophy” debug view.
+     * @param {CanvasRenderingContext2D} ctx
+     * @param {Object} [options]
+     * @param {number} [options.ox=0]
+     * @param {number} [options.oy=0]
+     * @param {string} [options.color="#fff"]
+     * @returns {void}
+     */
+    renderAsPixel(ctx, { ox = 0, oy = 0, color = "#fff" } = {}) {
+        ctx.fillStyle = color;
+        ctx.fillRect(ox + this.x, oy + this.y, 1, 1);
+    }
+
+    /**
+     * Reflect this vector on a horizontal or vertical wall, with optional angle adjustment.
+     * @param {"x"|"y"} axis - Axis of reflection ("x" for vertical wall, "y" for horizontal wall).
+     * @param {number} [angle=0] - Extra angle (in radians) to rotate the reflected vector.
+     *        Positive = counter-clockwise, Negative = clockwise.
+     * @returns {Vector} A new reflected and rotated vector.
+     */
+    reflect(axis, angle = 0) {
+        let reflected;
+        if (axis === "x") {
+            reflected = new Vector(-this.x, this.y);
+        } else if (axis === "y") {
+            reflected = new Vector(this.x, -this.y);
+        } else {
+            throw new Error("Vector.reflect axis must be 'x' or 'y'");
+        }
+
+        if (angle !== 0) {
+            reflected = reflected.rotate(angle);
+        }
+        return reflected;
     }
 }
 

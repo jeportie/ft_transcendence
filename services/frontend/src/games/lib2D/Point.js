@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/07 14:57:33 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/07 15:02:07 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/20 14:05:46 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -92,6 +92,44 @@ export default class Point extends Coord {
         this.x = vector.x;
         this.y = vector.y;
         return (this);
+    }
+
+    /**
+     * Renders this point as a single pixel on the canvas.
+     * @param {CanvasRenderingContext2D} ctx - The 2D drawing context.
+     * @param {Object} [options] - Rendering options.
+     * @param {string} [options.color="#fff"] - Fill color of the pixel.
+     * @returns {void}
+     */
+    render(ctx, { color = "#fff" } = {}) {
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, 1, 1);
+    }
+
+    /**
+     * Moves this point in place by a velocity vector, scaled by delta time.
+     * @param {Vector} velocity - The velocity to apply.
+     * @param {number} dt - Delta time in seconds.
+     * @returns {Point} This instance after moving.
+     */
+    move(velocity, dt = 1) {
+        if (!(velocity instanceof Vector))
+            throw new TypeError("Point.move requires a Vector");
+        this.x += velocity.x * dt;
+        this.y += velocity.y * dt;
+        return this;
+    }
+
+    /**
+     * Checks if this point is inside a rectangle.
+     * @param {number} x - Rect X.
+     * @param {number} y - Rect Y.
+     * @param {number} w - Rect width.
+     * @param {number} h - Rect height.
+     * @returns {boolean} True if inside, false otherwise.
+     */
+    isInsideRect(x, y, w, h) {
+        return this.x >= x && this.x <= x + w && this.y >= y && this.y <= y + h;
     }
 }
 

@@ -158,6 +158,3 @@ export default class Coord {
         return `(${this.x}, ${this.y})`;
     }
 }
-
-
-

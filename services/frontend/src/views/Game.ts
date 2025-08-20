@@ -11,11 +11,10 @@
 // ************************************************************************** //
 
 import AbstractView from "./AbstractView.ts";
-import createPong from "../games/pong/init.ts";
+import PongGame from "../games/pong/PongGame.js";
+import Rect from "../games/lib2D/Rect.js";
 
 export default class Game extends AbstractView {
-
-    private disposeGame?: () => void;
 
     constructor(ctx: any) {
         super(ctx);
@@ -42,8 +41,8 @@ export default class Game extends AbstractView {
             <div class="space-y-3">
               <canvas id="gameCanvas" width="800" height="600" class="w-full rounded-xl border border-slate-700 bg-black"></canvas>
               <div class="flex gap-2">
-                <button id="btn-start" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">Start</button>
-                <button id="btn-stop"  class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-700/60">Stop</button>
+                <button id="start-button" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">Start</button>
+                <button id="stop-button"  class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-700/60">Stop</button>
               </div>
               <p class="text-slate-300 text-sm">Controls: ↑ / ↓</p>
             </div>
@@ -54,30 +53,26 @@ export default class Game extends AbstractView {
     }
 
     mount() {
-        const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
-        if (!canvas) return;
+        const canvas = document.querySelector("#gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-        // createPong returns { start, stop, dispose }
-        const api = createPong(canvas);
+        const game = new PongGame(canvas, ctx);
 
-        const startBtn = document.getElementById("btn-start");
-        const stopBtn = document.getElementById("btn-stop");
+        // Toggle FPS
+        window.addEventListener("keydown", (e) => { if (e.key.toLowerCase() === "f") game.loop.toggleFPS(); });
 
-        startBtn?.addEventListener("click", api.start);
-        stopBtn?.addEventListener("click", api.stop);
+        const start = document.querySelector("#start-button");
+        const stop = document.querySelector("#stop-button");
 
-        // auto-start once mounted
-        api.start();
+        const bg = new Rect(0, 0, canvas.width, canvas.height);
+        bg.render(ctx, { fill: "#0b0f16" });
 
-        // remember how to cleanup (stop loop + remove listeners)
-        this.disposeGame = () => {
-            stopBtn?.removeEventListener("click", api.stop);
-            startBtn?.removeEventListener("click", api.start);
-            api.dispose();
-        };
-    }
+        start.addEventListener("click", () => {
+            game.start();
+        })
 
-    destroy() {
-        this.disposeGame?.();
+        stop.addEventListener("click", () => {
+            game.stop();
+        })
     }
 }
