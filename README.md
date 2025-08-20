@@ -27,3 +27,4 @@ and lightning-fast iteration.
 2. fix tailwind issues when path/ (css not rendered for pathes like http://localhost:3000/game/)
 3. fix redirection issues when /posts/lost -> we dont call nofound vew, we stay on posts view but without css
 4. convert 2dlib and pong src files from .js to .ts and add type checks
+5. implement fetch-wrapper with promise or with asynch in .ts and use it in the project
