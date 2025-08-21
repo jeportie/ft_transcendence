@@ -1,2 +1,4 @@
 services/frontend/.env.frontend
 services/api/.env.api
+services/frontend/public/bundle.js
+services/frontend/public/bundle.js.map
