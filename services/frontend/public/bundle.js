@@ -1,5 +1,143 @@
 "use strict";
 (() => {
+  // src/Router.js
+  function pathToRegex(path) {
+    if (path === "*") return { regex: /.*/u, keys: [], isCatchAll: true };
+    const keys = [];
+    const pattern = "^" + path.replace(/\//g, "\\/").replace(/:(\w+)/g, (_m, k) => {
+      keys.push(k);
+      return "([^\\/]+)";
+    }) + "$";
+    return { regex: new RegExp(pattern, "u"), keys, isCatchAll: false };
+  }
+  function normalize(path) {
+    return path !== "/" ? path.replace(/\/+$/, "") : "/";
+  }
+  function parseQuery(search) {
+    return Object.fromEntries(new URLSearchParams(search).entries());
+  }
+  var Router = class {
+    constructor(opts) {
+      this.routes = opts.routes.map((r) => {
+        const { regex, keys, isCatchAll } = pathToRegex(r.path);
+        return { path: r.path, view: r.view, regex, keys, isCatchAll };
+      });
+      this.notFound = this.routes.find((r) => r.isCatchAll) || (opts.notFoundPath ? this.routes.find((r) => r.path === opts.notFoundPath) : void 0);
+      const m = document.querySelector(opts.mountSelector ?? "#app");
+      if (!m) throw new Error("Router: mount element not found");
+      this.mountEl = m;
+      this.linkSelector = opts.linkSelector ?? "[data-link]";
+      this.onBeforeNavigate = opts.onBeforeNavigate;
+      this.currentView = null;
+      this.started = false;
+      this.handlePopState = this.handlePopState.bind(this);
+      this.handleClick = this.handleClick.bind(this);
+    }
+    start() {
+      if (this.started) return;
+      this.started = true;
+      window.addEventListener("popstate", this.handlePopState);
+      document.body.addEventListener("click", this.handleClick);
+      this.render();
+    }
+    stop() {
+      if (!this.started) return;
+      this.started = false;
+      window.removeEventListener("popstate", this.handlePopState);
+      document.body.removeEventListener("click", this.handleClick);
+    }
+    navigateTo(url, opts) {
+      if (this.onBeforeNavigate && this.onBeforeNavigate(url) === false) return;
+      if (opts?.replace) history.replaceState(opts?.state ?? null, "", url);
+      else history.pushState(opts?.state ?? null, "", url);
+      this.render();
+    }
+    handlePopState() {
+      this.render();
+    }
+    handleClick(e) {
+      if (e.defaultPrevented) return;
+      if (e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest(this.linkSelector);
+      if (!a) return;
+      if (a.target === "_blank" || a.hasAttribute("download") || a.getAttribute("rel") === "external")
+        return;
+      const url = new URL(a.href, window.location.origin);
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname.startsWith("/api/")) return;
+      e.preventDefault();
+      const next = url.pathname + url.search;
+      this.navigateTo(next);
+    }
+    match(pathname) {
+      for (const r of this.routes) {
+        const m = pathname.match(r.regex);
+        if (!m) continue;
+        const values = m.slice(1);
+        const params = {};
+        r.keys.forEach((k, i) => {
+          params[k] = decodeURIComponent(values[i] ?? "");
+        });
+        return { route: r, params };
+      }
+      return null;
+    }
+    buildContext(pathname, params) {
+      return {
+        path: pathname,
+        params,
+        query: parseQuery(window.location.search),
+        state: history.state
+      };
+    }
+    async render() {
+      const pathname = normalize(window.location.pathname);
+      const m = this.match(pathname);
+      const route = m?.route || this.notFound;
+      const params = m?.params || {};
+      if (!route) {
+        this.mountEl.innerHTML = "<h1>Not Found</h1>";
+        return;
+      }
+      this.currentView?.destroy?.();
+      const ctx = this.buildContext(pathname, params);
+      const view = new route.view(ctx);
+      const html = await view.getHTML();
+      this.mountEl.innerHTML = typeof html === "string" ? html : String(html);
+      this.currentView = view;
+      view.mount?.();
+    }
+  };
+
+  // src/Fetch.js
+  var Fetch = class {
+    constructor(baseURL) {
+      this.baseURL = baseURL;
+    }
+    get(endpoint) {
+      return fetch(this.baseURL + endpoint).then((response) => response.json());
+    }
+    put(endpoint, body) {
+      return this.#send("put", endpoint, body);
+    }
+    post(endpoint, body) {
+      return this.#send("post", endpoint, body);
+    }
+    delete(endpoint, body) {
+      return this.#send("delete", endpoint, body);
+    }
+    #send(method, endpoint, body) {
+      return fetch(this.baseURL + endpoint, {
+        method,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      }).then((response) => response.json());
+    }
+  };
+
   // src/views/AbstractView.ts
   var AbstractView = class {
     constructor(ctx) {
@@ -151,40 +289,6 @@
         const data = Object.fromEntries(new FormData(form).entries());
         console.log("Settings submit:", data);
       });
-    }
-  };
-
-  // src/views/NotFound.ts
-  var NotFound = class extends AbstractView {
-    constructor(ctx) {
-      super(ctx);
-      this.setTitle("NotFound");
-    }
-    async getHTML() {
-      return (
-        /*html*/
-        `
-    <div class="grid md:grid-cols-[220px_1fr] gap-6 p-6">
-      <aside class="bg-slate-800/60 rounded-xl p-4 border border-slate-700">
-        <h2 class="text-lg font-semibold mb-3">Menu</h2>
-        <nav class="flex flex-col gap-2">
-          <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
-          <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
-          <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
-          <a href="/game" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
-        </nav>
-      </aside>
-
-      <main class="space-y-4">
-        <h1 class="text-2xl font-bold">Not Found</h1>
-
-        <div class="rounded-xl border border-rose-800 bg-rose-900/80 p-4">
-          <p class="text-rose-100">Sorry, the page you are looking for was not found.</p>
-        </div>
-      </main>
-    </div>
-  `
-      );
     }
   };
 
@@ -1181,7 +1285,42 @@
     }
   };
 
-  // src/router.ts
+  // src/views/NotFound.ts
+  var NotFound = class extends AbstractView {
+    constructor(ctx) {
+      super(ctx);
+      this.setTitle("NotFound");
+    }
+    async getHTML() {
+      return (
+        /*html*/
+        `
+    <div class="grid md:grid-cols-[220px_1fr] gap-6 p-6">
+      <aside class="bg-slate-800/60 rounded-xl p-4 border border-slate-700">
+        <h2 class="text-lg font-semibold mb-3">Menu</h2>
+        <nav class="flex flex-col gap-2">
+          <a href="/" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
+          <a href="/posts" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
+          <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
+          <a href="/game" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
+        </nav>
+      </aside>
+
+      <main class="space-y-4">
+        <h1 class="text-2xl font-bold">Not Found</h1>
+
+        <div class="rounded-xl border border-rose-800 bg-rose-900/80 p-4">
+          <p class="text-rose-100">Sorry, the page you are looking for was not found.</p>
+        </div>
+      </main>
+    </div>
+  `
+      );
+    }
+  };
+
+  // src/main.ts
+  var API = new Fetch("http://localhost:8000");
   var routes = [
     { path: "/", view: Dashboard },
     { path: "/posts", view: Posts },
@@ -1190,89 +1329,15 @@
     { path: "/game", view: Game },
     { path: "*", view: NotFound }
   ];
-  var currentView = null;
-  function pathToRegex(path) {
-    return new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "([^\\/]+)") + "$");
-  }
-  function getParams(match) {
-    const res = match.result || [];
-    const values = res.slice(1);
-    const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map((result) => result[1]);
-    return Object.fromEntries(keys.map((key, i) => {
-      return [key, decodeURIComponent(values[i])];
-    }));
-  }
-  function normalize2(path) {
-    if (path !== "/")
-      return path.replace(/\/+$/, "");
-    else
-      return path;
-  }
-  function navigateTo(url) {
-    history.pushState(null, "", url);
-    router();
-  }
-  function matchRoute(path, pathname) {
-    if (path === "*") return null;
-    return pathname.match(pathToRegex(path));
-  }
-  async function router() {
-    const pathname = normalize2(location.pathname);
-    const potentialMatches = routes.map((route) => ({
-      route,
-      result: matchRoute(route.path, pathname)
-    }));
-    let match = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
-    if (!match) {
-      const notFound = routes.find((r) => r.path === "*");
-      match = { route: notFound, result: [pathname] };
+  var router = new Router({
+    routes,
+    mountSelector: "#app",
+    linkSelector: "[data-link]",
+    onBeforeNavigate: (to) => {
     }
-    const ctx = {
-      path: pathname,
-      params: getParams(match),
-      query: Object.fromEntries(new URLSearchParams(location.search).entries()),
-      hash: location.hash,
-      state: history.state
-    };
-    currentView?.destroy?.();
-    const view = new match.route.view(ctx);
-    const app = document.querySelector("#app");
-    app.innerHTML = await view.getHTML();
-    currentView = view;
-    view.mount?.();
-  }
-
-  // src/main.ts
-  fetch("http://localhost:8000/health").then((res) => {
-    if (!res.ok) throw new Error(`Health check failed: ${res.status}`);
-    return res.json();
-  }).then((data) => {
-    console.log("\u2705 Health check:", data);
-  }).catch((err) => {
-    console.error("\u274C Health check error:", err);
   });
-  window.addEventListener("popstate", router);
-  window.addEventListener("hashchange", router);
-  document.addEventListener("DOMContentLoaded", () => {
-    document.body.addEventListener("click", (e) => {
-      if (e.defaultPrevented)
-        return;
-      if (e.button !== 0)
-        return;
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
-        return;
-      const a = e.target.closest("[data-link]");
-      if (!a)
-        return;
-      const url = new URL(a.href, window.location.origin);
-      if (url.origin !== window.location.origin)
-        return;
-      if (a.target === "_blank" || a.hasAttribute("download") || a.getAttribute("rel") === "external")
-        return;
-      e.preventDefault();
-      navigateTo(url.pathname + url.search + url.hash);
-    });
-    router();
-  });
+  window.navigateTo = (url) => router.navigateTo(url);
+  API.get("/health").then((data) => console.log("\u2705 Health check:", data)).catch((err) => console.error("\u274C Health check error:", err));
+  router.start();
 })();
 //# sourceMappingURL=bundle.js.map
