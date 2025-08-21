@@ -1,39 +1,16 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   router.js                                          :+:      :+:    :+:   //
+//   Router.js                                          :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/21 13:55:36 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/21 13:56:02 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/21 15:18:18 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-function pathToRegex(path) {
-    if (path === "*") return { regex: /.*/u, keys: [], isCatchAll: true };
-
-    const keys = [];
-    const pattern =
-        "^" +
-        path
-            .replace(/\//g, "\\/")
-            .replace(/:(\w+)/g, (_m, k) => {
-                keys.push(k);
-                return "([^\\/]+)";
-            }) +
-        "$";
-
-    return { regex: new RegExp(pattern, "u"), keys, isCatchAll: false };
-}
-
-function normalize(path) {
-    return path !== "/" ? path.replace(/\/+$/, "") : "/";
-}
-
-function parseQuery(search) {
-    return Object.fromEntries(new URLSearchParams(search).entries());
-}
+import { pathToRegex, normalize, parseQuery } from "./routerTools.js";
 
 export default class Router {
     constructor(opts) {

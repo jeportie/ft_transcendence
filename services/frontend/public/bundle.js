@@ -1,6 +1,6 @@
 "use strict";
 (() => {
-  // src/Router.js
+  // src/tools/routerTools.js
   function pathToRegex(path) {
     if (path === "*") return { regex: /.*/u, keys: [], isCatchAll: true };
     const keys = [];
@@ -16,6 +16,8 @@
   function parseQuery(search) {
     return Object.fromEntries(new URLSearchParams(search).entries());
   }
+
+  // src/tools/Router.js
   var Router = class {
     constructor(opts) {
       this.routes = opts.routes.map((r) => {
@@ -110,7 +112,7 @@
     }
   };
 
-  // src/Fetch.js
+  // src/tools/Fetch.js
   var Fetch = class {
     constructor(baseURL) {
       this.baseURL = baseURL;
@@ -1339,5 +1341,6 @@
   window.navigateTo = (url) => router.navigateTo(url);
   API.get("/health").then((data) => console.log("\u2705 Health check:", data)).catch((err) => console.error("\u274C Health check error:", err));
   router.start();
+  router.match;
 })();
 //# sourceMappingURL=bundle.js.map
