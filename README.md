@@ -6,7 +6,8 @@ Last common core project of 42 school
 
 ### Ports
 
-backend service port : 5000
+backend service port : 8000
+backend inside docker port : 5000
 frontend service port : 3000
 sqlite port : 8191
 

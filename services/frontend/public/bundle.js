@@ -1341,6 +1341,5 @@
   window.navigateTo = (url) => router.navigateTo(url);
   API.get("/health").then((data) => console.log("\u2705 Health check:", data)).catch((err) => console.error("\u274C Health check error:", err));
   router.start();
-  router.match;
 })();
 //# sourceMappingURL=bundle.js.map
