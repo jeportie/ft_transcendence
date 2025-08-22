@@ -13,104 +13,85 @@
 import AbstractLayout from "./AbstractLayout.ts";
 
 export default class AppLayout extends AbstractLayout {
-    // keep a bound handler so destroy() can remove it
     #onToggle?: (e: Event) => void;
+    #open = true; // current state
 
     async getHTML() {
         return /*html*/ `
-      <div class="grid md:grid-cols-[220px_1fr] gap-6 p-6">
-        <!-- Toggle button (visible on small screens) -->
-        <button
-          id="sidebar-toggle"
-          class="md:hidden mb-2 px-3 py-2 rounded bg-slate-700 hover:bg-slate-600 text-sm"
-          aria-controls="app-sidebar"
-          aria-expanded="false"
-        >
-          Toggle menu
-        </button>
+      <div id="app-layout" class="min-h-screen flex flex-col">
+        <!-- Body row: sidebar + main -->
+        <div class="flex gap-6 p-6 flex-1 items-start">
+          <!-- Sidebar lives in normal flow (no fixed). It pushes the main area. -->
+          <aside
+            id="app-sidebar"
+            class="w-[220px] shrink-0 overflow-hidden
+                   transition-[width,padding] duration-200 ease-in-out
+                   rounded-xl bg-slate-800/60 border border-slate-700 p-4"
+          >
+            <h2 class="text-lg font-semibold mb-3">Menu</h2>
+            <nav class="flex flex-col gap-2">
+              <a href="/dashboard" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
+              <a href="/posts"     data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
+              <a href="/settings"  data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
+              <a href="/game"      data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
+            </nav>
+          </aside>
 
-        <!-- Sidebar wrapper for slide-in on mobile -->
-        <aside
-          id="app-sidebar"
-          class="bg-slate-800/60 rounded-xl p-4 border border-slate-700
-                 transform transition-transform duration-200 ease-in-out
-                 -translate-x-full md:translate-x-0 md:static md:block fixed top-4 left-4 w-64 z-40"
-        >
-          <h2 class="text-lg font-semibold mb-3">Menu</h2>
-          <nav class="flex flex-col gap-2">
-            <a href="/dashboard"         data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
-            <a href="/posts"    data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
-            <a href="/settings" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
-            <a href="/game"     data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
-          </nav>
-        </aside>
+          <!-- Main grows to fill remaining space -->
+          <main class="flex-1 min-w-0 space-y-4">
+            <!-- router-slot -->
+          </main>
+        </div>
 
-        <!-- A translucent backdrop when sidebar is open on mobile -->
-        <div id="sidebar-backdrop"
-             class="fixed inset-0 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-200 md:hidden"></div>
-
-        <main class="space-y-4 relative z-10">
-          <!-- router-slot -->
-        </main>
+        <!-- Footer with left-aligned toggle -->
+        <footer class="border-t border-slate-700 p-3 flex">
+          <button
+            id="sidebar-toggle"
+            class="px-3 py-2 rounded bg-slate-700 hover:bg-slate-600 text-sm"
+            aria-controls="app-sidebar"
+            aria-expanded="true"
+          >
+            Hide sidebar
+          </button>
+        </footer>
       </div>
     `;
     }
 
     mount() {
-        const btn = document.getElementById("sidebar-toggle");
-        const sidebar = document.getElementById("app-sidebar");
-        const backdrop = document.getElementById("sidebar-backdrop");
-
-        if (!btn || !sidebar || !backdrop) return;
+        const btn = document.getElementById("sidebar-toggle") as HTMLButtonElement | null;
+        const sidebar = document.getElementById("app-sidebar") as HTMLElement | null;
+        if (!btn || !sidebar) return;
 
         const open = () => {
-            sidebar.classList.remove("-translate-x-full");
-            (btn as HTMLButtonElement).setAttribute("aria-expanded", "true");
-            backdrop.classList.remove("pointer-events-none");
-            backdrop.classList.add("opacity-100");
+            sidebar.classList.remove("w-0", "p-0", "border-0");
+            sidebar.classList.add("w-[220px]", "p-4", "border");
+            btn.setAttribute("aria-expanded", "true");
+            btn.textContent = "Hide sidebar";
+            this.#open = true;
+            // optional: localStorage.setItem("sidebar", "open");
         };
 
         const close = () => {
-            sidebar.classList.add("-translate-x-full");
-            (btn as HTMLButtonElement).setAttribute("aria-expanded", "false");
-            backdrop.classList.add("pointer-events-none");
-            backdrop.classList.remove("opacity-100");
+            // collapse width & padding so it fully disappears
+            sidebar.classList.remove("w-[220px]", "p-4", "border");
+            sidebar.classList.add("w-0", "p-0", "border-0");
+            btn.setAttribute("aria-expanded", "false");
+            btn.textContent = "Show sidebar";
+            this.#open = false;
+            // optional: localStorage.setItem("sidebar", "closed");
         };
 
-        const toggle = () => {
-            const isClosed = sidebar.classList.contains("-translate-x-full");
-            isClosed ? open() : close();
-        };
-
-        // keep a bound reference so destroy can remove
+        const toggle = () => (this.#open ? close() : open());
         this.#onToggle = (e: Event) => { e.preventDefault(); toggle(); };
 
         btn.addEventListener("click", this.#onToggle);
 
-        // close when backdrop clicked (mobile)
-        backdrop.addEventListener("click", close);
+        // Initial state (you can restore from localStorage if you want)
+        open();
 
-        // close when resizing to desktop to avoid weird states
-        const onResize = () => {
-            if (window.matchMedia("(min-width: 768px)").matches) {
-                // desktop: ensure visible, remove backdrop effects
-                sidebar.classList.remove("-translate-x-full");
-                backdrop.classList.add("pointer-events-none");
-                backdrop.classList.remove("opacity-100");
-            } else {
-                // mobile: start closed by default
-                sidebar.classList.add("-translate-x-full");
-            }
-        };
-        window.addEventListener("resize", onResize);
-        // run once
-        onResize();
-
-        // store extra cleanup hooks
         (this as any)._cleanup = () => {
             btn.removeEventListener("click", this.#onToggle!);
-            backdrop.removeEventListener("click", close);
-            window.removeEventListener("resize", onResize);
         };
     }
 
