@@ -15,7 +15,13 @@ EXPOSE 3000
 
 WORKDIR /app
 
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends git ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
 COPY config/package.json /app/package.json
+# COPY LOCK ONLY WHEN IN PRODUCTION
+# COPY config/package-lock.json /app/package-lock.json
 RUN npm install
 
 RUN npx tailwindcss init -p
