@@ -12,7 +12,7 @@
 
 import Router from "./router/Router.js";
 import Fetch from "./tools/Fetch.js";
-import { createRouteTransition } from "./transition.ts";
+import { createRouteTransition } from "./router/transition.ts";
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
