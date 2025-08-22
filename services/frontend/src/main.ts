@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import Router from "./tools/Router.js";
+import Router from "./router/Router.js";
 import Fetch from "./tools/Fetch.js";
 
 import Dashboard from "./views/Dashboard.ts";
