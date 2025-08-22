@@ -57,14 +57,14 @@ const routes = [
 ];
 
 // Pick a global default
-const transition = createRouteTransition("slide");
+const transition = createRouteTransition("fade");
 
 const router = new Router({
     routes,
     mountSelector: "#app",
     linkSelector: "[data-link]",
     onBeforeNavigate,
-    // transition,
+    transition,
 });
 
 API.get("/health")
