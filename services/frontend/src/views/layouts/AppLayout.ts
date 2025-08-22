@@ -69,7 +69,7 @@ export default class AppLayout extends AbstractLayout {
             btn.setAttribute("aria-expanded", "true");
             btn.textContent = "Hide sidebar";
             this.#open = true;
-            // optional: localStorage.setItem("sidebar", "open");
+            localStorage.setItem("sidebar", "open");
         };
 
         const close = () => {
@@ -79,7 +79,7 @@ export default class AppLayout extends AbstractLayout {
             btn.setAttribute("aria-expanded", "false");
             btn.textContent = "Show sidebar";
             this.#open = false;
-            // optional: localStorage.setItem("sidebar", "closed");
+            localStorage.setItem("sidebar", "closed");
         };
 
         const toggle = () => (this.#open ? close() : open());
@@ -87,8 +87,8 @@ export default class AppLayout extends AbstractLayout {
 
         btn.addEventListener("click", this.#onToggle);
 
-        // Initial state (you can restore from localStorage if you want)
-        open();
+        const saved = localStorage.getItem("sidebar");
+        (saved === "closed") ? close() : open();
 
         (this as any)._cleanup = () => {
             btn.removeEventListener("click", this.#onToggle!);

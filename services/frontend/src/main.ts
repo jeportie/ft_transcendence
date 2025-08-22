@@ -6,12 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 14:07:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/22 16:01:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import Router from "./router/Router.js";
 import Fetch from "./tools/Fetch.js";
+import { createRouteTransition } from "./transition.ts";
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
@@ -56,41 +57,15 @@ const routes = [
     { path: "*", component: NotFound },
 ];
 
-// Tailwind-based fade transition
-function fadeTransition(el: HTMLElement, phase: "out" | "in") {
-    // We just toggle small utility classes; CSS is declared in tailwind (see section 4)
-    return new Promise<void>((resolve) => {
-        if (phase === "out") {
-            el.classList.remove("route-enter", "route-enter-active");
-            el.classList.add("route-leave");
-            requestAnimationFrame(() => {
-                el.classList.add("route-leave-active");
-                // Wait for the single transition to end
-                const done = () => { el.removeEventListener("transitionend", done); resolve(); };
-                el.addEventListener("transitionend", done, { once: true });
-            });
-        } else {
-            el.classList.remove("route-leave", "route-leave-active");
-            el.classList.add("route-enter");
-            requestAnimationFrame(() => {
-                el.classList.add("route-enter-active");
-                const done = () => {
-                    el.classList.remove("route-enter", "route-enter-active");
-                    el.removeEventListener("transitionend", done);
-                    resolve();
-                };
-                el.addEventListener("transitionend", done, { once: true });
-            });
-        }
-    });
-}
+// Pick a global default
+const transition = createRouteTransition("slide");
 
 const router = new Router({
     routes,
     mountSelector: "#app",
     linkSelector: "[data-link]",
     onBeforeNavigate,
-    transition: fadeTransition,
+    transition,
 });
 
 API.get("/health")

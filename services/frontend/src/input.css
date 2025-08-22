@@ -15,16 +15,35 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* base host has the transition */
+  /* Avoid horizontal scroll during slides */
+  html, body { @apply overflow-x-hidden; }
+
+  /* Host container: one transition pipeline for transform+opacity */
   #app {
-    @apply transition-opacity duration-200 ease-in-out opacity-100;
+    @apply overflow-hidden duration-300 ease-in-out;
+    transition-property: transform, opacity;
+    transform: translateZ(0); /* perf hint */
   }
 
-  /* leave: fade to 0 */
-  #app.route-leave        { @apply opacity-100; }
-  #app.route-leave-active { @apply opacity-0;   }
+  /* === SLIDE (right -> center, slight nudge left on leave) === */
+  #app[data-trans="slide"].route-leave                  { @apply translate-x-0; }
+  #app[data-trans="slide"].route-leave.route-leave-active { @apply -translate-x-6; }
+  #app[data-trans="slide"].route-enter                  { @apply translate-x-full; }
+  #app[data-trans="slide"].route-enter.route-enter-active { @apply translate-x-0; }
 
-  /* enter: fade from 0 to 100 */
-  #app.route-enter        { @apply opacity-0;   }
-  #app.route-enter-active { @apply opacity-100; }
+  /* === FADE === */
+  #app[data-trans="fade"].route-leave                   { @apply opacity-100; }
+  #app[data-trans="fade"].route-leave.route-leave-active { @apply opacity-0; }
+  #app[data-trans="fade"].route-enter                   { @apply opacity-0; }
+  #app[data-trans="fade"].route-enter.route-enter-active { @apply opacity-100; }
+
+  /* === ZOOM (subtle) === */
+  #app[data-trans="zoom"].route-leave                   { @apply scale-100 opacity-100; }
+  #app[data-trans="zoom"].route-leave.route-leave-active { @apply scale-95 opacity-0; }
+  #app[data-trans="zoom"].route-enter                   { @apply scale-105 opacity-0; }
+  #app[data-trans="zoom"].route-enter.route-enter-active { @apply scale-100 opacity-100; }
+
+  /* === NONE (no animation) — handled in JS, but keep for completeness === */
+  #app[data-trans="none"] { transition: none !important; }
 }
+
