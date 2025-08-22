@@ -83,7 +83,7 @@ export default class Router {
 
         // SPA navigation
         event.preventDefault();
-        const pathAndQuery = urlObj.pathname + urlObj.search;
+        const pathAndQuery = urlObj.pathname + urlObj.search + urlObj.hash;
         this.navigateTo(pathAndQuery);
     };
 
@@ -202,13 +202,15 @@ export default class Router {
      * Build the per-view context object.
      * @param {string} pathname
      * @param {Record<string,string>} params
-     * @returns {{ path:string, params:Record<string,string>, query:Record<string,string>, state:any }}
+     * @returns {{ path:string, params:Record<string,string>,
+     *      query:Record<string,string>, hash:Record<string>, state:any }}
      */
     #buildContext(pathname, params) {
         return {
             path: pathname,
             params,
             query: parseQuery(window.location.search),
+            hash: (window.location.hash || "").replace(/^#/, ""), // 👈 add this
             state: history.state,
         };
     }
@@ -253,13 +255,13 @@ export default class Router {
             await Promise.resolve(this.#transition(this.#mountEl, "out"));
         }
 
-        // 1) destroy old layouts (timers, listeners, etc.)
-        for (const lay of this.#currentLayouts) lay?.destroy?.();
-        this.#currentLayouts = [];
-
-        // 2) destroy previous leaf view
+        // 1) destroy previous leaf view
         this.#currentView?.destroy?.();
         this.#currentView = null;
+
+        // 2) destroy old layouts (timers, listeners, etc.)
+        for (const lay of this.#currentLayouts) lay?.destroy?.();
+        this.#currentLayouts = [];
 
         // Load layouts (outer -> inner) and component for leaf
         /** @type {any[]} */
@@ -283,6 +285,9 @@ export default class Router {
             const inst = layoutInsts[i];
             let shell = await inst.getHTML();
             shell = typeof shell === "string" ? shell : String(shell);
+            if (!shell.includes("<!-- router-slot -->")) {
+                throw new Error("Layout missing <!-- router-slot -->");
+            }
             html = shell.replace("<!-- router-slot -->", html);
         }
 
