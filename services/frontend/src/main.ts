@@ -22,7 +22,7 @@ const Game = () => import("./views/Game.ts");
 const NotFound = () => import("./views/NotFound.ts");
 
 // Lazy layout
-const AppLayout = () => import("./layouts/AppLayout.ts");
+const AppLayout = () => import("./layout/AppLayout.ts");
 
 const API = new Fetch("http://localhost:8000");
 
