@@ -53,6 +53,7 @@ export default class Router {
     #transition;
     #currentView = null;
     #started = false;
+    #currentLayouts = [];
 
     // ---------- Event handlers (bound once) ----------
     #onPopState = () => { this.#render(); };
@@ -252,15 +253,21 @@ export default class Router {
             await Promise.resolve(this.#transition(this.#mountEl, "out"));
         }
 
-        // Destroy previous view
+        // 1) destroy old layouts (timers, listeners, etc.)
+        for (const lay of this.#currentLayouts) lay?.destroy?.();
+        this.#currentLayouts = [];
+
+        // 2) destroy previous leaf view
         this.#currentView?.destroy?.();
+        this.#currentView = null;
 
         // Load layouts (outer -> inner) and component for leaf
         /** @type {any[]} */
-        const layoutChain = [];
+        const layoutInsts = [];
         for (const p of parents) {
             if (p.layout) {
-                layoutChain.push(await ensureComponent(p.layout));
+                const LayoutCtor = await ensureComponent(p.layout);
+                layoutInsts.push(new LayoutCtor(ctx));
             }
         }
 
@@ -271,18 +278,20 @@ export default class Router {
         let html = await leaf.getHTML();
         html = typeof html === "string" ? html : String(html);
 
-        // Wrap through layouts from inner to outer
-        for (let i = layoutChain.length - 1; i >= 0; i--) {
-            const Layout = layoutChain[i];
-            const inst = new Layout(ctx);
+        // wrap inner -> outer
+        for (let i = layoutInsts.length - 1; i >= 0; i--) {
+            const inst = layoutInsts[i];
             let shell = await inst.getHTML();
             shell = typeof shell === "string" ? shell : String(shell);
             html = shell.replace("<!-- router-slot -->", html);
-            // Note: for simplicity we don't manage layout mount/destroy lifecycles.
         }
 
         // Mount new DOM
         this.#mountEl.innerHTML = html;
+        // Save & mount layouts
+        this.#currentLayouts = layoutInsts;
+        // Mount layouts (outer -> inner) so parents can wire global UI first
+        for (const inst of this.#currentLayouts) inst.mount?.();
         this.#currentView = leaf;
         leaf.mount?.();
 
