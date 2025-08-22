@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:11:48 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 14:12:07 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/22 14:51:51 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,7 +20,7 @@ export default class AppLayout extends AbstractLayout {
         <aside class="bg-slate-800/60 rounded-xl p-4 border border-slate-700">
           <h2 class="text-lg font-semibold mb-3">Menu</h2>
           <nav class="flex flex-col gap-2">
-            <a href="/"        data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
+            <a href="/dashboard" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
             <a href="/posts"   data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
             <a href="/settings"data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
             <a href="/game"    data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>

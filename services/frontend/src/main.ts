@@ -14,21 +14,22 @@ import Router from "./router/Router.js";
 import Fetch from "./tools/Fetch.js";
 
 // Lazy views 
+const Landing = () => import("./views/Landing.ts");
 const Dashboard = () => import("./views/Dashboard.ts");
 const Settings = () => import("./views/Settings.ts");
 const Posts = () => import("./views/Posts.ts");
 const PostShow = () => import("./views/PostShow.ts");
 const Game = () => import("./views/Game.ts");
+const Login = () => import("./views/Login.ts");
 const NotFound = () => import("./views/NotFound.ts");
 
 // Lazy layout
-const AppLayout = () => import("./layout/AppLayout.ts");
+const AppLayout = () => import("./views/layouts/AppLayout.ts");
 
 const API = new Fetch("http://localhost:8000");
 
 // Example guard (redirect if not logged in)
 const requireAuth = (ctx: any) => {
-    void ctx;
     const logged = Boolean(localStorage.getItem("token"));
     return logged || "/login";
 };
@@ -39,18 +40,19 @@ const onBeforeNavigate = (to: string) => {
 };
 
 const routes = [
+    { path: "/", component: Landing },
     {
         path: "/",                // layout root
-        component: Dashboard,     // optional: render Dashboard at "/"
         layout: AppLayout,        // children will be wrapped in AppLayout
         children: [
-            { path: "settings", component: Settings, beforeEnter: requireAuth },
+            { path: "dashboard", component: Dashboard /*, beforeEnter: requireAuth */ },
+            { path: "settings", component: Settings /*, beforeEnter: requireAuth */ },
             { path: "posts", component: Posts },
             { path: "posts/:id", component: PostShow },
-            { path: "game", component: Game, beforeEnter: requireAuth },
+            { path: "game", component: Game/*, beforeEnter: requireAuth*/ },
         ],
     },
-    { path: "/login", component: () => import("./views/Login.ts") },
+    { path: "/login", component: Login },
     { path: "*", component: NotFound },
 ];
 
