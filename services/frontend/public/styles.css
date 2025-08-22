@@ -4,7 +4,7 @@
 
 /*                                                        :::      ::::::::   */
 
-/*   styles.css                                         :+:      :+:    :+:   */
+/*   input.css                                          :+:      :+:    :+:   */
 
 /*                                                    +:+ +:+         +:+     */
 
@@ -14,7 +14,7 @@
 
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/07/23 14:56:38 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/22 14:12:28 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -750,6 +750,41 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* base host has the transition */
+
+#app {
+  opacity: 1;
+  transition-property: opacity;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* leave: fade to 0 */
+
+#app.route-leave {
+  opacity: 1;
+}
+
+#app.route-leave-active {
+  opacity: 0;
+}
+
+/* enter: fade from 0 to 100 */
+
+#app.route-enter {
+  opacity: 0;
+}
+
+#app.route-enter-active {
+  opacity: 1;
 }
 
 .hover\:bg-blue-700:hover {

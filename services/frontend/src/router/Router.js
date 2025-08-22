@@ -12,6 +12,7 @@
 // ************************************************************************** //
 
 import { pathToRegex, normalize, parseQuery } from "./routerTools.js";
+import { expandRoutes, ensureComponent, runGuards } from "./routerInternals.js"
 
 /**
  * Simple, framework-agnostic SPA router with:
@@ -34,16 +35,6 @@ import { pathToRegex, normalize, parseQuery } from "./routerTools.js";
  */
 
 /**
- * @typedef {Object} RouteDef
- * @prop {string} path               Route path. For children, can be relative (e.g. "posts/:id") or absolute ("/posts/:id").
- * @prop {any|(()=>Promise<any>)} [view]       Legacy leaf view class or lazy loader returning module with default export.
- * @prop {any|(()=>Promise<any>)} [component]  Preferred: leaf view class or lazy loader (same as view).
- * @prop {any|(()=>Promise<any>)} [layout]     Optional layout class or lazy loader used for this node and its children.
- * @prop {(ctx:any)=> (void|boolean|string|Promise<void|boolean|string>)} [beforeEnter] Guard: return false to block, or a string path to redirect.
- * @prop {RouteDef[]} [children]    Nested routes rendered inside this node's layout (if provided).
- */
-
-/**
  * @typedef RouterOptions
  * @prop {RouteDef[]} routes
  * @prop {string} [mountSelector="#app"]
@@ -52,7 +43,6 @@ import { pathToRegex, normalize, parseQuery } from "./routerTools.js";
  * @prop {(el:HTMLElement, phase:"out"|"in")=> (void|Promise<void>)} [transition]
  * @prop {string} [notFoundPath] Optional explicit not-found path in your route table
  */
-
 export default class Router {
     // Compiled flat route table with parents, regex, keys, optional layout & guard
     #routes = [];
@@ -106,7 +96,7 @@ export default class Router {
         }
 
         // Flatten nested routes and precompile regexes
-        const flat = this.#expandRoutes(opts.routes, "/");
+        const flat = expandRoutes(opts.routes, "/");
         this.#routes = flat.map((r) => {
             const { regex, keys, isCatchAll } = pathToRegex(r.fullPath === "/*" ? "*" : r.fullPath);
             return {
@@ -185,59 +175,7 @@ export default class Router {
         this.#render();
     }
 
-    // ==================== Internal helpers ====================
-
-    /**
-     * Expand a nested route tree into a flat list with absolute full paths and parent chain.
-     * Child paths may be relative ("posts/:id") or absolute ("/posts/:id").
-     * @param {RouteDef[]} routes
-     * @param {string} base
-     * @param {Array<Object>} parents
-     * @returns {Array<Object>}
-     */
-    #expandRoutes(routes, base = "/", parents = []) {
-        /** @type {Array<Object>} */
-        const out = [];
-        for (const r of routes) {
-            const isAbs = typeof r.path === "string" && r.path.startsWith("/");
-            const raw = isAbs ? r.path : (base === "/" ? `/${r.path}` : `${base}/${r.path}`);
-            const full = normalize(raw);
-
-            const entry = {
-                path: r.path,
-                fullPath: full,
-                view: r.view,
-                component: r.component,
-                layout: r.layout,
-                beforeEnter: r.beforeEnter,
-                parents, // keep current chain (shallow)
-            };
-            out.push(entry);
-
-            if (Array.isArray(r.children) && r.children.length > 0) {
-                out.push(...this.#expandRoutes(r.children, full, [...parents, entry]));
-            }
-        }
-        return out;
-    }
-
-    /**
-     * Ensure we have a class/constructor from a direct class or a lazy loader.
-     * Accepts:
-     *   - class/function (constructor) directly
-     *   - () => import('...') (module with default export)
-     * @param {any|(()=>Promise<any>)} maybe
-     * @returns {Promise<any|null>}
-     */
-    async #ensureComponent(maybe) {
-        if (!maybe) return null;
-        // Heuristic: treat zero-arg functions as lazy loaders
-        if (typeof maybe === "function" && maybe.length === 0) {
-            const mod = await maybe();
-            return mod?.default ?? mod;
-        }
-        return maybe;
-    }
+    // ---------- Internal ----------
 
     /**
      * Try to match the current pathname against known routes.
@@ -275,29 +213,6 @@ export default class Router {
     }
 
     /**
-     * Run guards on parent chain then leaf route.
-     * Each guard may return:
-     *  - false        -> block navigation
-     *  - string path  -> redirect to that path
-     *  - void/true    -> continue
-     * @param {Array<any>} parents
-     * @param {any} leaf
-     * @param {any} ctx
-     * @returns {Promise< { action:"continue" } | { action:"block" } | { action:"redirect", to:string } >}
-     */
-    async #runGuards(parents, leaf, ctx) {
-        const chain = [...parents, leaf];
-        for (const r of chain) {
-            if (!r?.beforeEnter) continue;
-            const res = r.beforeEnter(ctx);
-            const out = (res && typeof res.then === "function") ? await res : res;
-            if (out === false) return { action: "block" };
-            if (typeof out === "string") return { action: "redirect", to: out };
-        }
-        return { action: "continue" };
-    }
-
-    /**
      * Core render pipeline with guards, layouts, lazy loading, and optional transitions:
      * - Resolve current route
      * - Build context
@@ -325,7 +240,7 @@ export default class Router {
 
         // Guards
         const parents = route.parents || [];
-        const guardRes = await this.#runGuards(parents, route, ctx);
+        const guardRes = await runGuards(parents, route, ctx);
         if (guardRes.action === "block") return;
         if (guardRes.action === "redirect") {
             await this.navigateTo(guardRes.to, { replace: true });
@@ -345,11 +260,11 @@ export default class Router {
         const layoutChain = [];
         for (const p of parents) {
             if (p.layout) {
-                layoutChain.push(await this.#ensureComponent(p.layout));
+                layoutChain.push(await ensureComponent(p.layout));
             }
         }
 
-        const LeafCtor = await this.#ensureComponent(route.component || route.view);
+        const LeafCtor = await ensureComponent(route.component || route.view);
         const leaf = new LeafCtor(ctx);
 
         // Render leaf first

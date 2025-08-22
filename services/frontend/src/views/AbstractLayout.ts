@@ -1,30 +1,29 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Dashboard.ts                                       :+:      :+:    :+:   //
+//   AbstractLayout.ts                                  :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/14 18:39:16 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 14:15:02 by jeportie         ###   ########.fr       //
+//   Created: 2025/08/22 14:08:13 by jeportie          #+#    #+#             //
+//   Updated: 2025/08/22 14:11:44 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import AbstractView from "./AbstractView.js";
+// services/frontend/src/layouts/AbstractLayout.ts
+export default class AbstractLayout {
+    // You can keep a context like your AbstractView if you want
+    protected ctx: any;
 
-export default class Dashboard extends AbstractView {
     constructor(ctx: any) {
-        super(ctx);
         this.ctx = ctx;
-        this.setTitle("Dashboard");
-    };
-
-    async getHTML() {
-        return /*html*/ `
-          <h1 class="text-2xl font-bold">Dashboard</h1>
-          <div class="rounded-xl border border-slate-700 bg-slate-800/60 p-4">
-            <p class="text-slate-300">Welcome to your SPA dashboard!</p>
-          </div>
-    `;
     }
+
+    async getHTML(): Promise<string> {
+        // Must contain <!-- router-slot -->
+        return "<!-- router-slot -->";
+    }
+
+    mount(): void { }
+    destroy(): void { }
 }
