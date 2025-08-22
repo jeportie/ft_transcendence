@@ -10,9 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import Router from "./router/Router.js";
+import { Router, createRouteTransition } from "@jeportie/mini-spa";
 import Fetch from "./tools/Fetch.js";
-import { createRouteTransition } from "./router/transition.ts";
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
@@ -25,7 +24,7 @@ const Login = () => import("./views/Login.ts");
 const NotFound = () => import("./views/NotFound.ts");
 
 // Lazy layout
-const AppLayout = () => import("./views/layouts/AppLayout.ts");
+const AppLayout = () => import("./views/AppLayout.ts");
 
 const API = new Fetch("http://localhost:8000");
 

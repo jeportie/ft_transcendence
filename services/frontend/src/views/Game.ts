@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import AbstractView from "./AbstractView.ts";
+import { AbstractView } from "@jeportie/mini-spa";
 import PongGame from "../games/pong/PongGame.js";
 import Rect from "../games/lib2D/Rect.js";
 

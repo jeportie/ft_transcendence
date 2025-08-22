@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import AbstractLayout from "./AbstractLayout.ts";
+import { AbstractLayout } from "@jeportie/mini-spa";
 
 export default class AppLayout extends AbstractLayout {
     #onToggle?: (e: Event) => void;

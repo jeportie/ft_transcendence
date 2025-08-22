@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import AbstractView from "./AbstractView.js";
+import { AbstractView } from "@jeportie/mini-spa";
 
 export default class Landing extends AbstractView {
     constructor(ctx: any) {
