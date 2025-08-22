@@ -64,7 +64,7 @@ const router = new Router({
     mountSelector: "#app",
     linkSelector: "[data-link]",
     onBeforeNavigate,
-    transition,
+    // transition,
 });
 
 API.get("/health")

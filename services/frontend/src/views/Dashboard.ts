@@ -15,7 +15,6 @@ import { AbstractView } from "@jeportie/mini-spa";
 export default class Dashboard extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
-        this.ctx = ctx;
         this.setTitle("Dashboard");
     };
 
