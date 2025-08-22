@@ -18,6 +18,12 @@ DATADIR = ~/data/
 DOCKER_COMPOSE := $(shell command -v docker compose >/dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
 DC      = $(DOCKER_COMPOSE) -f $(DCLOC)
 
+ifeq ($(DOCKER_COMPOSE),docker compose)
+    DOWN_FLAGS = --volumes --rmi all --remove-orphans
+else
+    DOWN_FLAGS = -v --rmi all --remove-orphans
+endif
+
 .PHONY: all prepare build up down clean logs re
 
 all: prepare build up
@@ -37,7 +43,8 @@ down:
 
 clean: down
 	docker system prune -af
-	$(DC) --env-file $(ENV) down -v --rmi all --remove-orphans
+	rm -f services/frontend/public/bundle* 
+	$(DC) --env-file $(ENVFILE) down $(DOWN_FLAGS)
 
 logs:
 	$(DC) --env-file $(ENVFILE) logs -f
