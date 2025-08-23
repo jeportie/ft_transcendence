@@ -14,8 +14,6 @@ module.exports = {
         "route-enter-active",
         "route-leave",
         "route-leave-active",
-        "fade",
-        "zoom",
         "view-slot",
     ],
 }

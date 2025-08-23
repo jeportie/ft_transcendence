@@ -580,6 +580,10 @@ video {
   visibility: collapse;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -902,6 +906,8 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Tunables */
+
 :root{
   --route-dur: 300ms;
   --route-ease: cubic-bezier(0.22,1,0.36,1);
@@ -909,107 +915,81 @@ video {
 
 #app {
   position: relative;
-}
-
-#app .view-slot {
-  position: absolute;
-  inset: 0;
-  width: 100%;
   transition-property: transform, opacity;
   transition-duration: var(--route-dur);
   transition-timing-function: var(--route-ease);
   transform: translateZ(0);
+  backface-visibility: hidden;
   will-change: transform, opacity;
 }
 
-#app .view-slot.route-enter {
-  z-index: 2;
-}
+/* --- FADE --- */
 
-/* new on top */
-
-#app .view-slot.route-leave {
-  z-index: 1;
-}
-
-/* old below */
-
-/* FADE — sequential (old fades to bg, new fades in later) */
-
-#app .view-slot[data-trans="fade"].route-leave {
+#app[data-trans="fade"].route-leave               {
   opacity: 1;
 }
 
-#app .view-slot[data-trans="fade"].route-leave.route-leave-active {
+#app[data-trans="fade"].route-leave.route-leave-active {
   opacity: 0;
 }
 
-#app .view-slot[data-trans="fade"].route-enter {
+#app[data-trans="fade"].route-enter               {
   opacity: 0;
 }
 
-#app .view-slot[data-trans="fade"].route-enter.route-enter-active {
+#app[data-trans="fade"].route-enter.route-enter-active {
   opacity: 1;
 }
 
-/* SLIDE — push (new from right, old fully off to left, no opacity changes) */
+/* --- SLIDE (gentle push) --- */
 
-#app .view-slot[data-trans="slide"].route-leave {
-  transform: translateX(0%);
+#app[data-trans="slide"].route-leave               {
+  transform: translateX(0);
+}
+
+#app[data-trans="slide"].route-leave.route-leave-active {
+  transform: translateX(-16px);
+}
+
+#app[data-trans="slide"].route-enter               {
+  transform: translateX(16px);
+}
+
+#app[data-trans="slide"].route-enter.route-enter-active {
+  transform: translateX(0);
+}
+
+/* --- ZOOM --- */
+
+#app[data-trans="zoom"] {
+  transform-origin: 50% 50%;
+}
+
+#app[data-trans="zoom"].route-leave               {
+  transform: scale(1);
   opacity: 1;
 }
 
-#app .view-slot[data-trans="slide"].route-leave.route-leave-active {
-  transform: translateX(-100%);
-  opacity: 1;
-}
-
-#app .view-slot[data-trans="slide"].route-enter {
-  transform: translateX(100%);
-  opacity: 1;
-}
-
-#app .view-slot[data-trans="slide"].route-enter.route-enter-active {
-  transform: translateX(0%);
-  opacity: 1;
-}
-
-/* ZOOM (unchanged if you use it) */
-
-/* ... keep your zoom rules ... */
-
-/* ZOOM */
-
-#app .view-slot[data-trans="zoom"].route-leave {
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-  opacity: 1;
-}
-
-#app .view-slot[data-trans="zoom"].route-leave.route-leave-active {
-  --tw-scale-x: .95;
-  --tw-scale-y: .95;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+#app[data-trans="zoom"].route-leave.route-leave-active {
+  transform: scale(.98);
   opacity: 0;
 }
 
-#app .view-slot[data-trans="zoom"].route-enter {
-  --tw-scale-x: 1.05;
-  --tw-scale-y: 1.05;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+#app[data-trans="zoom"].route-enter               {
+  transform: scale(1.02);
   opacity: 0;
 }
 
-#app .view-slot[data-trans="zoom"].route-enter.route-enter-active {
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+#app[data-trans="zoom"].route-enter.route-enter-active {
+  transform: scale(1);
   opacity: 1;
 }
 
-#app .view-slot[data-trans="none"] {
-  transition: none !important;
+/* Disable clicks during the brief out/in phases to avoid caret flicker */
+
+#app.route-leave,
+  #app.route-enter {
+  pointer-events: none;
 }
 
 .hover\:bg-blue-700:hover {

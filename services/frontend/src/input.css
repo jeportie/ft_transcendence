@@ -14,47 +14,42 @@
 @tailwind utilities;
 
 @layer utilities {
-
+  /* Tunables */
   :root{
     --route-dur: 300ms;
     --route-ease: cubic-bezier(0.22,1,0.36,1);
   }
   
-  #app { position: relative; }
-  #app .view-slot {
-    position: absolute; inset: 0; width: 100%;
+  #app {
+    position: relative;
     transition-property: transform, opacity;
     transition-duration: var(--route-dur);
     transition-timing-function: var(--route-ease);
     transform: translateZ(0);
+    backface-visibility: hidden;
     will-change: transform, opacity;
   }
-  #app .view-slot.route-enter { z-index: 2; }  /* new on top */
-  #app .view-slot.route-leave { z-index: 1; }  /* old below */
   
-  /* FADE — sequential (old fades to bg, new fades in later) */
-  #app .view-slot[data-trans="fade"].route-leave { opacity: 1; }
-  #app .view-slot[data-trans="fade"].route-leave.route-leave-active { opacity: 0; }
+  /* --- FADE --- */
+  #app[data-trans="fade"].route-leave               { opacity: 1; }
+  #app[data-trans="fade"].route-leave.route-leave-active { opacity: 0; }
+  #app[data-trans="fade"].route-enter               { opacity: 0; }
+  #app[data-trans="fade"].route-enter.route-enter-active { opacity: 1; }
   
-  #app .view-slot[data-trans="fade"].route-enter { opacity: 0; }
-  #app .view-slot[data-trans="fade"].route-enter.route-enter-active { opacity: 1; }
+  /* --- SLIDE (gentle push) --- */
+  #app[data-trans="slide"].route-leave               { transform: translateX(0); }
+  #app[data-trans="slide"].route-leave.route-leave-active { transform: translateX(-16px); }
+  #app[data-trans="slide"].route-enter               { transform: translateX(16px); }
+  #app[data-trans="slide"].route-enter.route-enter-active { transform: translateX(0); }
   
-  /* SLIDE — push (new from right, old fully off to left, no opacity changes) */
-  #app .view-slot[data-trans="slide"].route-leave { transform: translateX(0%); opacity: 1; }
-  #app .view-slot[data-trans="slide"].route-leave.route-leave-active { transform: translateX(-100%); opacity: 1; }
+  /* --- ZOOM --- */
+  #app[data-trans="zoom"] { transform-origin: 50% 50%; }
+  #app[data-trans="zoom"].route-leave               { transform: scale(1);   opacity: 1; }
+  #app[data-trans="zoom"].route-leave.route-leave-active { transform: scale(.98); opacity: 0; }
+  #app[data-trans="zoom"].route-enter               { transform: scale(1.02); opacity: 0; }
+  #app[data-trans="zoom"].route-enter.route-enter-active { transform: scale(1);   opacity: 1; }
   
-  #app .view-slot[data-trans="slide"].route-enter { transform: translateX(100%); opacity: 1; }
-  #app .view-slot[data-trans="slide"].route-enter.route-enter-active { transform: translateX(0%); opacity: 1; }
-  
-  /* ZOOM (unchanged if you use it) */
-  /* ... keep your zoom rules ... */
-
-
-  /* ZOOM */
-  #app .view-slot[data-trans="zoom"].route-leave { @apply scale-100 opacity-100; }
-  #app .view-slot[data-trans="zoom"].route-leave.route-leave-active { @apply scale-95 opacity-0; }
-  #app .view-slot[data-trans="zoom"].route-enter { @apply scale-105 opacity-0; }
-  #app .view-slot[data-trans="zoom"].route-enter.route-enter-active { @apply scale-100 opacity-100; }
-
-  #app .view-slot[data-trans="none"] { transition: none !important; }
+  /* Disable clicks during the brief out/in phases to avoid caret flicker */
+  #app.route-leave,
+  #app.route-enter { pointer-events: none; }
 }
