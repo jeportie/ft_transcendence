@@ -57,7 +57,7 @@ const routes = [
 ];
 
 // Pick a global default
-const transition = createRouteTransition("fade");
+const transition = createRouteTransition("slide");
 
 const router = new Router({
     routes,

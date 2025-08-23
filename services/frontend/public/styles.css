@@ -6,15 +6,13 @@
 
 /*   input.css                                          :+:      :+:    :+:   */
 
-/*                                                    +:+ +:+         +:+     */
-
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 
 /*                                                +#+#+#+#+#+   +#+           */
 
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/08/22 14:44:19 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/22 20:40:00 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -904,32 +902,113 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Avoid horizontal scroll during slides */
-
-html, body {
-  overflow-x: hidden;
+:root{
+  --route-dur: 300ms;
+  --route-ease: cubic-bezier(0.22,1,0.36,1);
 }
-
-/* Host container: one transition pipeline for transform+opacity */
 
 #app {
-  overflow: hidden;
-  transition-duration: 300ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-property: transform, opacity;
-  transform: translateZ(0);
-  /* perf hint */
+  position: relative;
 }
 
-/* === SLIDE (right -> center, slight nudge left on leave) === */
+#app .view-slot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  transition-property: transform, opacity;
+  transition-duration: var(--route-dur);
+  transition-timing-function: var(--route-ease);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
 
-/* === FADE === */
+#app .view-slot.route-enter {
+  z-index: 2;
+}
 
-/* === ZOOM (subtle) === */
+/* new on top */
 
-/* === NONE (no animation) — handled in JS, but keep for completeness === */
+#app .view-slot.route-leave {
+  z-index: 1;
+}
 
-#app[data-trans="none"] {
+/* old below */
+
+/* FADE — sequential (old fades to bg, new fades in later) */
+
+#app .view-slot[data-trans="fade"].route-leave {
+  opacity: 1;
+}
+
+#app .view-slot[data-trans="fade"].route-leave.route-leave-active {
+  opacity: 0;
+}
+
+#app .view-slot[data-trans="fade"].route-enter {
+  opacity: 0;
+}
+
+#app .view-slot[data-trans="fade"].route-enter.route-enter-active {
+  opacity: 1;
+}
+
+/* SLIDE — push (new from right, old fully off to left, no opacity changes) */
+
+#app .view-slot[data-trans="slide"].route-leave {
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+#app .view-slot[data-trans="slide"].route-leave.route-leave-active {
+  transform: translateX(-100%);
+  opacity: 1;
+}
+
+#app .view-slot[data-trans="slide"].route-enter {
+  transform: translateX(100%);
+  opacity: 1;
+}
+
+#app .view-slot[data-trans="slide"].route-enter.route-enter-active {
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+/* ZOOM (unchanged if you use it) */
+
+/* ... keep your zoom rules ... */
+
+/* ZOOM */
+
+#app .view-slot[data-trans="zoom"].route-leave {
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  opacity: 1;
+}
+
+#app .view-slot[data-trans="zoom"].route-leave.route-leave-active {
+  --tw-scale-x: .95;
+  --tw-scale-y: .95;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  opacity: 0;
+}
+
+#app .view-slot[data-trans="zoom"].route-enter {
+  --tw-scale-x: 1.05;
+  --tw-scale-y: 1.05;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  opacity: 0;
+}
+
+#app .view-slot[data-trans="zoom"].route-enter.route-enter-active {
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  opacity: 1;
+}
+
+#app .view-slot[data-trans="none"] {
   transition: none !important;
 }
 
@@ -966,4 +1045,3 @@ html, body {
     flex-direction: row;
   }
 }
-

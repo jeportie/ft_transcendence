@@ -2,11 +2,10 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   input.css                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
-/*   Updated: 2025/08/22 14:44:19 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/22 20:40:00 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +14,47 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* Avoid horizontal scroll during slides */
-  html, body { @apply overflow-x-hidden; }
 
-  /* Host container: one transition pipeline for transform+opacity */
-  #app {
-    @apply overflow-hidden duration-300 ease-in-out;
-    transition-property: transform, opacity;
-    transform: translateZ(0); /* perf hint */
+  :root{
+    --route-dur: 300ms;
+    --route-ease: cubic-bezier(0.22,1,0.36,1);
   }
+  
+  #app { position: relative; }
+  #app .view-slot {
+    position: absolute; inset: 0; width: 100%;
+    transition-property: transform, opacity;
+    transition-duration: var(--route-dur);
+    transition-timing-function: var(--route-ease);
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+  #app .view-slot.route-enter { z-index: 2; }  /* new on top */
+  #app .view-slot.route-leave { z-index: 1; }  /* old below */
+  
+  /* FADE — sequential (old fades to bg, new fades in later) */
+  #app .view-slot[data-trans="fade"].route-leave { opacity: 1; }
+  #app .view-slot[data-trans="fade"].route-leave.route-leave-active { opacity: 0; }
+  
+  #app .view-slot[data-trans="fade"].route-enter { opacity: 0; }
+  #app .view-slot[data-trans="fade"].route-enter.route-enter-active { opacity: 1; }
+  
+  /* SLIDE — push (new from right, old fully off to left, no opacity changes) */
+  #app .view-slot[data-trans="slide"].route-leave { transform: translateX(0%); opacity: 1; }
+  #app .view-slot[data-trans="slide"].route-leave.route-leave-active { transform: translateX(-100%); opacity: 1; }
+  
+  #app .view-slot[data-trans="slide"].route-enter { transform: translateX(100%); opacity: 1; }
+  #app .view-slot[data-trans="slide"].route-enter.route-enter-active { transform: translateX(0%); opacity: 1; }
+  
+  /* ZOOM (unchanged if you use it) */
+  /* ... keep your zoom rules ... */
 
-  /* === SLIDE (right -> center, slight nudge left on leave) === */
-  #app[data-trans="slide"].route-leave                  { @apply translate-x-0; }
-  #app[data-trans="slide"].route-leave.route-leave-active { @apply -translate-x-6; }
-  #app[data-trans="slide"].route-enter                  { @apply translate-x-full; }
-  #app[data-trans="slide"].route-enter.route-enter-active { @apply translate-x-0; }
 
-  /* === FADE === */
-  #app[data-trans="fade"].route-leave                   { @apply opacity-100; }
-  #app[data-trans="fade"].route-leave.route-leave-active { @apply opacity-0; }
-  #app[data-trans="fade"].route-enter                   { @apply opacity-0; }
-  #app[data-trans="fade"].route-enter.route-enter-active { @apply opacity-100; }
+  /* ZOOM */
+  #app .view-slot[data-trans="zoom"].route-leave { @apply scale-100 opacity-100; }
+  #app .view-slot[data-trans="zoom"].route-leave.route-leave-active { @apply scale-95 opacity-0; }
+  #app .view-slot[data-trans="zoom"].route-enter { @apply scale-105 opacity-0; }
+  #app .view-slot[data-trans="zoom"].route-enter.route-enter-active { @apply scale-100 opacity-100; }
 
-  /* === ZOOM (subtle) === */
-  #app[data-trans="zoom"].route-leave                   { @apply scale-100 opacity-100; }
-  #app[data-trans="zoom"].route-leave.route-leave-active { @apply scale-95 opacity-0; }
-  #app[data-trans="zoom"].route-enter                   { @apply scale-105 opacity-0; }
-  #app[data-trans="zoom"].route-enter.route-enter-active { @apply scale-100 opacity-100; }
-
-  /* === NONE (no animation) — handled in JS, but keep for completeness === */
-  #app[data-trans="none"] { transition: none !important; }
+  #app .view-slot[data-trans="none"] { transition: none !important; }
 }
-
