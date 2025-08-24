@@ -10,11 +10,8 @@ module.exports = {
     },
     plugins: [],
     safelist: [
-        "route-enter",
-        "route-enter-active",
-        "route-leave",
-        "route-leave-active",
+        { pattern: /^route-(enter|leave)(-active)?$/ },
         "view-slot",
-    ],
-}
+    ]
 
+}

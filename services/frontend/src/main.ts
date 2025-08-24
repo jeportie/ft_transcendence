@@ -6,12 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 16:01:47 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/24 11:55:09 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { Router, createRouteTransition } from "@jeportie/mini-spa";
-import Fetch from "./tools/Fetch.js";
+import { Router } from "@jeportie/mini-spa";
+import TailwindAnimationHook from "./transitions-lib/TailwindAnimationHook.js";
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
@@ -57,14 +57,14 @@ const routes = [
 ];
 
 // Pick a global default
-const transition = createRouteTransition("fade");
+const transition = tailwindEngine("slide");
 
 const router = new Router({
     routes,
     mountSelector: "#app",
     linkSelector: "[data-link]",
     onBeforeNavigate,
-    transition,
+    transition: new TailwindAnimationHook({ variant: "slide-push" }),
 });
 
 API.get("/health")

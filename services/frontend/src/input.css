@@ -5,7 +5,7 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
-/*   Updated: 2025/08/22 20:40:00 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/24 00:45:00 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
     --route-dur: 300ms;
     --route-ease: cubic-bezier(0.22,1,0.36,1);
   }
-  
+
+  /* ensure the containing block has height for overlap mode */
+  html, body { height: 100%; }
+
   #app {
     position: relative;
     transition-property: transform, opacity;
@@ -28,6 +31,9 @@
     transform: translateZ(0);
     backface-visibility: hidden;
     will-change: transform, opacity;
+
+    /* allow absolutely-positioned slots to fill container */
+    min-height: 100%;
   }
   
   /* --- FADE --- */
@@ -52,4 +58,62 @@
   /* Disable clicks during the brief out/in phases to avoid caret flicker */
   #app.route-leave,
   #app.route-enter { pointer-events: none; }
+
+  /* -------- Overlap mode basics -------- */
+  #app { overflow: hidden; }                 /* clip sliding/fading edges */
+  .view-slot { 
+    position: absolute; 
+    inset: 0;                                /* fill container */
+    z-index: 0; 
+  }
+  .view-slot.route-enter { z-index: 1; }     /* new view above old */
+
+  /* transitions (reuse tunables) */
+  .view-slot.route-enter,
+  .view-slot.route-leave {
+    transition-property: opacity, transform;
+    transition-duration: var(--route-dur);
+    transition-timing-function: var(--route-ease);
+  }
+
+  /* Click guard on slots during phases (mirrors #app guard) */
+  .view-slot.route-leave,
+  .view-slot.route-enter { pointer-events: none; }
+  
+  /* FADE on slots (overlap mode) */
+  .view-slot[data-trans="fade"].route-enter               { opacity: 0; }
+  .view-slot[data-trans="fade"].route-enter.route-enter-active { opacity: 1; }
+  .view-slot[data-trans="fade"].route-leave               { opacity: 1; }
+  .view-slot[data-trans="fade"].route-leave.route-leave-active { opacity: 0; }
+
+
+  /* ---- PUSH TRACK (no overlap) ---- */
+  .view-track {
+    position: relative;
+    display: flex;
+    width: 200%;
+    height: 100%;
+    will-change: transform;
+  }
+  
+  .view-track .view-slot {
+    position: relative;      /* override absolute */
+    inset: auto;             /* override absolute */
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+  }
+  
+  /* animate the track when variant=slide */
+  .view-track.route-enter,
+  .view-track.route-leave {
+    transition: transform var(--route-dur) var(--route-ease);
+  }
+  
+  .view-track[data-trans="slide"].route-enter { 
+    transform: translateX(0%);           /* first half visible: old on left */
+  }
+  .view-track[data-trans="slide"].route-enter.route-enter-active { 
+    transform: translateX(-50%);         /* second half visible: new on right */
+  }
 }
