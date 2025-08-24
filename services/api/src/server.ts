@@ -14,6 +14,14 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { getDb } from "./db.js"
+import { hashPassword, verifyPassword } from "./auth/password.js";
+
+(async () => {
+    const h = await hashPassword("hello");
+    const ok = verifyPassword(h, "hello")
+    if (!ok)
+        console.error("[auth] argon2 slef-check failed");
+})();
 
 const app = Fastify({ logger: false });
 
