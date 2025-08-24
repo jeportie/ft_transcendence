@@ -6,12 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/24 11:55:09 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/24 14:25:12 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { Router } from "@jeportie/mini-spa";
 import TailwindAnimationHook from "./transitions-lib/TailwindAnimationHook.js";
+import Fetch from "./tools/Fetch.js";
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
@@ -56,15 +57,12 @@ const routes = [
     { path: "*", component: NotFound },
 ];
 
-// Pick a global default
-const transition = tailwindEngine("slide");
-
 const router = new Router({
     routes,
     mountSelector: "#app",
     linkSelector: "[data-link]",
     onBeforeNavigate,
-    transition: new TailwindAnimationHook({ variant: "slide-push" }),
+    animationHook: new TailwindAnimationHook({ variant: "slide-push" }),
 });
 
 API.get("/health")

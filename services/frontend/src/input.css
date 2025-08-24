@@ -2,6 +2,7 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   input.css                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
@@ -86,8 +87,21 @@
   .view-slot[data-trans="fade"].route-leave               { opacity: 1; }
   .view-slot[data-trans="fade"].route-leave.route-leave-active { opacity: 0; }
 
+  /* SLIDE-PUSH on slots (overlap mode, used by TailwindAnimationHook) */
+  .view-slot[data-trans="slide-push"].route-enter {
+    transform: translateX(100%);   /* new starts off-screen to the RIGHT */
+  }
+  .view-slot[data-trans="slide-push"].route-enter.route-enter-active {
+    transform: translateX(0%);     /* slides into place */
+  }
+  .view-slot[data-trans="slide-push"].route-leave {
+    transform: translateX(0%);     /* old starts in place */
+  }
+  .view-slot[data-trans="slide-push"].route-leave.route-leave-active {
+    transform: translateX(-100%);  /* pushed LEFT and out */
+  }
 
-  /* ---- PUSH TRACK (no overlap) ---- */
+  /* -------- Track-based PUSH (no overlap) -------- */
   .view-track {
     position: relative;
     display: flex;
@@ -104,16 +118,17 @@
     height: 100%;
   }
   
-  /* animate the track when variant=slide */
   .view-track.route-enter,
   .view-track.route-leave {
     transition: transform var(--route-dur) var(--route-ease);
   }
   
-  .view-track[data-trans="slide"].route-enter { 
-    transform: translateX(0%);           /* first half visible: old on left */
+  /* LEFT push: start showing left half (old), slide left to reveal right half (new) */
+  .view-track[data-trans="slide-push"].route-enter {
+    transform: translateX(0%);
   }
-  .view-track[data-trans="slide"].route-enter.route-enter-active { 
-    transform: translateX(-50%);         /* second half visible: new on right */
+  .view-track[data-trans="slide-push"].route-enter.route-enter-active {
+    transform: translateX(-50%);
   }
+
 }

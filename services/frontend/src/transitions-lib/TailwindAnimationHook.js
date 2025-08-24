@@ -5,8 +5,8 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/24 11:51:09 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/24 11:52:21 by jeportie         ###   ########.fr       //
+//   Created: 2025/08/24 14:24:35 by jeportie          #+#    #+#             //
+//   Updated: 2025/08/24 14:25:00 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,93 +16,90 @@ import { getMaxTransitionMs } from "./time/getMaxTransitionMs.js";
 /**
  * Options:
  *   variant: "fade" | "slide-push"
- *   // fade runs in "container" mode on #app (mountEl)
- *   // slide-push runs in "overlap" mode on two .view-slot wrappers
+ *   - "fade": container fade on #app
+ *   - "slide-push": overlap push-left (new from right, old to left)
  */
 export default class TailwindAnimationHook extends AbstractAnimationHook {
-    /**
-     * @param {{ variant?: "fade" | "slide-push" }} opts
-     */
     constructor({ variant = "fade" } = {}) {
         super();
         this.variant = variant;
     }
 
-    async mount({ mountEl, ctx, helpers }) {
+    async mount({ mountEl, helpers }) {
         if (this.variant === "slide-push") {
-            await this.#overlapSlidePush({ mountEl, helpers });
+            await this.#overlapPushLeft({ mountEl, helpers });
         } else {
             await this.#containerFade({ mountEl, helpers });
         }
     }
 
-    /* ----------------------- container / fade ----------------------- */
+    /* -------- container / fade -------- */
     async #containerFade({ mountEl, helpers }) {
-        // Animate OUT existing content on the container
         if (mountEl.childElementCount > 0) {
             mountEl.setAttribute("data-trans", "fade");
             await this.#runPhase(mountEl, "out");
             if (helpers.isStale()) return;
         }
-
-        // Swap content
-        helpers.teardown();          // destroy instances, keep DOM intact until commit
-        await helpers.commit();      // inject into mountEl
+        helpers.teardown();
+        await helpers.commit(); // into #app
         if (helpers.isStale()) return;
 
-        // Animate IN new content
         mountEl.setAttribute("data-trans", "fade");
         await this.#runPhase(mountEl, "in");
     }
 
-    /* ------------------------- overlap / slide-push ------------------------- */
-    async #overlapSlidePush({ mountEl, helpers }) {
-        // Ensure mount can hold absolutely-positioned slots
+    /* -------- overlap push-left (two slots) -------- */
+    async #overlapPushLeft({ mountEl, helpers }) {
+        // Ensure container can host absolutely-positioned layers
         const cs = getComputedStyle(mountEl);
         if (cs.position === "static") mountEl.style.position = "relative";
         if (cs.overflow !== "hidden") mountEl.style.overflow = "hidden";
 
-        let oldSlot = mountEl.querySelector(".view-slot");
-        if (!oldSlot && mountEl.childElementCount > 0) {
-            // Wrap existing content into a slot so we can animate it out
-            const wrap = document.createElement("div");
-            wrap.className = "view-slot route-leave";
-            wrap.style.position = "absolute";
-            wrap.style.inset = "0";
-            wrap.innerHTML = mountEl.innerHTML;
-            mountEl.innerHTML = "";
-            mountEl.appendChild(wrap);
-            oldSlot = wrap;
+        // Wrap current DOM into an old slot (move nodes, do not clone)
+        let oldSlot = null;
+        if (mountEl.childNodes.length > 0) {
+            oldSlot = document.createElement("div");
+            oldSlot.className = "view-slot route-leave";
+            oldSlot.style.position = "absolute";
+            oldSlot.style.inset = "0";
+            const frag = document.createDocumentFragment();
+            while (mountEl.firstChild) frag.appendChild(mountEl.firstChild);
+            oldSlot.appendChild(frag);
+            mountEl.appendChild(oldSlot);
+            oldSlot.setAttribute("data-trans", "slide-push");
         }
 
-        // Prepare the new slot where the next view will be committed
+        // Tear down old instances (the DOM stays for the animation)
+        helpers.teardown();
+
+        // Create the entering slot and commit new view into it
         const newSlot = document.createElement("div");
         newSlot.className = "view-slot route-enter";
         newSlot.style.position = "absolute";
         newSlot.style.inset = "0";
         mountEl.appendChild(newSlot);
 
-        // Destroy instances (DOM stays) and commit next view into NEW slot
-        helpers.teardown();
         await helpers.commit(newSlot);
         if (helpers.isStale()) { newSlot.remove(); return; }
 
-        // Tag both slots for CSS
         newSlot.setAttribute("data-trans", "slide-push");
-        if (oldSlot) oldSlot.setAttribute("data-trans", "slide-push");
 
-        // Animate both in parallel (new in from right, old out to right)
+        // Animate both slots concurrently
         await Promise.all([
             this.#runPhase(newSlot, "in"),
             oldSlot ? this.#runPhase(oldSlot, "out") : Promise.resolve(),
         ]);
         if (helpers.isStale()) { newSlot.remove(); return; }
 
-        // Cleanup
+        // Unwrap: move new content out of the slot, remove both slots
         oldSlot?.remove();
+        const frag2 = document.createDocumentFragment();
+        while (newSlot.firstChild) frag2.appendChild(newSlot.firstChild);
+        mountEl.appendChild(frag2);
+        newSlot.remove();
     }
 
-    /* --------------------------- tiny runner --------------------------- */
+    /* -------- tiny class-based runner -------- */
     async #runPhase(el, phase) {
         return new Promise((resolve) => {
             let done = false;
@@ -130,9 +127,8 @@ export default class TailwindAnimationHook extends AbstractAnimationHook {
                 void el.offsetWidth; // reflow
                 el.classList.add(phase === "out" ? "route-leave-active" : "route-enter-active");
                 el.addEventListener("transitionend", onEnd, { once: true });
-                // safety timeout
                 const total = getMaxTransitionMs(el);
-                setTimeout(finish, (total || 0) + 50);
+                setTimeout(finish, (total || 0) + 50); // safety
             });
         });
     }
