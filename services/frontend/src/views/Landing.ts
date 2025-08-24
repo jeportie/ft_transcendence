@@ -21,7 +21,6 @@ export default class Landing extends AbstractView {
     async getHTML() {
         return /*html*/ `
       <section class="min-h-screen flex flex-col md:flex-row items-stretch">
-        <!-- Left: Login -->
         <div class="w-full md:w-[420px] p-8 flex flex-col justify-center gap-6 bg-slate-900">
           <h1 class="text-3xl font-bold">ft_transcendence</h1>
           <p class="text-slate-300">Log in to enter your dashboard.</p>
@@ -42,7 +41,6 @@ export default class Landing extends AbstractView {
           </nav>
         </div>
 
-        <!-- Right: Canvas hero (Babylon placeholder) -->
         <div class="flex-1 relative bg-black">
           <canvas id="hero-canvas" class="absolute inset-0 w-full h-full block"></canvas>
 

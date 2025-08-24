@@ -19,9 +19,7 @@ export default class AppLayout extends AbstractLayout {
     async getHTML() {
         return /*html*/ `
       <div id="app-layout" class="min-h-screen flex flex-col">
-        <!-- Body row: sidebar + main -->
         <div class="flex gap-6 p-6 flex-1 items-start">
-          <!-- Sidebar lives in normal flow (no fixed). It pushes the main area. -->
           <aside
             id="app-sidebar"
             class="w-[220px] shrink-0 overflow-hidden
@@ -37,13 +35,11 @@ export default class AppLayout extends AbstractLayout {
             </nav>
           </aside>
 
-          <!-- Main grows to fill remaining space -->
           <main class="flex-1 min-w-0 space-y-4">
             <!-- router-slot -->
           </main>
         </div>
 
-        <!-- Footer with left-aligned toggle -->
         <footer class="border-t border-slate-700 p-3 flex">
           <button
             id="sidebar-toggle"

@@ -14,7 +14,7 @@
 
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/08/24 00:45:00 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/24 14:57:28 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -912,6 +912,7 @@ html, body {
 }
 
 #app {
+  display: block;
   position: relative;
   transition-property: transform, opacity;
   transition-duration: var(--route-dur);
