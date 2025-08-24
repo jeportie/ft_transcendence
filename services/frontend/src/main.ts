@@ -6,13 +6,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/24 14:25:12 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/24 14:55:56 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { Router } from "@jeportie/mini-spa";
+import { defineMiniRouter } from "@jeportie/mini-spa";
 import TailwindAnimationHook from "./transitions-lib/TailwindAnimationHook.js";
 import Fetch from "./tools/Fetch.js";
+
+// Register the <mini-router> custom element
+defineMiniRouter();
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
@@ -57,19 +60,14 @@ const routes = [
     { path: "*", component: NotFound },
 ];
 
-const router = new Router({
-    routes,
-    mountSelector: "#app",
-    linkSelector: "[data-link]",
-    onBeforeNavigate,
-    animationHook: new TailwindAnimationHook({ variant: "slide-push" }),
-});
+const app = document.querySelector("#app") as any;
+app.routes = routes;
+app.linkSelector = "[data-link]";
+app.onBeforeNavigate = onBeforeNavigate;
+app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
+app.start();
+(window as any).navigateTo = (url: string) => app.navigateTo(url);
 
 API.get("/health")
     .then(data => console.log("✅ Health check:", data))
     .catch((err) => console.error("❌ Health check error:", err));
-
-router.start();
-
-// Export nav function to web dev console
-window.navigateTo = (url) => router.navigateTo(url);
