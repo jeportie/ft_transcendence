@@ -10,13 +10,10 @@
 //                                                                            //
 // ************************************************************************** //
 
-import GameLoop from "../lib2D/GameLoop.js";
-import Keyboard from "../lib2D/Keyboard.js";
 import Paddle from "./Paddle.js";
 import Ball from "./Ball.js";
 import Player from "./Player.js";
-import Line from "../lib2D/Line.js";
-import Rect from "../lib2D/Rect.js";
+import { GameLoop, Keyboard, Line, Rect } from "@jeportie/lib2d";
 
 export default class PongGame {
     /**

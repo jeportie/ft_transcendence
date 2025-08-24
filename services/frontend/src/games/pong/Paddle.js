@@ -10,8 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import Rect from "../lib2D/Rect.js";
-import { clamp } from "../lib2D/utils.js";
+import { Rect, clamp } from "@jeportie/lib2d";
 
 /**
  * Simple vertical paddle (extends Rect).

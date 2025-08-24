@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 import { defineMiniRouter } from "@jeportie/mini-spa";
-import TailwindAnimationHook from "./transitions-lib/TailwindAnimationHook.js";
+import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
 import Fetch from "./tools/Fetch.js";
 
 // Register the <mini-router> custom element

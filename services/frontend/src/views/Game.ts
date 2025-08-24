@@ -11,8 +11,8 @@
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
+import { Rect } from "@jeportie/lib2d";
 import PongGame from "../games/pong/PongGame.js";
-import Rect from "../games/lib2D/Rect.js";
 
 export default class Game extends AbstractView {
 

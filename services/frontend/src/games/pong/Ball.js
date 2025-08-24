@@ -10,10 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import Circle from "../lib2D/Circle.js";
-import Vector from "../lib2D/Vector.js";
-import { collideCircleRect } from "../lib2D/collision/index.js";
-import { deg2rad } from "../lib2D/utils.js";
+import { Circle, Rect, Vector, collision, deg2rad } from "@jeportie/lib2d";
+const { collideCircleRect } = collision;
 
 /**
  * Pong ball with simple serve + paddle/canvas bounce.
