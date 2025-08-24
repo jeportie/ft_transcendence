@@ -55,8 +55,10 @@ export default class AppLayout extends AbstractLayout {
     }
 
     mount() {
-        const btn = document.getElementById("sidebar-toggle") as HTMLButtonElement | null;
-        const sidebar = document.getElementById("app-sidebar") as HTMLElement | null;
+        const btnList = document.querySelectorAll("#sidebar-toggle");
+        const sidebarList = document.querySelectorAll("#app-sidebar");
+        const btn = (btnList[btnList.length - 1] ?? null) as HTMLButtonElement | null;
+        const sidebar = (sidebarList[sidebarList.length - 1] ?? null) as HTMLElement | null;
         if (!btn || !sidebar) return;
 
         const open = () => {
