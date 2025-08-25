@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:42:22 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/25 14:26:13 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/25 14:35:01 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -66,14 +66,7 @@ export default class Landing extends AbstractView {
             window.navigateTo("/dashboard");
         });
 
-        // Canvas particles following mouse
-        const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement | null;
-        if (!canvas)
-            return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx)
-            return;
-        runParticle(canvas, ctx);
+        this.#cleanup = runParticle("#hero-canvas");
         this.destroy = () => this.#cleanup?.();
     }
 }

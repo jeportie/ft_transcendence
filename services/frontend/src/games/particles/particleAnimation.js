@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/25 13:32:08 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/25 14:20:21 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/25 14:34:06 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -99,8 +99,12 @@ function step(ctx) {
     raf = requestAnimationFrame(() => step(ctx));
 }
 
-export function runParticle(canvas, ctx) {
-    // lifecycle
+export function runParticle(id) {
+    const canvas = document.querySelector(id);
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
     const onResize = () => { resize(canvas, ctx); init(); };
     const onMouse = (e) => {
         const rect = canvas.getBoundingClientRect();
