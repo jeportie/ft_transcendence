@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/19 14:33:46 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/25 13:25:39 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/25 14:03:15 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,7 +15,7 @@ import { open, Database } from 'sqlite';
 
 sqlite3.verbose();
 
-let db: Database | null = null;
+let db = null;
 
 export async function getDb() {
     if (db) return db;
