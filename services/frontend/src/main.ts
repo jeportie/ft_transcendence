@@ -30,7 +30,7 @@ const NotFound = () => import("./views/NotFound.ts");
 // Lazy layout
 const AppLayout = () => import("./views/AppLayout.ts");
 
-const API = new Fetch("http://localhost:8000");
+const API = new Fetch("http://localhost:8000/api");
 
 // Example guard (redirect if not logged in)
 const requireAuth = (ctx: any) => {

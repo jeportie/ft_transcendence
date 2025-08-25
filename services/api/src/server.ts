@@ -15,6 +15,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { getDb } from "./db.js"
 import { hashPassword, verifyPassword } from "./auth/password.js";
+import authRoutes from './auth/auth.js';
 
 (async () => {
     const h = await hashPassword("hello");
@@ -25,14 +26,18 @@ import { hashPassword, verifyPassword } from "./auth/password.js";
 
 const app = Fastify({ logger: false });
 
-await app.register(cors, { origin: true });
-
-app.get('/health', async () => {
+app.get('/api/health', async () => {
     const db = await getDb();
     const row = await db.get('SELECT status, updated_at FROM health WHERE id = 1');
     return { status: row?.status ?? 'unknown', updated_at: row?.updated_at ?? null };
 });
 
-const PORT = Number(process.env.PORT) || 5000;
+await app.register(cors, { origin: true });
+await app.register(authRoutes, { prefix: "/api" });
+// (later) 2FA, OAuth, etc. can be mounted similarly:
+// await app.register(twoFaRoutes, { prefix: '/api' });
+// await app.register(oauthRoutes, { prefix: '/api' });
+
+const PORT = 5000;
 await app.listen({ host: '0.0.0.0', port: PORT });
 console.log(`[api] listening on :${PORT}`);

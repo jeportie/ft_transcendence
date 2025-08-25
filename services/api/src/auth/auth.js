@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // Minimal auth routes: seed dev users + password login (no JWT yet)
-import { getDb } from "../db.ts";
+import { getDb } from "../db.js";
 import { hashPassword, verifyPassword } from "../auth/password.js";
 
 export default async function authRoutes(app) {
@@ -34,5 +34,24 @@ export default async function authRoutes(app) {
             }
         }
         return { ok: true };
+    });
+
+    // Password login (returns ok + user; JWT comes in Step 3)
+    app.post("/auth/login", async (req, reply) => {
+        const { email, password } = req.body ?? {};
+        if (!email || !password)
+            return (reply.code(400).send({ error: "Missing email or password" }));
+
+        const user = await db.get(
+            "SELECT id, email, password_hash, is_2fa_enabled FROM users WHERE email=?",
+            [email]
+        );
+        if (!user || !user.password_hash)
+            return (replpy.code(401).send({ error: "Invalid credentials" }));
+
+        const ok = await verifyPassword(user.password_hash, password);
+        if (!ok)
+            return (reply.code(401).send({ error: "Invalid credentials" }));
+        return ({ ok: true, user: { id: user.id, email: user.email, is_2fa_enabled: !!user.is_2fa_enabled } });
     });
 }
