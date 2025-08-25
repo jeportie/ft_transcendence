@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/24 14:55:56 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/25 18:46:40 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,16 +19,18 @@ defineMiniRouter();
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
+const Login = () => import("./views/Login.ts");
+
 const Dashboard = () => import("./views/Dashboard.ts");
 const Settings = () => import("./views/Settings.ts");
 const Posts = () => import("./views/Posts.ts");
 const PostShow = () => import("./views/PostShow.ts");
 const Game = () => import("./views/Game.ts");
-const Login = () => import("./views/Login.ts");
 const NotFound = () => import("./views/NotFound.ts");
 
 // Lazy layout
 const AppLayout = () => import("./views/AppLayout.ts");
+const LandingLayout = () => import("./views/LandingLayout.ts");
 
 const API = new Fetch("/api");
 
@@ -44,7 +46,14 @@ const onBeforeNavigate = (to: string) => {
 };
 
 const routes = [
-    { path: "/", component: Landing },
+    {
+        path: "/",
+        layout: LandingLayout,
+        children: [
+            { path: "", component: Landing },
+            { path: "login", component: Login },
+        ]
+    },
     {
         path: "/",                // layout root
         layout: AppLayout,        // children will be wrapped in AppLayout
@@ -56,7 +65,6 @@ const routes = [
             { path: "game", component: Game/*, beforeEnter: requireAuth*/ },
         ],
     },
-    { path: "/login", component: Login },
     { path: "*", component: NotFound },
 ];
 
@@ -64,7 +72,7 @@ const app = document.querySelector("#app") as any;
 app.routes = routes;
 app.linkSelector = "[data-link]";
 app.onBeforeNavigate = onBeforeNavigate;
-app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
+//app.animationHook = new TailwindAnimationHook({ variant: "fade" });
 app.start();
 (window as any).navigateTo = (url: string) => app.navigateTo(url);
 
