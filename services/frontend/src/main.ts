@@ -30,7 +30,7 @@ const NotFound = () => import("./views/NotFound.ts");
 // Lazy layout
 const AppLayout = () => import("./views/AppLayout.ts");
 
-const API = new Fetch("http://localhost:8000/api");
+const API = new Fetch("/api");
 
 // Example guard (redirect if not logged in)
 const requireAuth = (ctx: any) => {
@@ -71,3 +71,12 @@ app.start();
 API.get("/health")
     .then(data => console.log("✅ Health check:", data))
     .catch((err) => console.error("❌ Health check error:", err));
+
+const test = {
+    user: "jerome",
+    content: "Hello backend, this is the frontend speaking to you!",
+};
+
+API.post("/echo", test)
+    .then(data => console.log("✅ POST:", data))
+    .catch(err => console.error("❌ POST:", err));

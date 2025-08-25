@@ -13,38 +13,16 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import statics from '@fastify/static';
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { getDb } from "./db.js"
-import { hashPassword, verifyPassword } from "./auth/password.js";
-import authRoutes from './auth/auth.js';
-
-(async () => {
-    const h = await hashPassword("hello");
-    const ok = verifyPassword(h, "hello")
-    if (!ok)
-        console.error("[auth] argon2 slef-check failed");
-})();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const __port = 5000;
 
 const app = Fastify({ logger: false });
 
-app.get('/api/health', async () => {
-    const db = await getDb();
-    const row = await db.get('SELECT status, updated_at FROM health WHERE id = 1');
-    return { status: row?.status ?? 'unknown', updated_at: row?.updated_at ?? null };
-});
-
 await app.register(cors, { origin: true });
-await app.register(authRoutes, { prefix: "/api" });
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-console.log(__filename);
-console.log(__dirname);
-console.log(path.join(__dirname, "../public"));
-
 await app.register(statics, {
     root: path.join(__dirname, "../public"),
     prefix: "/",
@@ -56,6 +34,23 @@ app.setNotFoundHandler((req, reply) => {
     reply.code(404).send({ error: "Not Found" });
 })
 
-const PORT = 5000;
-await app.listen({ host: '0.0.0.0', port: PORT });
-console.log(`[api] listening on :${PORT}`);
+app.get('/api/health', async () => {
+    return ({
+        name: "jerome",
+        content: "this is my first api get message in json, youhou",
+        time: Date.now,
+    });
+});
+
+app.post('/api/echo', async (request, reply) => {
+    console.log("[POST] /api/echo -> body: ", request.body);
+
+    return ({
+        succes: true,
+        time: Date.now,
+        postData: request.body,
+    });
+})
+
+await app.listen({ host: '0.0.0.0', port: __port });
+console.log(`[api] server listening on :${__port}`);
