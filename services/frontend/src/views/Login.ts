@@ -39,6 +39,8 @@ export default class Login extends AbstractView {
     }
 
     mount() {
+        // If this view wants the canvas to restart when leaving the LandingLayout:
+        (this as any).layout?.reloadOnExit?.();
         const btn = document.querySelector("#login-btn");
         btn?.addEventListener("click", (e) => {
             e.preventDefault();

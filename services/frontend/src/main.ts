@@ -6,12 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/25 18:46:40 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/26 00:07:27 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { defineMiniRouter } from "@jeportie/mini-spa";
 import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
+import OverlayAnimationHook from "./transitions/OverlayAnimationHook.js";
 import Fetch from "./tools/Fetch.js";
 
 // Register the <mini-router> custom element
@@ -49,6 +50,7 @@ const routes = [
     {
         path: "/",
         layout: LandingLayout,
+        animationHook: new OverlayAnimationHook(),
         children: [
             { path: "", component: Landing },
             { path: "login", component: Login },
@@ -72,7 +74,8 @@ const app = document.querySelector("#app") as any;
 app.routes = routes;
 app.linkSelector = "[data-link]";
 app.onBeforeNavigate = onBeforeNavigate;
-//app.animationHook = new TailwindAnimationHook({ variant: "fade" });
+//app.animationHook = new OverlayAnimationHook();
+app.animationHook = new TailwindAnimationHook({ variant: "fade" });
 app.start();
 (window as any).navigateTo = (url: string) => app.navigateTo(url);
 
