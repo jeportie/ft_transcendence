@@ -6,12 +6,11 @@
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/14 14:07:18 by jeportie          #+#    #+#              #
-#    Updated: 2025/07/14 17:40:11 by jeportie         ###   ########.fr        #
+#    Updated: 2025/08/25 15:36:03 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM node:20-slim
-EXPOSE 3000
 
 WORKDIR /app
 

@@ -6,7 +6,7 @@
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/14 17:39:19 by jeportie          #+#    #+#              #
-#    Updated: 2025/08/19 13:24:06 by jeportie         ###   ########.fr        #
+#    Updated: 2025/08/25 15:01:38 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ COPY config/tsconfig.json ./tsconfig.json
 
 COPY src ./src
 
-RUN npm run build
+# IF WE CONVERT TO TS
+# RUN npm run build
 
 CMD ["npm", "start"]

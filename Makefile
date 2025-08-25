@@ -44,7 +44,14 @@ down:
 clean: down
 	docker system prune -af
 	rm -f services/frontend/public/bundle* 
+	rm -rf services/api/node_modules
+	rm -rf services/frontend/node_modules
 	$(DC) --env-file $(ENVFILE) down $(DOWN_FLAGS)
+
+dev:
+	cd services/frontend/config && npm i && mv node_modules/ ..
+	cd ../../..
+	cd services/api/config && npm i && mv node_modules/ ..
 
 logs:
 	$(DC) --env-file $(ENVFILE) logs -f

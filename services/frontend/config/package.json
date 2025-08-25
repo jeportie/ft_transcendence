@@ -8,9 +8,8 @@
         "watch:css": "tailwindcss -i src/input.css -o public/styles.css --watch",
         "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --log-level=info",
         "watch:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --watch --log-level=info",
-        "serve": "live-server public --port=3000 --entry-file=index.html",
         "predev": "npm run build:css && npm run build:js",
-        "dev": "npm run predev && (npm run watch:css & npm run watch:js & npm run serve)"
+        "dev": "npm run predev && (npm run watch:css & npm run watch:js)"
     },
     "keywords": [],
     "author": "",
@@ -20,7 +19,6 @@
         "@jeportie/mini-spa": "github:jeportie/mini-router#main",
         "autoprefixer": "^10.4.21",
         "esbuild": "^0.25.8",
-        "live-server": "^1.2.2",
         "postcss": "^8.5.6",
         "tailwindcss": "^3.4.17",
         "typescript": "^5.8.3"

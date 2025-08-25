@@ -6,7 +6,7 @@
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/12 17:28:24 by jeportie          #+#    #+#              #
-#    Updated: 2025/08/19 14:41:31 by jeportie         ###   ########.fr        #
+#    Updated: 2025/08/25 15:35:16 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,8 +23,6 @@ services:
       - ./services/frontend/public:/app/public:delegated
     networks:
       - transc
-    ports:
-      - "3000:3000"
     build: ./services/frontend
     restart: always
 
@@ -34,6 +32,7 @@ services:
       - services/api/.env.api
     volumes:
       - ./data/sqlite:/data:delegated
+      - ./services/frontend/public:/app/public:ro
     networks:
       - transc
     ports:
