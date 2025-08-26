@@ -31,12 +31,6 @@ const __dirname = path.dirname(__filename);
 
 const app = Fastify({ logger: false });
 
-app.get('/api/health', async () => {
-    const db = await getDb();
-    const row = await db.get('SELECT status, updated_at FROM health WHERE id = 1');
-    return { status: row?.status ?? 'unknown', updated_at: row?.updated_at ?? null };
-});
-
 await app.register(cors, { origin: true });
 await app.register(authRoutes, { prefix: "/api" });
 

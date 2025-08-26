@@ -47,7 +47,6 @@ export default class Login extends AbstractView {
         const loginForm = document.querySelector("#login-form");
         const userName = document.querySelector("#user-name");
         const userPwd = document.querySelector("#user-pwd");
-        const loginBtn = document.querySelector("#login-btn");
 
         loginForm?.addEventListener("submit", event => {
             event.preventDefault();
@@ -63,11 +62,5 @@ export default class Login extends AbstractView {
                 })
                 .catch(err => console.error("❌ ERROR:", err));
         })
-
-        // loginBtn?.addEventListener("click", (e) => {
-        //     e.preventDefault();
-        //     // @ts-ignore
-        //     window.navigateTo("/dashboard");
-        // });
     }
 }

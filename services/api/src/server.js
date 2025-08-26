@@ -15,6 +15,7 @@ import cors from '@fastify/cors';
 import statics from '@fastify/static';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getDb } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,11 +36,9 @@ app.setNotFoundHandler((req, reply) => {
 })
 
 app.get('/api/health', async () => {
-    return ({
-        name: "jerome",
-        content: "this is my first api get message in json, youhou",
-        time: Date.now,
-    });
+    const db = await getDb();
+    const row = await db.get('SELECT status, updated_at FROM health WHERE id = 1');
+    return { status: row?.status ?? 'unknown', updated_at: row?.updated_at ?? null };
 });
 
 app.post('/api/auth', async (request, reply) => {
