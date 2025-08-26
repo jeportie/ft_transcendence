@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: "class", // or 'media' if you want automatic OS theme
     content: [
         "./public/**/*.html",
         "./src/**/*.{ts,tsx}",

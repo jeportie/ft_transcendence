@@ -1,0 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   zoom.css                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 11:33:01 by jeportie          #+#    #+#             */
+/*   Updated: 2025/08/26 11:33:22 by jeportie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+@layer utilities {
+  /* #app zoom */
+  #app[data-trans="zoom"]                                   { transform-origin: 50% 50%; }
+  #app[data-trans="zoom"].route-leave                       { transform: scale(1);   opacity: 1; }
+  #app[data-trans="zoom"].route-leave.route-leave-active    { transform: scale(.98); opacity: 0; }
+  #app[data-trans="zoom"].route-enter                       { transform: scale(1.02); opacity: 0; }
+  #app[data-trans="zoom"].route-enter.route-enter-active    { transform: scale(1);   opacity: 1; }
+}

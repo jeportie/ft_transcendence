@@ -14,7 +14,7 @@
 
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/08/26 11:19:42 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/26 11:34:20 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -36,7 +36,7 @@
 
 /*   Created: 2025/08/26 11:14:37 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/08/26 11:15:04 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/26 11:42:49 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -596,15 +596,20 @@ video {
   display: none;
 }
 
-/* Global adjustments */
-
-html, body {
-  height: 100%;
-}
+/* Default (light mode) */
 
 body {
   --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  --tw-text-opacity: 1;
+  color: rgb(15 23 42 / var(--tw-text-opacity, 1));
+}
+
+/* Dark mode (when <html class="dark"> is set) */
+
+.dark body {
+  --tw-bg-opacity: 1;
+  background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1));
   --tw-text-opacity: 1;
   color: rgb(241 245 249 / var(--tw-text-opacity, 1));
 }
@@ -1061,11 +1066,6 @@ body {
   color: rgb(255 228 230 / var(--tw-text-opacity, 1));
 }
 
-.text-slate-100 {
-  --tw-text-opacity: 1;
-  color: rgb(241 245 249 / var(--tw-text-opacity, 1));
-}
-
 .text-slate-300 {
   --tw-text-opacity: 1;
   color: rgb(203 213 225 / var(--tw-text-opacity, 1));
@@ -1104,103 +1104,29 @@ body {
   transform: translateZ(0);
   backface-visibility: hidden;
   will-change: transform, opacity;
+  min-height: 100%;
   overflow: hidden;
   /* clip sliding/fading edges */
-  /* allow absolutely-positioned slots to fill container */
-  min-height: 100%;
 }
 
-/* --- FADE --- */
-
-#app[data-trans="fade"].route-leave               {
-  opacity: 1;
-}
-
-#app[data-trans="fade"].route-leave.route-leave-active {
-  opacity: 0;
-}
-
-#app[data-trans="fade"].route-enter               {
-  opacity: 0;
-}
-
-#app[data-trans="fade"].route-enter.route-enter-active {
-  opacity: 1;
-}
-
-/* --- SLIDE (gentle push) --- */
-
-#app[data-trans="slide"].route-leave               {
-  transform: translateX(0);
-}
-
-#app[data-trans="slide"].route-leave.route-leave-active {
-  transform: translateX(-16px);
-}
-
-#app[data-trans="slide"].route-enter               {
-  transform: translateX(16px);
-}
-
-#app[data-trans="slide"].route-enter.route-enter-active {
-  transform: translateX(0);
-}
-
-/* --- ZOOM --- */
-
-#app[data-trans="zoom"] {
-  transform-origin: 50% 50%;
-}
-
-#app[data-trans="zoom"].route-leave               {
-  transform: scale(1);
-  opacity: 1;
-}
-
-#app[data-trans="zoom"].route-leave.route-leave-active {
-  transform: scale(.98);
-  opacity: 0;
-}
-
-#app[data-trans="zoom"].route-enter               {
-  transform: scale(1.02);
-  opacity: 0;
-}
-
-#app[data-trans="zoom"].route-enter.route-enter-active {
-  transform: scale(1);
-  opacity: 1;
-}
-
-/* Disable clicks during the brief out/in phases to avoid caret flicker */
+/* disable clicks during transitions */
 
 #app.route-leave,
   #app.route-enter {
   pointer-events: none;
 }
 
-/* -------- Overlap mode basics -------- */
-
-#app {
-  overflow: hidden;
-}
-
-/* clip sliding/fading edges */
+/* overlap basics */
 
 .view-slot {
   position: absolute;
   inset: 0;
-  /* fill container */
   z-index: 0;
 }
 
 .view-slot.route-enter {
   z-index: 1;
 }
-
-/* new view above old */
-
-/* transitions (reuse tunables) */
 
 .view-slot.route-enter,
   .view-slot.route-leave {
@@ -1209,60 +1135,112 @@ body {
   transition-timing-function: var(--route-ease);
 }
 
-/* Click guard on slots during phases (mirrors #app guard) */
-
 .view-slot.route-leave,
   .view-slot.route-enter {
   pointer-events: none;
 }
 
-/* FADE on slots (overlap mode) */
+/* #app fade */
 
-.view-slot[data-trans="fade"].route-enter               {
-  opacity: 0;
-}
-
-.view-slot[data-trans="fade"].route-enter.route-enter-active {
+#app[data-trans="fade"].route-leave                           {
   opacity: 1;
 }
 
-.view-slot[data-trans="fade"].route-leave               {
-  opacity: 1;
-}
-
-.view-slot[data-trans="fade"].route-leave.route-leave-active {
+#app[data-trans="fade"].route-leave.route-leave-active        {
   opacity: 0;
 }
 
-/* SLIDE-PUSH on slots (overlap mode, used by TailwindAnimationHook) */
+#app[data-trans="fade"].route-enter                           {
+  opacity: 0;
+}
+
+#app[data-trans="fade"].route-enter.route-enter-active        {
+  opacity: 1;
+}
+
+/* .view-slot fade */
+
+.view-slot[data-trans="fade"].route-enter                     {
+  opacity: 0;
+}
+
+.view-slot[data-trans="fade"].route-enter.route-enter-active  {
+  opacity: 1;
+}
+
+.view-slot[data-trans="fade"].route-leave                     {
+  opacity: 1;
+}
+
+.view-slot[data-trans="fade"].route-leave.route-leave-active  {
+  opacity: 0;
+}
+
+/* #app slide */
+
+#app[data-trans="slide"].route-leave                      {
+  transform: translateX(0);
+}
+
+#app[data-trans="slide"].route-leave.route-leave-active   {
+  transform: translateX(-16px);
+}
+
+#app[data-trans="slide"].route-enter                      {
+  transform: translateX(16px);
+}
+
+#app[data-trans="slide"].route-enter.route-enter-active   {
+  transform: translateX(0);
+}
+
+/* #app zoom */
+
+#app[data-trans="zoom"]                                   {
+  transform-origin: 50% 50%;
+}
+
+#app[data-trans="zoom"].route-leave                       {
+  transform: scale(1);
+  opacity: 1;
+}
+
+#app[data-trans="zoom"].route-leave.route-leave-active    {
+  transform: scale(.98);
+  opacity: 0;
+}
+
+#app[data-trans="zoom"].route-enter                       {
+  transform: scale(1.02);
+  opacity: 0;
+}
+
+#app[data-trans="zoom"].route-enter.route-enter-active    {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* .view-slot slide-push */
 
 .view-slot[data-trans="slide-push"].route-enter {
   transform: translateX(100%);
-  /* new starts off-screen to the RIGHT */
 }
 
 .view-slot[data-trans="slide-push"].route-enter.route-enter-active {
   transform: translateX(0%);
-  /* slides into place */
 }
 
 .view-slot[data-trans="slide-push"].route-leave {
   transform: translateX(0%);
-  /* old starts in place */
 }
 
 .view-slot[data-trans="slide-push"].route-leave.route-leave-active {
   transform: translateX(-100%);
-  /* pushed LEFT and out */
 }
-
-/* -------- Track-based PUSH (no overlap) -------- */
 
 .view-track .view-slot {
   position: relative;
-  /* override absolute */
   inset: auto;
-  /* override absolute */
   flex: 0 0 50%;
   width: 50%;
   height: 100%;
@@ -1273,8 +1251,6 @@ body {
   transition: transform var(--route-dur) var(--route-ease);
 }
 
-/* LEFT push: start showing left half (old), slide left to reveal right half (new) */
-
 .view-track[data-trans="slide-push"].route-enter {
   transform: translateX(0%);
 }
@@ -1283,13 +1259,15 @@ body {
   transform: translateX(-50%);
 }
 
+/* transitions split */
+
 /* ************************************************************************** */
 
 /*                                                                            */
 
 /*                                                        :::      ::::::::   */
 
-/*   transitions.css                                    :+:      :+:    :+:   */
+/*   base.css                                           :+:      :+:    :+:   */
 
 /*                                                    +:+ +:+         +:+     */
 
@@ -1297,9 +1275,119 @@ body {
 
 /*                                                +#+#+#+#+#+   +#+           */
 
-/*   Created: 2025/08/26 11:15:46 by jeportie          #+#    #+#             */
+/*   Created: 2025/08/26 11:28:47 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/08/26 11:19:28 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/26 11:29:30 by jeportie         ###   ########.fr       */
+
+/*                                                                            */
+
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+
+/*                                                                            */
+
+/*                                                        :::      ::::::::   */
+
+/*   fade.css                                           :+:      :+:    :+:   */
+
+/*                                                    +:+ +:+         +:+     */
+
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+
+/*                                                +#+#+#+#+#+   +#+           */
+
+/*   Created: 2025/08/26 11:29:38 by jeportie          #+#    #+#             */
+
+/*   Updated: 2025/08/26 11:31:15 by jeportie         ###   ########.fr       */
+
+/*                                                                            */
+
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+
+/*                                                                            */
+
+/*                                                        :::      ::::::::   */
+
+/*   slide.css                                          :+:      :+:    :+:   */
+
+/*                                                    +:+ +:+         +:+     */
+
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+
+/*                                                +#+#+#+#+#+   +#+           */
+
+/*   Created: 2025/08/26 11:32:26 by jeportie          #+#    #+#             */
+
+/*   Updated: 2025/08/26 11:32:49 by jeportie         ###   ########.fr       */
+
+/*                                                                            */
+
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+
+/*                                                                            */
+
+/*                                                        :::      ::::::::   */
+
+/*   zoom.css                                           :+:      :+:    :+:   */
+
+/*                                                    +:+ +:+         +:+     */
+
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+
+/*                                                +#+#+#+#+#+   +#+           */
+
+/*   Created: 2025/08/26 11:33:01 by jeportie          #+#    #+#             */
+
+/*   Updated: 2025/08/26 11:33:22 by jeportie         ###   ########.fr       */
+
+/*                                                                            */
+
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+
+/*                                                                            */
+
+/*                                                        :::      ::::::::   */
+
+/*   slide-push.css                                     :+:      :+:    :+:   */
+
+/*                                                    +:+ +:+         +:+     */
+
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+
+/*                                                +#+#+#+#+#+   +#+           */
+
+/*   Created: 2025/08/26 11:33:28 by jeportie          #+#    #+#             */
+
+/*   Updated: 2025/08/26 11:33:36 by jeportie         ###   ########.fr       */
+
+/*                                                                            */
+
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+
+/*                                                                            */
+
+/*                                                        :::      ::::::::   */
+
+/*   track.css                                          :+:      :+:    :+:   */
+
+/*                                                    +:+ +:+         +:+     */
+
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+
+/*                                                +#+#+#+#+#+   +#+           */
+
+/*   Created: 2025/08/26 11:33:45 by jeportie          #+#    #+#             */
+
+/*   Updated: 2025/08/26 11:33:50 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -1323,3 +1411,4 @@ body {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
+

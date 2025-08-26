@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/26 11:06:03 by jeportie         ###   ########.fr       //
+//   Updated: 2025/08/26 11:46:34 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -43,5 +43,8 @@ const test = {
 API.post("/echo", test)
     .then(data => console.log("✅ POST:", data))
     .catch(err => console.error("❌ POST:", err));
+
+// toggle dark mode manually
+// document.documentElement.classList.toggle("dark");
 
 (window as any).navigateTo = (url: string) => app.navigateTo(url);

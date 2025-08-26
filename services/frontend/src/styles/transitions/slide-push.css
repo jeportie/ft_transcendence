@@ -1,0 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   slide-push.css                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 11:33:28 by jeportie          #+#    #+#             */
+/*   Updated: 2025/08/26 11:33:36 by jeportie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+@layer utilities {
+  /* .view-slot slide-push */
+  .view-slot[data-trans="slide-push"].route-enter {
+    transform: translateX(100%);
+  }
+  .view-slot[data-trans="slide-push"].route-enter.route-enter-active {
+    transform: translateX(0%);
+  }
+  .view-slot[data-trans="slide-push"].route-leave {
+    transform: translateX(0%);
+  }
+  .view-slot[data-trans="slide-push"].route-leave.route-leave-active {
+    transform: translateX(-100%);
+  }
+}

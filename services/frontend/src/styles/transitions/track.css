@@ -1,0 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   track.css                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 11:33:45 by jeportie          #+#    #+#             */
+/*   Updated: 2025/08/26 11:33:50 by jeportie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+@layer utilities {
+  .view-track {
+    position: relative;
+    display: flex;
+    width: 200%;
+    height: 100%;
+    will-change: transform;
+  }
+  
+  .view-track .view-slot {
+    position: relative;
+    inset: auto;
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+  }
+  
+  .view-track.route-enter,
+  .view-track.route-leave {
+    transition: transform var(--route-dur) var(--route-ease);
+  }
+  
+  .view-track[data-trans="slide-push"].route-enter {
+    transform: translateX(0%);
+  }
+  .view-track[data-trans="slide-push"].route-enter.route-enter-active {
+    transform: translateX(-50%);
+  }
+}

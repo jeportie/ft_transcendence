@@ -1,0 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   base.css                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 11:28:47 by jeportie          #+#    #+#             */
+/*   Updated: 2025/08/26 11:29:30 by jeportie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+@layer utilities {
+  :root {
+    --route-dur: 300ms;
+    --route-ease: cubic-bezier(0.22,1,0.36,1);
+  }
+
+  #app {
+    display: block;
+    position: relative;
+    transition-property: transform, opacity;
+    transition-duration: var(--route-dur);
+    transition-timing-function: var(--route-ease);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    min-height: 100%;
+    overflow: hidden; /* clip sliding/fading edges */
+  }
+
+  /* disable clicks during transitions */
+  #app.route-leave,
+  #app.route-enter { pointer-events: none; }
+
+  /* overlap basics */
+  .view-slot { 
+    position: absolute; 
+    inset: 0;
+    z-index: 0;
+  }
+  .view-slot.route-enter { z-index: 1; }
+
+  .view-slot.route-enter,
+  .view-slot.route-leave {
+    transition-property: opacity, transform;
+    transition-duration: var(--route-dur);
+    transition-timing-function: var(--route-ease);
+  }
+
+  .view-slot.route-leave,
+  .view-slot.route-enter { pointer-events: none; }
+}

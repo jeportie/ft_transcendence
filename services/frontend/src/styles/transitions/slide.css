@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   base.css                                           :+:      :+:    :+:   */
+/*   slide.css                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/26 11:14:37 by jeportie          #+#    #+#             */
-/*   Updated: 2025/08/26 11:42:49 by jeportie         ###   ########.fr       */
+/*   Created: 2025/08/26 11:32:26 by jeportie          #+#    #+#             */
+/*   Updated: 2025/08/26 11:32:49 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-@tailwind base;
-
-@layer base {
-  /* Default (light mode) */
-  body {
-    @apply bg-white text-slate-900;
-  }
-
-  /* Dark mode (when <html class="dark"> is set) */
-  .dark body {
-    @apply bg-slate-900 text-slate-100;
-  }
+@layer utilities {
+  /* #app slide */
+  #app[data-trans="slide"].route-leave                      { transform: translateX(0); }
+  #app[data-trans="slide"].route-leave.route-leave-active   { transform: translateX(-16px); }
+  #app[data-trans="slide"].route-enter                      { transform: translateX(16px); }
+  #app[data-trans="slide"].route-enter.route-enter-active   { transform: translateX(0); }
 }
-

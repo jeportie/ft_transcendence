@@ -1,0 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fade.css                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 11:29:38 by jeportie          #+#    #+#             */
+/*   Updated: 2025/08/26 11:31:15 by jeportie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+@layer utilities {
+  /* #app fade */
+  #app[data-trans="fade"].route-leave                           { opacity: 1; }
+  #app[data-trans="fade"].route-leave.route-leave-active        { opacity: 0; }
+  #app[data-trans="fade"].route-enter                           { opacity: 0; }
+  #app[data-trans="fade"].route-enter.route-enter-active        { opacity: 1; }
+
+  /* .view-slot fade */
+  .view-slot[data-trans="fade"].route-enter                     { opacity: 0; }
+  .view-slot[data-trans="fade"].route-enter.route-enter-active  { opacity: 1; }
+  .view-slot[data-trans="fade"].route-leave                     { opacity: 1; }
+  .view-slot[data-trans="fade"].route-leave.route-leave-active  { opacity: 0; }
+}
