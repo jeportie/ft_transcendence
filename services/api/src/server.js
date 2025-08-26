@@ -42,14 +42,17 @@ app.get('/api/health', async () => {
     });
 });
 
-app.post('/api/echo', async (request, reply) => {
-    console.log("[POST] /api/echo -> body: ", request.body);
+app.post('/api/auth', async (request, reply) => {
+    console.log("[POST] /api/auth -> body: ", request.body);
 
-    return ({
-        succes: true,
-        time: Date.now,
-        postData: request.body,
-    });
+    if (request.body.user === "jeportie" && request.body.pwd === "dub") {
+        return ({
+            succes: true,
+            user: "jeportie",
+            pwd: "dub",
+        });
+    }
+    return ({ succes: false });
 })
 
 await app.listen({ host: '0.0.0.0', port: __port });

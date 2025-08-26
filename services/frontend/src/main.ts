@@ -35,15 +35,6 @@ API.get("/health")
     .then(data => console.log("✅ Health check:", data))
     .catch((err) => console.error("❌ Error:", err));
 
-const test = {
-    user: "jerome",
-    content: "Hello backend, this is the frontend speaking to you!",
-};
-
-API.post("/echo", test)
-    .then(data => console.log("✅ POST:", data))
-    .catch(err => console.error("❌ POST:", err));
-
 // toggle dark mode manually
 // document.documentElement.classList.toggle("dark");
 
