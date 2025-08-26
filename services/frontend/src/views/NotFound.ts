@@ -20,11 +20,10 @@ export default class NotFound extends AbstractView {
 
     async getHTML() {
         return /*html*/ `
-        <h1 class="text-2xl font-bold">Not Found</h1>
-
-        <div class="rounded-xl border border-rose-800 bg-rose-900/80 p-4">
-          <p class="text-rose-100">Sorry, the page you are looking for was not found.</p>
+        <h1 class="ui-title">Not Found</h1>
+        <div class="ui-card-error">
+          <p class="ui-text-error">Sorry, the page you are looking for was not found.</p>
         </div>
-  `;
+        `;
     }
 }

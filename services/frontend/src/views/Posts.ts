@@ -20,18 +20,15 @@ export default class Posts extends AbstractView {
 
     async getHTML() {
         return /*html*/ `
-        <h1 class="text-2xl font-bold">Posts</h1>
-
-        <div class="rounded-xl border border-slate-700 bg-slate-800/60 p-4">
-          <p class="text-slate-300 mb-2">Recent posts</p>
-          <ul class="space-y-2">
-            <li><a href="/posts/1" data-link class="px-3 py-2 rounded hover:bg-slate-700/60 inline-block">Routing without frameworks</a></li>
-            <li><a href="/posts/2" data-link class="px-3 py-2 rounded hover:bg-slate-700/60 inline-block">State management 101</a></li>
-            <li><a href="/posts/3" data-link class="px-3 py-2 rounded hover:bg-slate-700/60 inline-block">Fastify tips</a></li>
+        <h1 class="ui-title">Posts</h1>
+        <div class="ui-card-solid">
+          <p class="ui-text-muted mb-2">Recent posts</p>
+          <ul class="ui-list">
+            <li><a href="/posts/1" data-link class="ui-list-link">Routing without frameworks</a></li>
+            <li><a href="/posts/2" data-link class="ui-list-link">State management 101</a></li>
+            <li><a href="/posts/3" data-link class="ui-list-link">Fastify tips</a></li>
           </ul>
         </div>
-  `;
+        `;
     }
-
-
 }

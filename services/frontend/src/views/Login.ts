@@ -20,7 +20,7 @@ export default class Login extends AbstractView {
 
     async getHTML() {
         return /*html*/ `
-        <div class="ui-card">
+        <div class="ui-card-auth">
           <h2 class="ui-card-title">Login</h2>
           <form id="login-form" class="ui-form">
             <input class="ui-input" type="text" name="user" placeholder="Username" />

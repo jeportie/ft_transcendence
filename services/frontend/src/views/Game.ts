@@ -23,20 +23,20 @@ export default class Game extends AbstractView {
 
     async getHTML() {
         return /*html*/ `
-          <h1 class="text-2xl font-bold">Pong</h1>
-
-          <div class="rounded-xl border border-slate-700 bg-slate-800/60 p-4">
-            <div class="space-y-3">
-              <canvas id="gameCanvas" width="800" height="600" class="w-full rounded-xl border border-slate-700 bg-black"></canvas>
-              <div class="flex gap-2">
-                <button id="start-button" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">Start</button>
-                <button id="stop-button"  class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-700/60">Stop</button>
-              </div>
-              <p class="text-slate-300 text-sm">Controls Left Player: w ↑ / s ↓</p>
-              <p class="text-slate-300 text-sm">Controls Right Player: Arrow ↑ / Arrow ↓</p>
+        <h1 class="ui-title">Pong</h1>
+    
+        <div class="ui-card-solid">
+          <div class="ui-card-inner">
+            <canvas id="gameCanvas" width="800" height="600" class="ui-canvas"></canvas>
+            <div class="flex gap-2">
+              <button id="start-button" class="ui-btn-start">Start</button>
+              <button id="stop-button"  class="ui-btn-stop">Stop</button>
             </div>
+            <p class="ui-text-small">Controls Left Player: w ↑ / s ↓</p>
+            <p class="ui-text-small">Controls Right Player: Arrow ↑ / Arrow ↓</p>
           </div>
-    `;
+        </div>
+        `;
     }
 
     mount() {

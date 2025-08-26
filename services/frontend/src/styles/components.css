@@ -29,14 +29,19 @@
   .ui-footer-hint       { @apply absolute bottom-6 left-6 right-6 z-10 pointer-events-none; }
   .ui-footer-text       { @apply text-slate-200/70 text-sm; }
 
-  /* Login form */      
-  .ui-card              { @apply rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 shadow-xl p-6 text-slate-100; }
+  /* --- Login form --- */      
+  .ui-card-auth         { @apply rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 shadow-xl p-6 text-slate-100; }
   .ui-card-title        { @apply text-xl font-semibold mb-4; }
 
   .ui-form              { @apply space-y-3; }
+  .ui-form-lg           { @apply space-y-4; } /* for Settings */
   .ui-input             { @apply w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20
                                  placeholder:text-slate-300/50 outline-none focus:ring-2 focus:ring-white/30; }
+  .ui-input-solid       { @apply w-full px-3 py-2 rounded border border-slate-700 bg-slate-900 focus:outline-none; }
+  .ui-label             { @apply block mb-1; }
+
   .ui-btn               { @apply w-full mt-1 px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 transition; }
+  .ui-btn-primary       { @apply px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white; }
 
   .ui-hint              { @apply mt-3 text-sm text-slate-200/80; }
   .ui-hint-link         { @apply underline hover:text-white; }
@@ -56,4 +61,24 @@
 
   .ui-footer            { @apply border-t border-slate-700 p-3 flex; }
   .ui-footer-btn        { @apply px-3 py-2 rounded bg-slate-700 hover:bg-slate-600 text-sm; }
+
+  /* --- Shared --- */
+  .ui-title             { @apply text-2xl font-bold; }
+  .ui-card-solid        { @apply rounded-xl border border-slate-700 bg-slate-800/60 p-4; }
+  .ui-card-error        { @apply rounded-xl border border-rose-800 bg-rose-900/80 p-4; }
+  .ui-text-muted        { @apply text-slate-300; }
+  .ui-text-small        { @apply text-slate-300 text-sm; }
+  .ui-text-error        { @apply text-rose-100; }
+
+  /* --- Lists --- */
+  .ui-list              { @apply space-y-2; }
+  .ui-list-link         { @apply px-3 py-2 rounded hover:bg-slate-700/60 inline-block; }
+
+  /* --- Game --- */
+  .ui-card-inner        { @apply space-y-3; }
+  .ui-canvas            { @apply w-full rounded-xl border border-slate-700 bg-black; }
+
+  .ui-btn-start         { @apply px-4 py-2 rounded bg-blue-600 hover:bg-blue-700; }
+  .ui-btn-stop          { @apply px-4 py-2 rounded bg-slate-700 hover:bg-slate-700/60; }
 }
+

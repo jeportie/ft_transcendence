@@ -20,36 +20,27 @@ export default class Settings extends AbstractView {
 
     async getHTML() {
         return /*html*/ `
-        <h1 class="text-2xl font-bold">Settings</h1>
-
-        <div class="rounded-xl border border-slate-700 bg-slate-800/60 p-4">
-          <form id="settings-form" class="space-y-4">
+        <h1 class="ui-title">Settings</h1>
+        <div class="ui-card-solid">
+          <form id="settings-form" class="ui-form-lg">
             <div>
-              <label for="name" class="block mb-1">Display name</label>
-              <input id="name" name="name" type="text" placeholder="Your name"
-                class="w-full px-3 py-2 rounded border border-slate-700 bg-slate-900 focus:outline-none" />
+              <label for="name" class="ui-label">Display name</label>
+              <input id="name" name="name" type="text" placeholder="Your name" class="ui-input-solid" />
             </div>
-
+    
             <div>
-              <label for="theme" class="block mb-1">Theme</label>
-              <select id="theme" name="theme"
-                class="w-full px-3 py-2 rounded border border-slate-700 bg-slate-900 focus:outline-none">
+              <label for="theme" class="ui-label">Theme</label>
+              <select id="theme" name="theme" class="ui-input-solid">
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
               </select>
             </div>
-
-            <button type="submit"
-              class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white">
-              Save
-            </button>
+    
+            <button type="submit" class="ui-btn-primary">Save</button>
           </form>
         </div>
-  `;
+        `;
     }
-
-
-
 
     mount() {
         const form = document.getElementById("settings-form") as HTMLFormElement | null;
