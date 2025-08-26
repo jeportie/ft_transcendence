@@ -13,6 +13,5 @@ module.exports = {
     safelist: [
         { pattern: /^route-(enter|leave)(-active)?$/ },
         "view-slot",
-    ]
-
+    ],
 }
