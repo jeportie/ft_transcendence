@@ -11,17 +11,25 @@
 /* ************************************************************************** */
 
 @layer utilities {
-  /* .view-slot slide-push */
+  .view-slot[data-trans="slide-push"] {
+    transition: transform var(--route-dur) var(--route-ease);
+    will-change: transform;
+  }
+
   .view-slot[data-trans="slide-push"].route-enter {
     transform: translateX(100%);
+    z-index: 2;
   }
   .view-slot[data-trans="slide-push"].route-enter.route-enter-active {
     transform: translateX(0%);
   }
+
   .view-slot[data-trans="slide-push"].route-leave {
     transform: translateX(0%);
+    z-index: 1;
   }
   .view-slot[data-trans="slide-push"].route-leave.route-leave-active {
     transform: translateX(-100%);
   }
 }
+

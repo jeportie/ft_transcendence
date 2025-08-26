@@ -28,8 +28,7 @@ export default class Login extends AbstractView {
                 <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
               </form>
               <p class="ui-text-small mt-3">
-               No account ?<a href="/subscribe" data-link class="ui-hint-link">Subscribe</a>
-              </p>
+              <a href="/subscribe" data-link class="ui-hint-link">Subscribe</a> </p>
             </div>
         `;
     }

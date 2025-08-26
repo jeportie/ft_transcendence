@@ -28,7 +28,7 @@ defineMiniRouter();
 app.routes = routes;
 app.linkSelector = "[data-link]";
 app.onBeforeNavigate = onBeforeNavigate;
-app.animationHook = new TailwindAnimationHook({ variant: "fade" });
+// app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
 app.start();
 
 API.get("/health")

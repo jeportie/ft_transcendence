@@ -13,14 +13,16 @@
 @tailwind base;
 
 @layer base {
-  /* Default (light mode) */
   body {
-    @apply bg-white text-slate-900;
+    @apply bg-black text-slate-100;
   }
 
-  /* Dark mode (when <html class="dark"> is set) */
-  .dark body {
-    @apply bg-slate-900 text-slate-100;
+  #app {
+    @apply text-slate-100; /* no background */
+  }
+
+  .dark #app {
+    @apply text-slate-100;
   }
 }
 

@@ -42,7 +42,7 @@ export const routes = [
     {
         path: "/",
         layout: AppLayout,
-        animationHook: new TailwindAnimationHook({ variant: "fade" }),
+        animationHook: new TailwindAnimationHook({ variant: "zoom" }),
         children: [
             { path: "dashboard", component: Dashboard /*, beforeEnter: requireAuth */ },
             { path: "settings", component: Settings /*, beforeEnter: requireAuth */ },

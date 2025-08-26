@@ -13,12 +13,6 @@
 import { AbstractAnimationHook } from "@jeportie/mini-spa";
 import { getMaxTransitionMs } from "./time/getMaxTransitionMs.js";
 
-/**
- * Options:
- *   variant: "fade" | "slide-push"
- *   - "fade": container fade on #app
- *   - "slide-push": overlap push-left (new from right, old to left)
- */
 export default class TailwindAnimationHook extends AbstractAnimationHook {
     constructor({ variant = "fade" } = {}) {
         super();
@@ -26,14 +20,28 @@ export default class TailwindAnimationHook extends AbstractAnimationHook {
     }
 
     async mount({ mountEl, helpers }) {
-        if (this.variant === "slide-push") {
-            await this.#overlapPushLeft({ mountEl, helpers });
-        } else {
-            await this.#containerFade({ mountEl, helpers });
+        switch (this.variant) {
+            case "fade":
+                await this.#containerFade({ mountEl, helpers });
+                break;
+            case "slide":
+                await this.#containerSlide({ mountEl, helpers });
+                break;
+            case "zoom":
+                await this.#containerZoom({ mountEl, helpers });
+                break;
+            case "slide-push":
+                await this.#overlapPushLeft({ mountEl, helpers });
+                break;
+            case "track":
+                await this.#trackPush({ mountEl, helpers });
+                break;
+            default:
+                await this.#containerFade({ mountEl, helpers });
         }
     }
 
-    /* -------- container / fade -------- */
+    /* -------- container fade -------- */
     async #containerFade({ mountEl, helpers }) {
         if (mountEl.childElementCount > 0) {
             mountEl.setAttribute("data-trans", "fade");
@@ -41,21 +49,49 @@ export default class TailwindAnimationHook extends AbstractAnimationHook {
             if (helpers.isStale()) return;
         }
         helpers.teardown();
-        await helpers.commit(); // into #app
+        await helpers.commit();
         if (helpers.isStale()) return;
 
         mountEl.setAttribute("data-trans", "fade");
         await this.#runPhase(mountEl, "in");
     }
 
-    /* -------- overlap push-left (two slots) -------- */
+    /* -------- container slide -------- */
+    async #containerSlide({ mountEl, helpers }) {
+        if (mountEl.childElementCount > 0) {
+            mountEl.setAttribute("data-trans", "slide");
+            await this.#runPhase(mountEl, "out");
+            if (helpers.isStale()) return;
+        }
+        helpers.teardown();
+        await helpers.commit();
+        if (helpers.isStale()) return;
+
+        mountEl.setAttribute("data-trans", "slide");
+        await this.#runPhase(mountEl, "in");
+    }
+
+    /* -------- container zoom -------- */
+    async #containerZoom({ mountEl, helpers }) {
+        if (mountEl.childElementCount > 0) {
+            mountEl.setAttribute("data-trans", "zoom");
+            await this.#runPhase(mountEl, "out");
+            if (helpers.isStale()) return;
+        }
+        helpers.teardown();
+        await helpers.commit();
+        if (helpers.isStale()) return;
+
+        mountEl.setAttribute("data-trans", "zoom");
+        await this.#runPhase(mountEl, "in");
+    }
+
+    /* -------- overlap push-left (slide-push) -------- */
     async #overlapPushLeft({ mountEl, helpers }) {
-        // Ensure container can host absolutely-positioned layers
         const cs = getComputedStyle(mountEl);
         if (cs.position === "static") mountEl.style.position = "relative";
         if (cs.overflow !== "hidden") mountEl.style.overflow = "hidden";
 
-        // Wrap current DOM into an old slot (move nodes, do not clone)
         let oldSlot = null;
         if (mountEl.childNodes.length > 0) {
             oldSlot = document.createElement("div");
@@ -67,31 +103,29 @@ export default class TailwindAnimationHook extends AbstractAnimationHook {
             oldSlot.appendChild(frag);
             mountEl.appendChild(oldSlot);
             oldSlot.setAttribute("data-trans", "slide-push");
+            oldSlot.style.transform = "translateX(0%)";
         }
 
-        // Tear down old instances (the DOM stays for the animation)
         helpers.teardown();
 
-        // Create the entering slot and commit new view into it
         const newSlot = document.createElement("div");
         newSlot.className = "view-slot route-enter";
         newSlot.style.position = "absolute";
         newSlot.style.inset = "0";
+        newSlot.setAttribute("data-trans", "slide-push");
         mountEl.appendChild(newSlot);
 
         await helpers.commit(newSlot);
         if (helpers.isStale()) { newSlot.remove(); return; }
-
-        newSlot.setAttribute("data-trans", "slide-push");
 
         // Animate both slots concurrently
         await Promise.all([
             this.#runPhase(newSlot, "in"),
             oldSlot ? this.#runPhase(oldSlot, "out") : Promise.resolve(),
         ]);
+
         if (helpers.isStale()) { newSlot.remove(); return; }
 
-        // Unwrap: move new content out of the slot, remove both slots
         oldSlot?.remove();
         const frag2 = document.createDocumentFragment();
         while (newSlot.firstChild) frag2.appendChild(newSlot.firstChild);
@@ -99,7 +133,33 @@ export default class TailwindAnimationHook extends AbstractAnimationHook {
         newSlot.remove();
     }
 
-    /* -------- tiny class-based runner -------- */
+    /* -------- track push (2 views side-by-side) -------- */
+    async #trackPush({ mountEl, helpers }) {
+        const track = document.createElement("div");
+        track.className = "view-track route-enter";
+        track.setAttribute("data-trans", "slide-push");
+        mountEl.appendChild(track);
+
+        const oldSlot = document.createElement("div");
+        oldSlot.className = "view-slot";
+        while (mountEl.firstChild !== track) {
+            oldSlot.appendChild(mountEl.firstChild);
+        }
+        track.appendChild(oldSlot);
+
+        const newSlot = document.createElement("div");
+        newSlot.className = "view-slot";
+        track.appendChild(newSlot);
+
+        helpers.teardown();
+        await helpers.commit(newSlot);
+
+        if (helpers.isStale()) { track.remove(); return; }
+
+        await this.#runPhase(track, "in");
+    }
+
+    /* -------- generic runner -------- */
     async #runPhase(el, phase) {
         return new Promise((resolve) => {
             let done = false;
@@ -124,11 +184,11 @@ export default class TailwindAnimationHook extends AbstractAnimationHook {
             }
 
             requestAnimationFrame(() => {
-                void el.offsetWidth; // reflow
+                void el.offsetWidth;
                 el.classList.add(phase === "out" ? "route-leave-active" : "route-enter-active");
                 el.addEventListener("transitionend", onEnd, { once: true });
                 const total = getMaxTransitionMs(el);
-                setTimeout(finish, (total || 0) + 50); // safety
+                setTimeout(finish, (total || 0) + 50);
             });
         });
     }
