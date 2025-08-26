@@ -10,13 +10,21 @@
 //                                                                            //
 // ************************************************************************** //
 
-// Example guard (redirect if not logged in)
+import { auth } from "./tools/AuthService.js";
+
+// If fail, we return to login/ but keeping the wanted page as argument 
+// so when logged in we go back to the requested page
 export const requireAuth = (ctx: any) => {
-    const logged = Boolean(localStorage.getItem("token"));
-    return logged || "/login";
+    if (auth.isLoggedIn())
+        return (true);
+
+    const wanted = (ctx?.path || location.pathname) + (location.search || "") + (location.hash || "");
+
+    const next = encodeURIComponent(wanted);
+    return (`/login?next=${next}`);
 };
 
-// Optional global block for API paths
 export const onBeforeNavigate = (to: string) => {
-    if (to.startsWith("/api/")) return false;
+    if (to.startsWith("/api/"))
+        return false;
 };

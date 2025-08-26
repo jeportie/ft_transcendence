@@ -11,6 +11,7 @@
 // ************************************************************************** //
 
 import { AbstractLayout } from "@jeportie/mini-spa";
+import { auth } from "../tools/AuthService.js";
 
 export default class AppLayout extends AbstractLayout {
     #onToggle?: (e: Event) => void;
@@ -28,6 +29,9 @@ export default class AppLayout extends AbstractLayout {
                 <a href="/settings"  data-link class="ui-sidebar-link">Settings</a>
                 <a href="/game"      data-link class="ui-sidebar-link">Game</a>
               </nav>
+              <button id="logout-btn" class="ui-sidebar-link">
+                Logout
+              </button>
             </aside>
     
             <main class="ui-main">
@@ -36,12 +40,9 @@ export default class AppLayout extends AbstractLayout {
           </div>
     
           <footer class="ui-footer">
-            <button
-              id="sidebar-toggle"
-              class="ui-footer-btn"
+            <button id="sidebar-toggle"class="ui-footer-btn"
               aria-controls="app-sidebar"
-              aria-expanded="true"
-            >
+              aria-expanded="true">
               Hide sidebar
             </button>
           </footer>
@@ -50,38 +51,40 @@ export default class AppLayout extends AbstractLayout {
     }
 
     mount() {
+        // DOM
+        const appLayout = document.querySelector("#app-layout")
         const btnList = document.querySelectorAll("#sidebar-toggle");
         const sidebarList = document.querySelectorAll("#app-sidebar");
+        const logoutBtn = document.querySelector("#logout-btn");
+        if (!appLayout || !btnList || !sidebarList || !logoutBtn) return;
+
         const btn = (btnList[btnList.length - 1] ?? null) as HTMLButtonElement | null;
         const sidebar = (sidebarList[sidebarList.length - 1] ?? null) as HTMLElement | null;
         if (!btn || !sidebar) return;
 
-        const open = () => {
-            sidebar.classList.remove("w-0", "p-0", "border-0");
-            sidebar.classList.add("w-[220px]", "p-4", "border");
-            btn.setAttribute("aria-expanded", "true");
-            btn.textContent = "Hide sidebar";
-            this.#open = true;
-            localStorage.setItem("sidebar", "open");
+        const apply = (state: "open" | "closed") => {
+            appLayout.setAttribute("data-state", state);
+            const expanded = state === "open";
+            btn.setAttribute("aria-expanded", String(expanded));
+            btn.textContent = expanded ? "Hide sidebar" : "Show sidebar";
+            this.#open = expanded;
+            localStorage.setItem("sidebar", state);
         };
 
-        const close = () => {
-            // collapse width & padding so it fully disappears
-            sidebar.classList.remove("w-[220px]", "p-4", "border");
-            sidebar.classList.add("w-0", "p-0", "border-0");
-            btn.setAttribute("aria-expanded", "false");
-            btn.textContent = "Show sidebar";
-            this.#open = false;
-            localStorage.setItem("sidebar", "closed");
+        this.#onToggle = (e: Event) => {
+            e.preventDefault();
+            apply(this.#open ? "closed" : "open");
         };
-
-        const toggle = () => (this.#open ? close() : open());
-        this.#onToggle = (e: Event) => { e.preventDefault(); toggle(); };
 
         btn.addEventListener("click", this.#onToggle);
 
+        logoutBtn.addEventListener("click", () => {
+            auth.clear();
+            window.navigateTo("/login");
+        })
+
         const saved = localStorage.getItem("sidebar");
-        (saved === "closed") ? close() : open();
+        apply(saved === "closed" ? "closed" : "open");
 
         (this as any)._cleanup = () => {
             btn.removeEventListener("click", this.#onToggle!);

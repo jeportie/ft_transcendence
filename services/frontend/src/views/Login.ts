@@ -12,6 +12,7 @@
 
 // @ts-ignore
 import { AbstractView } from "@jeportie/mini-spa";
+import { auth } from "../tools/AuthService.js";
 import Fetch from "../tools/Fetch.js";
 
 // API
@@ -48,17 +49,27 @@ export default class Login extends AbstractView {
         const userName = document.querySelector("#user-name");
         const userPwd = document.querySelector("#user-pwd");
 
+        // read ?next from URL
+        const params = new URLSearchParams(location.search);
+        const next = params.get("next") || "/dashboard";
+
         loginForm?.addEventListener("submit", event => {
             event.preventDefault();
 
             API.post("/auth", {
+                // @ts-ignore
                 user: userName.value,
+                // @ts-ignore
                 pwd: userPwd.value,
             })
                 .then(data => {
-                    console.log("AUTH:", data);
-                    if (data.succes === true)
-                        window.navigateTo("/dashboard");
+                    if (data.succes === true) {
+                        auth.setToken(data.token || "dev-token");
+                        // @ts-ignore
+                        window.navigateTo(next);
+                    } else {
+                        console.warn("Invalide credentials")
+                    }
                 })
                 .catch(err => console.error("❌ ERROR:", err));
         })

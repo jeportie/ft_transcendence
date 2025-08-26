@@ -1092,10 +1092,6 @@ body {
 
 /* ************************************************************************** */
 
-.collapse {
-  visibility: collapse;
-}
-
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -1108,20 +1104,8 @@ body {
   margin-top: 0.75rem;
 }
 
-.block {
-  display: block;
-}
-
 .flex {
   display: flex;
-}
-
-.w-0 {
-  width: 0px;
-}
-
-.w-\[220px\] {
-  width: 220px;
 }
 
 .w-full {
@@ -1138,22 +1122,6 @@ body {
 
 .gap-3 {
   gap: 0.75rem;
-}
-
-.border {
-  border-width: 1px;
-}
-
-.border-0 {
-  border-width: 0px;
-}
-
-.p-0 {
-  padding: 0px;
-}
-
-.p-4 {
-  padding: 1rem;
 }
 
 :root {
