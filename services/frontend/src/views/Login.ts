@@ -20,17 +20,17 @@ export default class Login extends AbstractView {
 
     async getHTML() {
         return /*html*/ `
-        <div class="ui-card-auth">
-          <h2 class="ui-card-title">Login</h2>
-          <form id="login-form" class="ui-form">
-            <input class="ui-input" type="text" name="user" placeholder="Username" />
-            <input class="ui-input" type="password" name="pass" placeholder="Password" />
-            <button id="login-btn" class="ui-btn">Sign in</button>
-          </form>
-          <p class="ui-hint">
-            No account? <a href="/subscribe" data-link class="ui-hint-link">Subscribe</a>
-          </p>
-        </div>
+            <div class="ui-card">
+              <h2 class="ui-card-title">Login</h2>
+              <form class="ui-form">
+                <input class="ui-input" type="text" placeholder="Username" />
+                <input class="ui-input" type="password" placeholder="Password" />
+                <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
+              </form>
+              <p class="ui-text-small mt-3">
+               No account ?<a href="/subscribe" data-link class="ui-hint-link">Subscribe</a>
+              </p>
+            </div>
         `;
     }
 

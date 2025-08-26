@@ -21,7 +21,7 @@ export default class Posts extends AbstractView {
     async getHTML() {
         return /*html*/ `
         <h1 class="ui-title">Posts</h1>
-        <div class="ui-card-solid">
+        <div class="ui-card">
           <p class="ui-text-muted mb-2">Recent posts</p>
           <ul class="ui-list">
             <li><a href="/posts/1" data-link class="ui-list-link">Routing without frameworks</a></li>

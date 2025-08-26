@@ -22,7 +22,7 @@ export default class PostShow extends AbstractView {
         const id = this.ctx.params.id;
         return /*html*/ `
         <h1 class="ui-title">Post ${id}</h1>
-        <div class="ui-card-solid">
+        <div class="ui-card">
           <p class="ui-text-muted">Details for post ${id}...</p>
         </div>
       `;

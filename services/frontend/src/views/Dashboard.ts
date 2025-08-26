@@ -21,7 +21,7 @@ export default class Dashboard extends AbstractView {
     async getHTML() {
         return /*html*/ `
         <h1 class="ui-title">Dashboard</h1>
-        <div class="ui-card-solid">
+        <div class="ui-card">
           <p class="ui-text-muted">Welcome to your SPA dashboard!</p>
         </div>
         `;

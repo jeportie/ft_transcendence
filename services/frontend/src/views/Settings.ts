@@ -21,16 +21,16 @@ export default class Settings extends AbstractView {
     async getHTML() {
         return /*html*/ `
         <h1 class="ui-title">Settings</h1>
-        <div class="ui-card-solid">
+        <div class="ui-card">
           <form id="settings-form" class="ui-form-lg">
             <div>
               <label for="name" class="ui-label">Display name</label>
-              <input id="name" name="name" type="text" placeholder="Your name" class="ui-input-solid" />
+              <input id="name" name="name" type="text" placeholder="Your name" class="ui-input" />
             </div>
     
             <div>
               <label for="theme" class="ui-label">Theme</label>
-              <select id="theme" name="theme" class="ui-input-solid">
+              <select id="theme" name="theme" class="ui-input">
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
               </select>

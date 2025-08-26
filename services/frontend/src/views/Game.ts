@@ -25,12 +25,12 @@ export default class Game extends AbstractView {
         return /*html*/ `
         <h1 class="ui-title">Pong</h1>
     
-        <div class="ui-card-solid">
+        <div class="ui-card">
           <div class="ui-card-inner">
             <canvas id="gameCanvas" width="800" height="600" class="ui-canvas"></canvas>
             <div class="flex gap-2">
-              <button id="start-button" class="ui-btn-start">Start</button>
-              <button id="stop-button"  class="ui-btn-stop">Stop</button>
+              <button id="start-button" class="ui-btn-primary">Start</button>
+              <button id="stop-button"  class="ui-btn-secondary">Stop</button>
             </div>
             <p class="ui-text-small">Controls Left Player: w ↑ / s ↓</p>
             <p class="ui-text-small">Controls Right Player: Arrow ↑ / Arrow ↓</p>
