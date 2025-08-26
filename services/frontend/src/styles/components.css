@@ -44,7 +44,7 @@
   .ui-btn-danger    { @apply ui-btn bg-rose-600 hover:bg-rose-700 text-white; }
 
   /* --- Layouts --- */
-  .ui-hero          { @apply relative min-h-screen overflow-hidden bg-black; }
+  .ui-hero          { @apply relative min-h-screen overflow-hidden; }
   .ui-hero-canvas   { @apply absolute inset-0 w-full h-full block z-0; }
 
   .ui-header        { @apply absolute top-0 inset-x-0 z-20; }
@@ -60,7 +60,7 @@
   .ui-footer-text   { @apply text-slate-300/70 text-sm; }
 
   /* --- App Layout (Sidebar style update to match Landing) --- */
-  .ui-app-layout    { @apply min-h-screen flex flex-col bg-black; }
+  .ui-app-layout    { @apply min-h-screen flex flex-col; }
   .ui-app-wrapper   { @apply flex gap-6 p-6 flex-1 items-start; }
 
   .ui-sidebar       { @apply w-[220px] shrink-0 overflow-hidden transition-[width,padding]
@@ -81,5 +81,5 @@
 
   /* --- Game --- */
   .ui-card-inner    { @apply space-y-3; }
-  .ui-canvas        { @apply w-full rounded-xl border border-white/10 bg-black; }
+  .ui-canvas        { @apply w-full rounded-xl border border-white/10; }
 }
