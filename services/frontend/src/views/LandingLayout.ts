@@ -36,7 +36,9 @@ export default class LandingLayout extends AbstractLayout {
           </header>
         
           <div id="modal-layer" class="ui-modal-layer">
-            <div data-router-outlet class="ui-modal-slot"><!-- router-slot --></div>
+             <div data-router-outlet class="ui-modal-slot">
+                <!-- router-slot -->
+             </div>
           </div>
         
           <div class="ui-footer-hint">

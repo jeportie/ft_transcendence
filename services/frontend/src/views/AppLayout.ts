@@ -18,40 +18,35 @@ export default class AppLayout extends AbstractLayout {
 
     async getHTML() {
         return /*html*/ `
-      <div id="app-layout" class="min-h-screen flex flex-col">
-        <div class="flex gap-6 p-6 flex-1 items-start">
-          <aside
-            id="app-sidebar"
-            class="w-[220px] shrink-0 overflow-hidden
-                   transition-[width,padding] duration-200 ease-in-out
-                   rounded-xl bg-slate-800/60 border border-slate-700 p-4"
-          >
-            <h2 class="text-lg font-semibold mb-3">Menu</h2>
-            <nav class="flex flex-col gap-2">
-              <a href="/dashboard" data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Dashboard</a>
-              <a href="/posts"     data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Posts</a>
-              <a href="/settings"  data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Settings</a>
-              <a href="/game"      data-link class="px-3 py-2 rounded hover:bg-slate-700/60">Game</a>
-            </nav>
-          </aside>
-
-          <main class="flex-1 min-w-0 space-y-4">
-            <!-- router-slot -->
-          </main>
+        <div id="app-layout" class="ui-app-layout">
+          <div class="ui-app-wrapper">
+            <aside id="app-sidebar" class="ui-sidebar">
+              <h2 class="ui-sidebar-title">Menu</h2>
+              <nav class="ui-sidebar-nav">
+                <a href="/dashboard" data-link class="ui-sidebar-link">Dashboard</a>
+                <a href="/posts"     data-link class="ui-sidebar-link">Posts</a>
+                <a href="/settings"  data-link class="ui-sidebar-link">Settings</a>
+                <a href="/game"      data-link class="ui-sidebar-link">Game</a>
+              </nav>
+            </aside>
+    
+            <main class="ui-main">
+              <!-- router-slot -->
+            </main>
+          </div>
+    
+          <footer class="ui-footer">
+            <button
+              id="sidebar-toggle"
+              class="ui-footer-btn"
+              aria-controls="app-sidebar"
+              aria-expanded="true"
+            >
+              Hide sidebar
+            </button>
+          </footer>
         </div>
-
-        <footer class="border-t border-slate-700 p-3 flex">
-          <button
-            id="sidebar-toggle"
-            class="px-3 py-2 rounded bg-slate-700 hover:bg-slate-600 text-sm"
-            aria-controls="app-sidebar"
-            aria-expanded="true"
-          >
-            Hide sidebar
-          </button>
-        </footer>
-      </div>
-    `;
+        `;
     }
 
     mount() {
