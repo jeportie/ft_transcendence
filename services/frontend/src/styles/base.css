@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.css                                          :+:      :+:    :+:   */
+/*   base.css                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
-/*   Updated: 2025/08/26 11:19:42 by jeportie         ###   ########.fr       */
+/*   Created: 2025/08/26 11:14:37 by jeportie          #+#    #+#             */
+/*   Updated: 2025/08/26 11:15:04 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-@import "./styles/base.css";
-@import "./styles/components.css";
-@import "./styles/utilities.css";
-@import "./styles/transitions.css";
+@tailwind base;
+
+/* Global adjustments */
+html, body { height: 100%; }
+body { @apply bg-black text-slate-100; }

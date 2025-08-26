@@ -33,7 +33,7 @@ app.start();
 
 API.get("/health")
     .then(data => console.log("✅ Health check:", data))
-    .catch((err) => console.error("❌ Health check error:", err));
+    .catch((err) => console.error("❌ Error:", err));
 
 const test = {
     user: "jerome",
