@@ -10,14 +10,12 @@
 #                                                                              #
 # **************************************************************************** #
 
-version: '3.8'
-
 services:
 
   frontend:
     container_name: frontend
     env_file:
-      - services/frontend/.env.frontend
+      - services/frontend/.env.local
     volumes:
       - ./services/frontend/src:/app/src:delegated
       - ./services/frontend/public:/app/public:delegated
@@ -29,7 +27,7 @@ services:
   api:
     container_name: api
     env_file:
-      - services/api/.env.api
+      - services/api/.env.local
     volumes:
       - ./data/sqlite:/data:delegated
       - ./services/frontend/public:/app/public:ro
