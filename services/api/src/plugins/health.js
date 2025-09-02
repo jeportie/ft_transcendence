@@ -13,8 +13,8 @@
 import fp from "fastify-plugin";
 
 export default fp(async function healthRoutes(app) {
-    app.get('/api/health', async () => {
-        const db = await getDb();
+    app.get('/health', async () => {
+        const db = await app.getDb();
         const row = await db.get(
             'SELECT status, updated_at FROM health WHERE id = 1'
         );

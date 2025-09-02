@@ -13,7 +13,7 @@
 import fp from "fastify-plugin";
 
 export default fp(async function authRoutes(app) {
-    app.post('/api/auth', async (request, reply) => {
+    app.post('/auth', async (request, reply) => {
         console.log("[POST] /api/auth -> body: ", request.body);
 
         if (request.body.user === "jeportie" && request.body.pwd === "dub") {
