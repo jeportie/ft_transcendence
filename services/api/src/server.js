@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/13 15:56:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/25 15:31:15 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/02 15:54:07 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,14 +16,14 @@ import statics from '@fastify/static';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getDb } from './db.js';
+import config from './config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const __port = 5000;
 
 const app = Fastify({ logger: false });
 
-await app.register(cors, { origin: true });
+await app.register(cors, { origin: config.CORS_ORIGIN || false, /*credentials: true*/ });
 await app.register(statics, {
     root: path.join(__dirname, "../public"),
     prefix: "/",
@@ -49,10 +49,11 @@ app.post('/api/auth', async (request, reply) => {
             succes: true,
             user: "jeportie",
             pwd: "dub",
+            token: "dev-token"
         });
     }
     return ({ succes: false });
 })
 
-await app.listen({ host: '0.0.0.0', port: __port });
-console.log(`[api] server listening on :${__port}`);
+await app.listen({ host: config.HOST, port: config.PORT });
+console.log(`[api] server listening on ${config.HOST}:${config.PORT} (env=${config.NODE_ENV})`);
