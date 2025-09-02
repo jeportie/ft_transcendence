@@ -1,23 +1,18 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   password.js                                        :+:      :+:    :+:   //
+//   db.js                                              :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/24 22:51:12 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/24 22:59:23 by jeportie         ###   ########.fr       //
+//   Created: 2025/08/19 14:33:46 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/02 17:42:59 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import * as argon2 from "argon2";
+import { getDb } from "../db/db.js";
+import fp from "fastify-plugin";
 
-/** Hash a plain password using Argon2id. */
-export function hashPassword(plain) {
-    return argon2.hash(plain, { type: argon2.argon2id });
-}
-
-/** Verify a plain password against a stored argon2 hash. */
-export function verifyPassword(hash, plain) {
-    return (argon2.verify(hash, plain));
-}
+export default fp(async function dbPlugin(app) {
+    app.decorate("getDb", getDb);
+});
