@@ -37,8 +37,11 @@ export async function buildApp() {
     await app.register(dbPlugin);
 
     // Routes
-    await app.register(healthRoutes, { prefix: '/api' });
-    await app.register(authRoutes, { prefix: '/api' });
+    await app.register(async function(api) {
+        await api.register(healthRoutes);
+        await api.register(authRoutes);
+    }, { prefix: '/api' });
+
 
     // SPA fallback to index.html for non /api paths
     app.setNotFoundHandler((req, reply) => {
@@ -46,6 +49,9 @@ export async function buildApp() {
             return (reply.sendFile("index.html"));
         reply.code(404).send({ error: "Not Found" });
     });
+
+    app.addHook('onRoute', (r) => console.log('[route]', r.method, r.path));
+    app.ready(() => console.log(app.printRoutes()));
 
     return (app);
 }
