@@ -1,17 +1,15 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   db.js                                              :+:      :+:    :+:   //
+//   migrations.js                                      :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/03 14:57:17 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/03 15:24:15 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/03 17:02:59 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import sqlite3 from "sqlite3";
-import { open } from "sqlite";
 import { promises as fs } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -19,19 +17,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log(__dirname);
-
-const defaultDbFile = path.join(__dirname, "./data/app.db");
-
-console.log(defaultDbFile);
-
-let dbPromise = null;
-
-async function ensureDirFor(file) {
-    await fs.mkdir(path.dirname(file), { recursive: true });
-};
-
-async function runMigrations(db) {
+export async function runMigrations(db) {
     await db.exec("PRAGMA foreign_keys = ON;");
 
     // Ensure migrations registery
@@ -69,22 +55,11 @@ async function runMigrations(db) {
             await db.exec(sql);
             await db.run("INSERT INTO migrations (name) VALUES (?)", file);
             await db.exec("COMMIT;");
-            console.log(`[DB] migration applied: ${file}`, err);
+            console.log(`[DB] migration applied: ${file}`);
         } catch (error) {
             await db.exec("ROLLBACK;");
-            console.error(`[DB] migration failed: ${file}`, err);
-            throw err;
+            console.error(`[DB] migration failed: ${file}`, error);
+            throw error;
         }
     }
-}
-
-export async function getDb() {
-    if (!dbPromise) {
-        const file = defaultDbFile;
-        await ensureDirFor(file);
-        dbPromise = open({ filename: file, driver: sqlite3.Database });
-        const db = await dbPromise;
-        await runMigrations(db);
-    }
-    return (dbPromise);
 }

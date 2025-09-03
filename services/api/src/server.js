@@ -6,13 +6,17 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/13 15:56:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/02 17:53:12 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/03 16:55:19 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { buildApp } from "./app.js";
+import { getDb } from "./db/connection.js";
+import { runMigrations } from "./db/migrations.js";
 
 const app = await buildApp();
+const db = await getDb();
+await runMigrations(db);
 
 const { HOST, PORT, NODE_ENV } = app.config;
 

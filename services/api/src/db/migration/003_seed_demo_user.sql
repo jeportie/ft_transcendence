@@ -1,0 +1,47 @@
+-- ************************************************************************** --
+--                                                                            --
+--                                                        :::      ::::::::   --
+--   003_seed_demo_user.sql                             :+:      :+:    :+:   --
+--                                                    +:+ +:+         +:+     --
+--   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
+--                                                +#+#+#+#+#+   +#+           --
+--   Created: 2025/09/03 17:43:05 by jeportie          #+#    #+#             --
+--   Updated: 2025/09/03 17:45:37 by jeportie         ###   ########.fr       --
+--                                                                            --
+-- ************************************************************************** --
+
+-- -------------------------------------------------------------------------- --
+-- Seed demo user
+--
+-- Purpose:
+--   Provides a demo user account to simplify local development and testing.
+--   This is not meant for production and will be replaced by a properly
+--   hashed password during later setup.
+--
+-- Columns populated:
+--   username      - 'jeportie'
+--   email         - 'jeportie@42.fr'
+--   password_hash - 'dub' (placeholder; replace with real hash later)
+--   role          - 'player'
+--
+-- Notes:
+--   - `INSERT OR IGNORE` ensures this row is only created if it doesn’t
+--     already exist (avoids duplicate users when re-running migrations).
+--   - In production, seed users should use strong, securely hashed passwords
+--     (e.g., Argon2, bcrypt, scrypt).
+--
+-- ASCII representation after insert:
+--
+--   +----+----------+-------------------+--------------+--------+---------------------+-----------+
+--   | id | username | email             | password_hash| role   | created_at          | updated_at|
+--   +----+----------+-------------------+--------------+--------+---------------------+-----------+
+--   |  1 | jeportie | jeportie@42.fr    | dub          | player | 2025-09-03 17:43:30 | NULL      |
+--   +----+----------+-------------------+--------------+--------+---------------------+-----------+
+--
+-- Example:
+--   SELECT username, role FROM users WHERE username = 'jeportie';
+--   → Returns one row with role = 'player'.
+-- -------------------------------------------------------------------------- --
+
+INSERT OR IGNORE INTO users (username, email, password_hash, role)
+VALUES ('jeportie', 'jeportie@42.fr', 'dub', 'player');
