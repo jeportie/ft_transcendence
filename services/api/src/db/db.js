@@ -5,51 +5,86 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/19 14:33:46 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/02 17:40:01 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/03 14:57:17 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/03 15:24:15 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import sqlite3 from 'sqlite3';
-import { open, Database } from 'sqlite';
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
+import { promises as fs } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-sqlite3.verbose();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-let db = null;
+console.log(__dirname);
+
+const defaultDbFile = path.join(__dirname, "./data/app.db");
+
+console.log(defaultDbFile);
+
+let dbPromise = null;
+
+async function ensureDirFor(file) {
+    await fs.mkdir(path.dirname(file), { recursive: true });
+};
+
+async function runMigrations(db) {
+    await db.exec("PRAGMA foreign_keys = ON;");
+
+    // Ensure migrations registery
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS migrations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            run_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+    `);
+
+    const dir = path.join(__dirname, "migrations");
+    let files = [];
+    try {
+        files = (await fs.readdir(dir))
+            .filter((file) => file.endsWith(".sql"))
+            .sort();
+    } catch (error) {
+        if (error.code === "ENOENT")
+            return; // no migrations found
+        throw error;
+    };
+
+    for (const file of files) {
+        const applied = await db.get(
+            "SELECT 1 FROM migrations WHERE name = ?",
+            file
+        );
+        if (applied)
+            continue;
+
+        const sql = await fs.readFile(path.join(dir, file), "utf8");
+        try {
+            await db.exec("BEGIN;");
+            await db.exec(sql);
+            await db.run("INSERT INTO migrations (name) VALUES (?)", file);
+            await db.exec("COMMIT;");
+            console.log(`[DB] migration applied: ${file}`, err);
+        } catch (error) {
+            await db.exec("ROLLBACK;");
+            console.error(`[DB] migration failed: ${file}`, err);
+            throw err;
+        }
+    }
+}
 
 export async function getDb() {
-    if (db) return db;
-    db = await open({
-        filename: '/data/app.db', // map a volume here in compose if you want persistence
-        driver: sqlite3.Database
-    });
-
-    /** Health check table */
-    await db.exec(`
-CREATE TABLE IF NOT EXISTS health (
-  id INTEGER PRIMARY KEY,
-  status TEXT NOT NULL,
-  updated_at TEXT NOT NULL
-);
-  `);
-
-    /** User table */
-    await db.exec(`
-CREATE TABLE IF NOT EXISTS users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  email TEXT UNIQUE NOT NULL,
-  password_hash TEXT,              -- null for pure OAuth later
-  display_name TEXT,
-  is_2fa_enabled INTEGER NOT NULL DEFAULT 0,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-  `);
-
-    const row = await db.get('SELECT * FROM health WHERE id = 1');
-    if (!row) {
-        await db.run('INSERT INTO health (id, status, updated_at) VALUES (1, ?, ?)', [
-            'ok', new Date().toISOString()
-        ]);
+    if (!dbPromise) {
+        const file = defaultDbFile;
+        await ensureDirFor(file);
+        dbPromise = open({ filename: file, driver: sqlite3.Database });
+        const db = await dbPromise;
+        await runMigrations(db);
     }
-    return db;
+    return (dbPromise);
 }

@@ -50,8 +50,5 @@ export async function buildApp() {
         reply.code(404).send({ error: "Not Found" });
     });
 
-    app.addHook('onRoute', (r) => console.log('[route]', r.method, r.path));
-    app.ready(() => console.log(app.printRoutes()));
-
     return (app);
 }

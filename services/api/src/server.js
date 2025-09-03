@@ -17,4 +17,4 @@ const app = await buildApp();
 const { HOST, PORT, NODE_ENV } = app.config;
 
 await app.listen({ host: HOST, port: PORT });
-console.log(`[api] server listening on ${HOST}:${PORT} (env=${NODE_ENV})`);
+console.log(`[API] server listening on ${HOST}:${PORT} (env=${NODE_ENV})`);

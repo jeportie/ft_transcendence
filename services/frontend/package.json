@@ -1,0 +1,26 @@
+{
+    "name": "frontend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build:css": "tailwindcss -i src/input.css -o public/styles.css",
+        "watch:css": "tailwindcss -i src/input.css -o public/styles.css --watch",
+        "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --log-level=info",
+        "watch:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --watch --log-level=info",
+        "predev": "npm run build:css && npm run build:js",
+        "dev": "npm run predev && (npm run watch:css & npm run watch:js)"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@jeportie/lib2d": "github:jeportie/lib2d#main",
+        "@jeportie/mini-spa": "github:jeportie/mini-router#main",
+        "autoprefixer": "^10.4.21",
+        "esbuild": "^0.25.8",
+        "postcss": "^8.5.6",
+        "tailwindcss": "^3.4.17",
+        "typescript": "^5.8.3"
+    }
+}
