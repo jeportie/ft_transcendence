@@ -30,6 +30,7 @@ export async function runMigrations(db) {
     `);
 
     const dir = path.join(__dirname, "migrations");
+    console.log("[DB] looking for migrations in:", dir);
     let files = [];
     try {
         files = (await fs.readdir(dir))

@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS health (
     id INTEGER PRIMARY KEY,
     status TEXT NOT NULL DEFAULT 'ok',
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CHECK id = 1
+    CHECK (id = 1)
 );
 
 INSERT OR IGNORE INTO health (id, status, updated_at)

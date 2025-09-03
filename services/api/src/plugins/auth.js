@@ -16,9 +16,9 @@ export default fp(async function authRoutes(app) {
     app.post('/auth', async (request, reply) => {
 
         console.log("[POST] /api/auth -> body: ", request.body);
-        const { id, pwd } = request.body || {};
+        const { user, pwd } = request.body || {};
 
-        if (!id || !pwd)
+        if (!user || !pwd)
             return (reply.code(400).send({
                 succes: false,
                 error: "Missing credentials",
@@ -32,8 +32,7 @@ export default fp(async function authRoutes(app) {
              WHERE   username    = ? 
              OR      email       = ?
              LIMIT 1`,
-            id,
-            id
+            user, user
         );
 
         if (!row || pwd !== row.password_hash)
