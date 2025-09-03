@@ -14,10 +14,9 @@ FROM node:20-slim
 EXPOSE 5000
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3 make g++ \
+    && apt-get install -y --no-install-recommends \
+        python3 make g++ sqlite3 \
     && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get install -y sqlite3
 
 WORKDIR /app
 

@@ -15,13 +15,14 @@ import { open } from "sqlite";
 import { promises as fs } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import * as dotenv from "dotenv";
+
+dotenv.config({ path: ".env.local" });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log(__dirname);
 
-const defaultDbFile = path.join(__dirname, "./data/app.db");
-console.log(defaultDbFile);
+const dbFile = path.join(__dirname, process.env.DB_FILE || "./data/app.db");
 
 let dbPromise = null;
 
@@ -31,8 +32,8 @@ export async function ensureDirFor(file) {
 
 export async function getDb() {
     if (!dbPromise) {
-        await ensureDirFor(defaultDbFile);
-        dbPromise = open({ filename: defaultDbFile, driver: sqlite3.Database });
+        await ensureDirFor(dbFile);
+        dbPromise = open({ filename: dbFile, driver: sqlite3.Database });
     }
     return (dbPromise);
 }

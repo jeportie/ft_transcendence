@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { getDb } from "../db/db.js";
+import { getDb } from "../db/connection.js";
 import fp from "fastify-plugin";
 
 export default fp(async function dbPlugin(app) {
