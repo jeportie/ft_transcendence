@@ -30,7 +30,10 @@ const config = {
 
     // CORS
     CORS_ORIGIN: asString(process.env.CORS_ORIGIN, "http://localhost:8000"),
-}
+
+    // Tokens
+    ACCESS_TOKEN_TTL: asString(process.env.ACCESS_TOKEN_TTL, "15m"),
+};
 
 const errors = [];
 

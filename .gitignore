@@ -1,7 +1,11 @@
-services/frontend/.env.frontend
-services/api/.env.api
+services/frontend/.env.local
+services/api/.env.local
+.env
+
 services/frontend/public/bundle.js
 services/frontend/public/bundle.js.map
+
 services/api/node_modules/
-.env
-services/api/.env
+services/api/config/node_modules/
+services/frontend/node_modules/
+services/frontend/config/node_modules/
