@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:48:43 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 19:09:56 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/04 22:53:32 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -46,11 +46,29 @@ export default fp(async function authRoutes(app) {
                 message: "Invalid password"
             }));
 
+        const token = app.jwt.sign({
+            sub: String(row.id),
+            username: row.username,
+            role: row.role,
+        });
+
+        console.log("Token:", token);
+
         return reply.code(200).send({
             succes: true,
             user: row.username,
             role: row.role,
-            token: "dev-token",
+            token,
+            exp: app.config.ACCESS_TOKEN_TTL,
+        });
+    });
+
+    // GET /api/me - Protected example that requires Bearer token
+    app.get("/me", { preHandler: [app.authenticate] }, async (request) => {
+        const claims = request.user;
+        return ({
+            success: true,
+            me: claims,
         });
     });
 });

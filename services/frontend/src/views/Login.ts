@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/26 11:23:15 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/04 23:03:48 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -63,6 +63,7 @@ export default class Login extends AbstractView {
                 pwd: userPwd.value,
             })
                 .then(data => {
+                    console.log(data);
                     if (data.succes === true) {
                         auth.setToken(data.token || "dev-token");
                         // @ts-ignore

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:10:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/02 17:53:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/04 22:28:17 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,6 +17,7 @@ import { fileURLToPath } from 'url';
 import config from './config.js';
 
 import security from "./plugins/security.js";
+import jwtPlugin from "./plugins/jwt.js";
 import dbPlugin from "./plugins/db.js";
 import healthRoutes from "./plugins/health.js";
 import authRoutes from "./plugins/auth.js";
@@ -34,6 +35,7 @@ export async function buildApp() {
         root: path.join(__dirname, "../public"),
         prefix: "/",
     });
+    await app.register(jwtPlugin);
     await app.register(dbPlugin);
 
     // Routes

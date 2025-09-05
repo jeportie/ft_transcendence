@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 14:26:18 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/02 15:35:24 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/04 23:00:22 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,7 +14,6 @@ import { asNumber, asBool, asString } from "./envParser.js";
 import * as dotenv from "dotenv";
 
 const result = dotenv.config({ path: ".env.local" });
-console.log(result);
 
 const NODE_ENV = asString(process.env.NODE_ENV, "development");
 const IS_PROD = NODE_ENV === "production";
