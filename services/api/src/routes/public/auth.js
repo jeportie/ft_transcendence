@@ -12,6 +12,70 @@
 
 import { verifyPassword } from "../../auth/password.js";
 
+/**
+ * @api {post} /auth Authenticate user
+ * @apiName Login
+ * @apiGroup Authentication
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ * Authenticates a user using a username or email and password.  
+ * Returns a signed JWT token and user info on success.
+ *
+ * @apiBody {String} user Username or email of the user.
+ * @apiBody {String} pwd  Plain-text password of the user.
+ *
+ * @apiSuccess {Boolean} succes   Indicates request outcome.
+ * @apiSuccess {String}  user     Username of the authenticated user.
+ * @apiSuccess {String}  role     Role of the user (e.g. `"player"`, `"admin"`).
+ * @apiSuccess {String}  token    JWT access token to be used in the `Authorization` header.
+ * @apiSuccess {String}  exp      Expiration time (e.g. `"15m"`).
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "succes": true,
+ *     "user": "jeportie",
+ *     "role": "player",
+ *     "token": "eyJhbGciOiJIUzI1NiIs...",
+ *     "exp": "15m"
+ *   }
+ *
+ * @apiError (400) MissingCredentials Missing `user` or `pwd` fields.
+ * @apiError (401) InvalidCredentials Invalid username/email or password.
+ */
+
+/**
+ * @api {get} /me Get authenticated user (claims)
+ * @apiName GetClaims
+ * @apiGroup Authentication
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ * Returns the decoded claims of the currently authenticated user.  
+ * Requires a valid Bearer token in the `Authorization` header.
+ *
+ * @apiHeader {String} Authorization Bearer access token.
+ *
+ * @apiSuccess {Boolean} success  Always `true` if token is valid.
+ * @apiSuccess {Object}  me       JWT claims of the current user.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "success": true,
+ *     "me": {
+ *       "sub": "1",
+ *       "username": "jeportie",
+ *       "role": "player",
+ *       "iat": 1693923812,
+ *       "exp": 1693924712
+ *     }
+ *   }
+ *
+ * @apiError (401) Unauthorized Invalid or missing token.
+ */
+
 export default async function(app) {
     app.post('/auth', async (request, reply) => {
         const { user, pwd } = request.body || {};

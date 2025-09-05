@@ -15,7 +15,7 @@ import me from "../routes/private/me.js";
 import adminUsers from "../routes/private/admin.users.js";
 
 export default fp(async function privateRoutes(app) {
-    app.addHook("onRequest", app.authenticate);
+    // app.addHook("onRequest", app.authenticate);
 
     await app.register(me); // /me
     await app.register(adminUsers, { prefix: "/admin" }); // /admin/*
