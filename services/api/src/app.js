@@ -32,16 +32,18 @@ export async function buildApp() {
     app.decorate("config", config);
 
     await app.register(security);
-    await app.register(statics, {
-        root: path.join(__dirname, "../public"),
-        prefix: "/",
-    });
     await app.register(jwtPlugin);
     await app.register(dbPlugin);
 
     // API
     await app.register(publicRoutes, { prefix: "/api" });
     await app.register(privateRoutes, { prefix: "/api/private" });
+
+    // Serve statics
+    await app.register(statics, {
+        root: path.join(__dirname, "../public"),
+        prefix: "/",
+    });
 
     // SPA fallback to index.html for non /api paths
     app.setNotFoundHandler((req, reply) => {
