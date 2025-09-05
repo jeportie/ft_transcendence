@@ -34,6 +34,7 @@ export default class Login extends AbstractView {
                 <input id="user-pwd" class="ui-input" type="password" placeholder="Password" />
                 <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
               </form>
+              <div id="login-error" class="ui-error hidden mt-2"></div>
               <p class="ui-text-small mt-3">
               <a href="/subscribe" data-link class="ui-hint-link">Subscribe</a> </p>
             </div>
@@ -46,33 +47,46 @@ export default class Login extends AbstractView {
 
         // DOM
         const loginForm = document.querySelector("#login-form");
-        const userName = document.querySelector("#user-name");
-        const userPwd = document.querySelector("#user-pwd");
+        const userName = document.querySelector("#user-name") as HTMLInputElement;
+        const userPwd = document.querySelector("#user-pwd") as HTMLInputElement;
+        const errorBox = document.querySelector("#login-error");
 
         // read ?next from URL
         const params = new URLSearchParams(location.search);
         const next = params.get("next") || "/dashboard";
 
+        // Hide error when focusing inputs
+        userPwd.addEventListener("focus", () => {
+            if (errorBox) {
+                errorBox.classList.add("hidden");
+                errorBox.textContent = "";
+            }
+        });
+
         loginForm?.addEventListener("submit", event => {
             event.preventDefault();
 
             API.post("/auth", {
-                // @ts-ignore
                 user: userName.value,
-                // @ts-ignore
                 pwd: userPwd.value,
             })
                 .then(data => {
                     console.log(data);
-                    if (data.succes === true) {
-                        auth.setToken(data.token || "dev-token");
-                        // @ts-ignore
-                        window.navigateTo(next);
-                    } else {
-                        console.warn("Invalide credentials")
-                    }
+                    auth.setToken(data.token || "dev-token");
+                    API.get('/me').then(data => console.log(data)).catch((err => console.error(err)));
+                    // @ts-ignore
+                    window.navigateTo(next);
                 })
-                .catch(err => console.error("❌ ERROR:", err));
+                .catch(err => {
+                    console.error("❌ Login failed:", err);
+                    userPwd.value = "";
+                    userName.focus();
+
+                    if (errorBox) {
+                        errorBox.textContent = "Invalid username or password.";
+                        errorBox.classList.remove("hidden");
+                    }
+                });
         })
     }
 }

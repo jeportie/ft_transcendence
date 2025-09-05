@@ -29,7 +29,7 @@ export default fp(async function jwtPlugin(app) {
             await request.jwtVerify();
         } catch (err) {
             return reply.code(401).send({
-                succes: false,
+                success: false,
                 error: "Unauthorized",
             });
         }

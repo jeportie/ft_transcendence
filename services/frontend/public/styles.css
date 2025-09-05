@@ -750,6 +750,12 @@ body {
   --tw-ring-color: rgb(59 130 246 / 0.4);
 }
 
+.ui-error {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+
 /* --- Buttons --- */
 
 .ui-btn-primary {
@@ -1100,12 +1106,20 @@ body {
   margin-top: 0.25rem;
 }
 
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
 .mt-3 {
   margin-top: 0.75rem;
 }
 
 .flex {
   display: flex;
+}
+
+.hidden {
+  display: none;
 }
 
 .w-full {
