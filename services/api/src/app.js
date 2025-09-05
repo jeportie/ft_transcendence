@@ -16,11 +16,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import config from './config.js';
 
+// Fastify Plugins
 import security from "./plugins/security.js";
 import jwtPlugin from "./plugins/jwt.js";
 import dbPlugin from "./plugins/db.js";
-import healthRoutes from "./plugins/health.js";
-import authRoutes from "./plugins/auth.js";
+import publicRoutes from "./plugins/public.js";
+import privateRoutes from "./plugins/private.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,12 +39,9 @@ export async function buildApp() {
     await app.register(jwtPlugin);
     await app.register(dbPlugin);
 
-    // Routes
-    await app.register(async function(api) {
-        await api.register(healthRoutes);
-        await api.register(authRoutes);
-    }, { prefix: '/api' });
-
+    // API
+    await app.register(publicRoutes, { prefix: "/api" });
+    await app.register(privateRoutes, { prefix: "/api/private" });
 
     // SPA fallback to index.html for non /api paths
     app.setNotFoundHandler((req, reply) => {

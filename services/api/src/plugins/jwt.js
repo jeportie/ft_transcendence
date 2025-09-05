@@ -35,7 +35,7 @@ export default fp(async function jwtPlugin(app) {
         }
     });
 
-    app.decorate("autorize", function(...roles) {
+    app.decorate("authorize", function(...roles) {
         const required = roles.flat().filter(Boolean);
         return (async function(request, reply) {
             if (!request.user) {

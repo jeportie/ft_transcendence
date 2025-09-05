@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { verifyPassword } from "../auth/password.js";
+import { verifyPassword } from "../../auth/password.js";
 
 export default async function(app) {
     app.post('/auth', async (request, reply) => {
@@ -59,15 +59,6 @@ export default async function(app) {
             role: row.role,
             token,
             exp: app.config.ACCESS_TOKEN_TTL,
-        });
-    });
-
-    // GET /api/me - Protected example that requires Bearer token
-    app.get("/me", { preHandler: [app.authenticate] }, async (request) => {
-        const claims = request.user;
-        return ({
-            success: true,
-            me: claims,
         });
     });
 };
