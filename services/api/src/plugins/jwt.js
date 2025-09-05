@@ -34,4 +34,26 @@ export default fp(async function jwtPlugin(app) {
             });
         }
     });
+
+    app.decorate("autorize", function(...roles) {
+        const required = roles.flat().filter(Boolean);
+        return (async function(request, reply) {
+            if (!request.user) {
+                try {
+                    await request.jwtVerify();
+                } catch {
+                    return (reply.code(401).send({
+                        success: false,
+                        error: "Unauthorized",
+                    }));
+                };
+            }
+            if (required.length && !required.includes(request.user.role)) {
+                return (reply.code(403).send({
+                    success: false,
+                    error: "Forbidden",
+                }));
+            }
+        });
+    });
 });

@@ -6,14 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:48:43 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 22:53:32 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/05 16:27:10 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import fp from "fastify-plugin";
 import { verifyPassword } from "../auth/password.js";
 
-export default fp(async function authRoutes(app) {
+export default async function(app) {
     app.post('/auth', async (request, reply) => {
         const { user, pwd } = request.body || {};
 
@@ -71,4 +70,4 @@ export default fp(async function authRoutes(app) {
             me: claims,
         });
     });
-});
+};

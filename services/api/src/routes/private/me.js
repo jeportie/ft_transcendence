@@ -1,26 +1,26 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   health.js                                          :+:      :+:    :+:   //
+//   me.js                                              :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/02 17:43:14 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/02 17:48:22 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/05 16:27:47 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/05 16:31:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import fp from "fastify-plugin";
-
-export default fp(async function healthRoutes(app) {
-    app.get('/health', async () => {
+export default async function(app) {
+    app.get("/me", { preHandler: [app.authenticate] }, async (request) => {
+        const claims = request.user;
         const db = await app.getDb();
-        const row = await db.get(
-            'SELECT status, updated_at FROM health WHERE id = 1'
+        const me = await db.get(
+            "SELECT id, username, email, role, created_at FROM users WHERE id = ?",
+            Number(claims.sub)
         );
         return ({
-            status: row?.status ?? 'unknown',
-            updated_at: row?.updated_at ?? null
+            success: true,
+            me: me || claims,
         });
     });
-})
+};
