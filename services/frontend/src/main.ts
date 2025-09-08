@@ -19,7 +19,7 @@ import { routes } from "./routes.js";
 import { onBeforeNavigate } from "./guards.js";
 
 // API
-const API = new Fetch("http://localhost:5000/api");
+const API = new Fetch("/api");
 
 //DOM
 const app = document.querySelector("#app") as any;

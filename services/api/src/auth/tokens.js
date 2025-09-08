@@ -20,7 +20,7 @@ export function hashToken(token) {
     return (crypto.createHash("sha256").update(token, "utf8").digest("hex"));
 }
 
-export function addDayUTC(days) {
+export function addDaysUTC(days) {
     const d = new Date();
     d.setUTCDate(d.getUTCDate() + days);
     return (d.toISOString().replace(/\.\d{3}Z$/, "Z"));

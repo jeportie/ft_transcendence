@@ -53,7 +53,8 @@ export default async function(app) {
      */
     app.post("/auth/login", async (req, reply) => {
         const data = await loginUser(app, req.body?.user, req.body?.pwd, req, reply);
-        if (data) reply.send(data);
+        if (data)
+            reply.code(200).send(data);
     });
 
     /**
@@ -86,7 +87,8 @@ export default async function(app) {
      */
     app.post("/auth/refresh", async (req, reply) => {
         const data = await refreshToken(app, req, reply);
-        if (data) reply.send(data);
+        if (data)
+            reply.send(data);
     });
 
     /**

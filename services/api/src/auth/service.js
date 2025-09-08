@@ -56,6 +56,7 @@ export async function loginUser(app, user, pwd, request, reply) {
     const raw = generateRefreshToken();
     const hash = hashToken(raw);
     const expiresAt = addDaysUTC(app.config.REFRESH_TOKEN_TTL_DAYS);
+    console.log("Refresh Token:", hash);
 
     await db.run(
         `INSERT INTO refresh_tokens (
@@ -67,18 +68,18 @@ export async function loginUser(app, user, pwd, request, reply) {
         VALUES (?, ?, ?, ?, ?)`,
         row.id,
         hash,
-        request.headers["user_agent"] || null,
+        request.headers["user-agent"] || null,
         request.ip || null,
         expiresAt,
     );
 
     setRefreshCookie(app, reply, raw, app.config.REFRESH_TOKEN_TTL_DAYS);
 
-    return reply.code(200).send({
+    return ({
         success: true,
         user: row.username,
         role: row.role,
-        token,
+        token: accessToken,
         exp: app.config.ACCESS_TOKEN_TTL,
     });
 };

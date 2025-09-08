@@ -16,7 +16,7 @@ export function setRefreshCookie(app, reply, rawToken, days) {
         httpOnly: true,
         secure: !!conf.COOKIE_SECURE,
         sameSite: conf.COOKIE_SAMESITE || "lax",
-        path: "/api/auth/refresh",
+        path: "/api/auth",
         domain: conf.COOKIE_DOMAIN || undefined,
         maxAge: days * 24 * 60 * 60,
     });
@@ -25,7 +25,7 @@ export function setRefreshCookie(app, reply, rawToken, days) {
 export function clearRefreshCookie(app, reply) {
     const conf = app.config;
     reply.clearCookie(conf.COOKIE_NAME_RT, {
-        path: "/api/auth/refresh",
+        path: "/api/auth",
         domain: conf.COOKIE_DOMAIN || undefined,
     });
 }
