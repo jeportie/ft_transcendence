@@ -32,7 +32,10 @@ export default class Fetch {
     delete(endpoint, body, opts) { return this.#send("DELETE", endpoint, body, opts); }
 
     async #send(method, endpoint, body, opts = {}) {
-        const headers = { "Content-Type": "application/json", ...(opts.headers || {}) };
+        const headers = { ...(opts.headers || {}) };
+        if (body !== undefined && method !== "GET" && method !== "HEAD") {
+            headers["Content-Type"] = "application/json";
+        }
 
         // Attach Bearer token if present
         const token = this.getToken?.();

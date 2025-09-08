@@ -40,8 +40,8 @@ export async function buildApp() {
     await app.register(dbPlugin);
 
     // API
-    await app.register(publicRoutes/*, { prefix: "/api" }*/);
-    await app.register(privateRoutes/*, { prefix: "/api/private" }*/);
+    await app.register(publicRoutes);
+    await app.register(privateRoutes);
 
     // Serve statics
     await app.register(statics, {
