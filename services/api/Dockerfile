@@ -26,6 +26,7 @@ RUN npm install
 # 2) Compiler config
 COPY config/tsconfig.json ./tsconfig.json
 
+COPY openapi.yaml .
 COPY src ./src
 COPY .env.local .
 

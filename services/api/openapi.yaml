@@ -1,0 +1,90 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    openapi.yaml                                       :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/09/08 13:01:22 by jeportie          #+#    #+#              #
+#    Updated: 2025/09/08 13:08:02 by jeportie         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+openapi: 3.0.3
+info:
+  title: ft_transcendence API
+  version: 1.0.0
+  description: >
+    API for the ft_transcendence project.  
+    Provides authentication, health monitoring, and game-related endpoints.
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Returns the current health status of the API and database.
+      tags:
+        - System
+      operationId: getHealth
+      responses:
+        "200":
+          description: Health status response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  updated_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    example: "2025-09-05T14:30:00.000Z"
+
+  /auth:
+    post:
+      summary: Authenticate user
+      description: >
+        Authenticates a user with username and password.  
+        Returns a signed JWT access token on success.
+      tags:
+        - Authentication
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user
+                - pwd
+              properties:
+                user:
+                  type: string
+                  example: jeportie
+                pwd:
+                  type: string
+                  example: secret123
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  token:
+                    type: string
+                    description: JWT access token
+        "400":
+          description: Missing credentials
+        "401":
+          description: Invalid credentials

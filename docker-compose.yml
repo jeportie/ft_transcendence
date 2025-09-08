@@ -34,7 +34,7 @@ services:
     networks:
       - transc
     ports:
-      - "8000:5000"
+      - "5000:5000"
     build: ./services/api
     restart: always # or on-failure or unless
 

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:10:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 22:28:17 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/08 13:05:20 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,6 +17,7 @@ import { fileURLToPath } from 'url';
 import config from './config.js';
 
 // Fastify Plugins
+import docs from "./plugins/docs.js";
 import security from "./plugins/security.js";
 import jwtPlugin from "./plugins/jwt.js";
 import dbPlugin from "./plugins/db.js";
@@ -31,13 +32,14 @@ export async function buildApp() {
 
     app.decorate("config", config);
 
+    await app.register(docs);
     await app.register(security);
     await app.register(jwtPlugin);
     await app.register(dbPlugin);
 
     // API
     await app.register(publicRoutes/*, { prefix: "/api" }*/);
-    await app.register(privateRoutes, { prefix: "/api/private" });
+    await app.register(privateRoutes/*, { prefix: "/api/private" }*/);
 
     // Serve statics
     await app.register(statics, {
