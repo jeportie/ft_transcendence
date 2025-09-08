@@ -31,6 +31,7 @@ export default class LandingLayout extends AbstractLayout {
                 <a id="auth-toggle" href="/login" data-link class="ui-nav-link">Login</a>
                 <a href="/subscribe" data-link class="ui-nav-link">Subscribe</a>
                 <a href="/about" data-link class="ui-nav-link">About</a>
+                <a href="/docs" class="ui-nav-link">API</a>
               </div>
             </nav>
           </header>
