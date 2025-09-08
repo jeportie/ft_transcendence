@@ -36,7 +36,7 @@ export async function buildApp() {
     await app.register(dbPlugin);
 
     // API
-    await app.register(publicRoutes, { prefix: "/api" });
+    await app.register(publicRoutes/*, { prefix: "/api" }*/);
     await app.register(privateRoutes, { prefix: "/api/private" });
 
     // Serve statics

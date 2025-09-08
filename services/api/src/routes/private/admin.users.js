@@ -57,4 +57,4 @@ export default async function(app) {
         );
         return { succes: true, users: rows };
     });
-}
+};

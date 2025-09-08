@@ -15,6 +15,6 @@ import health from "../routes/public/health.js";
 import auth from "../routes/public/auth.js";
 
 export default fp(async function publicRoutes(app) {
-    await app.register(health);
-    await app.register(auth);
+    await app.register(health, { prefix: "/api" });
+    await app.register(auth, { prefix: "/api" });
 });

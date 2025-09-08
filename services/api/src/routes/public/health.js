@@ -49,4 +49,4 @@ export default async function(app) {
             updated_at: row?.updated_at ?? null
         });
     });
-}
+};
