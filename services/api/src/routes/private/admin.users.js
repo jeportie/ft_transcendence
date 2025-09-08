@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   admin.user.js                                      :+:      :+:    :+:   //
+//   admin.users.js                                     :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/05 16:31:56 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/05 16:33:28 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/08 18:58:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -22,7 +22,7 @@
  *
  * @apiHeader {String} Authorization Bearer access token (admin role required).
  *
- * @apiSuccess {Boolean} succes Indicates request outcome.
+ * @apiSuccess {Boolean} success Indicates request outcome.
  * @apiSuccess {Object[]} users  List of users.
  * @apiSuccess {Number}   users.id        User ID.
  * @apiSuccess {String}   users.username  Username.
@@ -33,7 +33,7 @@
  * @apiSuccessExample {json} Success-Response:
  *   HTTP/1.1 200 OK
  *   {
- *     "succes": true,
+ *     "success": true,
  *     "users": [
  *       {
  *         "id": 1,
@@ -55,6 +55,6 @@ export default async function(app) {
         const rows = await db.all(
             "SELECT id, username, email, role, created_at FROM users ORDER BY id"
         );
-        return { succes: true, users: rows };
+        return { success: true, users: rows };
     });
 };
