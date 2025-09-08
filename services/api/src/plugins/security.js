@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:23:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/02 17:50:20 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/08 18:18:07 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,7 +19,7 @@ export default fp(async function security(app) {
 
     await app.register(cors, {
         origin: origin || false,
-        /*credentials: true,*/
+        credentials: true,
     });
 
     // Minimal hardening headers (helmet-like things come later if you want)

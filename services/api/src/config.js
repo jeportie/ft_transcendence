@@ -32,6 +32,12 @@ const config = {
 
     // Tokens
     ACCESS_TOKEN_TTL: asString(process.env.ACCESS_TOKEN_TTL, "15m"),
+    REFRESH_TOKEN_TTL_DAYS: asNumber(process.env.REFRESH_TOKEN_TTL_DAYS, 7),
+
+    // Cookies
+    COOKIE_NAME_RT: asString(process.env.COOKIE_NAME_RT, "rt"),
+    COOKIE_SAMESITE: asString(process.env.COOKIE_SAMESITE, "lax"), // "lax" | "none" | "strict"
+    COOKIE_DOMAIN: asString(process.env.COOKIE_DOMAIN, ""),         // optional
 };
 
 const errors = [];

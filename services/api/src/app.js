@@ -6,12 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:10:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/08 13:05:20 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/08 18:16:50 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import Fastify from 'fastify';
 import statics from '@fastify/static';
+import cookie from '@fastify/cookie';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import config from './config.js';
@@ -35,6 +36,7 @@ export async function buildApp() {
     await app.register(docs);
     await app.register(security);
     await app.register(jwtPlugin);
+    await app.register(cookie);
     await app.register(dbPlugin);
 
     // API
