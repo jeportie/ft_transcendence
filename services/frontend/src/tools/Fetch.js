@@ -17,9 +17,13 @@ function safeJson(t) {
 }
 
 export default class Fetch {
-    constructor(baseURL, { getToken = () => auth.getToken() } = {}) {
+    constructor(baseURL, {
+        getToken = () => auth.getToken(),
+        onToken = (token) => auth.setToken(token),
+    } = {}) {
         this.baseURL = baseURL;
         this.getToken = getToken;
+        this.onToken = onToken();
     }
 
     get(endpoint, opts) { return this.#send("GET", endpoint, undefined, opts); }
@@ -35,22 +39,61 @@ export default class Fetch {
         if (token)
             headers["Authorization"] = `Bearer ${token}`;
 
-        const init = { method, headers, credentials: "omit" };
+        const init = { method, headers, credentials: "include" };
         if (body !== undefined && method !== "GET" && method !== "HEAD") {
             init.body = JSON.stringify(body);
         }
 
-        const res = await fetch(this.baseURL + endpoint, init);
+        let res = await fetch(this.baseURL + endpoint, init);
 
         const text = await res.text();
         const data = text ? safeJson(text) : null;
 
+        if (res.status === 401 && !endpoint.startsWith("/auth/")) {
+            const refreshedToken = await this.#tryRefresh();
+            if (refreshedToken) {
+                // Retry original request with new token
+                const retryHeaders = { ...headers };
+                const newTok = this.getToken?.();
+                if (newTok) retryHeaders["Authorization"] = `Bearer ${newTok}`;
+                res = await fetch(this.baseURL + endpoint, { ...init, headers: retryHeaders });
+                const text2 = await res.text();
+                const data2 = text2 ? safeJson(text2) : null;
+                if (!res.ok) {
+                    const err2 = new Error((data2 && data2.error) || res.statusText || "Request failed");
+                    err2.status = res.status;
+                    err2.data = data2;
+                    throw err2;
+                }
+                return (data2);
+            }
+        }
+
         if (!res.ok) {
-            const err = new Error((data && data.error) || res.statusText || "Request failed");
+            const err = new Error((data && (data.error || data.message)) || res.statusText || "Request failed");
             err.status = res.status;
             err.data = data;
             throw err;
         }
         return (data);
+    }
+
+    async #tryRefresh() {
+        try {
+            const res = await fetch(this.baseURL + "/auth/refresh", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+            });
+            if (!res.ok) return false;
+            const json = await res.json();
+            if (json && json.token) {
+                this.onToken(json.token);
+                return true;
+            }
+            return false;
+        } catch {
+            return false;
+        }
     }
 }

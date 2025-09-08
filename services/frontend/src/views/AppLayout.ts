@@ -12,6 +12,9 @@
 
 import { AbstractLayout } from "@jeportie/mini-spa";
 import { auth } from "../tools/AuthService.js";
+import Fetch from "../tools/Fetch.js";
+
+const API = new Fetch("/api");
 
 export default class AppLayout extends AbstractLayout {
     #onToggle?: (e: Event) => void;
@@ -79,9 +82,17 @@ export default class AppLayout extends AbstractLayout {
         btn.addEventListener("click", this.#onToggle);
 
         logoutBtn.addEventListener("click", () => {
-            auth.clear();
-            window.navigateTo("/login");
-        })
+            API.post("/auth/logout")
+                .then(() => {
+                    auth.clear(); // clear local token
+                    window.navigateTo("/login");
+                })
+                .catch((err) => {
+                    console.error("❌ Logout failed:", err);
+                    auth.clear();
+                    window.navigateTo("/login");
+                });
+        });
 
         const saved = localStorage.getItem("sidebar");
         apply(saved === "closed" ? "closed" : "open");
