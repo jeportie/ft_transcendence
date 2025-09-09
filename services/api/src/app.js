@@ -35,8 +35,11 @@ export async function buildApp() {
 
     await app.register(docs);
     await app.register(security);
+    await app.register(cookie, {
+        secret: app.config.JWT_SECRET, // optional but good if you want signed cookies
+        hook: 'onRequest'
+    });
     await app.register(jwtPlugin);
-    await app.register(cookie);
     await app.register(dbPlugin);
 
     // API

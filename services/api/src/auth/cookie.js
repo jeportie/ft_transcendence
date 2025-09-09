@@ -14,18 +14,20 @@ export function setRefreshCookie(app, reply, rawToken, days) {
     const conf = app.config;
     reply.setCookie(conf.COOKIE_NAME_RT, rawToken, {
         httpOnly: true,
-        secure: !!conf.COOKIE_SECURE,
-        sameSite: conf.COOKIE_SAMESITE,
-        path: "/api/auth",
-        domain: conf.COOKIE_DOMAIN || undefined,
+        secure: false,
+        sameSite: "none",
+        path: "/api",
+        // path: "/api/auth",
+        // domain: conf.COOKIE_DOMAIN || undefined,
         maxAge: days * 24 * 60 * 60,
     });
 }
 
 export function clearRefreshCookie(app, reply) {
     const conf = app.config;
-    reply.clearCookie(conf.COOKIE_NAME_RT, {
-        path: "/api/auth",
-        domain: conf.COOKIE_DOMAIN || undefined,
-    });
+    reply.clearCookie(conf.COOKIE_NAME_RT, { path: "/api" });
+    // reply.clearCookie(conf.COOKIE_NAME_RT, {
+    // path: "/api/auth",
+    // domain: conf.COOKIE_DOMAIN || undefined,
+    // });
 }

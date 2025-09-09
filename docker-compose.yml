@@ -29,7 +29,8 @@ services:
     env_file:
       - services/api/.env.local
     volumes:
-      - ./data/sqlite:/data:delegated
+      # - ./data/sqlite:/data:delegated
+      - ~/data/sqlite:/data
       - ./services/frontend/public:/app/public:ro
     networks:
       - transc

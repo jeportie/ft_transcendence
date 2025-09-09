@@ -92,6 +92,11 @@ export async function refreshToken(app, request, reply) {
     const hash = hashToken(raw);
     const db = await app.getDb();
 
+    console.log("Cookie raw:", raw);
+    console.log("Cookie hash:", hash);
+    const rows = await db.all("SELECT token_hash FROM refresh_tokens");
+    console.log("DB tokens:", rows);
+
     const rt = await db.get(
         `SELECT rt.*, u.username, u.role
         FROM refresh_tokens rt
