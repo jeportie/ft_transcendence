@@ -15,7 +15,7 @@ export function setRefreshCookie(app, reply, rawToken, days) {
     reply.setCookie(conf.COOKIE_NAME_RT, rawToken, {
         httpOnly: true,
         secure: !!conf.COOKIE_SECURE,
-        sameSite: conf.COOKIE_SAMESITE || "lax",
+        sameSite: conf.COOKIE_SAMESITE,
         path: "/api/auth",
         domain: conf.COOKIE_DOMAIN || undefined,
         maxAge: days * 24 * 60 * 60,
