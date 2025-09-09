@@ -31,20 +31,6 @@ export default fp(async function publicRoutes(app) {
             }),
         });
 
-        await authScoped.register(auth, { prefix: "/api" });
+        await authScoped.register(auth, { prefix: "/api/auth" });
     });
 });
-
-// export default fp(async function publicRoutes(app) {
-//     await app.register(health, { prefix: "/api" });
-//     await app.register(rateLimit, {
-//         max: 5,
-//         timeWindow: "1 minute",
-//         keyGenerator: (request) => request.ip,
-//         errorResponseBuilder: (request, context) => ({
-//             success: false,
-//             error: "Too many attempts. Please wait before retrying.",
-//         }),
-//     });
-//     await app.register(auth, { prefix: "/api" });
-// });

@@ -14,20 +14,20 @@ import { loginUser, refreshToken, logoutUser } from "../../auth/service.js";
 
 export default async function(app) {
 
-    app.post("/auth/login", async (req, reply) => {
+    app.post("/login", async (req, reply) => {
         console.log("[API] Login hit with body:", req.body);
         const data = await loginUser(app, req.body?.user, req.body?.pwd, req, reply);
         if (data)
             reply.send(data);
     });
 
-    app.post("/auth/refresh", async (req, reply) => {
+    app.post("/refresh", async (req, reply) => {
         const data = await refreshToken(app, req, reply);
         if (data)
             reply.send(data);
     });
 
-    app.post("/auth/logout", async (req, reply) => {
+    app.post("/logout", async (req, reply) => {
         const data = await logoutUser(app, req, reply);
         reply.send(data);
     });
