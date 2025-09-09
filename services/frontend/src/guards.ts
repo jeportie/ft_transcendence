@@ -15,6 +15,7 @@ import { auth } from "./tools/AuthService.js";
 // If fail, we return to login/ but keeping the wanted page as argument 
 // so when logged in we go back to the requested page
 export const requireAuth = (ctx: any) => {
+    console.log("[Guard] Checking auth for path:", ctx?.path, "loggedIn:", auth.isLoggedIn());
     if (auth.isLoggedIn())
         return (true);
 

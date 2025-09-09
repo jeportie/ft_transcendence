@@ -85,6 +85,7 @@ export async function loginUser(app, user, pwd, request, reply) {
 };
 
 export async function refreshToken(app, request, reply) {
+    console.log("[API] Refresh endpoint hit, cookies:", request.cookies);
     const raw = request.cookies?.[app.config.COOKIE_NAME_RT];
     if (!raw) return reply.code(401).send({ success: false });
 

@@ -31,7 +31,7 @@ const config = {
     CORS_ORIGIN: asString(process.env.CORS_ORIGIN, "http://localhost:8000"),
 
     // Tokens
-    ACCESS_TOKEN_TTL: asString(process.env.ACCESS_TOKEN_TTL, "15m"),
+    ACCESS_TOKEN_TTL: asString(process.env.ACCESS_TOKEN_TTL, "1m"),
     REFRESH_TOKEN_TTL_DAYS: asNumber(process.env.REFRESH_TOKEN_TTL_DAYS, 7),
 
     // Cookies

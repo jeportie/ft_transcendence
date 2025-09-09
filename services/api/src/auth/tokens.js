@@ -13,6 +13,7 @@
 import crypto from "crypto";
 
 export function generateRefreshToken() {
+    console.log("A refresh token has been generated");
     return (crypto.randomBytes(32).toString("hex"));
 }
 

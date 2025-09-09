@@ -23,7 +23,7 @@ export default class Fetch {
     } = {}) {
         this.baseURL = baseURL;
         this.getToken = getToken;
-        this.onToken = onToken();
+        this.onToken = onToken;
     }
 
     get(endpoint, opts) { return this.#send("GET", endpoint, undefined, opts); }
@@ -32,6 +32,7 @@ export default class Fetch {
     delete(endpoint, body, opts) { return this.#send("DELETE", endpoint, body, opts); }
 
     async #send(method, endpoint, body, opts = {}) {
+        console.log(`[Fetch] Sending ${method} ${endpoint} with token:`, this.getToken?.());
         const headers = { ...(opts.headers || {}) };
         if (body !== undefined && method !== "GET" && method !== "HEAD") {
             headers["Content-Type"] = "application/json";
@@ -53,6 +54,7 @@ export default class Fetch {
         const data = text ? safeJson(text) : null;
 
         if (res.status === 401 && !endpoint.startsWith("/auth/")) {
+            console.log("[Fetch] Got 401, trying refresh...");
             const refreshedToken = await this.#tryRefresh();
             if (refreshedToken) {
                 // Retry original request with new token
@@ -91,9 +93,11 @@ export default class Fetch {
             if (!res.ok) return false;
             const json = await res.json();
             if (json && json.token) {
+                console.log("[Fetch] Refresh success, new token:", json.token);
                 this.onToken(json.token);
                 return true;
             }
+            console.log("[Fetch] Refresh failed");
             return false;
         } catch {
             return false;

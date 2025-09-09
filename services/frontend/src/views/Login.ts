@@ -73,9 +73,8 @@ export default class Login extends AbstractView {
                 .then(data => {
                     console.log(data);
                     auth.setToken(data.token || "dev-token");
-                    // API.get('/me').then(data => console.log("me:", data)).catch((err => console.error(err)));
                     // @ts-ignore
-                    window.navigateTo(next);
+                    setTimeout(() => window.navigateTo(next), 0);
                 })
                 .catch(err => {
                     console.error("❌ Login failed:", err);
