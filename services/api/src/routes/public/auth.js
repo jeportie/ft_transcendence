@@ -15,6 +15,7 @@ import { loginUser, refreshToken, logoutUser } from "../../auth/service.js";
 export default async function(app) {
 
     app.post("/auth/login", async (req, reply) => {
+        console.log("[API] Login hit with body:", req.body);
         const data = await loginUser(app, req.body?.user, req.body?.pwd, req, reply);
         if (data)
             reply.send(data);
