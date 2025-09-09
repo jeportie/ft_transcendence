@@ -73,6 +73,7 @@ export async function loginUser(app, user, pwd, request, reply) {
         expiresAt,
     );
 
+    clearRefreshCookie(app, reply);
     setRefreshCookie(app, reply, raw, app.config.REFRESH_TOKEN_TTL_DAYS);
 
     return ({

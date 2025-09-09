@@ -40,4 +40,10 @@ API.get("/health")
 // toggle dark mode manually
 // document.documentElement.classList.toggle("dark");
 
+window.addEventListener("auth:logout", () => {
+    const next = encodeURIComponent(location.pathname + location.search + location.hash);
+    // @ts-ignore
+    window.navigateTo(`/login?next=${next}`);
+});
+
 (window as any).navigateTo = (url: string) => app.navigateTo(url);

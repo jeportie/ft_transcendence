@@ -88,18 +88,24 @@ export default class Fetch {
             const res = await fetch(this.baseURL + "/auth/refresh", {
                 method: "POST",
                 credentials: "include",
-                headers: { "Content-Type": "application/json" },
             });
-            if (!res.ok) return false;
+            if (!res.ok) {
+                this.onToken?.(null);
+                window.dispatchEvent(new CustomEvent("auth:logout", { detail: { reason: "refresh_failed" } }));
+                return false;
+            }
             const json = await res.json();
             if (json && json.token) {
-                console.log("[Fetch] Refresh success, new token:", json.token);
                 this.onToken(json.token);
+                console.log("[Fetch] Refresh success, new token:", json.token);
                 return true;
             }
-            console.log("[Fetch] Refresh failed");
+            this.onToken?.(null);
+            window.dispatchEvent(new CustomEvent("auth:logout", { detail: { reason: "refresh_missing_token" } }));
             return false;
         } catch {
+            this.onToken?.(null);
+            window.dispatchEvent(new CustomEvent("auth:logout", { detail: { reason: "refresh_exception" } }));
             return false;
         }
     }

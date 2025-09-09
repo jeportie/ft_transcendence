@@ -11,10 +11,6 @@
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
-import Fetch from "../tools/Fetch.js";
-
-// API
-const API = new Fetch("/api");
 
 export default class Dashboard extends AbstractView {
     constructor(ctx: any) {
@@ -29,9 +25,5 @@ export default class Dashboard extends AbstractView {
           <p class="ui-text-muted">Welcome to your SPA dashboard!</p>
         </div>
         `;
-    }
-
-    mount() {
-        API.get('/me').then(data => console.log("me:", data)).catch((err => console.error(err)));
     }
 }

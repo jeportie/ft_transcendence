@@ -37,6 +37,21 @@ export class AuthService {
         this.#token = null;
         localStorage.removeItem(this.#storageKey);
     }
+
+    // Proactive expiry check
+    isTokenExpired(skewSec = 10) {
+        const t = this.#token;
+        if (!t) return true;
+        const parts = t.split(".");
+        if (parts.length !== 3) return true;
+        try {
+            const payload = JSON.parse(atob(parts[1]));
+            const now = Math.floor(Date.now() / 1000);
+            return (payload.exp ?? 0) <= (now + skewSec);
+        } catch {
+            return true;
+        }
+    }
 }
 
 // Singleton instance for the app
