@@ -16,13 +16,15 @@ import Fetch from "./tools/Fetch.js";
 const API = new Fetch("/api");
 
 export const requireAuth = async (ctx: any) => {
-    console.log("[Guard] Checking auth for path:", ctx?.path);
+    console.log("[Guard] Checking auth for path:", ctx?.path, "...");
 
     const wanted = (ctx?.path || location.pathname) + (location.search || "") + (location.hash || "");
     const next = encodeURIComponent(wanted);
 
-    if (!auth.isLoggedIn())
+    if (!auth.isLoggedIn()) {
+        console.log("[Guard] Failed: not logged.");
         return (`/login?next=${next}`);
+    }
 
     // If token looks expired → proactive refresh
     if (auth.isTokenExpired()) {
@@ -31,10 +33,13 @@ export const requireAuth = async (ctx: any) => {
                 method: "POST",
                 credentials: "include",
             });
-            if (!res.ok) throw new Error("refresh failed");
+            if (!res.ok)
+                throw new Error("refresh failed");
             const json = await res.json();
-            if (json?.token) auth.setToken(json.token);
-            else throw new Error("missing token");
+            if (json?.token)
+                auth.setToken(json.token);
+            else
+                throw new Error("missing token");
         } catch {
             auth.clear();
             return `/login?next=${next}`;
@@ -44,7 +49,7 @@ export const requireAuth = async (ctx: any) => {
     // Definitive backend check
     try {
         const data = await API.get("/me");
-        console.log("/me:", data);
+        console.log("[Guard] OK:", data);
         if (data?.success)
             return true;
     } catch (err: any) {
@@ -52,7 +57,6 @@ export const requireAuth = async (ctx: any) => {
     }
 
     auth.clear();
-
     return (`/login?next=${next}`);
 };
 

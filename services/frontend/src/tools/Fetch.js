@@ -32,7 +32,6 @@ export default class Fetch {
     delete(endpoint, body, opts) { return this.#send("DELETE", endpoint, body, opts); }
 
     async #send(method, endpoint, body, opts = {}) {
-        console.log(`[Fetch] Sending ${method} ${endpoint} with token:`, this.getToken?.());
         const headers = { ...(opts.headers || {}) };
         if (body !== undefined && method !== "GET" && method !== "HEAD") {
             headers["Content-Type"] = "application/json";

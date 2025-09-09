@@ -19,7 +19,7 @@ export default fp(async function(app) {
         timeWindow: '1 minute',
         keyGenerator: (request) => request.ip,
         errorResponseBuilder: (request, context) => ({
-            succes: false,
+            success: false,
             author: request.ip,
             context,
             error: "Too many attempts. Please wait before retrying.",

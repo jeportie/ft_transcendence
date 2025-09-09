@@ -31,18 +31,22 @@ export async function loginUser(app, user, pwd, request, reply) {
         user, user
     );
 
-    if (!row)
+    if (!row) {
+        app.log.warn(`[Auth] Failed login attempt for user/email: ${user}`);
         return (reply.code(401).send({
             success: false,
             message: "Invalid credentials"
         }));
+    }
 
     const ok = await verifyPassword(row.password_hash, pwd);
-    if (!ok)
+    if (!ok) {
+        app.log.warn(`[Auth] Invalid password for user/email: ${user}`);
         return (reply.code(401).send({
             success: false,
-            message: "Invalid password"
+            message: "Invalid credentials"
         }));
+    }
 
     // Access Token
     const accessToken = app.jwt.sign({
@@ -50,13 +54,11 @@ export async function loginUser(app, user, pwd, request, reply) {
         username: row.username,
         role: row.role,
     });
-    console.log("Access Token:", accessToken);
 
     // Refresh Token
     const raw = generateRefreshToken();
     const hash = hashToken(raw);
     const expiresAt = addDaysUTC(app.config.REFRESH_TOKEN_TTL_DAYS);
-    console.log("Refresh Token:", hash);
 
     await db.run(
         `INSERT INTO refresh_tokens (
@@ -86,17 +88,18 @@ export async function loginUser(app, user, pwd, request, reply) {
 };
 
 export async function refreshToken(app, request, reply) {
-    console.log("[API] Refresh endpoint hit, cookies:", request.cookies);
-    const raw = request.cookies?.[app.config.COOKIE_NAME_RT];
-    if (!raw) return reply.code(401).send({ success: false });
+    const name = app.config.COOKIE_NAME_RT;
+    const rawSigned = request.cookies?.[name];
+    if (!rawSigned) return reply.code(401).send({ success: false });
+
+    const { valid, value: raw } = request.unsignCookie(rawSigned);
+    if (!valid || !raw) return reply.code(401).send({ success: false });
 
     const hash = hashToken(raw);
     const db = await app.getDb();
 
-    console.log("Cookie raw:", raw);
-    console.log("Cookie hash:", hash);
-    const rows = await db.all("SELECT token_hash FROM refresh_tokens");
-    console.log("DB tokens:", rows);
+    // const rows = await db.all("SELECT token_hash FROM refresh_tokens");
+    // console.log("DB tokens:", rows);
 
     const rt = await db.get(
         `SELECT rt.*, u.username, u.role
@@ -143,11 +146,15 @@ export async function refreshToken(app, request, reply) {
 }
 
 export async function logoutUser(app, request, reply) {
-    const raw = request.cookies?.[app.config.COOKIE_NAME_RT];
-    if (raw) {
-        const hash = hashToken(raw);
-        const db = await app.getDb();
-        await db.run(`DELETE FROM refresh_tokens WHERE token_hash = ?`, hash);
+    const name = app.config.COOKIE_NAME_RT;
+    const rawSigned = request.cookies?.[name];
+    if (rawSigned) {
+        const { valid, value: raw } = request.unsignCookie(rawSigned);
+        if (valid && raw) {
+            const hash = hashToken(raw);
+            const db = await app.getDb();
+            await db.run(`DELETE FROM refresh_tokens WHERE token_hash = ?`, hash);
+        }
     }
     clearRefreshCookie(app, reply);
     return { success: true };

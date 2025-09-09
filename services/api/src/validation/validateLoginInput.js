@@ -25,7 +25,7 @@ export default function validateLoginInput(body) {
     if (typeof pwd !== "string") {
         return "Password required";
     }
-    if (pwd.length < 6) {
+    if (pwd.length < 3) {
         return "Password too short";
     }
     if (pwd.length > 128) {

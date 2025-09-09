@@ -10,29 +10,50 @@
 //                                                                            //
 // ************************************************************************** //
 
-const ALL_PATHS = ["/", "/api", "/api/auth"];
+const ALL_CLEAR_PATHS = ["/api/auth", "/api", "/"]; // most specific first
+
+function resolveCookieOptions(app, days) {
+    const conf = app.config;
+
+    // Enforce secure when SameSite=None (browser requirement)
+    const sameSite = (conf.COOKIE_SAMESITE || "lax").toLowerCase(); // "lax" | "none" | "strict"
+
+    // Browsers require secure=true when SameSite=None
+    let secure = Boolean(conf.COOKIE_SECURE);
+    if (sameSite === "none" && !secure) {
+        console.warn(
+            "[cookie] WARNING: SameSite=None requires secure cookies. Forcing secure=true."
+        );
+        secure = true;
+    }
+
+    return {
+        httpOnly: true,
+        signed: true,
+        secure,
+        sameSite,
+        path: "/api/auth",
+        domain: conf.COOKIE_DOMAIN || undefined,
+        maxAge: days * 24 * 60 * 60,
+    };
+}
 
 export function setRefreshCookie(app, reply, rawToken, days) {
     const conf = app.config;
-    reply.setCookie(conf.COOKIE_NAME_RT, rawToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-        path: "/api/auth",
-        // path: "/api/auth",
-        // domain: conf.COOKIE_DOMAIN || undefined,
-        maxAge: days * 24 * 60 * 60,
-    });
+    const opts = resolveCookieOptions(app, days);
+
+    reply.setCookie(conf.COOKIE_NAME_RT, rawToken, opts);
 }
 
 export function clearRefreshCookie(app, reply) {
-    for (const p of ALL_PATHS) {
-        reply.clearCookie(app.config.COOKIE_NAME_RT, { path: p });
+    const conf = app.config;
+
+    // Clear using the *same* attributes (path/domain) used when setting.
+    for (const p of ALL_CLEAR_PATHS) {
+        reply.clearCookie(conf.COOKIE_NAME_RT, {
+            path: p,
+            domain: conf.COOKIE_DOMAIN || undefined,
+        });
     }
-    // const conf = app.config;
-    // reply.clearCookie(conf.COOKIE_NAME_RT, { path: "/api" });
-    // reply.clearCookie(conf.COOKIE_NAME_RT, {
-    // path: "/api/auth",
-    // domain: conf.COOKIE_DOMAIN || undefined,
-    // });
 }
+

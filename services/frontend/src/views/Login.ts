@@ -71,7 +71,6 @@ export default class Login extends AbstractView {
                 pwd: userPwd.value,
             })
                 .then(data => {
-                    console.log(data);
                     auth.setToken(data.token || "dev-token");
                     // @ts-ignore
                     setTimeout(() => window.navigateTo(next), 0);
