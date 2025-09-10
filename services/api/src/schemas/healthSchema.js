@@ -23,11 +23,11 @@ export const healthSchema = {
             properties: {
                 status: { type: "string", example: "ok" },
                 updated_at: {
-                    type: "string",
+                    type: ["string", "null"],
                     format: "date-time",
-                    nullable: true,
                     example: "2025-09-05T14:30:00.000Z"
                 }
+
             }
         }
     }

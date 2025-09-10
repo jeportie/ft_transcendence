@@ -10,17 +10,24 @@
 //                                                                            //
 // ************************************************************************** //
 
+import { meSchema } from "../../schemas/meSchema.js"
+
 export default async function(app) {
-    app.get("/me", { preHandler: [app.authenticate] }, async (request) => {
-        const claims = request.user;
-        const db = await app.getDb();
-        const me = await db.get(
-            "SELECT id, username, email, role, created_at FROM users WHERE id = ?",
-            Number(claims.sub)
-        );
-        return ({
-            success: true,
-            me: me || claims,
+    app.get("/me",
+        {
+            schema: meSchema,
+            preHandler: [app.authenticate],
+        },
+        async (request) => {
+            const claims = request.user;
+            const db = await app.getDb();
+            const me = await db.get(
+                "SELECT id, username, email, role, created_at FROM users WHERE id = ?",
+                Number(claims.sub)
+            );
+            return ({
+                success: true,
+                me: me || claims,
+            });
         });
-    });
 };

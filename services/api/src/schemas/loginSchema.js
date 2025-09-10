@@ -28,7 +28,7 @@ export const loginSchema = {
             },
             pwd: {
                 type: "string",
-                minLength: 6,
+                minLength: 3,
                 maxLength: 128,
                 description: "Password (6–128 characters)",
                 example: "secret123"

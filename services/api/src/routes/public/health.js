@@ -10,10 +10,10 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { healthSchema } from "../../schemas/healthSchema.js"
+import { healthSchema } from "../../schemas/healthSchema.js";
 
 export default async function(app) {
-    app.get('/health', { schemas: healthSchema }, async () => {
+    app.get('/health', { schema: healthSchema }, async () => {
         const db = await app.getDb();
         const row = await db.get(
             'SELECT status, updated_at FROM health WHERE id = 1'

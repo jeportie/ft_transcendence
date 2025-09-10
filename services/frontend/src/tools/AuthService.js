@@ -12,26 +12,39 @@
 
 export class AuthService {
     #token = null;
+    #storageKey = "hasSession";
 
-    initFromStorage() {
-        this.#token = null; // reset first
+    async initFromStorage() {
+        this.#token = null;
 
-        // Try to restore using refresh cookie
-        return fetch("/api/auth/refresh", { method: "POST", credentials: "include" })
-            .then(res => res.ok ? res.json() : null)
-            .then(json => {
-                if (json?.token) {
-                    this.setToken(json.token);
-                    return true; // session restored
-                } else {
-                    this.clear();
-                    return false;
-                }
-            })
-            .catch(() => {
+        if (!localStorage.getItem(this.#storageKey)) {
+            return false;
+        }
+
+        try {
+            const res = await fetch("/api/auth/refresh", { method: "POST", credentials: "include" });
+
+            if (res.status === 401) {
+                this.clear();
+                return false; // not logged in
+            }
+            if (!res.ok) {
+                console.error("[Auth] Refresh failed:", res.status);
                 this.clear();
                 return false;
-            });
+            }
+
+            const json = await res.json();
+            if (json && json.token) {
+                this.setToken(json.token);
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error("[Auth] Refresh exception:", err);
+            this.clear();
+            return false;
+        }
     }
 
     isLoggedIn() {
@@ -44,10 +57,12 @@ export class AuthService {
 
     setToken(token) {
         this.#token = token;
+        localStorage.setItem(this.#storageKey, "true");
     }
 
     clear() {
         this.#token = null;
+        localStorage.removeItem(this.#storageKey);
     }
 
     isTokenExpired(skewSec = 10) {
@@ -64,49 +79,6 @@ export class AuthService {
         }
     }
 }
-
-
-// Version local storage / unsafe
-// export class AuthService {
-//     #storageKey = "token";
-//     #token = null;
-//
-//     initFromStorage() {
-//         this.#token = localStorage.getItem(this.#storageKey);
-//     }
-//
-//     isLoggedIn() {
-//         return !!this.#token;
-//     }
-//
-//     getToken() {
-//         return this.#token;
-//     }
-//
-//     setToken(token) {
-//         this.#token = token;
-//         localStorage.setItem(this.#storageKey, token);
-//     }
-//
-//     clear() {
-//         this.#token = null;
-//         localStorage.removeItem(this.#storageKey);
-//     }
-//
-//     isTokenExpired(skewSec = 10) {
-//         const t = this.#token;
-//         if (!t) return true;
-//         const parts = t.split(".");
-//         if (parts.length !== 3) return true;
-//         try {
-//             const payload = JSON.parse(atob(parts[1]));
-//             const now = Math.floor(Date.now() / 1000);
-//             return (payload.exp ?? 0) <= (now + skewSec);
-//         } catch {
-//             return true;
-//         }
-//     }
-// }
 
 // Singleton instance for the app
 export const auth = new AuthService();

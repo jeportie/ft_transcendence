@@ -30,8 +30,14 @@ export default class Login extends AbstractView {
             <div class="ui-card">
               <h2 class="ui-card-title">Login</h2>
               <form id="login-form" class="ui-form">
-                <input id="user-name" class="ui-input" type="text" placeholder="Username" />
-                <input id="user-pwd" class="ui-input" type="password" placeholder="Password" />
+                <input id="user-name" class="ui-input"
+                type="text"
+                placeholder="Username"
+                autocomplete="username"/>
+                <input id="user-pwd" class="ui-input"
+                type="password"
+                placeholder="Password"
+                autocomplete="current-password"/>
                 <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
               </form>
               <div id="login-error" class="ui-error hidden mt-2"></div>

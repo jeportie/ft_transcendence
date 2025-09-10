@@ -13,22 +13,8 @@
 import fp from "fastify-plugin";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
-import path from "path";
-import { fileURLToPath } from "url";
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
 
 export default fp(async function docs(app) {
-    // await app.register(swagger, {
-    //     mode: "static",
-    //     specification: {
-    //         path: path.join(process.cwd(), "openapi.yaml"),
-    //         baseDir: process.cwd(),
-    //     },
-    //
-    // });
-
     await app.register(swagger, {
         mode: "dynamic",
         openapi: {
@@ -39,7 +25,16 @@ export default fp(async function docs(app) {
             },
             servers: [
                 { url: "http://localhost:5000", description: "Local dev" }
-            ]
+            ],
+            components: {
+                securitySchemes: {
+                    bearerAuth: {
+                        type: "http",
+                        scheme: "bearer",
+                        bearerFormat: "JWT"
+                    }
+                }
+            }
         }
     });
 
