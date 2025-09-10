@@ -15,7 +15,7 @@ EXPOSE 5000
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        python3 make g++ sqlite3 \
+    python3 make g++ sqlite3 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -26,7 +26,7 @@ RUN npm install
 # 2) Compiler config
 COPY config/tsconfig.json ./tsconfig.json
 
-COPY openapi.yaml .
+# COPY openapi.yaml .
 COPY src ./src
 COPY .env.local .
 

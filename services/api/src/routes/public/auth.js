@@ -6,13 +6,15 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:48:43 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/10 16:27:02 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/10 17:27:44 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { loginUser, refreshToken, logoutUser } from "../../auth/service.js";
 import { loginSchema } from "../../schemas/loginSchema.js";
 import { registerSchema } from "../../schemas/registerSchema.js";
+import { refreshSchema } from "../../schemas/refreshSchema.js";
+import { logoutSchema } from "../../schemas/logoutSchema.js";
 
 export default async function(app) {
 
@@ -27,13 +29,13 @@ export default async function(app) {
         reply.send({ success: true, user: req.body.username, role: "player" });
     });
 
-    app.post("/refresh", async (req, reply) => {
+    app.post("/refresh", { schema: refreshSchema }, async (req, reply) => {
         const data = await refreshToken(app, req, reply);
         if (data)
             reply.send(data);
     });
 
-    app.post("/logout", async (req, reply) => {
+    app.post("/logout", { schema: logoutSchema }, async (req, reply) => {
         const data = await logoutUser(app, req, reply);
         reply.send(data);
     });
