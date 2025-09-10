@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:10:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/09 20:24:15 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/10 16:50:01 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -29,7 +29,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function buildApp() {
-    const app = Fastify({ logger: false });
+    const app = Fastify({
+        logger: false,
+        ajv: {
+            customOptions: {
+                strict: false
+            }
+        },
+    });
 
     app.decorate("config", config);
 

@@ -6,23 +6,25 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:48:43 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/09 21:14:12 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/10 16:27:02 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { loginUser, refreshToken, logoutUser } from "../../auth/service.js";
-import validateLoginInput from "../../validation/validateLoginInput.js";
+import { loginSchema } from "../../schemas/loginSchema.js";
+import { registerSchema } from "../../schemas/registerSchema.js";
 
 export default async function(app) {
 
-    app.post("/login", async (req, reply) => {
-        const error = validateLoginInput(req.body);
-        if (error) {
-            return (reply.code(400).send({ success: false, error }));
-        }
+    app.post("/login", { schema: loginSchema }, async (req, reply) => {
         const data = await loginUser(app, req.body?.user, req.body?.pwd, req, reply);
         if (data)
             reply.send(data);
+    });
+
+    app.post("/register", { schema: registerSchema }, async (req, reply) => {
+        // TODO: actually insert into DB + hash password
+        reply.send({ success: true, user: req.body.username, role: "player" });
     });
 
     app.post("/refresh", async (req, reply) => {

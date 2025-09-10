@@ -25,13 +25,16 @@ const API = new Fetch("/api");
 const app = document.querySelector("#app") as any;
 
 defineMiniRouter();
-auth.initFromStorage();
+// auth.initFromStorage();
 
 app.routes = routes;
 app.linkSelector = "[data-link]";
 app.onBeforeNavigate = onBeforeNavigate;
 // app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
-app.start();
+auth.initFromStorage().then(() => {
+    app.start();
+});
+// app.start();
 
 API.get("/health")
     .then(data => console.log("✅ Health check:", data))

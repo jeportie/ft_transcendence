@@ -22,7 +22,7 @@ export default fp(async function publicRoutes(app) {
     // Scoped instance just for /api/auth/*
     await app.register(async function(authScoped) {
         await authScoped.register(rateLimit, {
-            max: 5,
+            max: 100,
             timeWindow: "1 minute",
             keyGenerator: (request) => request.ip,
             errorResponseBuilder: () => ({
