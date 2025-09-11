@@ -36,7 +36,7 @@
 
 /*   Created: 2025/08/26 11:14:37 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/08/26 11:42:49 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:39:11 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -1076,6 +1076,18 @@ body {
   border-color: rgb(255 255 255 / 0.1);
 }
 
+.ui-loader-overlay {
+  position: fixed;
+  inset: 0px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 0.9);
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
 /* ************************************************************************** */
 
 /*                                                                            */
@@ -1116,25 +1128,13 @@ body {
 
 /*   Created: 2025/09/11 22:38:39 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/09/11 22:38:45 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:38:39 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
 /* ************************************************************************** */
 
 /* src/styles/loaders.css */
-
-.fixed {
-  position: fixed;
-}
-
-.inset-0 {
-  inset: 0px;
-}
-
-.z-\[9999\] {
-  z-index: 9999;
-}
 
 .mb-2 {
   margin-bottom: 0.5rem;
@@ -1160,26 +1160,8 @@ body {
   display: none;
 }
 
-.h-12 {
-  height: 3rem;
-}
-
-.w-12 {
-  width: 3rem;
-}
-
 .w-full {
   width: 100%;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
 }
 
 .flex-col {
@@ -1188,10 +1170,6 @@ body {
 
 .items-center {
   align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
 }
 
 .gap-2 {
@@ -1206,28 +1184,6 @@ body {
   gap: 1rem;
 }
 
-.rounded-full {
-  border-radius: 9999px;
-}
-
-.border-4 {
-  border-width: 4px;
-}
-
-.border-white {
-  --tw-border-opacity: 1;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
-}
-
-.border-t-transparent {
-  border-top-color: transparent;
-}
-
-.bg-black {
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
-}
-
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -1237,9 +1193,26 @@ body {
   font-weight: 500;
 }
 
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+@keyframes spin-synced {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to   {
+    transform: rotate(360deg);
+  }
+}
+
+.ui-loader-spinner {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 9999px;
+  border-width: 4px;
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
+  border-top-color: transparent;
+  animation: spin-synced 5s linear infinite;
+  /* sync with microchip */
 }
 
 :root {
@@ -1420,86 +1393,76 @@ body {
 /* microchip animations */
 
 .microchip__center {
-  animation: center-scale 5s infinite cubic-bezier(0.65, 0, 0.35, 1);
-  transform-origin: 25px 25px;
+  animation: center-scale 5s infinite cubic-bezier(0.65,0,0.35,1);
 }
 
-.microchip__dot {
-  animation: dot-scale 5s infinite cubic-bezier(0.65, 0, 0.35, 1);
+.microchip__dot    {
+  animation: dot-scale 5s infinite cubic-bezier(0.65,0,0.35,1);
 }
 
-.microchip__line {
-  stroke: hsl(var(--hue, 153), 90%, 30%);
-  animation: line-draw 5s infinite cubic-bezier(0.65, 0, 0.35, 1);
+.microchip__line   {
+  animation: line-draw 5s infinite cubic-bezier(0.65,0,0.35,1);
 }
 
-.microchip__spark {
-  stroke: hsl(var(--hue, 153), 90%, 70%);
+.microchip__spark  {
   animation: spark-move 5s infinite linear;
 }
 
-.microchip__wave {
-  stroke: hsl(var(--hue, 153), 90%, 70%);
+.microchip__wave   {
   animation: wave-scale 5s infinite steps(1);
 }
 
 /* Keyframes (simplified versions from your original) */
 
 @keyframes center-scale {
-  from,
-    to {
-    transform: scale(0)
+  from,to {
+    transform:scale(0)
   }
 
-  25%,
-    75% {
-    transform: scale(1)
+  25%,75% {
+    transform:scale(1)
   }
 }
 
-@keyframes dot-scale {
-  from,
-    to {
-    transform: scale(0)
+@keyframes dot-scale    {
+  from,to {
+    transform:scale(0)
   }
 
-  30%,
-    70% {
-    transform: scale(1)
+  30%,70% {
+    transform:scale(1)
   }
 }
 
-@keyframes line-draw {
-  from,
-    to {
-    stroke-dashoffset: 60
+@keyframes line-draw    {
+  from,to {
+    stroke-dashoffset:60
   }
 
-  40%,
-    60% {
-    stroke-dashoffset: 0
+  40%,60% {
+    stroke-dashoffset:0
   }
 }
 
-@keyframes spark-move {
+@keyframes spark-move   {
   from {
-    stroke-dashoffset: 60
+    stroke-dashoffset:60
   }
 
   to {
-    stroke-dashoffset: -120
+    stroke-dashoffset:-120
   }
 }
 
-@keyframes wave-scale {
+@keyframes wave-scale   {
   from {
-    stroke-width: 6;
-    transform: scale(1)
+    stroke-width:6;
+    transform:scale(1)
   }
 
   to {
-    stroke-width: 0;
-    transform: scale(2)
+    stroke-width:0;
+    transform:scale(2)
   }
 }
 

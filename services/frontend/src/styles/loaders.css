@@ -6,110 +6,47 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 22:38:39 by jeportie          #+#    #+#             */
-/*   Updated: 2025/09/11 22:43:14 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:38:39 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* src/styles/loaders.css */
 @tailwind utilities;
 
+@layer utilities {
+  @keyframes spin-synced {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .ui-loader-spinner {
+    @apply w-12 h-12 border-4 border-white border-t-transparent rounded-full;
+    animation: spin-synced 5s linear infinite; /* sync with microchip */
+  }
+}
+
 @layer components {
-    .ui-loader-overlay {
-        @apply fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 text-white;
-    }
+  .ui-loader-overlay {
+    @apply fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 text-white;
+  }
 
-    .ui-loader-spinner {
-        @apply w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin;
-    }
-
-    .microchip {
-        @apply w-24 h-24 text-blue-400;
-    }
+  .microchip {
+    @apply w-24 h-24 text-blue-400;
+  }
 }
 
 /* microchip animations */
-.microchip__center {
-    animation: center-scale 5s infinite cubic-bezier(0.65, 0, 0.35, 1);
-    transform-origin: 25px 25px;
-}
 
-.microchip__dot {
-    animation: dot-scale 5s infinite cubic-bezier(0.65, 0, 0.35, 1);
-}
+.microchip__center { animation: center-scale 5s infinite cubic-bezier(0.65,0,0.35,1); }
+.microchip__dot    { animation: dot-scale 5s infinite cubic-bezier(0.65,0,0.35,1); }
+.microchip__line   { animation: line-draw 5s infinite cubic-bezier(0.65,0,0.35,1); }
+.microchip__spark  { animation: spark-move 5s infinite linear; }
+.microchip__wave   { animation: wave-scale 5s infinite steps(1); }
 
-.microchip__line {
-    stroke: hsl(var(--hue, 153), 90%, 30%);
-    animation: line-draw 5s infinite cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.microchip__spark {
-    stroke: hsl(var(--hue, 153), 90%, 70%);
-    animation: spark-move 5s infinite linear;
-}
-
-.microchip__wave {
-    stroke: hsl(var(--hue, 153), 90%, 70%);
-    animation: wave-scale 5s infinite steps(1);
-}
 
 /* Keyframes (simplified versions from your original) */
-@keyframes center-scale {
-
-    from,
-    to {
-        transform: scale(0)
-    }
-
-    25%,
-    75% {
-        transform: scale(1)
-    }
-}
-
-@keyframes dot-scale {
-
-    from,
-    to {
-        transform: scale(0)
-    }
-
-    30%,
-    70% {
-        transform: scale(1)
-    }
-}
-
-@keyframes line-draw {
-
-    from,
-    to {
-        stroke-dashoffset: 60
-    }
-
-    40%,
-    60% {
-        stroke-dashoffset: 0
-    }
-}
-
-@keyframes spark-move {
-    from {
-        stroke-dashoffset: 60
-    }
-
-    to {
-        stroke-dashoffset: -120
-    }
-}
-
-@keyframes wave-scale {
-    from {
-        stroke-width: 6;
-        transform: scale(1)
-    }
-
-    to {
-        stroke-width: 0;
-        transform: scale(2)
-    }
-}
+@keyframes center-scale { from,to {transform:scale(0)} 25%,75% {transform:scale(1)} }
+@keyframes dot-scale    { from,to {transform:scale(0)} 30%,70% {transform:scale(1)} }
+@keyframes line-draw    { from,to {stroke-dashoffset:60} 40%,60% {stroke-dashoffset:0} }
+@keyframes spark-move   { from {stroke-dashoffset:60} to {stroke-dashoffset:-120} }
+@keyframes wave-scale   { from {stroke-width:6;transform:scale(1)} to {stroke-width:0;transform:scale(2)} }

@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // @ts-ignore
-import microchipSvg from "../assets/microchip.svg?raw";
+import microchipSvg from "../assets/microchip.svg";
 
 export function showLoading(message = "Loading...") {
     const overlay = document.createElement("div");
@@ -20,7 +20,7 @@ export function showLoading(message = "Loading...") {
 
     overlay.innerHTML = `
     <div class="flex flex-col items-center gap-4">
-      <div class="ui-loader-spinner"></div>
+      <!-- <div class="ui-loader-spinner"></div> -->
       ${microchipSvg}
       <p class="text-lg font-medium">${message}</p>
     </div>

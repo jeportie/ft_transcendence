@@ -6,179 +6,82 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:15:11 by jeportie          #+#    #+#             */
-/*   Updated: 2025/09/11 22:43:17 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/08/26 11:15:14 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 @tailwind components;
 
 @layer components {
+  /* --- Global Landing look --- */
+  .ui-title         { @apply text-2xl font-bold tracking-wide text-white; }
+  .ui-subtitle      { @apply text-lg font-medium text-slate-200/90; }
+  .ui-text-muted    { @apply text-slate-300/80; }
+  .ui-text-small    { @apply text-slate-400 text-sm; }
+  .ui-text-error    { @apply text-rose-400;}
 
-    /* --- Global Landing look --- */
-    .ui-title {
-        @apply text-2xl font-bold tracking-wide text-white;
-    }
+  /* --- Cards --- */
+  .ui-card          { @apply rounded-2xl bg-white/5 backdrop-blur-md border 
+                        border-white/10 shadow-xl p-6 text-slate-100; }
+  .ui-card-error    { @apply rounded-2xl bg-rose-900/40 backdrop-blur-md 
+                        border border-rose-700/60 shadow-lg p-6 text-rose-100; }
 
-    .ui-subtitle {
-        @apply text-lg font-medium text-slate-200/90;
-    }
+  /* --- Forms --- */
+  .ui-form          { @apply space-y-3; }
+  .ui-form-lg       { @apply space-y-4; }
+  .ui-label         { @apply block mb-1 text-slate-200/90 text-sm font-medium; }
+  .ui-input         { @apply w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20
+                        placeholder:text-slate-400/50 text-slate-100
+                        outline-none focus:ring-2 focus:ring-blue-500/40;
+  }
 
-    .ui-text-muted {
-        @apply text-slate-300/80;
-    }
+  .ui-error         { @apply text-red-500 font-semibold; }
 
-    .ui-text-small {
-        @apply text-slate-400 text-sm;
-    }
+  /* --- Buttons --- */
+  .ui-btn           { @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium
+                        transition focus:outline-none focus:ring-2 focus:ring-blue-400/40; }
+  .ui-btn-primary   { @apply ui-btn bg-blue-600 hover:bg-blue-700 text-white; }
+  .ui-btn-secondary { @apply ui-btn bg-slate-700/70 hover:bg-slate-600 text-white/90; }
+  .ui-btn-ghost     { @apply ui-btn bg-white/10 hover:bg-white/20 text-white/90; }
+  .ui-btn-danger    { @apply ui-btn bg-rose-600 hover:bg-rose-700 text-white; }
 
-    .ui-text-error {
-        @apply text-rose-400;
-    }
+  /* --- Layouts --- */
+  .ui-hero          { @apply relative min-h-screen overflow-hidden; }
+  .ui-hero-canvas   { @apply absolute inset-0 w-full h-full block z-0; }
 
-    /* --- Cards --- */
-    .ui-card {
-        @apply rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-xl p-6 text-slate-100;
-    }
+  .ui-header        { @apply absolute top-0 inset-x-0 z-20; }
+  .ui-nav           { @apply mx-auto max-w-6xl px-6 py-4 flex items-center justify-between; }
 
-    .ui-card-error {
-        @apply rounded-2xl bg-rose-900/40 backdrop-blur-md border border-rose-700/60 shadow-lg p-6 text-rose-100;
-    }
+  .ui-brand         { @apply text-white font-semibold tracking-wide; }
+  .ui-nav-link      { @apply px-3 py-1.5 rounded-lg text-slate-100/90 hover:text-white hover:bg-white/10 transition; }
 
-    /* --- Forms --- */
-    .ui-form {
-        @apply space-y-3;
-    }
+  .ui-modal-layer   { @apply absolute inset-0 z-10 grid place-items-center pointer-events-none p-6; }
+  .ui-modal-slot    { @apply w-full max-w-md pointer-events-auto; }
 
-    .ui-form-lg {
-        @apply space-y-4;
-    }
+  .ui-footer-hint   { @apply absolute bottom-6 left-6 right-6 z-10 pointer-events-none; }
+  .ui-footer-text   { @apply text-slate-300/70 text-sm; }
 
-    .ui-label {
-        @apply block mb-1 text-slate-200/90 text-sm font-medium;
-    }
+  /* --- App Layout (Sidebar style update to match Landing) --- */
+  .ui-app-layout    { @apply min-h-screen flex flex-col; }
+  .ui-app-wrapper   { @apply flex gap-6 p-6 flex-1 items-start; }
 
-    .ui-input {
-        @apply w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 placeholder:text-slate-400/50 text-slate-100 outline-none focus:ring-2 focus:ring-blue-500/40;
-    }
+  .ui-sidebar       { @apply w-[220px] shrink-0 overflow-hidden transition-[width,padding]
+                        duration-200 ease-in-out rounded-2xl
+                        bg-white/5 backdrop-blur-md border border-white/10 p-4;
+  }
+  .ui-sidebar-title { @apply text-lg font-semibold mb-3 text-white; }
+  .ui-sidebar-nav   { @apply flex flex-col gap-2; }
+  .ui-sidebar-link  { @apply px-3 py-2 rounded-lg hover:bg-white/10 text-slate-100/90; }
 
-    .ui-error {
-        @apply text-red-500 font-semibold;
-    }
+  .ui-main          { @apply flex-1 min-w-0 space-y-4; }
+  .ui-footer        { @apply border-t border-white/10 p-3 flex; }
+  .ui-footer-btn    { @apply ui-btn-secondary text-sm; }
 
-    /* --- Buttons --- */
-    .ui-btn {
-        @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition focus:outline-none focus:ring-2 focus:ring-blue-400/40;
-    }
+  /* --- Lists --- */
+  .ui-list          { @apply space-y-2; }
+  .ui-list-link     { @apply px-3 py-2 rounded-lg hover:bg-white/10 inline-block text-slate-100/90; }
 
-    .ui-btn-primary {
-        @apply ui-btn bg-blue-600 hover:bg-blue-700 text-white;
-    }
-
-    .ui-btn-secondary {
-        @apply ui-btn bg-slate-700/70 hover:bg-slate-600 text-white/90;
-    }
-
-    .ui-btn-ghost {
-        @apply ui-btn bg-white/10 hover:bg-white/20 text-white/90;
-    }
-
-    .ui-btn-danger {
-        @apply ui-btn bg-rose-600 hover:bg-rose-700 text-white;
-    }
-
-    /* --- Layouts --- */
-    .ui-hero {
-        @apply relative min-h-screen overflow-hidden;
-    }
-
-    .ui-hero-canvas {
-        @apply absolute inset-0 w-full h-full block z-0;
-    }
-
-    .ui-header {
-        @apply absolute top-0 inset-x-0 z-20;
-    }
-
-    .ui-nav {
-        @apply mx-auto max-w-6xl px-6 py-4 flex items-center justify-between;
-    }
-
-    .ui-brand {
-        @apply text-white font-semibold tracking-wide;
-    }
-
-    .ui-nav-link {
-        @apply px-3 py-1.5 rounded-lg text-slate-100/90 hover:text-white hover:bg-white/10 transition;
-    }
-
-    .ui-modal-layer {
-        @apply absolute inset-0 z-10 grid place-items-center pointer-events-none p-6;
-    }
-
-    .ui-modal-slot {
-        @apply w-full max-w-md pointer-events-auto;
-    }
-
-    .ui-footer-hint {
-        @apply absolute bottom-6 left-6 right-6 z-10 pointer-events-none;
-    }
-
-    .ui-footer-text {
-        @apply text-slate-300/70 text-sm;
-    }
-
-    /* --- App Layout (Sidebar style update to match Landing) --- */
-    .ui-app-layout {
-        @apply min-h-screen flex flex-col;
-    }
-
-    .ui-app-wrapper {
-        @apply flex gap-6 p-6 flex-1 items-start;
-    }
-
-    .ui-sidebar {
-        @apply w-[220px] shrink-0 overflow-hidden transition-[width, padding] duration-200 ease-in-out rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-4;
-    }
-
-    .ui-sidebar-title {
-        @apply text-lg font-semibold mb-3 text-white;
-    }
-
-    .ui-sidebar-nav {
-        @apply flex flex-col gap-2;
-    }
-
-    .ui-sidebar-link {
-        @apply px-3 py-2 rounded-lg hover:bg-white/10 text-slate-100/90;
-    }
-
-    .ui-main {
-        @apply flex-1 min-w-0 space-y-4;
-    }
-
-    .ui-footer {
-        @apply border-t border-white/10 p-3 flex;
-    }
-
-    .ui-footer-btn {
-        @apply ui-btn-secondary text-sm;
-    }
-
-    /* --- Lists --- */
-    .ui-list {
-        @apply space-y-2;
-    }
-
-    .ui-list-link {
-        @apply px-3 py-2 rounded-lg hover:bg-white/10 inline-block text-slate-100/90;
-    }
-
-    /* --- Game --- */
-    .ui-card-inner {
-        @apply space-y-3;
-    }
-
-    .ui-canvas {
-        @apply w-full rounded-xl border border-white/10;
-    }
+  /* --- Game --- */
+  .ui-card-inner    { @apply space-y-3; }
+  .ui-canvas        { @apply w-full rounded-xl border border-white/10; }
 }
