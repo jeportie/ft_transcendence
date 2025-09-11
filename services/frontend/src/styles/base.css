@@ -6,27 +6,26 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:14:37 by jeportie          #+#    #+#             */
-/*   Updated: 2025/08/26 11:42:49 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:39:11 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 @tailwind base;
 
 @layer base {
-  body {
-    @apply text-slate-100;
-    background: linear-gradient(to bottom, #0b0f16 0%, #05070b 100%);
-  }
+    body {
+        @apply text-slate-100;
+        background: linear-gradient(to bottom, #0b0f16 0%, #05070b 100%);
+    }
 
-  #app {
-    @apply text-slate-100;
-    /* no solid bg here, let body’s gradient show through */
-    background: transparent;
-  }
+    #app {
+        @apply text-slate-100;
+        /* no solid bg here, let body’s gradient show through */
+        background: transparent;
+    }
 
-  .dark #app {
-    @apply text-slate-100;
-    background: transparent;
-  }
+    .dark #app {
+        @apply text-slate-100;
+        background: transparent;
+    }
 }
-

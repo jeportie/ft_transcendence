@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/09 20:19:02 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/11 22:16:42 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,6 +17,7 @@ import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
 import Fetch from "./tools/Fetch.js";
 import { routes } from "./routes.js";
 import { onBeforeNavigate } from "./guards.js";
+import { showLoading, hideLoading } from "./views/LoadingOverlay.js";
 
 // API
 const API = new Fetch("/api");
@@ -25,16 +26,24 @@ const API = new Fetch("/api");
 const app = document.querySelector("#app") as any;
 
 defineMiniRouter();
-// auth.initFromStorage();
 
 app.routes = routes;
 app.linkSelector = "[data-link]";
 app.onBeforeNavigate = onBeforeNavigate;
 // app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
-auth.initFromStorage().then(() => {
+
+async function bootstrap() {
+    showLoading("Starting app...");
+
+    await auth.initFromStorage();
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    console.log("Waited 5 seconds.");
+
+    hideLoading();
     app.start();
-});
-// app.start();
+}
+
+bootstrap();
 
 API.get("/health")
     .then(data => console.log("✅ Health check:", data))

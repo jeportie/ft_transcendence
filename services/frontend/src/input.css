@@ -13,6 +13,7 @@
 @import "./styles/base.css";
 @import "./styles/components.css";
 @import "./styles/utilities.css";
+@import "./styles/loaders.css";
 
 /* transitions split */
 @import "./styles/transitions/base.css";
@@ -21,4 +22,3 @@
 @import "./styles/transitions/zoom.css";
 @import "./styles/transitions/slide-push.css";
 @import "./styles/transitions/track.css";
-

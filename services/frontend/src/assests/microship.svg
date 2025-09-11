@@ -1,0 +1,46 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- microship.svg                                      :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/09/11 22:37:49 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/09/11 22:38:29 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<!-- src/assets/microchip.svg -->
+<svg class="microchip" viewBox="0 0 128 128" width="128px" height="128px" role="img" aria-label="Animated microchip loader">
+  <!-- definitions -->
+  <symbol id="dot"><circle r="3"/></symbol>
+  <symbol id="line"><polyline stroke-dasharray="60 60"/></symbol>
+  <symbol id="spark"><polyline stroke-dasharray="15 105"/></symbol>
+  <symbol id="wave"><rect x="3" y="3" rx="2.5" ry="2.5" width="44" height="44"/></symbol>
+
+  <g transform="translate(10,10)">
+    <g class="microchip__lines" stroke-linecap="round" stroke-linejoin="round">
+      <!-- left side -->
+      <g>
+        <g fill="none" stroke="currentcolor">
+          <use class="microchip__line microchip__line--1" href="#line" x="3" y="38"/>
+          <use class="microchip__spark microchip__spark--1" href="#spark" x="3" y="38"/>
+        </g>
+        <use class="microchip__dot microchip__dot--1" href="#dot" x="3" y="38" fill="currentcolor"/>
+      </g>
+      <!-- repeat blocks for other lines/dots as in your original, but using <use> -->
+      <!-- ... keep structure compact -->
+    </g>
+
+    <!-- center -->
+    <g transform="translate(29,29)">
+      <g class="microchip__center">
+        <g fill="none" stroke="currentcolor" stroke-width="6">
+          <use class="microchip__wave microchip__wave--1" href="#wave"/>
+          <use class="microchip__wave microchip__wave--2" href="#wave"/>
+        </g>
+        <rect class="microchip__core" fill="currentcolor" rx="5" ry="5" width="50" height="50"/>
+      </g>
+    </g>
+  </g>
+</svg>
