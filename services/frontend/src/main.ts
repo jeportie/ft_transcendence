@@ -13,7 +13,7 @@
 // @ts-ignore
 import { defineMiniRouter } from "@jeportie/mini-spa";
 import { auth } from "./tools/AuthService.js";
-import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
+// import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
 import Fetch from "./tools/Fetch.js";
 import { routes } from "./routes.js";
 import { onBeforeNavigate } from "./tools/guards.js";
