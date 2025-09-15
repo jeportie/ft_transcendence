@@ -29,6 +29,7 @@ app.onBeforeNavigate = onBeforeNavigate;
 // app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
 
 app.beforeStart(async () => {
+    // throw new Error("💥 Boot failed");
     // 1. Restore auth session
     await auth.initFromStorage();
     const alreadyBooted = sessionStorage.getItem("appBooted");
@@ -63,9 +64,11 @@ app.start().catch((err: any) => {
     const container = document.querySelector("#app");
     if (container) {
         container.innerHTML = `
-            <div class="ui-error-box">
-              <h2>⚠️ App failed to start</h2>
-              <pre>${err?.message || "Unknown error"}</pre>
+            <div class="flex items-center justify-center min-h-screen">
+                <div class=" ui-card-error max-w-md text-center">
+                    <h2>⚠️ App failed to start</h2>
+                    <pre>${err?.message || "Unknown error"}</pre>
+                </div>
             </div>
         `;
     }

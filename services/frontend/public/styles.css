@@ -1194,8 +1194,16 @@ body {
   display: none;
 }
 
+.min-h-screen {
+  min-height: 100vh;
+}
+
 .w-full {
   width: 100%;
+}
+
+.max-w-md {
+  max-width: 28rem;
 }
 
 .flex-col {
@@ -1204,6 +1212,10 @@ body {
 
 .items-center {
   align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .gap-2 {
@@ -1216,6 +1228,10 @@ body {
 
 .gap-4 {
   gap: 1rem;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .text-lg {
