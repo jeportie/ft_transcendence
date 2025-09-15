@@ -11,7 +11,8 @@
 // ************************************************************************** //
 
 import { AbstractLayout } from "@jeportie/mini-spa";
-import { auth, API } from "../initApp.ts";
+import { API } from "../spa/api.js";
+import { auth } from "../spa/auth.js";
 
 export default class AppLayout extends AbstractLayout {
     #onToggle?: (e: Event) => void;

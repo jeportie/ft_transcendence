@@ -12,7 +12,8 @@
 
 // @ts-ignore
 import { AbstractView } from "@jeportie/mini-spa";
-import { auth, API } from "../initApp.ts";
+import { API } from "../spa/api.js";
+import { auth } from "../spa/auth.js";
 
 export default class Login extends AbstractView {
     constructor(ctx: any) {

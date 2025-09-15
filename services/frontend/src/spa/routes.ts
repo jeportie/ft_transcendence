@@ -10,24 +10,24 @@
 //                                                                            //
 // ************************************************************************** //
 
-import TailwindAnimationHook from "./styles/transitions/hooks/TailwindAnimationHook.js";
-import OverlayAnimationHook from "./styles/transitions/hooks/OverlayAnimationHook.js";
-import { guards } from "./initApp.ts";
+import TailwindAnimationHook from "../styles/transitions/hooks/TailwindAnimationHook.js";
+import OverlayAnimationHook from "../styles/transitions/hooks/OverlayAnimationHook.js";
+import { guards } from "./guards.js";
 
 // Lazy views 
-const Landing = () => import("./views/Landing.ts");
-const Login = () => import("./views/Login.ts");
+const Landing = () => import("../views/Landing.ts");
+const Login = () => import("../views/Login.ts");
 
-const Dashboard = () => import("./views/Dashboard.ts");
-const Settings = () => import("./views/Settings.ts");
-const Posts = () => import("./views/Posts.ts");
-const PostShow = () => import("./views/PostShow.ts");
-const Game = () => import("./views/Game.ts");
-const NotFound = () => import("./views/NotFound.ts");
+const Dashboard = () => import("../views/Dashboard.ts");
+const Settings = () => import("../views/Settings.ts");
+const Posts = () => import("../views/Posts.ts");
+const PostShow = () => import("../views/PostShow.ts");
+const Game = () => import("../views/Game.ts");
+const NotFound = () => import("../views/NotFound.ts");
 
 // Lazy layout
-const AppLayout = () => import("./views/AppLayout.ts");
-const LandingLayout = () => import("./views/LandingLayout.ts");
+const AppLayout = () => import("../views/AppLayout.ts");
+const LandingLayout = () => import("../views/LandingLayout.ts");
 
 export const routes = [
     {
