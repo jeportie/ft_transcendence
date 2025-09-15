@@ -37,11 +37,8 @@ app.afterStart(() => {
 app.start();
 
 API.get("/health")
-    .then(data => logger.info("[Health] ✅ Health check:", data))
-    .catch((err) => logger.error("[Health] ❌ Error:", err));
-
-// toggle dark mode manually
-// document.documentElement.classList.toggle("dark");
+    .then((data: any) => logger.info("[Health] ✅ Health check:", data))
+    .catch((err: any) => logger.error("[Health] ❌ Error:", err));
 
 window.addEventListener("auth:logout", () => {
     const next = encodeURIComponent(location.pathname + location.search + location.hash);
