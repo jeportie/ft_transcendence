@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
-import OverlayAnimationHook from "./transitions/OverlayAnimationHook.js";
+import TailwindAnimationHook from "./styles/transitions/hooks/TailwindAnimationHook.js";
+import OverlayAnimationHook from "./styles/transitions/hooks/OverlayAnimationHook.js";
 import { guards } from "./initApp.ts";
 
 // Lazy views 

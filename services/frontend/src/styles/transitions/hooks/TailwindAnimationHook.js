@@ -10,8 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractAnimationHook } from "@jeportie/mini-spa";
-import { getMaxTransitionMs } from "./time/getMaxTransitionMs.js";
+import { AbstractAnimationHook, getMaxTransitionMs } from "@jeportie/mini-spa";
 
 export default class TailwindAnimationHook extends AbstractAnimationHook {
     constructor({ variant = "fade" } = {}) {

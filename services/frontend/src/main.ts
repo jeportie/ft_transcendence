@@ -13,9 +13,9 @@
 // @ts-ignore
 import { defineMiniRouter, onBeforeNavigate } from "@jeportie/mini-spa";
 // import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
-import { routes } from "./routes.js";
+import { routes } from "./spa/routes.js";
 import { showLoading, hideLoading } from "./views/LoadingOverlay.js";
-import { auth, API, logger } from "./initApp.js";
+import { auth, API, logger } from "./spa/initApp.js";
 
 //DOM
 const app = document.querySelector("#app") as any;
