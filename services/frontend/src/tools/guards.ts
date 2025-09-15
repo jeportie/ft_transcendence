@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { auth } from "./tools/AuthService.js";
-import Fetch from "./tools/Fetch.js";
+import { auth } from "./AuthService.js";
+import Fetch from "./Fetch.js";
 
 const API = new Fetch("/api");
 

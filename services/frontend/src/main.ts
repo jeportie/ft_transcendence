@@ -16,7 +16,7 @@ import { auth } from "./tools/AuthService.js";
 import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
 import Fetch from "./tools/Fetch.js";
 import { routes } from "./routes.js";
-import { onBeforeNavigate } from "./guards.js";
+import { onBeforeNavigate } from "./tools/guards.js";
 import { showLoading, hideLoading } from "./views/LoadingOverlay.js";
 
 // API
@@ -31,19 +31,16 @@ app.routes = routes;
 app.linkSelector = "[data-link]";
 app.onBeforeNavigate = onBeforeNavigate;
 // app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
-
-async function bootstrap() {
+app.beforeStart(async () => {
     showLoading("Starting app...");
-
     await auth.initFromStorage();
     await new Promise(resolve => setTimeout(resolve, 5000));
     console.log("Waited 5 seconds.");
-
+});
+app.afterStart(() => {
     hideLoading();
-    app.start();
-}
-
-bootstrap();
+})
+app.start();
 
 API.get("/health")
     .then(data => console.log("✅ Health check:", data))

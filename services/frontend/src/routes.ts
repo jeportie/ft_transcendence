@@ -12,8 +12,7 @@
 
 import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
 import OverlayAnimationHook from "./transitions/OverlayAnimationHook.js";
-import { onBeforeNavigate } from "./guards.js";
-import { requireAuth } from "./guards.js";
+import { requireAuth } from "./tools/guards.js";
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
