@@ -29,13 +29,13 @@ app.onBeforeNavigate = onBeforeNavigate;
 // app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
 
 app.beforeStart(async () => {
+    // 1. Restore auth session
+    await auth.initFromStorage();
     const alreadyBooted = sessionStorage.getItem("appBooted");
     if (!alreadyBooted) {
         showLoading("Starting app...");
 
         try {
-            // 1. Restore auth session
-            await auth.initFromStorage();
             // 2. Health check
             const health = await API.get("/health");
             logger.info("[Health] ✅ OK:", health);
@@ -46,7 +46,6 @@ app.beforeStart(async () => {
 
         } catch (err: any) {
             logger.error("[Boot] ❌ Startup failed:", err);
-
             hideLoading();
             throw err;
         }
