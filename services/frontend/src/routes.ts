@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/26 11:06:35 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/15 13:59:38 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
 import OverlayAnimationHook from "./transitions/OverlayAnimationHook.js";
-import { requireAuth } from "./tools/guards.js";
+import { guards } from "./initApp.ts";
 
 // Lazy views 
 const Landing = () => import("./views/Landing.ts");
@@ -44,11 +44,11 @@ export const routes = [
         layout: AppLayout,
         animationHook: new TailwindAnimationHook({ variant: "zoom" }),
         children: [
-            { path: "dashboard", component: Dashboard, beforeEnter: requireAuth },
-            { path: "settings", component: Settings, beforeEnter: requireAuth },
-            { path: "posts", component: Posts, beforeEnter: requireAuth },
-            { path: "posts/:id", component: PostShow, beforeEnter: requireAuth },
-            { path: "game", component: Game, beforeEnter: requireAuth },
+            { path: "dashboard", component: Dashboard, beforeEnter: guards.requireAuth },
+            { path: "settings", component: Settings, beforeEnter: guards.requireAuth },
+            { path: "posts", component: Posts, beforeEnter: guards.requireAuth },
+            { path: "posts/:id", component: PostShow, beforeEnter: guards.requireAuth },
+            { path: "game", component: Game, beforeEnter: guards.requireAuth },
         ],
     },
     { path: "*", component: NotFound },

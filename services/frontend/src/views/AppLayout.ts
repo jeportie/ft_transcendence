@@ -11,10 +11,7 @@
 // ************************************************************************** //
 
 import { AbstractLayout } from "@jeportie/mini-spa";
-import { auth } from "../tools/AuthService.js";
-import Fetch from "../tools/Fetch.js";
-
-const API = new Fetch("/api");
+import { auth, API } from "../initApp.ts";
 
 export default class AppLayout extends AbstractLayout {
     #onToggle?: (e: Event) => void;

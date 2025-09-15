@@ -6,25 +6,19 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/11 22:16:42 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/15 14:19:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 // @ts-ignore
-import { defineMiniRouter } from "@jeportie/mini-spa";
-import { auth } from "./tools/AuthService.js";
+import { defineMiniRouter, onBeforeNavigate } from "@jeportie/mini-spa";
 // import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
-import Fetch from "./tools/Fetch.js";
 import { routes } from "./routes.js";
-import { onBeforeNavigate } from "./tools/guards.js";
 import { showLoading, hideLoading } from "./views/LoadingOverlay.js";
-
-// API
-const API = new Fetch("/api");
+import { auth, API, logger } from "./initApp.js";
 
 //DOM
 const app = document.querySelector("#app") as any;
-
 defineMiniRouter();
 
 app.routes = routes;
@@ -35,7 +29,7 @@ app.beforeStart(async () => {
     showLoading("Starting app...");
     await auth.initFromStorage();
     await new Promise(resolve => setTimeout(resolve, 5000));
-    console.log("Waited 5 seconds.");
+    logger.info("[] Waited 5 seconds.");
 });
 app.afterStart(() => {
     hideLoading();
@@ -43,8 +37,8 @@ app.afterStart(() => {
 app.start();
 
 API.get("/health")
-    .then(data => console.log("✅ Health check:", data))
-    .catch((err) => console.error("❌ Error:", err));
+    .then(data => logger.info("[Health] ✅ Health check:", data))
+    .catch((err) => logger.error("[Health] ❌ Error:", err));
 
 // toggle dark mode manually
 // document.documentElement.classList.toggle("dark");
