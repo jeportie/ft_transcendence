@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/13 15:56:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 18:56:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/16 17:59:22 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,3 +24,4 @@ const { HOST, PORT, NODE_ENV } = app.config;
 
 await app.listen({ host: HOST, port: PORT });
 console.log(`[API] server listening on ${HOST}:${PORT} (env=${NODE_ENV})`);
+console.log(app.config.GOOGLE_CLIENT_ID, "Google client ID");

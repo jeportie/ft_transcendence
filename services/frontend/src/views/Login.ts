@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 23:03:48 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/16 17:34:53 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -40,6 +40,9 @@ export default class Login extends AbstractView {
               <div id="login-error" class="ui-error hidden mt-2"></div>
               <p class="ui-text-small mt-3">
               <a href="/subscribe" data-link class="ui-hint-link">Subscribe</a> </p>
+              <button id="google-btn" class="ui-btn-secondary w-full mt-2">
+                Continue with Google
+              </button>
             </div>
         `;
     }
@@ -53,6 +56,7 @@ export default class Login extends AbstractView {
         const userName = document.querySelector("#user-name") as HTMLInputElement;
         const userPwd = document.querySelector("#user-pwd") as HTMLInputElement;
         const errorBox = document.querySelector("#login-error");
+        const googleBtn = document.querySelector("#google-btn") as HTMLButtonElement;
 
         // read ?next from URL
         const params = new URLSearchParams(location.search);
@@ -89,5 +93,9 @@ export default class Login extends AbstractView {
                     }
                 });
         })
+
+        googleBtn?.addEventListener("click", () => {
+            window.location.href = "/api/auth/google/start";
+        });
     }
 }
