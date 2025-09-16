@@ -95,7 +95,9 @@ export default class Login extends AbstractView {
         })
 
         googleBtn?.addEventListener("click", () => {
-            window.location.href = "/api/auth/google/start";
+            const params = new URLSearchParams(location.search);
+            const next = params.get("next") || "/dashboard";
+            window.location.href = `/api/auth/google/start?next=${encodeURIComponent(next)}`;
         });
     }
 }

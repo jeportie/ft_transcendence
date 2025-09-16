@@ -14,8 +14,10 @@ import { verifyPassword } from "./password.js";
 import { generateRefreshToken, hashToken, addDaysUTC } from "./tokens.js";
 import { setRefreshCookie, clearRefreshCookie } from "./cookie.js";
 
-export async function loginUser(app, user, pwd, request, reply) {
-    if (!user || !pwd)
+export async function loginUser(app, user, pwd, request, reply, opts = {}) {
+    const skipPwd = Boolean(opts.skipPwd);
+
+    if (!user || (!skipPwd && !pwd))
         return (reply.code(400).send({
             success: false,
             error: "Missing credentials",
@@ -39,13 +41,15 @@ export async function loginUser(app, user, pwd, request, reply) {
         }));
     }
 
-    const ok = await verifyPassword(row.password_hash, pwd);
-    if (!ok) {
-        app.log.warn(`[Auth] Invalid password for user/email: ${user}`);
-        return (reply.code(401).send({
-            success: false,
-            message: "Invalid credentials"
-        }));
+    if (!skipPwd) {
+        const ok = await verifyPassword(row.password_hash, pwd);
+        if (!ok) {
+            app.log.warn(`[Auth] Invalid password for user/email: ${user}`);
+            return (reply.code(401).send({
+                success: false,
+                message: "Invalid credentials"
+            }));
+        }
     }
 
     // Access Token

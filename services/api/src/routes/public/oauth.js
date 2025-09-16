@@ -17,6 +17,16 @@ export default async function oauthRoutes(app) {
 
     app.get("/auth/:provider/start", async (req, reply) => {
         const { provider } = req.params;
+        const { next = "/dashboard" } = req.query || {};
+
+        reply.setCookie(`oauth_next_${provider}`, String(next), {
+            path: `/api/auth/${provider}`,
+            httpOnly: true,
+            sameSite: "lax",
+            maxAge: 10 * 60, // 10 minutes
+            secure: !!app.config.COOKIE_SECURE,
+        });
+
         const p = getProvider(app, provider);
         const url = p.getAuthUrl();
         reply.redirect(url);
@@ -25,6 +35,7 @@ export default async function oauthRoutes(app) {
     app.get("/auth/:provider/callback", async (req, reply) => {
         const { provider } = req.params;
         const { code } = req.query;
+
         const p = getProvider(app, provider);
         const profile = await p.exchangeCode(code);
 
@@ -41,8 +52,15 @@ export default async function oauthRoutes(app) {
             user = await db.get("SELECT * FROM users WHERE id = ?", r.lastID);
         }
 
-        // Reuse your existing login flow but skip password check
-        const data = await loginUser(app, user.email || user.username, null, req, reply, { skipPwd: true });
-        reply.send(data);
+        // Issue your tokens, skipping password
+        await loginUser(app, user.email || user.username, null, req, reply, { skipPwd: true });
+
+        // Read & clear the "next" cookie, then redirect back to the SPA
+        const cookieName = `oauth_next_${provider}`;
+        const next = req.cookies?.[cookieName] || "/dashboard";
+        reply.clearCookie(cookieName, { path: `/api/auth/${provider}` });
+
+        // Important: redirect so the browser leaves the JSON page
+        reply.redirect(String(next));
     });
 }
