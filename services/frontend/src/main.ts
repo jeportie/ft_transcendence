@@ -30,8 +30,12 @@ app.onBeforeNavigate = onBeforeNavigate;
 
 app.beforeStart(async () => {
     // throw new Error("💥 Boot failed");
-    // 1. Restore auth session
-    await auth.initFromStorage();
+    const restored = await auth.initFromStorage();
+    if (restored) {
+        logger.info("[Boot] Auth session restored from cookie");
+    } else {
+        logger.info("[Boot] No session to restore");
+    }
     const alreadyBooted = sessionStorage.getItem("appBooted");
     if (!alreadyBooted) {
         showLoading("Starting app...");
