@@ -1,5 +1,5 @@
-./services/frontend/.env.local
-./services/api/.env.local
+services/frontend/.env.local
+services/api/.env.local
 .env
 
 services/frontend/public/bundle.js
