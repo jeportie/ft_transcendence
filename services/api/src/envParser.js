@@ -39,4 +39,11 @@ export function asBool(v, fallback) {
     return (fallback);
 }
 
+export function requireString(v, name) {
+    if (!v || String(v).trim() === "") {
+        throw new Error(`[config] Missing required env: ${name}`);
+    }
+    return String(v).trim();
+}
+
 // add asNumberList(), asJson(), asUrl()

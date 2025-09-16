@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { asNumber, asBool, asString } from "./envParser.js";
+import { asNumber, asBool, asString, requireString } from "./envParser.js";
 import * as dotenv from "dotenv";
 
 const result = dotenv.config({ path: ".env.local" });
@@ -38,6 +38,11 @@ const config = {
     COOKIE_NAME_RT: asString(process.env.COOKIE_NAME_RT, "rt"),
     COOKIE_SAMESITE: asString(process.env.COOKIE_SAMESITE, "lax"), // "lax" | "none" | "strict"
     COOKIE_DOMAIN: asString(process.env.COOKIE_DOMAIN, ""),         // optional
+
+    // Google OAuth
+    GOOGLE_CLIENT_ID: requireString(process.env.GOOGLE_CLIENT_ID, "GOOGLE_CLIENT_ID"),
+    GOOGLE_CLIENT_SECRET: requireString(process.env.GOOGLE_CLIENT_SECRET, "GOOGLE_CLIENT_SECRET"),
+    GOOGLE_REDIRECT_URI: requireString(process.env.GOOGLE_REDIRECT_URI, "GOOGLE_REDIRECT_URI"),
 };
 
 const errors = [];
