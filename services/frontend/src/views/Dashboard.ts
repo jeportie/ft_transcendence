@@ -11,6 +11,7 @@
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
+import { API } from "../spa/api.js";
 
 export default class Dashboard extends AbstractView {
     constructor(ctx: any) {
@@ -18,12 +19,35 @@ export default class Dashboard extends AbstractView {
         this.setTitle("Dashboard");
     };
 
-    async getHTML() {
+    getHTML() {
         return /*html*/ `
-        <h1 class="ui-title">Dashboard</h1>
-        <div class="ui-card">
-          <p class="ui-text-muted">Welcome to your SPA dashboard!</p>
-        </div>
-        `;
+    <h1 class="ui-title">Dashboard</h1>
+    <div class="ui-card">
+      <p class="ui-text-muted">Welcome to your SPA dashboard!</p>
+      <div id="user-info" class="mt-2 ui-text-small">Loading user info...</div>
+    </div>
+  `;
+    }
+
+    mount() {
+        const userInfoEl = document.querySelector("#user-info");
+
+        API.get("/me")
+            .then((data: any) => {
+                console.log(data); // backend response
+                if (data?.success || data?.username) {
+                    const username = data.username || data.me?.username;
+                    const email = data.email || data.me?.email;
+                    userInfoEl!.innerHTML =
+                        `<p><strong>Logged in as:</strong> ${username} (${email})</p>`;
+                } else {
+                    userInfoEl!.innerHTML = `<p class="ui-error">Could not load user info.</p>`;
+                }
+            })
+            .catch((err: any) => {
+                console.error("[Dashboard] Failed to fetch /me:", err);
+                userInfoEl!.innerHTML = `<p class="ui-error">Error loading user info.</p>`;
+            });
     }
 }
+

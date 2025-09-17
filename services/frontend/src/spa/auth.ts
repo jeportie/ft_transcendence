@@ -19,3 +19,7 @@ export const auth = new AuthService({
     refreshFn: refreshToken,
     logger,
 });
+
+export function markHasSession() {
+    localStorage.setItem("hasSession", "true");
+}
