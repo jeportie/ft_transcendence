@@ -12,13 +12,26 @@
 
 import { getProvider } from "../../oauth/providers.js";
 import { loginUser } from "../../auth/service.js";
+import crypto from "crypto";
 
 export default async function oauthRoutes(app) {
 
     app.get("/auth/:provider/start", async (req, reply) => {
         const { provider } = req.params;
         const { next = "/dashboard" } = req.query || {};
+        const state = crypto.randomBytes(16).toString("hex");
 
+        // CSRF protection with random state
+        reply.setCookie(`oauth_state_${provider}`, state, {
+            path: `/api/auth/${provider}/callback`,
+            httpOnly: true,
+            sameSite: "lax",
+            maxAge: 10 * 60, // 10 min
+            secure: !!app.config.COOKIE_SECURE,
+            signed: true,
+        });
+
+        // Store next URL
         reply.setCookie(`oauth_next_${provider}`, String(next), {
             path: `/api/auth/${provider}`,
             httpOnly: true,
@@ -28,13 +41,23 @@ export default async function oauthRoutes(app) {
         });
 
         const p = getProvider(app, provider);
-        const url = p.getAuthUrl();
+        const url = p.getAuthUrl(state);
         reply.redirect(url);
     });
 
     app.get("/auth/:provider/callback", async (req, reply) => {
         const { provider } = req.params;
-        const { code } = req.query;
+        const { code, state } = req.query;
+
+        // Verify CSRF state
+        const cookieName = `oauth_state_${provider}`;
+        const raw = req.cookies?.[cookieName];
+        const { valid, value } = raw ? req.unsignCookie(raw) : { valid: false, value: null };
+        reply.clearCookie(cookieName, { path: `/api/auth/${provider}/callback` });
+
+        if (!valid || !value || !state || state !== value) {
+            return (reply.code(400).send({ success: false, error: "Invalid OAuth state" }));
+        }
 
         const p = getProvider(app, provider);
         const profile = await p.exchangeCode(code);
@@ -56,9 +79,9 @@ export default async function oauthRoutes(app) {
         await loginUser(app, user.email || user.username, null, req, reply, { skipPwd: true });
 
         // Read & clear the "next" cookie, then redirect back to the SPA
-        const cookieName = `oauth_next_${provider}`;
-        const next = req.cookies?.[cookieName] || "/dashboard";
-        reply.clearCookie(cookieName, { path: `/api/auth/${provider}` });
+        const nextCookie = `oauth_next_${provider}`;
+        const next = req.cookies?.[nextCookie] || "/dashboard";
+        reply.clearCookie(nextCookie, { path: `/api/auth/${provider}` });
 
         // Important: redirect so the browser leaves the JSON page
         reply.redirect(String(next));

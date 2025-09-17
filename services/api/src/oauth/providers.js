@@ -13,11 +13,13 @@
 import { OAuth2Client } from "google-auth-library";
 
 function googleGetAuthUrl(client, state) {
-    return client.generateAuthUrl({
+    const opts = {
         scope: ["openid", "email", "profile"],
         prompt: "select_account",
-        state, // can be undefined, caller decides
-    });
+    }
+    if (state)
+        opts.state = state;
+    return client.generateAuthUrl(opts);
 }
 
 async function googleExchangeCode(client, app, code) {
