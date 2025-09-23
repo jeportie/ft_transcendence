@@ -15,7 +15,7 @@ import statics from '@fastify/static';
 import cookie from '@fastify/cookie';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import config from './config.js';
+import config from './config/config.js';
 
 // Fastify Plugins
 import docs from "./plugins/docs.js";
