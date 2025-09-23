@@ -6,12 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:42:22 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/26 11:21:58 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 13:33:08 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractLayout } from "@jeportie/mini-spa";
 import { runParticle } from "../games/particles/particleAnimation";
+import landingLayoutHTML from "../html/landingLayout.html";
 
 export default class LandingLayout extends AbstractLayout {
     #cleanup?: () => void;
@@ -20,33 +21,7 @@ export default class LandingLayout extends AbstractLayout {
     #onPop?: () => void;
 
     async getHTML() {
-        return /*html*/ `
-        <section class="ui-hero">
-          <canvas id="hero-canvas" class="ui-hero-canvas"></canvas>
-        
-          <header class="ui-header">
-            <nav class="ui-nav">
-              <a href="/" data-link class="ui-brand">ft_transcendence</a>
-              <div class="flex items-center gap-3">
-                <a id="auth-toggle" href="/login" data-link class="ui-nav-link">Login</a>
-                <a href="/subscribe" data-link class="ui-nav-link">Subscribe</a>
-                <a href="/about" data-link class="ui-nav-link">About</a>
-                <a href="/docs" class="ui-nav-link">API</a>
-              </div>
-            </nav>
-          </header>
-        
-          <div id="modal-layer" class="ui-modal-layer">
-            <div data-router-outlet class="ui-modal-slot">
-              <!-- router-slot -->
-            </div>
-          </div>
-        
-          <div class="ui-footer-hint">
-            <p class="ui-footer-text">Move your mouse — particles follow. (Babylon later)</p>
-          </div>
-        </section>
-        `;
+        return (landingLayoutHTML);
     }
 
     mount() {

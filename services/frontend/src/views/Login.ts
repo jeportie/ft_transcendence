@@ -14,6 +14,7 @@
 import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
+import loginHTML from "../html/login.html";
 
 export default class Login extends AbstractView {
     constructor(ctx: any) {
@@ -23,28 +24,7 @@ export default class Login extends AbstractView {
     }
 
     async getHTML() {
-        return /*html*/ `
-            <div class="ui-card">
-              <h2 class="ui-card-title">Login</h2>
-              <form id="login-form" class="ui-form">
-                <input id="user-name" class="ui-input"
-                type="text"
-                placeholder="Username"
-                autocomplete="username"/>
-                <input id="user-pwd" class="ui-input"
-                type="password"
-                placeholder="Password"
-                autocomplete="current-password"/>
-                <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
-              </form>
-              <div id="login-error" class="ui-error hidden mt-2"></div>
-              <p class="ui-text-small mt-3">
-              <a href="/subscribe" data-link class="ui-hint-link">Subscribe</a> </p>
-              <button id="google-btn" class="ui-btn-secondary w-full mt-2">
-                Continue with Google
-              </button>
-            </div>
-        `;
+        return (loginHTML);
     }
 
     mount() {

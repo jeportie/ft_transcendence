@@ -6,49 +6,21 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:11:48 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 14:51:51 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 13:24:45 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractLayout } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
+import appLayoutHTML from "../html/appLayout.html";
 
 export default class AppLayout extends AbstractLayout {
     #onToggle?: (e: Event) => void;
     #open = true; // current state
 
     async getHTML() {
-        return /*html*/ `
-        <div id="app-layout" class="ui-app-layout">
-          <div class="ui-app-wrapper">
-            <aside id="app-sidebar" class="ui-sidebar">
-              <h2 class="ui-sidebar-title">Menu</h2>
-              <nav class="ui-sidebar-nav">
-                <a href="/dashboard" data-link class="ui-sidebar-link">Dashboard</a>
-                <a href="/posts"     data-link class="ui-sidebar-link">Posts</a>
-                <a href="/settings"  data-link class="ui-sidebar-link">Settings</a>
-                <a href="/game"      data-link class="ui-sidebar-link">Game</a>
-              </nav>
-              <button id="logout-btn" class="ui-sidebar-link">
-                Logout
-              </button>
-            </aside>
-    
-            <main class="ui-main">
-              <!-- router-slot -->
-            </main>
-          </div>
-    
-          <footer class="ui-footer">
-            <button id="sidebar-toggle"class="ui-footer-btn"
-              aria-controls="app-sidebar"
-              aria-expanded="true">
-              Hide sidebar
-            </button>
-          </footer>
-        </div>
-        `;
+        return (appLayoutHTML);
     }
 
     mount() {

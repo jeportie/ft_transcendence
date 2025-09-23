@@ -6,11 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 19:19:28 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 14:16:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 13:51:57 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
+import settingsHTML from "../html/settings.html";
 
 export default class Settings extends AbstractView {
     constructor(ctx: any) {
@@ -19,27 +20,7 @@ export default class Settings extends AbstractView {
     };
 
     async getHTML() {
-        return /*html*/ `
-        <h1 class="ui-title">Settings</h1>
-        <div class="ui-card">
-          <form id="settings-form" class="ui-form-lg">
-            <div>
-              <label for="name" class="ui-label">Display name</label>
-              <input id="name" name="name" type="text" placeholder="Your name" class="ui-input" />
-            </div>
-    
-            <div>
-              <label for="theme" class="ui-label">Theme</label>
-              <select id="theme" name="theme" class="ui-input">
-                <option value="dark">Dark</option>
-                <option value="light">Light</option>
-              </select>
-            </div>
-    
-            <button type="submit" class="ui-btn-primary">Save</button>
-          </form>
-        </div>
-        `;
+        return (settingsHTML);
     }
 
     mount() {

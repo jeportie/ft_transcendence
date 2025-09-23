@@ -1,0 +1,37 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- landingLayout.html                                 :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/09/23 13:31:47 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/09/23 13:33:33 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<section class="ui-hero">
+    <canvas id="hero-canvas" class="ui-hero-canvas"></canvas>
+
+    <header class="ui-header">
+        <nav class="ui-nav">
+            <a href="/" data-link class="ui-brand">ft_transcendence</a>
+            <div class="flex items-center gap-3">
+                <a id="auth-toggle" href="/login" data-link class="ui-nav-link">Login</a>
+                <a href="/subscribe" data-link class="ui-nav-link">Subscribe</a>
+                <a href="/about" data-link class="ui-nav-link">About</a>
+                <a href="/docs" class="ui-nav-link">API</a>
+            </div>
+        </nav>
+    </header>
+
+    <div id="modal-layer" class="ui-modal-layer">
+        <div data-router-outlet class="ui-modal-slot">
+            <!-- router-slot -->
+        </div>
+    </div>
+
+    <div class="ui-footer-hint">
+        <p class="ui-footer-text">Move your mouse — particles follow. (Babylon later)</p>
+    </div>
+</section>

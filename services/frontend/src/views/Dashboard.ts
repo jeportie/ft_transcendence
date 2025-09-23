@@ -6,12 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 18:39:16 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 14:43:19 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 13:26:45 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
+import dashboardHTML from "../html/dashboard.html";
 
 export default class Dashboard extends AbstractView {
     constructor(ctx: any) {
@@ -20,13 +21,7 @@ export default class Dashboard extends AbstractView {
     };
 
     getHTML() {
-        return /*html*/ `
-    <h1 class="ui-title">Dashboard</h1>
-    <div class="ui-card">
-      <p class="ui-text-muted">Welcome to your SPA dashboard!</p>
-      <div id="user-info" class="mt-2 ui-text-small">Loading user info...</div>
-    </div>
-  `;
+        return (dashboardHTML);
     }
 
     mount() {

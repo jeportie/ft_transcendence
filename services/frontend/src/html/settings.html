@@ -1,0 +1,31 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- settings.html                                      :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/09/23 13:44:47 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/09/23 13:51:58 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<h1 class="ui-title">Settings</h1>
+<div class="ui-card">
+    <form id="settings-form" class="ui-form-lg">
+        <div>
+            <label for="name" class="ui-label">Display name</label>
+            <input id="name" name="name" type="text" placeholder="Your name" class="ui-input" />
+        </div>
+
+        <div>
+            <label for="theme" class="ui-label">Theme</label>
+            <select id="theme" name="theme" class="ui-input">
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+            </select>
+        </div>
+
+        <button type="submit" class="ui-btn-primary">Save</button>
+    </form>
+</div>

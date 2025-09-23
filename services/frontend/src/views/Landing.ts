@@ -6,11 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:42:22 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/25 18:53:33 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 13:31:11 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
+import landingHTML from "../html/landing.html"
 
 export default class Landing extends AbstractView {
     constructor(ctx: any) {
@@ -19,7 +20,7 @@ export default class Landing extends AbstractView {
     }
 
     async getHTML() {
-        return /*html*/ ``;
+        return (landingHTML);
     }
 
     // mount() {

@@ -6,13 +6,14 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/19 19:15:00 by jeportie          #+#    #+#             //
-//   Updated: 2025/08/22 14:15:25 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 13:28:27 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
 import { Rect } from "@jeportie/lib2d";
 import PongGame from "../games/pong/PongGame.js";
+import gameHTML from "../html/game.html";
 
 export default class Game extends AbstractView {
 
@@ -22,21 +23,7 @@ export default class Game extends AbstractView {
     }
 
     async getHTML() {
-        return /*html*/ `
-        <h1 class="ui-title">Pong</h1>
-    
-        <div class="ui-card">
-          <div class="ui-card-inner">
-            <canvas id="gameCanvas" width="800" height="600" class="ui-canvas"></canvas>
-            <div class="flex gap-2">
-              <button id="start-button" class="ui-btn-primary">Start</button>
-              <button id="stop-button"  class="ui-btn-secondary">Stop</button>
-            </div>
-            <p class="ui-text-small">Controls Left Player: w ↑ / s ↓</p>
-            <p class="ui-text-small">Controls Right Player: Arrow ↑ / Arrow ↓</p>
-          </div>
-        </div>
-        `;
+        return (gameHTML);
     }
 
     mount() {
