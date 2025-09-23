@@ -13,7 +13,7 @@
 import crypto from "crypto";
 import { getProvider } from "./providers.js";
 
-export async function startOAuth(app, provider, next, reply) {
+export function startOAuth(app, provider, next, reply) {
     const state = crypto.randomBytes(16).toString("hex");
 
     // CSRF protection with random state

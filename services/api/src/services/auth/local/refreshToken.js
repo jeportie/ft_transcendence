@@ -11,6 +11,7 @@
 // ************************************************************************** //
 
 import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
+import { setRefreshCookie } from "../cookie.js";
 
 export async function refreshToken(app, request, reply) {
     const name = app.config.COOKIE_NAME_RT;

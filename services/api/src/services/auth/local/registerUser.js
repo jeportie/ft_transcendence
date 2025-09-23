@@ -22,7 +22,7 @@ export async function registerUser(app, username, email, pwd) {
         email
     );
     if (exists) {
-        return reply.code(400).send({
+        return ({
             success: false,
             error: "Username or email already exists"
         });

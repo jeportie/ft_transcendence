@@ -11,6 +11,7 @@
 // ************************************************************************** //
 
 import { adminUsersSchema } from "../../schemas/adminUsersSchema.js";
+import { listUsers } from "../../services/user/admin.js";
 
 export default async function(app) {
     app.get("/users",

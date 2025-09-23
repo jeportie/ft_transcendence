@@ -10,6 +10,9 @@
 //                                                                            //
 // ************************************************************************** //
 
+import { hashToken } from "../tokens.js";
+import { clearRefreshCookie } from "../cookie.js";
+
 export async function logoutUser(app, request, reply) {
     const name = app.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];

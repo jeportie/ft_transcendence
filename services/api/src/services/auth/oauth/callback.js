@@ -11,13 +11,13 @@
 // ************************************************************************** //
 
 import { getProvider } from "./providers.js";
-import { loginUser } from "./local/loginUser.js";
+import { loginUser } from "../local/loginUser.js";
 
 export async function handleOAuthCallback(app, provider, code, state, cookies, reply) {
     // Verify CSRF state
     const cookieName = `oauth_state_${provider}`;
-    const raw = req.cookies?.[cookieName];
-    const { valid, value } = raw ? req.unsignCookie(raw) : { valid: false, value: null };
+    const raw = cookies?.[cookieName];
+    const { valid, value } = raw ? reply.unsignCookie(raw) : { valid: false, value: null };
     reply.clearCookie(cookieName, { path: `/api/auth/${provider}/callback` });
 
     if (!valid || !value || !state || state !== value) {
@@ -41,7 +41,7 @@ export async function handleOAuthCallback(app, provider, code, state, cookies, r
     }
 
     // Issue your tokens, skipping password
-    await loginUser(app, user.email || user.username, null, req, reply, { skipPwd: true });
+    await loginUser(app, user.email || user.username, null, null, reply, { skipPwd: true });
 
     // Read & clear the "next" cookie, then redirect back to the SPA
     const nextCookie = `oauth_next_${provider}`;
