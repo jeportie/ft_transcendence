@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:48:43 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/10 17:27:44 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 14:50:23 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -25,8 +25,9 @@ export default async function(app) {
     });
 
     app.post("/register", { schema: registerSchema }, async (req, reply) => {
-        // TODO: actually insert into DB + hash password
-        reply.send({ success: true, user: req.body.username, role: "player" });
+        const data = await registerUser(app, req.body?.user, req.body?.email, req.body?.pwd, req, reply);
+        if (data)
+            reply.send(data);
     });
 
     app.post("/refresh", { schema: refreshSchema }, async (req, reply) => {
