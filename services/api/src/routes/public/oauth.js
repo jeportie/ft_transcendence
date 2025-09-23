@@ -25,7 +25,7 @@ export default async function oauthRoutes(app) {
     app.get("/auth/:provider/callback", async (req, reply) => {
         const { provider } = req.params;
         const { code, state } = req.query;
-        const result = await handleOAuthCallback(app, provider, code, state, req.cookies, reply);
+        const result = await handleOAuthCallback(app, provider, code, state, req, reply);
 
         if (!result.success) {
             return (reply.code(result.status || 400).send(result));
@@ -36,7 +36,7 @@ export default async function oauthRoutes(app) {
         return reply.type("text/html").send(`
           <script>
             localStorage.setItem("hasSession", "true");
-            window.location.href = "${String(next)}";
+            window.location.href = "${result.redirect}";
           </script>
         `);
     });
