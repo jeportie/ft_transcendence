@@ -5,18 +5,19 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/05 16:27:47 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/23 15:21:13 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/23 15:14:55 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/23 15:21:22 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { meSchema } from "../../schemas/meSchema.js";
-import { getMe } from "../../services/user/me.js";
-
-export default async function(app) {
-    app.get("/me", { schema: meSchema, preHandler: [app.authenticate], },
-        async (request) => {
-            const data = await getMe(app, request.user);
-            return (data);
-        });
-};
+export async function getMe(app, claims) {
+    const db = await app.getDb();
+    const me = await db.get(
+        "SELECT id, username, email, role, created_at FROM users WHERE id = ?",
+        Number(claims.sub)
+    );
+    return ({
+        success: true,
+        me: me || claims,
+    });
+}

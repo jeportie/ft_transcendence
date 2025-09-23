@@ -12,7 +12,7 @@
 
 import { hashPassword } from "../password.js";
 
-export async function loginUser(app, user, email, pwd, request, reply, opts = {}) {
+export async function registerUser(app, username, email, pwd) {
     const db = await app.getDb();
 
     // Check duplicates
@@ -40,10 +40,10 @@ export async function loginUser(app, user, email, pwd, request, reply, opts = {}
         "player"
     );
 
-    return reply.send({
+    return ({
         success: true,
         user: username,
-        role: "player"
+        role: "player",
+        id: result.lastID
     });
 };
-

@@ -1,22 +1,22 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   me.js                                              :+:      :+:    :+:   //
+//   health.js                                          :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/05 16:27:47 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/23 15:21:13 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/23 15:08:22 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/23 15:09:44 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { meSchema } from "../../schemas/meSchema.js";
-import { getMe } from "../../services/user/me.js";
-
-export default async function(app) {
-    app.get("/me", { schema: meSchema, preHandler: [app.authenticate], },
-        async (request) => {
-            const data = await getMe(app, request.user);
-            return (data);
-        });
-};
+export async function getHealth(app) {
+    const db = await app.getDb();
+    const row = await db.get(
+        'SELECT status, updated_at FROM health WHERE id = 1'
+    );
+    return {
+        status: row?.status ?? "unknown",
+        updated_at: row?.updated_at ?? null
+    };
+}

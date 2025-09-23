@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/05 16:31:56 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/10 22:44:55 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 15:24:38 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,10 +19,7 @@ export default async function(app) {
             preHandler: [app.authorize("admin")],
         },
         async () => {
-            const db = await app.getDb();
-            const rows = await db.all(
-                "SELECT id, username, email, role, created_at FROM users ORDER BY id"
-            );
-            return { success: true, users: rows };
+            const data = await listUsers(app);
+            return (data);
         });
 };

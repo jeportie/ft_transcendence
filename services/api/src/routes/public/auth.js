@@ -10,7 +10,11 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loginUser, refreshToken, logoutUser } from "../../auth/service.js";
+import { refreshToken } from "../../services/auth/local/refreshToken.js";
+import { logoutUser } from "../../services/auth/local/logoutUser.js";
+import { loginUser } from "../../services/auth/local/loginUser.js";
+import { registerUser } from "../../services/auth/local/registerUser.js";
+
 import { loginSchema } from "../../schemas/loginSchema.js";
 import { registerSchema } from "../../schemas/registerSchema.js";
 import { refreshSchema } from "../../schemas/refreshSchema.js";
@@ -25,9 +29,10 @@ export default async function(app) {
     });
 
     app.post("/register", { schema: registerSchema }, async (req, reply) => {
-        const data = await registerUser(app, req.body?.user, req.body?.email, req.body?.pwd, req, reply);
-        if (data)
-            reply.send(data);
+        const data = await registerUser(app, req.body?.username, req.body?.email, req.body?.pwd);
+        if (!data.success)
+            return (reply.code(400).send(data));
+        reply.send(data);
     });
 
     app.post("/refresh", { schema: refreshSchema }, async (req, reply) => {

@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { hashPassword } from "../auth/password.js";
+import { hashPassword } from "../services/auth/password.js";
 
 export async function ensureDemoUserHashed(db) {
     const row = await db.get(
