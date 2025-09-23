@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/15 13:59:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 14:11:18 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,20 +14,22 @@ import TailwindAnimationHook from "../styles/transitions/hooks/TailwindAnimation
 import OverlayAnimationHook from "../styles/transitions/hooks/OverlayAnimationHook.js";
 import { guards } from "./guards.js";
 
+// Lazy layout
+const LandingLayout = () => import("../views/LandingLayout.ts");
 // Lazy views 
 const Landing = () => import("../views/Landing.ts");
 const Login = () => import("../views/Login.ts");
+const Subscribe = () => import("../views/Subscribe.ts");
 
+// Lazy layout
+const AppLayout = () => import("../views/AppLayout.ts");
+// Lazy views 
 const Dashboard = () => import("../views/Dashboard.ts");
 const Settings = () => import("../views/Settings.ts");
 const Posts = () => import("../views/Posts.ts");
 const PostShow = () => import("../views/PostShow.ts");
 const Game = () => import("../views/Game.ts");
 const NotFound = () => import("../views/NotFound.ts");
-
-// Lazy layout
-const AppLayout = () => import("../views/AppLayout.ts");
-const LandingLayout = () => import("../views/LandingLayout.ts");
 
 export const routes = [
     {
@@ -37,6 +39,7 @@ export const routes = [
         children: [
             { path: "", component: Landing },
             { path: "login", component: Login },
+            { path: "subscribe", component: Subscribe },
         ]
     },
     {
