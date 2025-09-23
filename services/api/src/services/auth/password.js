@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/04 18:18:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 18:27:37 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/23 14:40:07 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,10 +24,3 @@ export async function verifyPassword(hash, plain) {
         return (false);
     }
 }
-
-// const password = "Jerome";
-// console.log(password);
-// const hashed = await hashPassword(password);
-// console.log(hashed);
-// console.log(await verifyPassword(hashed, password));
-// console.log(await verifyPassword(hashed, "dub"));
