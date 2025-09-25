@@ -13,6 +13,6 @@
 import fp from "fastify-plugin";
 import { healthRoutes } from "./handler/health.handler.js";
 
-export default fp(async function systemPlugin(app) {
-    await app.register(healthRoutes, { prefix: "/api/system" });
+export default fp(async function systemPlugin(fastify) {
+    await fastify.register(healthRoutes, { prefix: "/api/system" });
 });

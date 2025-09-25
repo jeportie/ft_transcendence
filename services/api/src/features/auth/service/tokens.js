@@ -1,20 +1,27 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   plugin.js                                          :+:      :+:    :+:   //
+//   tokens.js                                          :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/25 14:31:49 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 18:49:26 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/08 18:09:19 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/08 18:14:46 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import fp from "fastify-plugin";
-import { userRoutes } from "./handler/user.handler.js";
-import { adminRoutes } from "./handler/admin.handler.js";
+import crypto from "crypto";
 
-export default fp(async function systemPlugin(fastify) {
-    await fastify.register(userRoutes, { prefix: "/api/user" });
-    await fastify.register(adminRoutes, { prefix: "/api/admin" });
-});
+export function generateRefreshToken() {
+    return (crypto.randomBytes(32).toString("hex"));
+}
+
+export function hashToken(token) {
+    return (crypto.createHash("sha256").update(token, "utf8").digest("hex"));
+}
+
+export function addDaysUTC(days) {
+    const d = new Date();
+    d.setUTCDate(d.getUTCDate() + days);
+    return (d.toISOString().replace(/\.\d{3}Z$/, "Z"));
+}
