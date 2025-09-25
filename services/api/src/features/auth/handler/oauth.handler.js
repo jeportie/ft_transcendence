@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import * as controller from "../controller/local.controller.js";
+import * as controller from "../controller/oauth.controller.js";
 import { startSchema } from "../schema/startSchema.js";
 import { callbackSchema } from "../schema/callbackSchema.js";
 

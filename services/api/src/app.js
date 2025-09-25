@@ -26,9 +26,7 @@ import dbPlugin from "./plugins/db.js";
 // Features Plugins
 import systemPlugin from "./features/system/plugin.js";
 import userPlugin from "./features/user/plugin.js";
-// Old Plugins
-import publicRoutes from "./plugins/public.js";
-import privateRoutes from "./plugins/private.js";
+import authPlugin from "./features/auth/plugin.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -57,9 +55,7 @@ export async function buildApp() {
     // Features API
     await fastify.register(systemPlugin);
     await fastify.register(userPlugin);
-    // Old
-    await fastify.register(publicRoutes);
-    await fastify.register(privateRoutes);
+    await fastify.register(authPlugin);
 
     // Serve statics
     await fastify.register(statics, {

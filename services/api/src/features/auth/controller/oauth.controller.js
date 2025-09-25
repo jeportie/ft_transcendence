@@ -13,11 +13,11 @@
 import { startOAuth } from "../service/oauth/start.js";
 import { handleOAuthCallback } from "../service/oauth/callback.js";
 
-export async function startOauth(req, reply) {
+export async function startOAuth(req, reply) {
     const { provider } = req.params;
     const { next = "/dashboard" } = req.query || {};
 
-    const url = await startOAuth(req.server, provider, next, reply);
+    const url = startOAuth(req.server, provider, next, reply);
     if (!url)
         return (reply.code(404).send({ message: "cannot start OAuth" }));
     reply.redirect(url);
