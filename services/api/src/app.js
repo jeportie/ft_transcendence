@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:10:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/16 17:57:21 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/25 14:37:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -22,6 +22,10 @@ import docs from "./plugins/docs.js";
 import security from "./plugins/security.js";
 import jwtPlugin from "./plugins/jwt.js";
 import dbPlugin from "./plugins/db.js";
+
+// Features Plugins
+import systemPlugin from "./features/system/plugin.js";
+// Old Plugins
 import publicRoutes from "./plugins/public.js";
 import privateRoutes from "./plugins/private.js";
 
@@ -49,7 +53,9 @@ export async function buildApp() {
     await fastify.register(jwtPlugin);
     await fastify.register(dbPlugin);
 
-    // API
+    // Features API
+    await fastify.register(systemPlugin);
+    // Old
     await fastify.register(publicRoutes);
     await fastify.register(privateRoutes);
 

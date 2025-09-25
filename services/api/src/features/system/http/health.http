@@ -1,0 +1,2 @@
+### GET HEALTH
+GET http://localhost:5000/api/system/health HTTP/1.1
