@@ -14,7 +14,7 @@ import fp from "fastify-plugin";
 import { localRoutes } from "./handler/local.handler.js";
 import { oauthRoutes } from "./handler/oauth.handler.js";
 
-export default fp(async function systemPlugin(app) {
-    await app.register(userRoutes, { prefix: "/api/user" });
-    await app.register(adminRoutes, { prefix: "/api/admin" });
+export default fp(async function systemPlugin(fastify) {
+    await fastify.register(localRoutes, { prefix: "/api/auth" });
+    await fastify.register(oauthRoutes, { prefix: "/api/auth" });
 });
