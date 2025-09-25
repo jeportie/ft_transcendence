@@ -6,18 +6,17 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 19:36:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 19:51:43 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/25 22:12:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { startOAuth } from "../service/oauth/start.js";
-import { handleOAuthCallback } from "../service/oauth/callback.js";
+import * as oauthService from "../service/oauth/index.js";
 
 export async function startOAuth(req, reply) {
     const { provider } = req.params;
     const { next = "/dashboard" } = req.query || {};
 
-    const url = startOAuth(req.server, provider, next, reply);
+    const url = oauthService.startOAuth(req.server, provider, next, reply);
     if (!url)
         return (reply.code(404).send({ message: "cannot start OAuth" }));
     reply.redirect(url);
@@ -26,7 +25,7 @@ export async function startOAuth(req, reply) {
 export async function handleOAuth(req, reply) {
     const { provider } = req.params;
     const { code, state } = req.query;
-    const data = await handleOAuthCallback(req.server, provider, code, state, req, reply);
+    const data = await oauthService.handleOAuthCallback(req.server, provider, code, state, req, reply);
 
     if (!data.success) {
         return (reply.code(data.status || 400).send(data));
