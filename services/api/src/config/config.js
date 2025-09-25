@@ -13,7 +13,7 @@
 import { asNumber, asBool, asString, requireString } from "./envParser.js";
 import * as dotenv from "dotenv";
 
-const result = dotenv.config({ path: ".env.local" });
+const result = dotenv.config({ path: "../.env.local" });
 
 const NODE_ENV = asString(process.env.NODE_ENV, "development");
 const IS_PROD = NODE_ENV === "production";

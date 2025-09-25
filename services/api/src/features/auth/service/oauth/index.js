@@ -10,5 +10,5 @@
 //                                                                            //
 // ************************************************************************** //
 
-export { startOAuth } from "../service/oauth/start.js";
-export { handleOAuthCallback } from "../service/oauth/callback.js";
+export { startOAuth } from "./start.js";
+export { handleOAuthCallback } from "./callback.js";
