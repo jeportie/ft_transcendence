@@ -15,12 +15,12 @@ import { getDb } from "./db/connection.js";
 import { runMigrations } from "./db/migrations.js";
 import { ensureDemoUserHashed } from "./db/hashDemoUserPwd.js";
 
-const fastify = await buildApp();
+const app = await buildApp();
 const db = await getDb();
 await runMigrations(db);
 await ensureDemoUserHashed(db);
 
-const { HOST, PORT, NODE_ENV } = fastify.config;
+const { HOST, PORT, NODE_ENV } = app.config;
 
-await fastify.listen({ host: HOST, port: PORT });
+await app.listen({ host: HOST, port: PORT });
 console.log(`[API] server listening on ${HOST}:${PORT} (env=${NODE_ENV})`);
