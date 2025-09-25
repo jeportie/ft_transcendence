@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import * as controller from "../controller/health.contoller.js";
+import * as controller from "../controller/health.controller.js";
 import { healthSchema } from "../schema/healthSchema.js";
 
 export async function healthRoutes(fastify, options) {

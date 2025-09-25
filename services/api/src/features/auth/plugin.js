@@ -28,7 +28,7 @@ export default fp(async function authPlugin(fastify) {
             }),
         });
 
-        await authScoped.register(localRoutes, { prefix: "/api/auth" });
-        await authScoped.register(oauthRoutes, { prefix: "/api/auth" });
-    });
+        await authScoped.register(localRoutes);
+        await authScoped.register(oauthRoutes);
+    }, { prefix: "/api/auth" });
 });

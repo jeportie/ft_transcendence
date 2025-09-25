@@ -12,7 +12,7 @@
 
 import * as service from "../service/admin.service.js";
 
-export async function getMe(req, reply) {
+export async function getUsers(req, reply) {
     const data = await service.getUsers(req.server);
     if (!data)
         return (reply.code(404).send({ message: "list of users is empty" }));

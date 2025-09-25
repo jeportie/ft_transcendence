@@ -17,7 +17,7 @@ export async function adminRoutes(fastify, options) {
 
     fastify.get(
         "/users",
-        { schema: adminSchema, preHandler: [fastify.authorize("admin")] },
+        { schema: usersSchema, preHandler: [fastify.authorize("admin")] },
         controller.getUsers
     );
 
