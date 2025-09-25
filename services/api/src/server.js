@@ -24,5 +24,3 @@ const { HOST, PORT, NODE_ENV } = app.config;
 
 await app.listen({ host: HOST, port: PORT });
 console.log(`[API] server listening on ${HOST}:${PORT} (env=${NODE_ENV})`);
-console.log(app.config.GOOGLE_CLIENT_ID, "Google client ID");
-console.log(app.config.GOOGLE_CLIENT_SECRET, "Google client secret");
