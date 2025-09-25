@@ -1,20 +1,22 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   health.handler.js                                  :+:      :+:    :+:   //
+//   health.js                                          :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/02 17:43:14 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 11:25:34 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/23 15:08:22 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/23 15:09:44 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import * as controller from "../controller/health.contoller.js";
-import * as schema from "../schema/health.schema.js";
-
-export async function healthRoutes(fastify, options) {
-
-    fastify.get('/health', { schema: schema.healthSchema }, controller.getHealth);
-
-};
+export async function getHealth(app) {
+    const db = await app.getDb();
+    const row = await db.get(
+        'SELECT status, updated_at FROM health WHERE id = 1'
+    );
+    return {
+        status: row?.status ?? "unknown",
+        updated_at: row?.updated_at ?? null
+    };
+}
