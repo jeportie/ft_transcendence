@@ -14,8 +14,10 @@ import { verifyPassword } from "../password.js";
 import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
 import { setRefreshCookie, clearRefreshCookie } from "../cookie.js";
 
-export async function loginUser(app, user, pwd, request, reply, opts = {}) {
+export async function loginUser(fastify, request, reply, opts = {}) {
     const skipPwd = Boolean(opts.skipPwd);
+    user = req.body?.user;
+    pwd = req.body?.pwd;
 
     if (!user || (!skipPwd && !pwd))
         return (reply.code(400).send({
@@ -23,7 +25,7 @@ export async function loginUser(app, user, pwd, request, reply, opts = {}) {
             error: "Missing credentials",
         }));
 
-    const db = await app.getDb();
+    const db = await fastify.getDb();
     const row = await db.get(
         `SELECT id, username, email, password_hash, role
              FROM    users
@@ -34,7 +36,7 @@ export async function loginUser(app, user, pwd, request, reply, opts = {}) {
     );
 
     if (!row) {
-        app.log.warn(`[Auth] Failed login attempt for user/email: ${user}`);
+        fastify.log.warn(`[Auth] Failed login attempt for user/email: ${user}`);
         return (reply.code(401).send({
             success: false,
             message: "Invalid credentials"
@@ -44,7 +46,7 @@ export async function loginUser(app, user, pwd, request, reply, opts = {}) {
     if (!skipPwd) {
         const ok = await verifyPassword(row.password_hash, pwd);
         if (!ok) {
-            app.log.warn(`[Auth] Invalid password for user/email: ${user}`);
+            fastify.log.warn(`[Auth] Invalid password for user/email: ${user}`);
             return (reply.code(401).send({
                 success: false,
                 message: "Invalid credentials"
@@ -53,7 +55,7 @@ export async function loginUser(app, user, pwd, request, reply, opts = {}) {
     }
 
     // Access Token
-    const accessToken = app.jwt.sign({
+    const accessToken = fastify.jwt.sign({
         sub: String(row.id),
         username: row.username,
         role: row.role,
@@ -62,7 +64,7 @@ export async function loginUser(app, user, pwd, request, reply, opts = {}) {
     // Refresh Token
     const raw = generateRefreshToken();
     const hash = hashToken(raw);
-    const expiresAt = addDaysUTC(app.config.REFRESH_TOKEN_TTL_DAYS);
+    const expiresAt = addDaysUTC(fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
     await db.run(
         `INSERT INTO refresh_tokens (
@@ -79,15 +81,15 @@ export async function loginUser(app, user, pwd, request, reply, opts = {}) {
         expiresAt,
     );
 
-    clearRefreshCookie(app, reply);
-    setRefreshCookie(app, reply, raw, app.config.REFRESH_TOKEN_TTL_DAYS);
+    clearRefreshCookie(fastify, reply);
+    setRefreshCookie(fastify, reply, raw, fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
     return ({
         success: true,
         user: row.username,
         role: row.role,
         token: accessToken,
-        exp: app.config.ACCESS_TOKEN_TTL,
+        exp: fastify.config.ACCESS_TOKEN_TTL,
     });
 };
 

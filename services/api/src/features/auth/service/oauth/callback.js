@@ -13,21 +13,21 @@
 import { getProvider } from "./providers.js";
 import { loginUser } from "../local/loginUser.js";
 
-export async function handleOAuthCallback(app, provider, code, state, require, reply) {
+export async function handleOAuthCallback(fastify, provider, code, state, request, reply) {
     // Verify CSRF state
     const cookieName = `oauth_state_${provider}`;
-    const raw = require.cookies?.[cookieName];
-    const { valid, value } = raw ? require.unsignCookie(raw) : { valid: false, value: null };
+    const raw = request.cookies?.[cookieName];
+    const { valid, value } = raw ? request.unsignCookie(raw) : { valid: false, value: null };
     reply.clearCookie(cookieName, { path: `/api/auth/${provider}/callback` });
 
     if (!valid || !value || !state || state !== value) {
         return (reply.code(400).send({ success: false, error: "Invalid OAuth state" }));
     }
 
-    const p = getProvider(app, provider);
+    const p = getProvider(fastify, provider);
     const profile = await p.exchangeCode(code);
 
-    const db = await app.getDb();
+    const db = await fastify.getDb();
     let user = await db.get("SELECT * FROM users WHERE email = ?", profile.email);
     if (!user) {
         const r = await db.run(
@@ -41,11 +41,11 @@ export async function handleOAuthCallback(app, provider, code, state, require, r
     }
 
     // Issue your tokens, skipping password
-    await loginUser(app, user.email || user.username, null, require, reply, { skipPwd: true });
+    await loginUser(fastify, user.email || user.username, null, request, reply, { skipPwd: true });
 
     // Read & clear the "next" cookie, then redirect back to the SPA
     const nextCookie = `oauth_next_${provider}`;
-    const next = require.cookies?.[nextCookie] || "/dashboard";
+    const next = request.cookies?.[nextCookie] || "/dashboard";
     reply.clearCookie(nextCookie, { path: `/api/auth/${provider}` });
     return ({ success: true, redirect: String(next) });
 }

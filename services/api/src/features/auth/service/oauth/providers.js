@@ -22,11 +22,11 @@ function googleGetAuthUrl(client, state) {
     return client.generateAuthUrl(opts);
 }
 
-async function googleExchangeCode(client, app, code) {
+async function googleExchangeCode(client, fastify, code) {
     const { tokens } = await client.getToken(code);
     const ticket = await client.verifyIdToken({
         idToken: tokens.id_token,
-        audience: app.config.GOOGLE_CLIENT_ID,
+        audience: fastify.config.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload() || {};
     const {
@@ -41,20 +41,20 @@ async function googleExchangeCode(client, app, code) {
     return { sub, email, email_verified, name, picture, hd };
 }
 
-export function makeGoogleProvider(app) {
+export function makeGoogleProvider(fastify) {
     const client = new OAuth2Client({
-        clientId: app.config.GOOGLE_CLIENT_ID,
-        clientSecret: app.config.GOOGLE_CLIENT_SECRET,
-        redirectUri: app.config.GOOGLE_REDIRECT_URI,
+        clientId: fastify.config.GOOGLE_CLIENT_ID,
+        clientSecret: fastify.config.GOOGLE_CLIENT_SECRET,
+        redirectUri: fastify.config.GOOGLE_REDIRECT_URI,
     });
 
     return {
         getAuthUrl: (state) => googleGetAuthUrl(client, state),
-        exchangeCode: (code) => googleExchangeCode(client, app, code),
+        exchangeCode: (code) => googleExchangeCode(client, fastify, code),
     };
 }
 
-export function getProvider(app, name) {
-    if (name === "google") return makeGoogleProvider(app);
+export function getProvider(fastify, name) {
+    if (name === "google") return makeGoogleProvider(fastify);
     throw new Error(`Unknown provider: ${name}`);
 }

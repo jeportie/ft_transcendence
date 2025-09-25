@@ -13,6 +13,6 @@
 import { getDb } from "../db/connection.js";
 import fp from "fastify-plugin";
 
-export default fp(async function dbPlugin(app) {
-    app.decorate("getDb", getDb);
+export default fp(async function dbPlugin(fastify) {
+    fastify.decorate("getDb", getDb);
 });

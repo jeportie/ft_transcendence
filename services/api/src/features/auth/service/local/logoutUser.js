@@ -13,17 +13,17 @@
 import { hashToken } from "../tokens.js";
 import { clearRefreshCookie } from "../cookie.js";
 
-export async function logoutUser(app, request, reply) {
-    const name = app.config.COOKIE_NAME_RT;
+export async function logoutUser(fastify, request, reply) {
+    const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];
     if (rawSigned) {
         const { valid, value: raw } = request.unsignCookie(rawSigned);
         if (valid && raw) {
             const hash = hashToken(raw);
-            const db = await app.getDb();
+            const db = await fastify.getDb();
             await db.run(`DELETE FROM refresh_tokens WHERE token_hash = ?`, hash);
         }
     }
-    clearRefreshCookie(app, reply);
+    clearRefreshCookie(fastify, reply);
     return { success: true };
 }

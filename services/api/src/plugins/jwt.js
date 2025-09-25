@@ -13,18 +13,18 @@
 import fp from "fastify-plugin";
 import fastifyJwt from "@fastify/jwt";
 
-export default fp(async function jwtPlugin(app) {
-    const conf = app.config;
+export default fp(async function jwtPlugin(fastify) {
+    const conf = fastify.config;
 
     // Register @fastify/jwt with pwd from env
-    await app.register(fastifyJwt, {
+    await fastify.register(fastifyJwt, {
         secret: conf.JWT_SECRET,
         sign: {
             expiresIn: conf.ACCESS_TOKEN_TTL,
         },
     });
 
-    app.decorate("authenticate", async function(request, reply) {
+    fastify.decorate("authenticate", async function(request, reply) {
         try {
             await request.jwtVerify();
         } catch (err) {
@@ -35,7 +35,7 @@ export default fp(async function jwtPlugin(app) {
         }
     });
 
-    app.decorate("authorize", function(...roles) {
+    fastify.decorate("authorize", function(...roles) {
         const required = roles.flat().filter(Boolean);
         return (async function(request, reply) {
             if (!request.user) {

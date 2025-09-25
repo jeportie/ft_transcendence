@@ -13,17 +13,17 @@
 import fp from "fastify-plugin";
 import cors from "@fastify/cors";
 
-export default fp(async function security(app) {
-    const config = app.config;
+export default fp(async function security(fastify) {
+    const config = fastify.config;
     const origin = config.CORS_ORIGIN?.trim();
 
-    await app.register(cors, {
+    await fastify.register(cors, {
         origin: origin || false,
         credentials: true,
     });
 
     // Minimal hardening headers (helmet-like things come later if you want)
-    app.addHook("onSend", async (_req, reply, payload) => {
+    fastify.addHook("onSend", async (_req, reply, payload) => {
         reply.header("X-Content-Type-Options", "nosniff");
         reply.header("X-Frame-Options", "SAMEORIGIN");
         reply.header("X-XSS-Protection", "0");

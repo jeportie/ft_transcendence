@@ -12,8 +12,8 @@
 
 const ALL_CLEAR_PATHS = ["/api/auth", "/api", "/"]; // most specific first
 
-function resolveCookieOptions(app, days) {
-    const conf = app.config;
+function resolveCookieOptions(fastify, days) {
+    const conf = fastify.config;
 
     // Enforce secure when SameSite=None (browser requirement)
     const sameSite = (conf.COOKIE_SAMESITE || "lax").toLowerCase(); // "lax" | "none" | "strict"
@@ -38,15 +38,15 @@ function resolveCookieOptions(app, days) {
     };
 }
 
-export function setRefreshCookie(app, reply, rawToken, days) {
-    const conf = app.config;
-    const opts = resolveCookieOptions(app, days);
+export function setRefreshCookie(fastify, reply, rawToken, days) {
+    const conf = fastify.config;
+    const opts = resolveCookieOptions(fastify, days);
 
     reply.setCookie(conf.COOKIE_NAME_RT, rawToken, opts);
 }
 
-export function clearRefreshCookie(app, reply) {
-    const conf = app.config;
+export function clearRefreshCookie(fastify, reply) {
+    const conf = fastify.config;
 
     // Clear using the *same* attributes (path/domain) used when setting.
     for (const p of ALL_CLEAR_PATHS) {

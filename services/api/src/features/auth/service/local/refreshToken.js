@@ -13,8 +13,8 @@
 import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
 import { setRefreshCookie } from "../cookie.js";
 
-export async function refreshToken(app, request, reply) {
-    const name = app.config.COOKIE_NAME_RT;
+export async function refreshToken(fastify, request, reply) {
+    const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];
     if (!rawSigned) return reply.code(401).send({ success: false });
 
@@ -22,7 +22,7 @@ export async function refreshToken(app, request, reply) {
     if (!valid || !raw) return reply.code(401).send({ success: false });
 
     const hash = hashToken(raw);
-    const db = await app.getDb();
+    const db = await fastify.getDb();
 
     // const rows = await db.all("SELECT token_hash FROM refresh_tokens");
     // console.log("DB tokens:", rows);
@@ -43,7 +43,7 @@ export async function refreshToken(app, request, reply) {
 
     const rawNew = generateRefreshToken();
     const hashNew = hashToken(rawNew);
-    const expiresAt = addDaysUTC(app.config.REFRESH_TOKEN_TTL_DAYS);
+    const expiresAt = addDaysUTC(fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
     await db.run(
         `INSERT INTO refresh_tokens (user_id, token_hash, user_agent, ip, expires_at, last_used_at)
@@ -55,10 +55,10 @@ export async function refreshToken(app, request, reply) {
         expiresAt
     );
 
-    setRefreshCookie(app, reply, rawNew, app.config.REFRESH_TOKEN_TTL_DAYS);
+    setRefreshCookie(fastify, reply, rawNew, fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
     // New access token
-    const accessToken = app.jwt.sign({
+    const accessToken = fastify.jwt.sign({
         sub: String(rt.user_id),
         username: rt.username,
         role: rt.role,
@@ -67,7 +67,7 @@ export async function refreshToken(app, request, reply) {
     return {
         success: true,
         token: accessToken,
-        exp: app.config.ACCESS_TOKEN_TTL
+        exp: fastify.config.ACCESS_TOKEN_TTL
     };
 }
 
