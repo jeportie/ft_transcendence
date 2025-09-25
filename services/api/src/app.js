@@ -29,7 +29,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function buildApp() {
-    const app = Fastify({
+    const fastify = Fastify({
         logger: false,
         ajv: {
             customOptions: {
@@ -38,33 +38,33 @@ export async function buildApp() {
         },
     });
 
-    app.decorate("config", config);
+    fastify.decorate("config", config);
 
-    await app.register(docs);
-    await app.register(security);
-    await app.register(cookie, {
-        secret: app.config.JWT_SECRET, // optional but good if you want signed cookies
+    await fastify.register(docs);
+    await fastify.register(security);
+    await fastify.register(cookie, {
+        secret: fastify.config.JWT_SECRET,
         hook: 'onRequest'
     });
-    await app.register(jwtPlugin);
-    await app.register(dbPlugin);
+    await fastify.register(jwtPlugin);
+    await fastify.register(dbPlugin);
 
     // API
-    await app.register(publicRoutes);
-    await app.register(privateRoutes);
+    await fastify.register(publicRoutes);
+    await fastify.register(privateRoutes);
 
     // Serve statics
-    await app.register(statics, {
+    await fastify.register(statics, {
         root: path.join(__dirname, "../public"),
         prefix: "/",
     });
 
     // SPA fallback to index.html for non /api paths
-    app.setNotFoundHandler((req, reply) => {
+    fastify.setNotFoundHandler((req, reply) => {
         if (!req.raw.url?.startsWith("/api"))
             return (reply.sendFile("index.html"));
         reply.code(404).send({ error: "Not Found" });
     });
 
-    return (app);
+    return (fastify);
 }

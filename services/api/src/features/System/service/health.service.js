@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-export async function getHealth(app) {
-    const db = await app.getDb();
+export async function getHealth(fastify) {
+    const db = await fastify.getDb();
     const row = await db.get(
         'SELECT status, updated_at FROM health WHERE id = 1'
     );
