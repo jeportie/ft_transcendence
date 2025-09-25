@@ -11,10 +11,24 @@
 // ************************************************************************** //
 
 import fp from "fastify-plugin";
+import rateLimit from "@fastify/rate-limit";
 import { localRoutes } from "./handler/local.handler.js";
 import { oauthRoutes } from "./handler/oauth.handler.js";
 
-export default fp(async function systemPlugin(fastify) {
-    await fastify.register(localRoutes, { prefix: "/api/auth" });
-    await fastify.register(oauthRoutes, { prefix: "/api/auth" });
+export default fp(async function authPlugin(fastify) {
+    // Scoped instance just for /api/auth/*
+    await fastify.register(async function(authScoped) {
+        await authScoped.register(rateLimit, {
+            max: 100,
+            timeWindow: "1 minute",
+            keyGenerator: (request) => request.ip,
+            errorResponseBuilder: () => ({
+                success: false,
+                error: "Too many attempts. Please wait before retrying.",
+            }),
+        });
+
+        await authScoped.register(localRoutes, { prefix: "/api/auth" });
+        await authScoped.register(oauthRoutes, { prefix: "/api/auth" });
+    });
 });

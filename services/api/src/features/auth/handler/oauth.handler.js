@@ -14,7 +14,7 @@ import * as controller from "../controller/local.controller.js";
 import { startSchema } from "../schema/startSchema.js";
 import { callbackSchema } from "../schema/callbackSchema.js";
 
-export async function localRoutes(fastify, options) {
+export async function oauthRoutes(fastify, options) {
 
     fastify.get("/:provider/start", { schema: startSchema }, controller.startOAuth);
     fastify.get("/:provider/callback", { schema: callbackSchema }, controller.handleOAuth);
