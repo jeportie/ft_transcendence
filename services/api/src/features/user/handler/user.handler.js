@@ -10,11 +10,15 @@
 //                                                                            //
 // ************************************************************************** //
 
-import * as controller from "../controller/user.contoller.js";
-import * as schema from "../schema/user.schema.js";
+import * as controller from "../controller/user.controller.js";
+import { meSchema } from "../schema/meSchema.js";
 
 export async function userRoutes(fastify, options) {
 
-    fastify.get("/me", { schema: schema.meSchema, preHandler: null }, controller.getMe);
+    fastify.get(
+        "/me",
+        { schema: meSchema, preHandler: [fastify.authenticate] },
+        controller.getMe
+    );
 
 }

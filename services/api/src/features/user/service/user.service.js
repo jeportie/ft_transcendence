@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-export async function getMe(app, claims) {
-    const db = await app.getDb();
+export async function getMe(fastify, claims) {
+    const db = await fastify.getDb();
     const me = await db.get(
         "SELECT id, username, email, role, created_at FROM users WHERE id = ?",
         Number(claims.sub)

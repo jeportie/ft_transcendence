@@ -10,11 +10,11 @@
 //                                                                            //
 // ************************************************************************** //
 
-import * as services from "../service/user.service.js";
+import * as service from "../service/user.service.js";
 
 export async function getMe(req, reply) {
-    const data = services.getHealth(req.server);
+    const data = await service.getMe(req.server);
     if (!data)
-        return (reply.code(404).send({ message: "health check not found" }));
+        return (reply.code(404).send({ message: "user not found" }));
     reply.send(data);
 }
