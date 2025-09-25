@@ -1,0 +1,24 @@
+### REGISTER
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "email": "newuser@example.com",
+  "pwd": "S3curePass!"
+}
+
+### LOGIN
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "user": "newuser",
+  "pwd": "S3curePass!"
+}
+
+### REFRESH TOKEN
+POST http://localhost:5000/api/auth/refresh
+
+### LOGOUT
+POST http://localhost:5000/api/auth/logout
