@@ -6,8 +6,15 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 14:31:49 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 14:35:00 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/25 18:49:26 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import fp from "fastify-plugin";
+import { userRoutes } from "./handler/user.handler.js";
+import { adminRoutes } from "./handler/admin.handler.js";
+
+export default fp(async function systemPlugin(app) {
+    await app.register(userRoutes, { prefix: "/api/user" });
+    await app.register(adminRoutes, { prefix: "/api/admin" });
+});

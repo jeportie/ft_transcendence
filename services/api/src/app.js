@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:10:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 14:37:37 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/25 18:50:28 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -25,6 +25,7 @@ import dbPlugin from "./plugins/db.js";
 
 // Features Plugins
 import systemPlugin from "./features/system/plugin.js";
+import userPlugin from "./features/user/plugin.js";
 // Old Plugins
 import publicRoutes from "./plugins/public.js";
 import privateRoutes from "./plugins/private.js";
@@ -55,6 +56,7 @@ export async function buildApp() {
 
     // Features API
     await fastify.register(systemPlugin);
+    await fastify.register(userPlugin);
     // Old
     await fastify.register(publicRoutes);
     await fastify.register(privateRoutes);

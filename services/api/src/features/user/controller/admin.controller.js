@@ -1,19 +1,20 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   admin.js                                           :+:      :+:    :+:   //
+//   admin.controller.js                                :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/23 15:21:47 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 18:41:13 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/25 18:35:17 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/25 18:39:09 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-export async function listUsers(app) {
-    const db = await app.getDb();
-    const rows = await db.all(
-        "SELECT id, username, email, role, created_at FROM users ORDER BY id"
-    );
-    return { success: true, users: rows };
+import * as service from "../service/admin.service.js";
+
+export async function getMe(req, reply) {
+    const data = await service.getUsers(req.server);
+    if (!data)
+        return (reply.code(404).send({ message: "list of users is empty" }));
+    reply.send(data);
 }
