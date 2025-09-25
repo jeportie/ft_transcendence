@@ -16,8 +16,8 @@ import { setRefreshCookie, clearRefreshCookie } from "../cookie.js";
 
 export async function loginUser(fastify, request, reply, opts = {}) {
     const skipPwd = Boolean(opts.skipPwd);
-    user = req.body?.user;
-    pwd = req.body?.pwd;
+    const user = req.body?.user;
+    const pwd = req.body?.pwd;
 
     if (!user || (!skipPwd && !pwd))
         return (reply.code(400).send({

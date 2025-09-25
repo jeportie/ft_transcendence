@@ -12,7 +12,10 @@
 
 import { hashPassword } from "../password.js";
 
-export async function registerUser(fastify, username, email, pwd) {
+export async function registerUser(fastify, req, reply) {
+    const username = req.body?.username;
+    const email = req.body?.email;
+    const pwd = req.body?.pwd;
     const db = await fastify.getDb();
 
     // Check duplicates
