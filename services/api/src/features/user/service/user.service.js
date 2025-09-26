@@ -1,21 +1,22 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   me.js                                              :+:      :+:    :+:   //
+//   user.service.js                                    :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:14:55 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/23 15:21:22 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/26 15:44:11 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+import { loadSql } from "../../../utils/sqlLoader.js";
+
+const getMeSql = loadSql(import.meta.url, "./sql/getMe.sql");
+
 export async function getMe(fastify, claims) {
     const db = await fastify.getDb();
-    const me = await db.get(
-        "SELECT id, username, email, role, created_at FROM users WHERE id = ?",
-        Number(claims.sub)
-    );
+    const me = await db.get(getMeSql, { ":id": Number(claims.sub) });
     return ({
         success: true,
         me: me || claims,
