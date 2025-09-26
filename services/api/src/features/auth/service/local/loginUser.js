@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:37:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/23 14:39:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/26 16:17:34 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,10 +14,17 @@ import { verifyPassword } from "../password.js";
 import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
 import { setRefreshCookie, clearRefreshCookie } from "../cookie.js";
 
+import { loadSql } from "../../../../utils/sqlLoader.js";
+
+const PATH = import.meta.url;
+
+const userSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
+const refreshTokenSql = loadSql(PATH, "../sql/insertRefreshToken.sql");
+
 export async function loginUser(fastify, request, reply, opts = {}) {
     const skipPwd = Boolean(opts.skipPwd);
-    const user = req.body?.user;
-    const pwd = req.body?.pwd;
+    const user = request.body?.user;
+    const pwd = request.body?.pwd;
 
     if (!user || (!skipPwd && !pwd))
         return (reply.code(400).send({
@@ -26,14 +33,10 @@ export async function loginUser(fastify, request, reply, opts = {}) {
         }));
 
     const db = await fastify.getDb();
-    const row = await db.get(
-        `SELECT id, username, email, password_hash, role
-             FROM    users
-             WHERE   username    = ? 
-             OR      email       = ?
-             LIMIT 1`,
-        user, user
-    );
+    const row = await db.get(userSql, {
+        ":username": user,
+        ":email": user
+    });
 
     if (!row) {
         fastify.log.warn(`[Auth] Failed login attempt for user/email: ${user}`);
@@ -66,20 +69,13 @@ export async function loginUser(fastify, request, reply, opts = {}) {
     const hash = hashToken(raw);
     const expiresAt = addDaysUTC(fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
-    await db.run(
-        `INSERT INTO refresh_tokens (
-            user_id,
-            token_hash,
-            user_agent,
-            ip,
-            expires_at)
-        VALUES (?, ?, ?, ?, ?)`,
-        row.id,
-        hash,
-        request.headers["user-agent"] || null,
-        request.ip || null,
-        expiresAt,
-    );
+    await db.run(refreshTokenSql, {
+        ":user_id": row.id,
+        ":token_hash": hash,
+        ":user_agent": request.headers["user-agent"] || null,
+        ":ip": request.ip || null,
+        ":expires_at": expiresAt,
+    });
 
     clearRefreshCookie(fastify, reply);
     setRefreshCookie(fastify, reply, raw, fastify.config.REFRESH_TOKEN_TTL_DAYS);
