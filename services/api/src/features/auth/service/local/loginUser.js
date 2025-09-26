@@ -13,11 +13,9 @@
 import { verifyPassword } from "../password.js";
 import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
 import { setRefreshCookie, clearRefreshCookie } from "../cookie.js";
-
 import { loadSql } from "../../../../utils/sqlLoader.js";
 
 const PATH = import.meta.url;
-
 const userSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
 const refreshTokenSql = loadSql(PATH, "../sql/insertRefreshToken.sql");
 
