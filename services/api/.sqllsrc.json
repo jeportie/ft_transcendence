@@ -1,0 +1,8 @@
+{
+    "name": "sqlite3-project",
+    "adapter": "sqlite3",
+    "filename": "./src/data/app.db",
+    "projectPaths": [
+        "./src"
+    ]
+}
