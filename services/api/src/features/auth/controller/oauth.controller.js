@@ -6,11 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 19:36:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 22:12:21 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/26 23:04:42 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import * as oauthService from "../service/oauth/index.js";
+import { fail, notFound } from "../../../utils/reply.js";
 
 export async function startOAuth(req, reply) {
     const { provider } = req.params;
@@ -18,20 +19,21 @@ export async function startOAuth(req, reply) {
 
     const url = oauthService.startOAuth(req.server, provider, next, reply);
     if (!url)
-        return (reply.code(404).send({ message: "cannot start OAuth" }));
+        return notFound(reply, "Cannot start OAuth");
     reply.redirect(url);
 }
 
 export async function handleOAuth(req, reply) {
     const { provider } = req.params;
     const { code, state } = req.query;
-    const data = await oauthService.handleOAuthCallback(req.server, provider, code, state, req, reply);
 
-    if (!data.success) {
-        return (reply.code(data.status || 400).send(data));
-    }
-    // Important: redirect so the browser leaves the JSON page
-    // Instead of a raw redirect, inject a script that marks session in localStorage
+    const data = await oauthService.handleOAuthCallback(
+        req.server, provider, code, state, req, reply
+    );
+
+    if (!data.success)
+        return fail(reply, data.error || "OAuth failed", data.status || 400);
+
     reply.type("text/html").send(`
       <script>
         localStorage.setItem("hasSession", "true");
