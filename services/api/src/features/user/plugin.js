@@ -17,4 +17,4 @@ import { adminRoutes } from "./handler/admin.handler.js";
 export default fp(async function userPlugin(fastify) {
     await fastify.register(userRoutes, { prefix: "/user" });
     await fastify.register(adminRoutes, { prefix: "/admin" });
-}, { prefix: "/api" });
+});

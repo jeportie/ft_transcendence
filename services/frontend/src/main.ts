@@ -42,7 +42,7 @@ app.beforeStart(async () => {
 
         try {
             // 2. Health check
-            const health = await API.get("/health");
+            const health = await API.get("/system/health");
             logger.info("[Health] ✅ OK:", health);
             // 3. Simulated preload (e.g. assets/fonts)
             await new Promise(resolve => setTimeout(resolve, 2000));

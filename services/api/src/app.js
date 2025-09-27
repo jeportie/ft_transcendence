@@ -54,7 +54,7 @@ export async function buildApp() {
 
     // Features API
     await fastify.register(systemPlugin);
-    await fastify.register(userPlugin);
+    await fastify.register(userPlugin, { prefix: "/api" });
     await fastify.register(authPlugin);
 
     // Serve statics
