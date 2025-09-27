@@ -26,23 +26,33 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     const { valid, value } = raw ? request.unsignCookie(raw) : { valid: false, value: null };
     reply.clearCookie(cookieName, { path: `/api/auth/${provider}/callback` });
 
-    if (!valid || !value || !state || state !== value) {
-        return (reply.code(400).send({ success: false, error: "Invalid OAuth state" }));
-    }
+    if (!valid || !value || !state || state !== value)
+        throw new Error("OAUTH_STATE_INVALID");
 
     const p = getProvider(fastify, provider);
-    const profile = await p.exchangeCode(code);
+    let profile;
+    try {
+        profile = await p.exchangeCode(code);
+    } catch (err) {
+        fastify.log.error(err, "[OAuth] Code exchange failed");
+        throw new Error("OAUTH_EXCHANGE_FAILED");
+    }
 
     const db = await fastify.getDb();
     let user = await db.get(findUserByEmailSql, { ":email": profile.email });
     if (!user) {
-        const r = await db.run(createUserSql, {
-            ":username": profile.name || `user_${profile.sub.slice(0, 8)}`,
-            ":email": profile.email || null,
-            ":password_hash": "<oauth>",
-            ":role": "player"
-        });
-        user = await db.get(findUserByIdSql, { ":id": r.lastID });
+        try {
+            const r = await db.run(createUserSql, {
+                ":username": profile.name || `user_${profile.sub.slice(0, 8)}`,
+                ":email": profile.email || null,
+                ":password_hash": "<oauth>",
+                ":role": "player"
+            });
+            user = await db.get(findUserByIdSql, { ":id": r.lastID });
+        } catch (err) {
+            fastify.log.error(err, "[OAuth] User creation failed");
+            throw new Error("OAUTH_USER_CREATE_FAILED");
+        }
     }
 
     // Issue your tokens, skipping password
@@ -52,5 +62,6 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     const nextCookie = `oauth_next_${provider}`;
     const next = request.cookies?.[nextCookie] || "/dashboard";
     reply.clearCookie(nextCookie, { path: `/api/auth/${provider}` });
-    return ({ success: true, redirect: String(next) });
+
+    return ({ redirect: String(next) });
 }

@@ -54,7 +54,14 @@ export function makeGoogleProvider(fastify) {
     };
 }
 
+const registry = {
+    google: makeGoogleProvider,
+    // github: makeGitHubProvider,
+    // fortyTwo: make42Provider,
+};
+
 export function getProvider(fastify, name) {
-    if (name === "google") return makeGoogleProvider(fastify);
-    throw new Error(`Unknown provider: ${name}`);
+    const factory = registry[name];
+    if (!factory) throw new Error(`OAUTH_PROVIDER_UNKNOWN: ${name}`);
+    return factory(fastify);
 }

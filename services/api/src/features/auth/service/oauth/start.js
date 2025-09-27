@@ -14,6 +14,7 @@ import crypto from "crypto";
 import { getProvider } from "./providers.js";
 
 export function startOAuth(fastify, provider, next, reply) {
+    const p = getProvider(fastify, provider);
     const state = crypto.randomBytes(16).toString("hex");
 
     // CSRF protection with random state
@@ -35,7 +36,6 @@ export function startOAuth(fastify, provider, next, reply) {
         secure: !!fastify.config.COOKIE_SECURE,
     });
 
-    const p = getProvider(fastify, provider);
     const url = p.getAuthUrl(state);
     return (url);
 }

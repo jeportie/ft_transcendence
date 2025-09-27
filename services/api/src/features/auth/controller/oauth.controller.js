@@ -11,35 +11,54 @@
 // ************************************************************************** //
 
 import * as oauthService from "../service/oauth/index.js";
-import { fail, notFound } from "../../../utils/reply.js";
+import { ok, fail, notFound } from "../../../utils/reply.js";
 
 export async function startOAuth(req, reply) {
     const { provider } = req.params;
     const { next = "/dashboard" } = req.query || {};
 
-    const url = oauthService.startOAuth(req.server, provider, next, reply);
-    if (!url)
-        return notFound(reply, "Cannot start OAuth");
-    reply.redirect(url);
+    try {
+        const url = oauthService.startOAuth(req.server, provider, next, reply);
+        return reply.redirect(url);
+    } catch (err) {
+        switch (err.message) {
+            case "OAUTH_PROVIDER_UNKNOWN":
+                return badRequest(reply, "Unknown OAuth provider");
+            default:
+                req.server.log.error(err, "[OAuth] Unexpected start error");
+                return notFound(reply, "Cannot start OAuth");
+        }
+    }
 }
 
 export async function handleOAuth(req, reply) {
     const { provider } = req.params;
     const { code, state } = req.query;
 
-    const data = await oauthService.handleOAuthCallback(
-        req.server, provider, code, state, req, reply
-    );
+    try {
+        const data = await oauthService.handleOAuthCallback(
+            req.server, provider, code, state, req, reply
+        );
 
-    if (!data.success)
-        return fail(reply, data.error || "OAuth failed", data.status || 400);
-
-    reply.type("text/html").send(`
-      <script>
-        localStorage.setItem("hasSession", "true");
-        window.location.href = "${data.redirect}";
-      </script>
-    `);
+        return reply.type("text/html").send(`
+          <script>
+            localStorage.setItem("hasSession", "true");
+            window.location.href = "${data.redirect}";
+          </script>
+        `);
+    } catch (err) {
+        switch (err.message) {
+            case "OAUTH_STATE_INVALID":
+                return badRequest(reply, "Invalid OAuth state");
+            case "OAUTH_EXCHANGE_FAILED":
+                return fail(reply, "Failed to exchange code with provider", 502);
+            case "OAUTH_USER_CREATE_FAILED":
+                return fail(reply, "Failed to create user from provider profile", 500);
+            default:
+                req.server.log.error(err, "[OAuth] Unexpected callback error");
+                return notFound(reply, "Cannot complete OAuth");
+        }
+    }
 }
 
 /*
