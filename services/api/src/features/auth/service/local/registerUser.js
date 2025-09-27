@@ -21,23 +21,18 @@ export async function registerUser(fastify, req, reply) {
     const email = req.body?.email;
     const pwd = req.body?.pwd;
 
-    // Check duplicates
+    if (!username || !email || !pwd)
+        throw new Error("MISSING_FIELDS");
+
     const db = await fastify.getDb();
     const exists = await db.get(findUserSql, {
         ":username": username,
         ":email": email
     });
-    if (exists) {
-        return {
-            success: false,
-            error: "Username or email already exists"
-        };
-    }
+    if (exists)
+        throw new Error("USER_ALREADY_EXISTS");
 
-    // Hash password
     const hashed = await hashPassword(pwd);
-
-    // Insert new user
     const result = await db.run(createUserSql, {
         ":username": username,
         ":email": email,
@@ -46,7 +41,6 @@ export async function registerUser(fastify, req, reply) {
     });
 
     return ({
-        success: true,
         user: username,
         role: "player",
         id: result.lastID

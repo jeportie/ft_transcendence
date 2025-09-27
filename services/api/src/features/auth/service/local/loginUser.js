@@ -25,10 +25,7 @@ export async function loginUser(fastify, request, reply, opts = {}) {
     const pwd = request.body?.pwd;
 
     if (!user || (!skipPwd && !pwd))
-        return (reply.code(400).send({
-            success: false,
-            error: "Missing credentials",
-        }));
+        throw new Error("MISSING_CREDENTIALS");
 
     const db = await fastify.getDb();
     const row = await db.get(userSql, {
@@ -38,20 +35,14 @@ export async function loginUser(fastify, request, reply, opts = {}) {
 
     if (!row) {
         fastify.log.warn(`[Auth] Failed login attempt for user/email: ${user}`);
-        return (reply.code(401).send({
-            success: false,
-            message: "Invalid credentials"
-        }));
+        throw new Error("USER_NOT_FOUND");
     }
 
     if (!skipPwd) {
         const ok = await verifyPassword(row.password_hash, pwd);
         if (!ok) {
             fastify.log.warn(`[Auth] Invalid password for user/email: ${user}`);
-            return (reply.code(401).send({
-                success: false,
-                message: "Invalid credentials"
-            }));
+            throw new Error("INVALID_PASSWORD");
         }
     }
 
@@ -79,7 +70,6 @@ export async function loginUser(fastify, request, reply, opts = {}) {
     setRefreshCookie(fastify, reply, raw, fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
     return ({
-        success: true,
         user: row.username,
         role: row.role,
         token: accessToken,

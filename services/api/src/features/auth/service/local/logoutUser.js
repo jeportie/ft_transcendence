@@ -20,14 +20,16 @@ const deleteRefreshToken = loadSql(import.meta.url, "../sql/deleteRefreshTokenBy
 export async function logoutUser(fastify, request, reply) {
     const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];
-    if (rawSigned) {
-        const { valid, value: raw } = request.unsignCookie(rawSigned);
-        if (valid && raw) {
-            const hash = hashToken(raw);
-            const db = await fastify.getDb();
-            await db.run(deleteRefreshToken, { ":token_hash": hash });
-        }
-    }
+    if (!rawSigned)
+        throw new Error("NO_REFRESH_COOKIE");
+
+    const { valid, value: raw } = request.unsignCookie(rawSigned);
+    if (!valid || !raw)
+        throw new Error("INVALID_REFRESH_COOKIE");
+
+    const hash = hashToken(raw);
+    const db = await fastify.getDb();
+    await db.run(deleteRefreshToken, { ":token_hash": hash });
+
     clearRefreshCookie(fastify, reply);
-    return { success: true };
 }
