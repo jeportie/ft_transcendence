@@ -14,8 +14,16 @@ import * as service from "../service/admin.service.js";
 import { ok, notFound } from "../../../utils/reply.js";
 
 export async function getUsers(req, reply) {
-    const data = await service.getUsers(req.server);
-    if (!data)
-        return notFound(reply, "No users found");
-    return ok(reply, data);
+    try {
+        const data = await service.getUsers(req.server);
+        return ok(reply, data);
+    } catch (err) {
+        switch (err.message) {
+            case "NO_USERS":
+                return notFound(reply, "No users found");
+            default:
+                req.server.log.error(err, "[Admin] Unexpected getUsers error");
+                return notFound(reply, "Cannot fetch users");
+        }
+    }
 }

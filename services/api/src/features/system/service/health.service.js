@@ -17,8 +17,11 @@ const getHealthSql = loadSql(import.meta.url, "./sql/getHealth.sql");
 export async function getHealth(fastify) {
     const db = await fastify.getDb();
     const row = await db.get(getHealthSql);
+    if (!row)
+        throw new Error("HEALTH_NOT_FOUND");
+
     return {
-        status: row?.status ?? "unknown",
-        updated_at: row?.updated_at ?? null
+        status: row.status,
+        updated_at: row.updated_at
     };
 }

@@ -17,8 +17,8 @@ const getMeSql = loadSql(import.meta.url, "./sql/getMe.sql");
 export async function getMe(fastify, claims) {
     const db = await fastify.getDb();
     const me = await db.get(getMeSql, { ":id": Number(claims.sub) });
-    return ({
-        success: true,
-        me: me || claims,
-    });
+    if (!me)
+        throw new Error("USER_NOT_FOUND");
+
+    return { me };
 }

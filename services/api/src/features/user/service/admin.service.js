@@ -17,8 +17,7 @@ const getUsersSql = loadSql(import.meta.url, "./sql/getUsers.sql");
 export async function getUsers(fastify) {
     const db = await fastify.getDb();
     const rows = await db.all(getUsersSql);
-    return {
-        success: true,
-        users: rows
-    };
+    if (!rows || rows.length === 0)
+        throw new Error("NO_USERS");
+    return { users: rows };
 }
