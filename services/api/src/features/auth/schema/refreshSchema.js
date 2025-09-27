@@ -12,7 +12,7 @@
 
 export const refreshSchema = {
     summary: "Refresh access token (rotate refresh)",
-    description: "Uses the httpOnly refresh cookie to validate and rotate the refresh token, then returns a new access token.",
+    description: "Uses the HttpOnly refresh cookie to validate and rotate the refresh token, then returns a new access token.",
     tags: ["Authentication"],
     operationId: "refresh",
 
@@ -27,8 +27,13 @@ export const refreshSchema = {
             }
         },
         401: {
-            description: "Unauthorized (missing/invalid/expired/rotated elsewhere)",
-            type: "null"
+            type: "object",
+            required: ["success", "error", "code"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "Session expired" },
+                code: { type: "string", example: "REFRESH_EXPIRED" }
+            }
         }
     }
 };

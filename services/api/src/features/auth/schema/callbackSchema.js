@@ -20,28 +20,26 @@ export const callbackSchema = {
         type: "object",
         required: ["code", "state"],
         properties: {
-            code: { type: "string", description: "Authorization code from provider" },
-            state: { type: "string", description: "CSRF state token" },
+            code: { type: "string" },
+            state: { type: "string" }
         },
-        additionalProperties: false,
+        additionalProperties: false
     },
 
     response: {
         200: {
-            type: "object",
-            required: ["success", "redirect"],
-            properties: {
-                success: { type: "boolean", example: true },
-                redirect: { type: "string", example: "/dashboard" },
-            },
+            description: "HTML redirect page",
+            type: "string",
+            example: "<script>window.location.href='/dashboard'</script>"
         },
         400: {
             type: "object",
-            required: ["success", "error"],
+            required: ["success", "error", "code"],
             properties: {
                 success: { type: "boolean", example: false },
                 error: { type: "string", example: "Invalid OAuth state" },
-            },
-        },
-    },
+                code: { type: "string", example: "OAUTH_STATE_INVALID" }
+            }
+        }
+    }
 };

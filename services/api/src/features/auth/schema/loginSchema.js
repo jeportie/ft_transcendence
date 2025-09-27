@@ -15,6 +15,7 @@ export const loginSchema = {
     description: "Authenticate with username/email + password. Returns a short-lived access token and sets an HttpOnly refresh cookie.",
     tags: ["Authentication"],
     operationId: "login",
+
     body: {
         type: "object",
         required: ["user", "pwd"],
@@ -36,6 +37,7 @@ export const loginSchema = {
         },
         additionalProperties: false
     },
+
     response: {
         200: {
             type: "object",
@@ -50,10 +52,20 @@ export const loginSchema = {
         },
         400: {
             type: "object",
-            required: ["success", "error"],
+            required: ["success", "error", "code"],
             properties: {
                 success: { type: "boolean", example: false },
-                error: { type: "string", example: "Password too short" }
+                error: { type: "string", example: "Missing credentials" },
+                code: { type: "string", example: "MISSING_CREDENTIALS" }
+            }
+        },
+        401: {
+            type: "object",
+            required: ["success", "error", "code"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "Invalid credentials" },
+                code: { type: "string", example: "INVALID_PASSWORD" }
             }
         }
     }

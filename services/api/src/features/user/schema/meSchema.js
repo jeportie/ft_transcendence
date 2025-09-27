@@ -44,6 +44,15 @@ export const meSchema = {
         401: {
             description: "Unauthorized (invalid or missing token)",
             type: "null"
+        },
+        404: {
+            type: "object",
+            required: ["success", "error", "code"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "User not found" },
+                code: { type: "string", example: "USER_NOT_FOUND" }
+            }
         }
     }
 };

@@ -44,7 +44,16 @@ export const usersSchema = {
                 }
             }
         },
-        401: { description: "Unauthorized (missing/invalid token)", type: "null" },
-        403: { description: "Forbidden (not an admin)", type: "null" }
+        401: { description: "Unauthorized", type: "null" },
+        403: { description: "Forbidden", type: "null" },
+        404: {
+            type: "object",
+            required: ["success", "error", "code"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "No users found" },
+                code: { type: "string", example: "NO_USERS" }
+            }
+        }
     }
 };

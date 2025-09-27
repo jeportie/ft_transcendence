@@ -55,10 +55,11 @@ export const registerSchema = {
         },
         400: {
             type: "object",
-            required: ["success", "error"],
+            required: ["success", "error", "code"],
             properties: {
                 success: { type: "boolean", example: false },
-                error: { type: "string", example: "Invalid email format" }
+                error: { type: "string", example: "User already exists" },
+                code: { type: "string", example: "USER_ALREADY_EXISTS" }
             }
         }
     }

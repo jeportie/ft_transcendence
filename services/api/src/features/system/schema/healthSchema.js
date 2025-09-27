@@ -27,7 +27,15 @@ export const healthSchema = {
                     format: "date-time",
                     example: "2025-09-05T14:30:00.000Z"
                 }
-
+            }
+        },
+        404: {
+            type: "object",
+            required: ["success", "error", "code"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "Health check not found" },
+                code: { type: "string", example: "HEALTH_NOT_FOUND" }
             }
         }
     }
