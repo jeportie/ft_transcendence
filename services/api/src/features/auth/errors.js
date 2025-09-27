@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/27 14:32:10 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 14:33:23 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 23:52:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -45,3 +45,8 @@ export const OAuthErrors = {
     UserCreateFailed: () =>
         new AppError("OAUTH_USER_CREATE_FAILED", "Failed to create user from provider profile", 500),
 };
+
+export const F2AErrors = {
+    CodeGenerationFailed: () =>
+        new AppError("QR_GENERATE_FAILED", "Failed to generate QR code", 500, "[Auth 2FA] QR code generation failed"),
+}
