@@ -1,24 +1,23 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   admin.service.js                                   :+:      :+:    :+:   //
+//   errors.js                                          :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/25 18:39:30 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 15:08:07 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/27 14:34:11 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/27 15:08:16 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../utils/sqlLoader.js";
-import { AdminErrors } from "../errors.js";
+import { AppError } from "../utils/AppError.js";
 
-const getUsersSql = loadSql(import.meta.url, "./sql/getUsers.sql");
+export const UserErrors = {
+    UserNotFound: (id) =>
+        new AppError("USER_NOT_FOUND", "User not found", 404, `[User] No user with id=${id}`),
+};
 
-export async function getUsers(fastify) {
-    const db = await fastify.getDb();
-    const rows = await db.all(getUsersSql);
-    if (!rows || rows.length === 0)
-        throw AdminErrors.NoUsers();
-    return { users: rows };
-}
+export const AdminErrors = {
+    NoUsers: () =>
+        new AppError("NO_USERS", "No users found", 404, "[Admin] No users in database"),
+};

@@ -6,11 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/16 16:51:12 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/16 16:58:50 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 15:02:01 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { OAuth2Client } from "google-auth-library";
+import { OAuthErrors } from "../../errors.js";
 
 function googleGetAuthUrl(client, state) {
     const opts = {
@@ -62,6 +63,7 @@ const registry = {
 
 export function getProvider(fastify, name) {
     const factory = registry[name];
-    if (!factory) throw new Error(`OAUTH_PROVIDER_UNKNOWN: ${name}`);
+    if (!factory)
+        throw OAuthErrors.UnknownProvider(name);
     return factory(fastify);
 }

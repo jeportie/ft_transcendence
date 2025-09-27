@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:37:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/26 16:17:34 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 14:49:02 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,6 +14,7 @@ import { verifyPassword } from "../password.js";
 import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
 import { setRefreshCookie, clearRefreshCookie } from "../cookie.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
+import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
 const userSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
@@ -25,7 +26,7 @@ export async function loginUser(fastify, request, reply, opts = {}) {
     const pwd = request.body?.pwd;
 
     if (!user || (!skipPwd && !pwd))
-        throw new Error("MISSING_CREDENTIALS");
+        throw AuthErrors.MissingCredentials();
 
     const db = await fastify.getDb();
     const row = await db.get(userSql, {
@@ -33,17 +34,13 @@ export async function loginUser(fastify, request, reply, opts = {}) {
         ":email": user
     });
 
-    if (!row) {
-        fastify.log.warn(`[Auth] Failed login attempt for user/email: ${user}`);
-        throw new Error("USER_NOT_FOUND");
-    }
+    if (!row)
+        throw AuthErrors.UserNotFound(user);
 
     if (!skipPwd) {
         const ok = await verifyPassword(row.password_hash, pwd);
-        if (!ok) {
-            fastify.log.warn(`[Auth] Invalid password for user/email: ${user}`);
-            throw new Error("INVALID_PASSWORD");
-        }
+        if (!ok)
+            throw AuthErrors.InvalidPassword(user);
     }
 
     // Access Token

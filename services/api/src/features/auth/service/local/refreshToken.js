@@ -6,13 +6,14 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:39:01 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/26 16:56:36 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 14:55:49 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
 import { setRefreshCookie } from "../cookie.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
+import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
 const deleteRefreshTokenSql = loadSql(PATH, "../sql/deleteRefreshTokenByID.sql");
@@ -23,22 +24,22 @@ export async function refreshToken(fastify, request, reply) {
     const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];
     if (!rawSigned)
-        throw new Error("NO_REFRESH_COOKIE");
+        throw AuthErrors.NoRefreshCookie();
 
     const { valid, value: raw } = request.unsignCookie(rawSigned);
     if (!valid || !raw)
-        throw new Error("INVALID_REFRESH_COOKIE");
+        throw AuthErrors.InvalidRefreshCookie();
 
     const hash = hashToken(raw);
     const db = await fastify.getDb();
 
     const rt = await db.get(findRefreshTokenSql, { ":token_hash": hash });
     if (!rt)
-        throw new Error("REFRESH_NOT_FOUND");
+        throw AuthErrors.RefreshNotFound();
     if (rt.revoked_at)
-        throw new Error("REFRESH_REVOKED");
+        throw AuthErrors.RefreshRevoked();
     if (new Date(rt.expires_at) < new Date())
-        throw new Error("REFRESH_EXPIRED");
+        throw AuthErrors.RefreshExpired();
 
     // Rotate
     await db.run(deleteRefreshTokenSql, { ":id": rt.id });

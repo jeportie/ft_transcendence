@@ -6,12 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:47:42 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/26 18:38:15 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 14:51:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { hashPassword } from "../password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
+import { AuthErrors } from "../../errors.js";
 
 const findUserSql = loadSql(import.meta.url, "../sql/findUserByUsernameOrEmail.sql");
 const createUserSql = loadSql(import.meta.url, "../sql/createUser.sql");
@@ -22,7 +23,7 @@ export async function registerUser(fastify, req, reply) {
     const pwd = req.body?.pwd;
 
     if (!username || !email || !pwd)
-        throw new Error("MISSING_FIELDS");
+        throw AuthErrors.MissingFields();
 
     const db = await fastify.getDb();
     const exists = await db.get(findUserSql, {
@@ -30,7 +31,7 @@ export async function registerUser(fastify, req, reply) {
         ":email": email
     });
     if (exists)
-        throw new Error("USER_ALREADY_EXISTS");
+        throw AuthErrors.UserAlreadyExists(username);
 
     const hashed = await hashPassword(pwd);
     const result = await db.run(createUserSql, {

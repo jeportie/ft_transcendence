@@ -6,13 +6,14 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:34:08 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/26 18:53:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 14:59:29 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { getProvider } from "./providers.js";
 import { loginUser } from "../local/loginUser.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
+import { OAuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
 const findUserByEmailSql = loadSql(PATH, "../sql/findUserByEmail.sql");
@@ -27,7 +28,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     reply.clearCookie(cookieName, { path: `/api/auth/${provider}/callback` });
 
     if (!valid || !value || !state || state !== value)
-        throw new Error("OAUTH_STATE_INVALID");
+        throw OAuthErrors.InvalidState();
 
     const p = getProvider(fastify, provider);
     let profile;
@@ -35,7 +36,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
         profile = await p.exchangeCode(code);
     } catch (err) {
         fastify.log.error(err, "[OAuth] Code exchange failed");
-        throw new Error("OAUTH_EXCHANGE_FAILED");
+        throw OAuthErrors.ExchangeFailed();
     }
 
     const db = await fastify.getDb();
@@ -51,7 +52,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
             user = await db.get(findUserByIdSql, { ":id": r.lastID });
         } catch (err) {
             fastify.log.error(err, "[OAuth] User creation failed");
-            throw new Error("OAUTH_USER_CREATE_FAILED");
+            throw OAuthErrors.UserCreateFailed();
         }
     }
 
