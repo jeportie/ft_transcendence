@@ -20,7 +20,7 @@ export const guards = {
         loginPath: "/login",
         checkSessionFn: async () => {
             try {
-                const data = await API.get("/me");
+                const data = await API.get("/user/me");
                 return data?.success === true;
             } catch (err) {
                 logger.warn("[Guard] /me check failed:", err);

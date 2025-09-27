@@ -27,7 +27,7 @@ export default class Dashboard extends AbstractView {
     mount() {
         const userInfoEl = document.querySelector("#user-info");
 
-        API.get("/me")
+        API.get("/user/me")
             .then((data: any) => {
                 console.log(data); // backend response
                 if (data?.success || data?.username) {
