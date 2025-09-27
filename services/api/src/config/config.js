@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 14:26:18 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 23:00:22 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 23:25:36 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,6 +20,7 @@ const IS_PROD = NODE_ENV === "production";
 
 const config = {
     NODE_ENV,
+    APP_NAME: asString(process.env.APP_NAME, "ft_transcendence"),
     HOST: asString(process.env.HOST, "0.0.0.0"),
     PORT: asNumber(process.env.PORT, 5000),
 
