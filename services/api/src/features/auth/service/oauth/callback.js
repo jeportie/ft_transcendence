@@ -6,12 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:34:08 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 14:59:29 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/27 21:01:50 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { getProvider } from "./providers.js";
-import { loginUser } from "../local/loginUser.js";
+import { loginWithoutPwd } from "../local/loginUser.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { OAuthErrors } from "../../errors.js";
 
@@ -57,16 +57,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     }
 
     // Issue your tokens, skipping password
-    await loginUser(
-        fastify,
-        {
-            body: { user: user.email || user.username },
-            headers: request.headers,
-            ip: request.ip
-        },
-        reply,
-        { skipPwd: true }
-    );
+    await loginWithoutPwd(fastify, user.email || user.username, request, reply);
 
     // Read & clear the "next" cookie, then redirect back to the SPA
     const nextCookie = `oauth_next_${provider}`;
