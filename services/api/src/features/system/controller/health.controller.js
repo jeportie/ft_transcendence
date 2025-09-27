@@ -11,19 +11,16 @@
 // ************************************************************************** //
 
 import * as services from "../service/health.service.js";
-import { ok, notFound } from "../../../utils/reply.js";
+import { AppError } from "../../../utils/AppError.js";
+import { ok } from "../../../utils/reply.js";
+
+const DOMAIN = "[System]";
 
 export async function getHealth(req, reply) {
     try {
         const data = await services.getHealth(req.server);
         return ok(reply, data);
     } catch (err) {
-        switch (err.message) {
-            case "HEALTH_NOT_FOUND":
-                return notFound(reply, "Health check not found");
-            default:
-                req.server.log.error(err, "[System] Unexpected health error");
-                return notFound(reply, "Cannot get health");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }

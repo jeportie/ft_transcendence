@@ -11,7 +11,9 @@
 // ************************************************************************** //
 
 import * as oauthService from "../service/oauth/index.js";
-import { fail, notFound, unsupportedProvider } from "../../../utils/reply.js";
+import { AppError } from "../../../utils/AppError.js";
+
+const DOMAIN = "[OAuth]";
 
 export async function startOAuth(req, reply) {
     const { provider } = req.params;
@@ -21,14 +23,7 @@ export async function startOAuth(req, reply) {
         const url = oauthService.startOAuth(req.server, provider, next, reply);
         return reply.redirect(url);
     } catch (err) {
-        switch (err.message) {
-            case "OAUTH_PROVIDER_UNKNOWN":
-                const name = err.messagge.split(":")[1];
-                return unsupportedProvider(reply, name);
-            default:
-                req.server.log.error(err, "[OAuth] Unexpected start error");
-                return notFound(reply, "Cannot start OAuth");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }
 
@@ -48,17 +43,7 @@ export async function handleOAuth(req, reply) {
           </script>
         `);
     } catch (err) {
-        switch (err.message) {
-            case "OAUTH_STATE_INVALID":
-                return badRequest(reply, "Invalid OAuth state");
-            case "OAUTH_EXCHANGE_FAILED":
-                return fail(reply, "Failed to exchange code with provider", 502);
-            case "OAUTH_USER_CREATE_FAILED":
-                return fail(reply, "Failed to create user from provider profile", 500);
-            default:
-                req.server.log.error(err, "[OAuth] Unexpected callback error");
-                return notFound(reply, "Cannot complete OAuth");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }
 

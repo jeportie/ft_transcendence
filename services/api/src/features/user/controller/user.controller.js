@@ -11,19 +11,16 @@
 // ************************************************************************** //
 
 import * as service from "../service/user.service.js";
-import { ok, notFound } from "../../../utils/reply.js";
+import { ok } from "../../../utils/reply.js";
+import { AppError } from "../../../utils/AppError.js";
+
+const DOMAIN = "[User]";
 
 export async function getMe(req, reply) {
     try {
         const data = await service.getMe(req.server, req.user);
         return ok(reply, data);
     } catch (err) {
-        switch (err.message) {
-            case "USER_NOT_FOUND":
-                return notFound(reply, "User not found");
-            default:
-                req.server.log.error(err, "[User] Unexpected getMe error");
-                return notFound(reply, "Cannot fetch user");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }

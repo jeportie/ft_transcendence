@@ -11,24 +11,17 @@
 // ************************************************************************** //
 
 import * as localService from "../service/local/index.js";
-import { ok, badRequest, notFound, unauthorized, invalidSession } from "../../../utils/reply.js";
+import { AppError } from "../../../utils/AppError.js";
+import { ok } from "../../../utils/reply.js";
+
+const DOMAIN = "[Auth]";
 
 export async function loginUser(req, reply) {
     try {
         const data = await localService.loginUser(req.server, req, reply);
         return ok(reply, data);
     } catch (err) {
-        switch (err.message) {
-            case "MISSING_CREDENTIALS":
-                return badRequest(reply, "Missing credentials");
-            case "USER_NOT_FOUND":
-                return unauthorized(reply, "Invalid credentials");
-            case "INVALID_PASSWORD":
-                return unauthorized(reply, "Invalid credentials");
-            default:
-                req.server.log.error(err, "[Auth] Unexpected login error");
-                return notFound(reply, "Cannot login");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }
 
@@ -37,15 +30,7 @@ export async function registerUser(req, reply) {
         const data = await localService.registerUser(req.server, req);
         return ok(reply, data);
     } catch (err) {
-        switch (err.message) {
-            case "MISSING_FIELDS":
-                return badRequest(reply, "Missing required fields");
-            case "USER_ALREADY_EXISTS":
-                return badRequest(reply, "User already exists");
-            default:
-                req.server.log.error(err, "[Auth] Unexpected register error");
-                return notFound(reply, "Cannot register");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }
 
@@ -54,17 +39,7 @@ export async function refreshToken(req, reply) {
         const data = await localService.refreshToken(req.server, req, reply);
         return ok(reply, data);
     } catch (err) {
-        switch (err.message) {
-            case "NO_REFRESH_COOKIE":
-            case "INVALID_REFRESH_COOKIE":
-            case "REFRESH_NOT_FOUND":
-            case "REFRESH_REVOKED":
-            case "REFRESH_EXPIRED":
-                return invalidSession(reply);
-            default:
-                req.server.log.error(err, "[Auth] Unexpected refresh error");
-                return notFound(reply, "Cannot refresh");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }
 
@@ -73,13 +48,6 @@ export async function logoutUser(req, reply) {
         const data = await localService.logoutUser(req.server, req, reply);
         return ok(reply, data);
     } catch (err) {
-        switch (err.message) {
-            case "NO_REFRESH_COOKIE":
-            case "INVALID_REFRESH_COOKIE":
-                return invalidSession(reply, "No active session");
-            default:
-                req.server.log.error(err, "[Auth] Unexpected logout error");
-                return notFound(reply, "Cannot logout");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }

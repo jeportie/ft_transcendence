@@ -11,19 +11,16 @@
 // ************************************************************************** //
 
 import * as service from "../service/admin.service.js";
-import { ok, notFound } from "../../../utils/reply.js";
+import { ok } from "../../../utils/reply.js";
+import { AppError } from "../../../utils/AppError.js";
+
+const DOMAIN = "[Admin]";
 
 export async function getUsers(req, reply) {
     try {
         const data = await service.getUsers(req.server);
         return ok(reply, data);
     } catch (err) {
-        switch (err.message) {
-            case "NO_USERS":
-                return notFound(reply, "No users found");
-            default:
-                req.server.log.error(err, "[Admin] Unexpected getUsers error");
-                return notFound(reply, "Cannot fetch users");
-        }
+        return AppError.handle(err, req, reply, DOMAIN);
     }
 }
