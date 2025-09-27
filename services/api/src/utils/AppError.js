@@ -12,7 +12,7 @@
 
 export class AppError extends Error {
     constructor(code, message, status = 400, logMessage = null) {
-        super(code);
+        super(message);
         this.name = "AppError";
         this.code = code;
         this.publicMessage = message;
@@ -29,6 +29,8 @@ export class AppError extends Error {
                 success: false,
                 error: err.publicMessage,
                 code: err.code,
+                status: err.status,
+                context
             });
         }
 
@@ -36,6 +38,9 @@ export class AppError extends Error {
         return reply.code(500).send({
             success: false,
             error: "Unexpected error",
+            code: "UNEXPECTED_ERROR",
+            status: 500,
+            context
         });
     }
 }

@@ -44,8 +44,28 @@ export const usersSchema = {
                 }
             }
         },
-        401: { description: "Unauthorized", type: "null" },
-        403: { description: "Forbidden", type: "null" },
+        401: {
+            type: "object",
+            required: ["success", "error", "code", "status", "context"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "Unauthorized" },
+                code: { type: "string", example: "UNAUTHORIZED" },
+                status: { type: "integer", example: 401 },
+                context: { type: "string", example: "[User]" }
+            }
+        },
+        403: {
+            type: "object",
+            required: ["success", "error", "code", "status", "context"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "Forbidden" },
+                code: { type: "string", example: "FORBIDDEN" },
+                status: { type: "integer", example: 403 },
+                context: { type: "string", example: "[Admin]" }
+            }
+        },
         404: {
             type: "object",
             required: ["success", "error", "code"],
