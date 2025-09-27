@@ -57,7 +57,16 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     }
 
     // Issue your tokens, skipping password
-    await loginUser(fastify, user.email || user.username, null, request, reply, { skipPwd: true });
+    await loginUser(
+        fastify,
+        {
+            body: { user: user.email || user.username },
+            headers: request.headers,
+            ip: request.ip
+        },
+        reply,
+        { skipPwd: true }
+    );
 
     // Read & clear the "next" cookie, then redirect back to the SPA
     const nextCookie = `oauth_next_${provider}`;
