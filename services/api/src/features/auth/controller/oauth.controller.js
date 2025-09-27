@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 import * as oauthService from "../service/oauth/index.js";
-import { ok, fail, notFound } from "../../../utils/reply.js";
+import { fail, notFound, unsupportedProvider } from "../../../utils/reply.js";
 
 export async function startOAuth(req, reply) {
     const { provider } = req.params;
@@ -23,7 +23,8 @@ export async function startOAuth(req, reply) {
     } catch (err) {
         switch (err.message) {
             case "OAUTH_PROVIDER_UNKNOWN":
-                return badRequest(reply, "Unknown OAuth provider");
+                const name = err.messagge.split(":")[1];
+                return unsupportedProvider(reply, name);
             default:
                 req.server.log.error(err, "[OAuth] Unexpected start error");
                 return notFound(reply, "Cannot start OAuth");
