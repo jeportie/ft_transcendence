@@ -15,7 +15,7 @@ EXPOSE 5000
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    python3 make g++ sqlite3 \
+    python3 make g++ sqlite3 curl\
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

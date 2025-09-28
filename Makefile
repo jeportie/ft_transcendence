@@ -6,13 +6,13 @@
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/12 17:27:29 by jeportie          #+#    #+#              #
-#    Updated: 2025/07/12 17:28:04 by jeportie         ###   ########.fr        #
+#    Updated: 2025/09/28 20:15:00 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 DCLOC   = docker-compose.yml
 ENVFILE = .env
-DATADIR = ~/data/
+DATADIR = ~/data/sqlite
 
 # Detect docker compose (plugin) or docker-compose (standalone)
 DOCKER_COMPOSE := $(shell command -v docker compose >/dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
@@ -24,19 +24,18 @@ else
     DOWN_FLAGS = -v --rmi all --remove-orphans
 endif
 
-.PHONY: all prepare build up down clean logs re
-
 all: prepare build up
 
 prepare:
-	mkdir -p $(DATADIR)/SQLite
-	# chown -R 1000:1000 $(DATADIR)/sqlite
+	mkdir -p $(DATADIR)
+	# Ensure correct ownership for SQLite files
+	# chown -R 1000:1000 $(DATADIR)
 
 build:
 	$(DC) --env-file $(ENVFILE) build
 
 up: prepare
-	$(DC) --env-file $(ENVFILE) up -d
+	$(DC) --env-file $(ENVFILE) up -d migrator api frontend sqlite-web
 
 down:
 	$(DC) --env-file $(ENVFILE) down
@@ -59,3 +58,5 @@ logs:
 	$(DC) --env-file $(ENVFILE) logs -f
 
 re: clean all
+
+.PHONY: all prepare build up down clean logs re dev monitor-up monitor-down backup-db

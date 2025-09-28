@@ -5,31 +5,42 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/07/12 17:28:24 by jeportie          #+#    #+#              #
-#    Updated: 2025/08/25 15:35:16 by jeportie         ###   ########.fr        #
+#    Created: 2025/09/28 19:22:31 by jeportie          #+#    #+#              #
+#    Updated: 2025/09/28 19:23:08 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 services:
-
   frontend:
     container_name: frontend
+    image: frontend
     env_file:
       - services/frontend/.env.local
-    volumes:
-      - ./services/frontend/src:/app/src:delegated
-      - ./services/frontend/public:/app/public:delegated
+    # volumes:
+      # - ./services/frontend/src:/app/src:delegated
+      # - ./services/frontend/public:/app/public:delegated
     networks:
       - transc
     build: ./services/frontend
     restart: always
 
+  migrator:
+    build: ./services/api
+    command: ["node", "src/db/migrations.js"]
+    volumes:
+      - ~/data/sqlite:/data
+    environment:
+      - NODE_ENV=development
+      - DB_FILE=/data/app.db
+    networks:
+      - transc
+
   api:
     container_name: api
+    image: api 
     env_file:
       - services/api/.env.local
     volumes:
-      # - ./data/sqlite:/data:delegated
       - ~/data/sqlite:/data
       - ./services/frontend/public:/app/public:ro
     networks:
@@ -37,15 +48,29 @@ services:
     ports:
       - "5000:5000"
     build: ./services/api
-    restart: always # or on-failure or unless
+    restart: always
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:5000/api/system/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
 
-# volumes:
-#   SQLite:
-#     driver: local
-#     driver_opts:
-#       type: none
-#       o: bind
-#       device: ./data/sqlite
+  sqlite-web:
+    image: coleifer/sqlite-web
+    command: sqlite_web --host 0.0.0.0 --port 8080 /app/data/app.db
+    working_dir: /app
+    volumes:
+      - ~/data/sqlite:/app/data
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
 
 networks:
   transc:
