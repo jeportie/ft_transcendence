@@ -23,14 +23,8 @@ WORKDIR /app
 COPY config/package.json ./package.json
 RUN npm install
 
-# 2) Compiler config
-COPY config/tsconfig.json ./tsconfig.json
-
 # COPY openapi.yaml .
 COPY src ./src
 COPY .env.local .
-
-# IF WE CONVERT TO TS
-# RUN npm run build
 
 CMD ["npm", "start"]

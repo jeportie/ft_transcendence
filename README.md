@@ -6,10 +6,12 @@ Last common core project of 42 school
 
 ### Ports
 
-backend service port : 8000
-backend inside docker port : 5000
-frontend service port : 3000
-sqlite port : 8191
+webapp : localhost:5000
+tilt.dev ui : localhost:10350
+API docs (swagger) : localhost:5000/docs
+Sqlite-web : localhost:8080
+Prometheus : localhost:9090/targets
+Graphana Metrics : localhost:3000
 
 ### Frontend dependencies
 
@@ -24,9 +26,3 @@ and lightning-fast iteration.
 
 ### TODO LIST
 
-1. fix tailwind issue when /knownpath/unknown path (css no rendered on pathes like http://localhost:3000/game/lost )
-2. fix tailwind issues when path/ (css not rendered for pathes like http://localhost:3000/game/)
-3. fix redirection issues when /posts/lost -> we dont call nofound vew, we stay on posts view but without css
-4. convert 2dlib and pong src files from .js to .ts and add type checks
-5. implement fetch-wrapper with promise or with asynch in .ts and use it in the project
-6. fix reload when we enter manually a inexistant path in the URL like : localhost:3000/lost --> issue with liver-server, need to serve unknown path back to index.html too.
