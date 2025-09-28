@@ -10,9 +10,9 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { verifyPassword } from "../password.js";
+import { verifyPassword } from "../utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
-import { issueSession } from "../issueSession.js";
+import { issueSession } from "../utils/issueSession.js";
 import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
@@ -41,6 +41,14 @@ export async function loginUser(fastify, request, reply, opts = {}) {
             throw AuthErrors.InvalidPassword(user);
     }
 
+    if (row.f2a_enabled) {
+        return {
+            success: false,
+            f2a_required: true,
+            user_id: row.id,
+            username: row.username,
+        };
+    }
     return issueSession(fastify, request, reply, row);
 };
 
@@ -56,5 +64,14 @@ export async function loginWithoutPwd(fastify, id, request, reply) {
 
     if (!row)
         throw AuthErrors.UserNotFound();
+
+    if (row.f2a_enabled) {
+        return {
+            success: true,
+            f2a_required: true,
+            user_id: row.id,
+            username: row.username,
+        };
+    }
     return issueSession(fastify, request, reply, row);
 }

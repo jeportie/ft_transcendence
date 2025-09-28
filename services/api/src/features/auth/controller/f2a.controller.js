@@ -28,7 +28,7 @@ export async function enableF2a(req, reply) {
 export async function verifyF2a(req, reply) {
     try {
         const { code } = req.body || {};
-        const data = await f2aService.verifyF2a(req.server, req.user.id, code);
+        const data = await f2aService.verifyF2a(req.server, req.user.id, code, req.reply);
         return ok(reply, data);
     } catch (err) {
         return AppError.handle(err, req, reply, DOMAIN);
