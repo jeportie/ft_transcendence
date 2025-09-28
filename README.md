@@ -24,5 +24,54 @@ This chain ensures you get type-safe, modular code; ultra-fast builds;
 utility-first, minimal CSS; and broad browser support—all with a tiny config
 and lightning-fast iteration.
 
-### TODO LIST
+---
 
+## Backup & Restore Process
+
+We provide `make` targets to back up and restore **Prometheus**, **Grafana dashboards**, and the **SQLite DB**.  
+Backups are stored in the `backups/` folder at the root of the repo.
+
+### 🔹 Full Backup (Prometheus + Grafana + SQLite)
+
+On workstation A:
+
+```bash
+make backup-all
+git add backups/
+git commit -m "Full backup"
+git push
+````
+
+### 🔹 Full Restore
+
+On workstation B:
+
+```bash
+git pull
+make restore-all
+```
+
+This restores all volumes (Prometheus metrics history, Grafana dashboards, and the SQLite DB).
+
+### 🔹 Light Backup (Grafana + SQLite only)
+
+For smaller backups (safe to push to git, excludes Prometheus time-series):
+
+```bash
+make backup-light
+git add backups/
+git commit -m "Light backup"
+git push
+```
+
+Restore on another workstation:
+
+```bash
+git pull
+make restore-light
+```
+
+---
+
+✅ Use **full backups** when you need metrics history.
+✅ Use **light backups** when you just want dashboards + DB state without heavy Prometheus data.
