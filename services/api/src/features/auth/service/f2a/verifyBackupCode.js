@@ -22,7 +22,7 @@ export async function verifyBackupCode(fastify, userId, rawCode) {
         return ("INVALID");
 
     const db = await fastify.getDb();
-    const codes = db.get(getBackupCodesSql, { ":user_id": userId });
+    const codes = await db.get(getBackupCodesSql, { ":user_id": userId });
 
     for (const code of codes) {
         const match = await verifyPassword(code.code_hash, rawCode);

@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   verifyBackuopSchema.js                             :+:      :+:    :+:   //
+//   verifyBackupSchema.js                              :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 14:50:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 17:40:54 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 17:53:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -53,11 +53,11 @@ export const verifySchema = {
         },
         401: {
             type: "object",
-            required: ["success", "code", "message"],
+            required: ["success", "error", "code"],
             properties: {
                 success: { type: "boolean", example: false },
+                error: { type: "string", example: "This backup code was already used" },
                 code: { type: "string", example: "BACKUP_EXHAUSTED" },
-                message: { type: "string", example: "This backup code was already used" },
             },
         },
         500: { $ref: "internalServerErrorResponse#" },
