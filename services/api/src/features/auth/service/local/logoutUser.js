@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { hashToken } from "../tokens.js";
-import { clearRefreshCookie } from "../cookie.js";
+import { hashToken } from "../utils/tokens.js";
+import { clearRefreshCookie } from "../utils/cookie.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 

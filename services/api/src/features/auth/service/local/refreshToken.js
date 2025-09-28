@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { generateRefreshToken, hashToken, addDaysUTC } from "../tokens.js";
-import { setRefreshCookie } from "../cookie.js";
+import { generateRefreshToken, hashToken, addDaysUTC } from "../utils/tokens.js";
+import { setRefreshCookie } from "../utils/cookie.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 

@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { hashPassword } from "../password.js";
+import { hashPassword } from "../utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 

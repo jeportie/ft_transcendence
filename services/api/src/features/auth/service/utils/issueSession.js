@@ -15,7 +15,7 @@ import { setRefreshCookie, clearRefreshCookie } from "./cookie.js";
 import { loadSql } from "../../../utils/sqlLoader.js";
 
 const PATH = import.meta.url;
-const refreshTokenSql = loadSql(PATH, "./sql/insertRefreshToken.sql");
+const refreshTokenSql = loadSql(PATH, "../sql/insertRefreshToken.sql");
 
 export async function issueSession(fastify, request, reply, userRow) {
 
