@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/27 14:32:10 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 23:52:41 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 14:54:45 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -55,4 +55,7 @@ export const F2AErrors = {
             "[Auth 2FA] QR code generation failed"),
     Invalid2FACode: () =>
         new AppError("INVALID_2FA_CODE", "Invalid 2FA code", 401),
+    BackupGenerateFailed: () =>
+        new AppError("BACKUP_GENERATE_FAILED", "Failed to generate backup codes", 500,
+            "[Auth 2FA] Backup codes generation failed"),
 }

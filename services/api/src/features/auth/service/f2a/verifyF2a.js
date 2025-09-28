@@ -14,9 +14,9 @@ import { authenticator } from "otplib";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 
-const DOMAIN = import.meta.url;
-const getSecretSql = loadSql(DOMAIN, "../sql/getF2aSecret.sql");
-const enableF2aSql = loadSql(DOMAIN, "../sql/enableF2a.sql");
+const PATH = import.meta.url;
+const getSecretSql = loadSql(PATH, "../sql/getF2aSecret.sql");
+const enableF2aSql = loadSql(PATH, "../sql/enableF2a.sql");
 
 export async function verifyF2a(fastify, userId, code) {
     if (!userId || !code)

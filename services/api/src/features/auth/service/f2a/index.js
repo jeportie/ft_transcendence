@@ -10,3 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
+export { generateBackupCodes } from "./backupCodes.js";
+export { disableF2a } from "./disableF2a.js";
+export { enableF2a } from "./enableF2a.js";
+export { verifyF2a } from "./verifyF2a.js";
