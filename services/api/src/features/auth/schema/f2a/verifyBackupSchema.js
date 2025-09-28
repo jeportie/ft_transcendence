@@ -60,6 +60,15 @@ export const verifyBackupSchema = {
                 code: { type: "string", example: "BACKUP_EXHAUSTED" },
             },
         },
-        500: { $ref: "internalServerErrorResponse#" },
+        500: {
+            type: "object",
+            required: ["success", "error", "code"],
+            properties: {
+                success: { type: "boolean", example: false },
+                error: { type: "string", example: "Something went wrong" },
+                code: { type: "string", example: "INTERNAL_ERROR" }
+            }
+        }
+
     }
 };
