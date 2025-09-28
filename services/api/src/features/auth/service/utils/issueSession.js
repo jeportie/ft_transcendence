@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/27 20:43:46 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 21:02:56 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 18:10:40 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { generateRefreshToken, hashToken, addDaysUTC } from "./tokens.js";
 import { setRefreshCookie, clearRefreshCookie } from "./cookie.js";
-import { loadSql } from "../../../utils/sqlLoader.js";
+import { loadSql } from "../../../../utils/sqlLoader.js";
 
 const PATH = import.meta.url;
 const refreshTokenSql = loadSql(PATH, "../sql/insertRefreshToken.sql");

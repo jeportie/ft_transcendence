@@ -11,8 +11,8 @@
 // ************************************************************************** //
 
 import * as controller from "../controller/oauth.controller.js";
-import { startSchema } from "../schema/startSchema.js";
-import { callbackSchema } from "../schema/callbackSchema.js";
+import { startSchema } from "../schema/oauth/startSchema.js";
+import { callbackSchema } from "../schema/oauth/callbackSchema.js";
 
 export async function oauthRoutes(fastify, options) {
 

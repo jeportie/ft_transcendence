@@ -6,11 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 14:50:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 17:53:37 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 18:11:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-export const verifySchema = {
+export const verifyBackupSchema = {
     summary: "Verify backup code",
     description: "Verify a one-time backup code (issued when enabling 2FA). Each code can only be used once.",
     tags: ["Authentication", "2FA"],

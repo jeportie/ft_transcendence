@@ -11,10 +11,10 @@
 // ************************************************************************** //
 
 import * as controller from "../controller/local.controller.js";
-import { loginSchema } from "../schema/loginSchema.js";
-import { logoutSchema } from "../schema/logoutSchema.js";
-import { refreshSchema } from "../schema/refreshSchema.js";
-import { registerSchema } from "../schema/registerSchema.js";
+import { loginSchema } from "../schema/local/loginSchema.js";
+import { logoutSchema } from "../schema/local/logoutSchema.js";
+import { refreshSchema } from "../schema/local/refreshSchema.js";
+import { registerSchema } from "../schema/local/registerSchema.js";
 
 export async function localRoutes(fastify, options) {
 

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 15:44:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 17:29:46 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 18:13:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,7 +15,7 @@ import { loadSql } from "../../../../utils/sqlLoader.js";
 
 const PATH = import.meta.url;
 const getBackupCodesSql = loadSql(PATH, "../sql/getBackupCodes.sql");
-const useBackupCodeSql = loadSql(PATH, ".../sql/useBackupCode.sql");
+const useBackupCodeSql = loadSql(PATH, "../sql/useBackupCode.sql");
 
 export async function verifyBackupCode(fastify, userId, rawCode) {
     if (!userId || !rawCode)
