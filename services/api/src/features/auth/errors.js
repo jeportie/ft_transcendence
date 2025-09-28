@@ -16,13 +16,16 @@ export const AuthErrors = {
     MissingCredentials: () =>
         new AppError("MISSING_CREDENTIALS", "Missing credentials", 400),
     UserNotFound: (user) =>
-        new AppError("USER_NOT_FOUND", "Invalid credentials", 401, `[Auth] User not found: ${user}`),
+        new AppError("USER_NOT_FOUND", "Invalid credentials", 401,
+            `[Auth] User not found: ${user}`),
     InvalidPassword: (user) =>
-        new AppError("INVALID_PASSWORD", "Invalid credentials", 401, `[Auth] Bad password: ${user}`),
+        new AppError("INVALID_PASSWORD", "Invalid credentials", 401,
+            `[Auth] Bad password: ${user}`),
     MissingFields: () =>
         new AppError("MISSING_FIELDS", "Missing required fields", 400),
     UserAlreadyExists: (user) =>
-        new AppError("USER_ALREADY_EXISTS", "User already exists", 400, `[Auth] Duplicate username/email: ${user}`),
+        new AppError("USER_ALREADY_EXISTS", "User already exists", 400,
+            `[Auth] Duplicate username/email: ${user}`),
     NoRefreshCookie: () =>
         new AppError("NO_REFRESH_COOKIE", "Invalid session", 401),
     InvalidRefreshCookie: () =>
@@ -48,5 +51,8 @@ export const OAuthErrors = {
 
 export const F2AErrors = {
     CodeGenerationFailed: () =>
-        new AppError("QR_GENERATE_FAILED", "Failed to generate QR code", 500, "[Auth 2FA] QR code generation failed"),
+        new AppError("QR_GENERATE_FAILED", "Failed to generate QR code", 500,
+            "[Auth 2FA] QR code generation failed"),
+    Invalid2FACode: () =>
+        new AppError("INVALID_2FA_CODE", "Invalid 2FA code", 401),
 }

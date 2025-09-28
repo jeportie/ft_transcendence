@@ -13,7 +13,6 @@
 import { authenticator } from "otplib";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors, F2AErrors } from "../../errors.js";
-import { use } from "react";
 
 const DOMAIN = import.meta.url;
 const getSecretSql = loadSql(DOMAIN, "../sql/getF2aSecret.sql");
@@ -30,7 +29,7 @@ export async function verifyF2a(fastify, userId, code) {
 
     const valid = authenticator.check(code, row.f2a_secret);
     if (!valid)
-        throw new Error("Invalid 2FA code"); // TODO: put this in console.error();
+        throw F2AErrors.Invalid2FACode();
 
     await db.run(enableF2aSql, { ":user_id": userId });
 }
