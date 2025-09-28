@@ -22,14 +22,12 @@ import docs from "./plugins/docs.js";
 import security from "./plugins/security.js";
 import jwtPlugin from "./plugins/jwt.js";
 import dbPlugin from "./plugins/db.js";
+import metricsPlugin from "./plugins/metrics.js";
 
 // Features Plugins
 import systemPlugin from "./features/system/plugin.js";
 import userPlugin from "./features/user/plugin.js";
 import authPlugin from "./features/auth/plugin.js";
-
-// Prometeus Client
-import client from "prom-client";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,15 +44,6 @@ export async function buildApp() {
 
     fastify.decorate("config", config);
 
-    // Setup metrics
-    const register = new client.Registry();
-    client.collectDefaultMetrics({ register });
-
-    fastify.get('/metrics', async (req, reply) => {
-        reply.type('text/plain');
-        return register.metrics();
-    });
-
     await fastify.register(docs);
     await fastify.register(security);
     await fastify.register(cookie, {
@@ -63,6 +52,7 @@ export async function buildApp() {
     });
     await fastify.register(jwtPlugin);
     await fastify.register(dbPlugin);
+    await fastify.register(metricsPlugin);
 
     // Features API
     await fastify.register(systemPlugin);
