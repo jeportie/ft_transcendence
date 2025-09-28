@@ -15,8 +15,8 @@ FROM node:20-slim
 WORKDIR /app
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends git ca-certificates \
- && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY config/package.json /app/package.json
 # COPY LOCK ONLY WHEN IN PRODUCTION
@@ -34,4 +34,6 @@ COPY src /app/src
 COPY public /app/public
 
 # 3. Build-once, then watch in background, then serve
-CMD ["npm", "run", "dev"]
+# CMD ["npm", "run", "dev"]
+# In dev, let Tilt build assets, container stays alive
+CMD ["tail", "-f", "/dev/null"]

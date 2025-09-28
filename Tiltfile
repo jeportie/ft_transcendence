@@ -20,6 +20,7 @@ docker_build(
     live_update=[
         sync('services/frontend/src', '/app/src'),
         sync('services/frontend/public', '/app/public'),
-        run('npm run dev', trigger=['services/frontend/src', 'services/frontend/public']),
-    ],
+        run('npm run build:css', trigger=['services/frontend/src', 'services/frontend/input.css']),
+        run('npm run build:js', trigger=['services/frontend/src/**/*.ts', 'services/frontend/src/**/*.js']),
+        ],
 )
