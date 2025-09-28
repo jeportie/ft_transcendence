@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 15:44:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 16:01:34 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 17:29:46 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,7 +19,7 @@ const useBackupCodeSql = loadSql(PATH, ".../sql/useBackupCode.sql");
 
 export async function verifyBackupCode(fastify, userId, rawCode) {
     if (!userId || !rawCode)
-        return (false);
+        return ("INVALID");
 
     const db = await fastify.getDb();
     const codes = db.get(getBackupCodesSql, { ":user_id": userId });
@@ -27,12 +27,17 @@ export async function verifyBackupCode(fastify, userId, rawCode) {
     for (const code of codes) {
         const match = await verifyPassword(code.code_hash, rawCode);
         if (match) {
-            await db.run(useBackupCodeSql, {
+            const result = await db.run(useBackupCodeSql, {
                 ":user_id": userId,
                 ":id": code.id,
             });
-            return (true);
+
+            if (result.changes === 1) {
+                return ("VALID");
+            } else {
+                return ("USED");
+            }
         }
     }
-    return (false);
+    return ("INVALID");
 }

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/27 14:32:10 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 14:54:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 17:30:35 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -58,4 +58,6 @@ export const F2AErrors = {
     BackupGenerateFailed: () =>
         new AppError("BACKUP_GENERATE_FAILED", "Failed to generate backup codes", 500,
             "[Auth 2FA] Backup codes generation failed"),
+    BackupExhausted: () =>
+        new AppError("BACKUP_EXHAUSTED", "This backup code was already used", 401),
 }

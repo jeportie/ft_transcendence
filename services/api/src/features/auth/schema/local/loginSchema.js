@@ -5,14 +5,15 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/10 16:18:43 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/10 16:46:55 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/28 17:42:30 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/28 17:42:39 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 export const loginSchema = {
-    summary: "Login (issue access & refresh)",
-    description: "Authenticate with username/email + password. Returns a short-lived access token and sets an HttpOnly refresh cookie.",
+    summary: "Login (issue access & refresh, or request 2FA)",
+    description:
+        "Authenticate with username/email + password. If 2FA is enabled, the server responds with `f2a_required` instead of issuing tokens.",
     tags: ["Authentication"],
     operationId: "login",
 
@@ -25,30 +26,45 @@ export const loginSchema = {
                 minLength: 3,
                 maxLength: 64,
                 description: "Username or email of the account",
-                example: "jeportie"
+                example: "jeportie",
             },
             pwd: {
                 type: "string",
                 minLength: 3,
                 maxLength: 128,
                 description: "Password (6–128 characters)",
-                example: "secret123"
-            }
+                example: "secret123",
+            },
         },
-        additionalProperties: false
+        additionalProperties: false,
     },
 
     response: {
         200: {
-            type: "object",
-            required: ["success", "user", "role", "token", "exp"],
-            properties: {
-                success: { type: "boolean", example: true },
-                user: { type: "string", example: "jeportie" },
-                role: { type: "string", example: "player" },
-                token: { type: "string", description: "JWT access token" },
-                exp: { type: "string", example: "15m" }
-            }
+            description: "Either a valid session OR a 2FA challenge",
+            oneOf: [
+                {
+                    type: "object",
+                    required: ["success", "user", "role", "token", "exp"],
+                    properties: {
+                        success: { type: "boolean", example: true },
+                        user: { type: "string", example: "jeportie" },
+                        role: { type: "string", example: "player" },
+                        token: { type: "string", description: "JWT access token" },
+                        exp: { type: "string", example: "15m" },
+                    },
+                },
+                {
+                    type: "object",
+                    required: ["success", "f2a_required", "user_id", "username"],
+                    properties: {
+                        success: { type: "boolean", example: false },
+                        f2a_required: { type: "boolean", example: true },
+                        user_id: { type: "integer", example: 42 },
+                        username: { type: "string", example: "jeportie" },
+                    },
+                },
+            ],
         },
         400: {
             type: "object",
@@ -56,8 +72,8 @@ export const loginSchema = {
             properties: {
                 success: { type: "boolean", example: false },
                 error: { type: "string", example: "Missing credentials" },
-                code: { type: "string", example: "MISSING_CREDENTIALS" }
-            }
+                code: { type: "string", example: "MISSING_CREDENTIALS" },
+            },
         },
         401: {
             type: "object",
@@ -65,9 +81,8 @@ export const loginSchema = {
             properties: {
                 success: { type: "boolean", example: false },
                 error: { type: "string", example: "Invalid credentials" },
-                code: { type: "string", example: "INVALID_PASSWORD" }
-            }
-        }
-    }
+                code: { type: "string", example: "INVALID_PASSWORD" },
+            },
+        },
+    },
 };
-
