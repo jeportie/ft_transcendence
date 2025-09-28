@@ -6,6 +6,8 @@ services/frontend/public/bundle.js
 services/frontend/public/bundle.js.map
 
 services/api/node_modules/
+services/api/src/node_modules/
+services/api/src/package-lock.json
 services/api/config/node_modules/
 services/frontend/node_modules/
 services/frontend/config/node_modules/
