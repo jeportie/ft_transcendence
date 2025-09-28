@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 14:36:24 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 14:37:55 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 17:11:52 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -25,10 +25,20 @@ export async function enableF2a(req, reply) {
     }
 }
 
-export async function verifyF2a(req, reply) {
+export async function verifyTotp(req, reply) {
     try {
         const { code } = req.body || {};
-        const data = await f2aService.verifyF2a(req.server, req.user.id, code, req.reply);
+        const data = await f2aService.verifyTotp(req.server, req.user.id, code, req.reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, req, reply, DOMAIN);
+    }
+}
+
+export async function verifyBackup(req, reply) {
+    try {
+        const { code } = req.body || {};
+        const data = await f2aService.verifyBackup(req.server, req.user.id, code, req.reply);
         return ok(reply, data);
     } catch (err) {
         return AppError.handle(err, req, reply, DOMAIN);

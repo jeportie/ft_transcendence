@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   verifyF2a.js                                       :+:      :+:    :+:   //
+//   verifyTotp.js                                      :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 00:23:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 00:34:58 by jeportie         ###   ########.fr       //
+//   Updated: 2025/09/28 17:13:05 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -31,14 +31,19 @@ export async function verifyF2a(fastify, userId, code, request, reply) {
         throw AuthErrors.UserNotFound(userId);
 
     // TOTP check
-    let valid = authenticator.check(code, row.f2a_secret);
-    if (!valid)
-        valid = await verifyBackupCode(fastify, userId, code);
-    if (!valid)
+    let verifWith = null;
+    if (authenticator.check(code, row.f2a_secret)) {
+        verifWith = "TOTP";
+    } else {
+        const valid = await verifyBackupCode(fastify, userId, code);
+        if (valid)
+            verifWith = "BACKUP";
+    }
+    if (!verifWith)
         throw F2AErrors.Invalid2FACode();
 
     await db.run(enableF2aSql, { ":user_id": userId });
-
+    fastify.log.info(`[2FA] User ${userId} verified using ${verifWith}`);
     // Get the whole User row:
     const userRow = await db.get(findUserByIdSql, { ":id": userId });
     return issueSession(fastify, request, reply, userRow);
