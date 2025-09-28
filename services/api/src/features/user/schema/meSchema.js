@@ -13,7 +13,7 @@
 export const meSchema = {
     summary: "Get authenticated user",
     description: "Returns the authenticated user’s profile. Requires a valid Bearer access token.",
-    tags: ["Authentication"],
+    tags: ["User"],
     operationId: "getMe",
 
     security: [{ bearerAuth: [] }],

@@ -13,7 +13,7 @@
 export const verifyBackupSchema = {
     summary: "Verify backup code",
     description: "Verify a one-time backup code (issued when enabling 2FA). Each code can only be used once.",
-    tags: ["Authentication", "2FA"],
+    tags: ["2FA"],
     operationId: "verifyBackup",
 
     body: {

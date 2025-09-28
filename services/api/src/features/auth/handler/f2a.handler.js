@@ -20,9 +20,9 @@ import { backupSchema } from "../schema/f2a/backupSchema.js";
 export async function f2aRoutes(fastify) {
     const authGuard = { preHandler: [fastify.authenticate] };
 
-    fastify.post("/f2a/enable", { ...authGuard, schema: enableSchema }, controller.enableF2a);
-    fastify.post("/f2a/verify-totp", { ...authGuard, schema: verifyTotpSchema }, controller.verifyTotp);
-    fastify.post("/f2a/verify-backup", { ...authGuard, schema: verifyBackupSchema }, controller.verifyBackup);
-    fastify.post("/f2a/disable", { ...authGuard, schema: disableSchema }, controller.disableF2a);
-    fastify.post("/f2a/backup", { ...authGuard, schema: backupSchema }, controller.generateBackupCodes);
+    fastify.post("/enable", { ...authGuard, schema: enableSchema }, controller.enableF2a);
+    fastify.post("/verify-totp", { ...authGuard, schema: verifyTotpSchema }, controller.verifyTotp);
+    fastify.post("/verify-backup", { ...authGuard, schema: verifyBackupSchema }, controller.verifyBackup);
+    fastify.post("/disable", { ...authGuard, schema: disableSchema }, controller.disableF2a);
+    fastify.post("/backup", { ...authGuard, schema: backupSchema }, controller.generateBackupCodes);
 }

@@ -13,7 +13,7 @@
 export const disableSchema = {
     summary: "Disable 2FA",
     description: "Clears the stored secret and disables 2FA for the user.",
-    tags: ["Authentication"],
+    tags: ["2FA"],
     operationId: "disable2FA",
 
     response: {

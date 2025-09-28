@@ -1,0 +1,29 @@
+### ENABLE 2FA (init QR code)
+POST http://localhost:5000/api/auth/f2a/enable
+Authorization: Bearer {{access_token}}
+
+### VERIFY 2FA (TOTP)
+POST http://localhost:5000/api/auth/f2a/verify
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+### GENERATE BACKUP CODES
+POST http://localhost:5000/api/auth/f2a/backup
+Authorization: Bearer {{access_token}}
+
+### VERIFY BACKUP CODE
+POST http://localhost:5000/api/auth/f2a/verify-backup
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "code": "abcd1234"
+}
+
+### DISABLE 2FA
+POST http://localhost:5000/api/auth/f2a/disable
+Authorization: Bearer {{access_token}}

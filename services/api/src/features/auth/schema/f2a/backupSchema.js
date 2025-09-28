@@ -13,7 +13,7 @@
 export const backupSchema = {
     summary: "Generate backup codes for 2FA",
     description: "Generates 10 single-use backup codes, stores them hashed, and returns plaintext codes once.",
-    tags: ["Authentication"],
+    tags: ["2FA"],
     operationId: "backup2FA",
 
     response: {

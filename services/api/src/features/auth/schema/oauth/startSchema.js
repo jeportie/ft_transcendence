@@ -13,7 +13,7 @@
 export const startSchema = {
     summary: "Start OAuth flow",
     description: "Redirects to the OAuth provider’s authorization URL with proper state and next cookie set.",
-    tags: ["Authentication"],
+    tags: ["OAuth"],
     operationId: "oauthStart",
 
     params: {

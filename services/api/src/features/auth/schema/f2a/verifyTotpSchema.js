@@ -13,7 +13,7 @@
 export const verifyTotpSchema = {
     summary: "Verify TOTP code",
     description: "Verify a 6-digit time-based code from the user’s authenticator app and issue a session.",
-    tags: ["Authentication", "2FA"],
+    tags: ["2FA"],
     operationId: "verifyTotp",
 
     body: {

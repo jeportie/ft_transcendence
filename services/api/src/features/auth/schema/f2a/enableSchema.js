@@ -13,7 +13,7 @@
 export const enableSchema = {
     summary: "Enable 2FA (init setup)",
     description: "Generates a TOTP secret + QR code for the user to scan with Google Authenticator.",
-    tags: ["Authentication"],
+    tags: ["2FA"],
     operationId: "enable2FA",
 
     response: {

@@ -13,7 +13,7 @@
 export const callbackSchema = {
     summary: "OAuth callback",
     description: "Handles the OAuth2 provider redirect, exchanges code for profile, and issues tokens.",
-    tags: ["Authentication"],
+    tags: ["OAuth"],
     operationId: "oauthCallback",
 
     querystring: {
