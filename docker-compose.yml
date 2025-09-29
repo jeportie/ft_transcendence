@@ -23,6 +23,8 @@ services:
       - transc
     build: ./services/frontend
     restart: always
+    ports:
+      - "35729:35729"
 
   migrator:
     build: ./services/api
