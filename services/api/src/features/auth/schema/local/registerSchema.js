@@ -50,7 +50,9 @@ export const registerSchema = {
             properties: {
                 success: { type: "boolean", example: true },
                 user: { type: "string", example: "jeportie_42" },
-                role: { type: "string", example: "player" }
+                role: { type: "string", example: "player" },
+                token: { type: "string", description: "JWT access token" },
+                exp: { type: "string", example: "15m" },
             }
         },
         400: {

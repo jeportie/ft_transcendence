@@ -13,6 +13,7 @@
 import { hashPassword } from "../utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
+import { issueSession } from "../utils/issueSession.js";
 
 const findUserSql = loadSql(import.meta.url, "../sql/findUserByUsernameOrEmail.sql");
 const createUserSql = loadSql(import.meta.url, "../sql/createUser.sql");
@@ -41,9 +42,12 @@ export async function registerUser(fastify, req, reply) {
         ":role": "player"
     });
 
-    return ({
-        user: username,
-        role: "player",
-        id: result.lastID
-    });
+    return issueSession(fastify, req, reply, result);
+
+    // Use this when implemented mail confirmation and anti bot registering.
+    // return ({
+    //     user: username,
+    //     role: "player",
+    //     id: result.lastID
+    // });
 };
