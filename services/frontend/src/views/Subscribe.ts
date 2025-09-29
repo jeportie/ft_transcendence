@@ -30,14 +30,15 @@ export default class Subscribe extends AbstractView {
     mount() {
         (this as any).layout?.reloadOnExit?.();
 
+        console.log("[Subscribe.ts] Loaded Subscribe view");
         // DOM
-        const subscribeForm = document.querySelector("#subscribe-form") as HTMLFormElement;
+        const subscribeForm = document.querySelector("#subscribe-form");
         const subscribeUsername = document.querySelector("#subscribe-username") as HTMLInputElement;
         const subscribeEmail = document.querySelector("#subscribe-email") as HTMLInputElement;
         const subscribePwd = document.querySelector("#subscribe-pwd") as HTMLInputElement;
         const subscribeConfirm = document.querySelector("#subscribe-confirm") as HTMLInputElement;
-        const subscribeError = document.querySelector("#subscribe-error") as HTMLDivElement;
-        const googleSubscribeBtn = document.querySelector("#google-subscribe-btn") as HTMLButtonElement;
+        const subscribeError = document.querySelector("#subscribe-error");
+        const googleSubscribeBtn = document.querySelector("#google-subscribe-btn");
 
         subscribePwd.addEventListener("focus", () => {
             if (subscribeError) {
@@ -52,7 +53,7 @@ export default class Subscribe extends AbstractView {
             console.log("values:", subscribeUsername.value, subscribePwd.value, subscribeConfirm.value, subscribeEmail.value);
             if (subscribePwd.value !== subscribeConfirm.value) {
                 subscribeError.textContent = "Passwords do not match.";
-                subscribeError.classList.remove("hidden");
+                subscribeError?.classList.remove("hidden");
                 return;
             }
 

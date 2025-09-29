@@ -9,7 +9,8 @@
         "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --log-level=info --loader:.svg=text --loader:.html=text",
         "watch:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --watch --log-level=info",
         "predev": "npm run build:css && npm run build:js",
-        "dev": "npm run predev && (npm run watch:css & npm run watch:js)"
+        "dev": "npm run predev && (npm run watch:css & npm run watch:js)",
+        "start": "npm run build:css && npm run build:js"
     },
     "keywords": [],
     "author": "",

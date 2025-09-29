@@ -61,7 +61,8 @@ export async function buildApp() {
 
     // Serve statics
     await fastify.register(statics, {
-        root: path.join(__dirname, "../public"),
+        // root: path.join(__dirname, "../public"),
+        root: "/app/public",
         prefix: "/",
     });
 
@@ -73,5 +74,4 @@ export async function buildApp() {
     });
 
     return (fastify);
-    // coment to test tilt
 }

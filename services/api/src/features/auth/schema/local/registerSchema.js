@@ -22,7 +22,6 @@ export const registerSchema = {
         properties: {
             username: {
                 type: "string",
-                pattern: "^[a-zA-Z0-9_]{3,32}$",
                 description: "Username must be 3–32 chars, alphanumeric/underscore only",
                 example: "jeportie_42"
             },
@@ -40,7 +39,6 @@ export const registerSchema = {
                 example: "S3curePassw0rd!"
             }
         },
-        additionalProperties: false
     },
 
     response: {

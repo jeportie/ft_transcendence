@@ -34,6 +34,6 @@ COPY src /app/src
 COPY public /app/public
 
 # 3. Build-once, then watch in background, then serve
-# CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
 # In dev, let Tilt build assets, container stays alive
-CMD ["tail", "-f", "/dev/null"]
+# CMD ["tail", "-f", "/dev/null"]

@@ -42,7 +42,11 @@ export async function registerUser(fastify, req, reply) {
         ":role": "player"
     });
 
-    return issueSession(fastify, req, reply, result);
+    const userRow = await db.get("SELECT * FROM users WHERE id = :id", {
+        ":id": result.lastID
+    });
+
+    return issueSession(fastify, req, reply, userRow);
 
     // Use this when implemented mail confirmation and anti bot registering.
     // return ({

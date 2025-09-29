@@ -16,15 +16,14 @@ services:
     image: frontend
     env_file:
       - services/frontend/.env.local
-    # volumes:
+    volumes:
+      - frontend_build:/app/public
       # - ./services/frontend/src:/app/src:delegated
       # - ./services/frontend/public:/app/public:delegated
     networks:
       - transc
     build: ./services/frontend
     restart: always
-    ports:
-      - "35729:35729"
 
   migrator:
     build: ./services/api
@@ -44,7 +43,8 @@ services:
       - services/api/.env.local
     volumes:
       - ~/data/sqlite:/data
-      - ./services/frontend/public:/app/public:ro
+      - frontend_build:/app/public:ro
+      # - ./services/frontend/public:/app/public:ro
     networks:
       - transc
     ports:
@@ -123,6 +123,7 @@ services:
 volumes:
   prometheus_data:
   grafana_data:
+  frontend_build:
 
 networks:
   transc:
