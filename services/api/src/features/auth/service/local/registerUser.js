@@ -15,13 +15,14 @@ import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 import { issueSession } from "../utils/issueSession.js";
 
-const findUserSql = loadSql(import.meta.url, "../sql/findUserByUsernameOrEmail.sql");
-const createUserSql = loadSql(import.meta.url, "../sql/createUser.sql");
+const PATH = import.meta.url;
+const findUserSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
+const createUserSql = loadSql(PATH, "../sql/createUser.sql");
 
-export async function registerUser(fastify, req, reply) {
-    const username = req.body?.username;
-    const email = req.body?.email;
-    const pwd = req.body?.pwd;
+export async function registerUser(fastify, request, reply) {
+    const username = request.body?.username;
+    const email = request.body?.email;
+    const pwd = request.body?.pwd;
 
     if (!username || !email || !pwd)
         throw AuthErrors.MissingFields();
@@ -42,11 +43,12 @@ export async function registerUser(fastify, req, reply) {
         ":role": "player"
     });
 
-    const userRow = await db.get("SELECT * FROM users WHERE id = :id", {
-        ":id": result.lastID
+    const row = await db.get(findUserSql, {
+        ":username": username,
+        ":email": email
     });
 
-    return issueSession(fastify, req, reply, userRow);
+    return issueSession(fastify, request, reply, row);
 
     // Use this when implemented mail confirmation and anti bot registering.
     // return ({

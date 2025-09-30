@@ -19,7 +19,7 @@ import { registerSchema } from "../schema/local/registerSchema.js";
 export async function localRoutes(fastify, options) {
 
     fastify.post("/login", { schema: loginSchema }, controller.loginUser);
-    fastify.post("/register", controller.registerUser);
+    fastify.post("/register", { schema: registerSchema }, controller.registerUser);
     fastify.post("/refresh", { schema: refreshSchema }, controller.refreshToken);
     fastify.post("/logout", { schema: logoutSchema }, controller.logoutUser);
 

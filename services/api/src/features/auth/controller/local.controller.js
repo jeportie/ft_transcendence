@@ -16,38 +16,38 @@ import { ok } from "../../../utils/reply.js";
 
 const DOMAIN = "[Auth]";
 
-export async function loginUser(req, reply) {
+export async function loginUser(request, reply) {
     try {
-        const data = await localService.loginUser(req.server, req, reply);
+        const data = await localService.loginUser(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
 
-export async function registerUser(req, reply) {
+export async function registerUser(request, reply) {
     try {
-        const data = await localService.registerUser(req.server, req);
+        const data = await localService.registerUser(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
 
-export async function refreshToken(req, reply) {
+export async function refreshToken(request, reply) {
     try {
-        const data = await localService.refreshToken(req.server, req, reply);
+        const data = await localService.refreshToken(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
 
-export async function logoutUser(req, reply) {
+export async function logoutUser(request, reply) {
     try {
-        const data = await localService.logoutUser(req.server, req, reply);
+        const data = await localService.logoutUser(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }

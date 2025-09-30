@@ -18,6 +18,10 @@ const PATH = import.meta.url;
 const refreshTokenSql = loadSql(PATH, "../sql/insertRefreshToken.sql");
 
 export async function issueSession(fastify, request, reply, userRow) {
+    if (!userRow) {
+        fastify.log.error("[issueSession] userRow is null/undefined");
+        throw new Error("issueSession: userRow missing");
+    }
 
     // Access Token
     const accessToken = fastify.jwt.sign({

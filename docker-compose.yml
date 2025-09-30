@@ -18,23 +18,21 @@ services:
       - services/frontend/.env.local
     volumes:
       - frontend_build:/app/public
-      # - ./services/frontend/src:/app/src:delegated
-      # - ./services/frontend/public:/app/public:delegated
     networks:
       - transc
     build: ./services/frontend
     restart: always
 
-  migrator:
-    build: ./services/api
-    command: ["node", "src/db/migrations.js"]
-    volumes:
-      - ~/data/sqlite:/data
-    environment:
-      - NODE_ENV=development
-      - DB_FILE=/data/app.db
-    networks:
-      - transc
+  # migrator:
+  #   build: ./services/api
+  #   command: ["node", "src/db/migrations.js"]
+  #   volumes:
+  #     - ~/data/sqlite:/data
+  #   environment:
+  #     - NODE_ENV=development
+  #     - DB_FILE=/data/app.db
+  #   networks:
+  #     - transc
 
   api:
     container_name: api
@@ -44,16 +42,15 @@ services:
     volumes:
       - ~/data/sqlite:/data
       - frontend_build:/app/public:ro
-      # - ./services/frontend/public:/app/public:ro
     networks:
       - transc
     ports:
       - "5000:5000"
     build: ./services/api
     restart: always
-    depends_on:
-      migrator:
-        condition: service_completed_successfully
+    # depends_on:
+      # migrator:
+        # condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:5000/api/system/health"]
       interval: 10s
@@ -74,51 +71,51 @@ services:
       timeout: 3s
       retries: 10
 
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-    ports:
-      - "9090:9090"
-    networks:
-      - transc
-
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    depends_on:
-      - prometheus
-    networks:
-      - transc
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    ports:
-      - "8081:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    networks:
-      - transc
-
-  node-exporter:
-    image: prom/node-exporter
-    container_name: node-exporter
-    ports:
-      - "9100:9100"
-    networks:
-      - transc
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - prometheus_data:/prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   networks:
+  #     - transc
+  #
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+  #   depends_on:
+  #     - prometheus
+  #   networks:
+  #     - transc
+  #
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   container_name: cadvisor
+  #   ports:
+  #     - "8081:8080"
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     # - /var/lib/docker/:/var/lib/docker:ro
+  #   networks:
+  #     - transc
+  #
+  # node-exporter:
+  #   image: prom/node-exporter
+  #   container_name: node-exporter
+  #   ports:
+  #     - "9100:9100"
+  #   networks:
+  #     - transc
 
 volumes:
   prometheus_data:
