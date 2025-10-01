@@ -26,7 +26,14 @@ export default fp(async function jwtPlugin(fastify) {
 
     fastify.decorate("authenticate", async function(request, reply) {
         try {
-            await request.jwtVerify();
+            const decoded = await request.jwtVerify();
+
+            request.user = {
+                id: decoded.sub,
+                username: decoded.username,
+                role: decoded.role,
+                ...decoded,
+            };
         } catch (err) {
             return reply.code(401).send({
                 success: false,
