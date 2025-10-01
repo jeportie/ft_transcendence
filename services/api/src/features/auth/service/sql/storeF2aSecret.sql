@@ -10,8 +10,11 @@
 --                                                                            --
 -- ************************************************************************** --
 
-INSERT INTO users (id, f2a_secret, f2a_enabled)
-VALUES (:user_id, :secret, 0)
-ON CONFLICT(id) DO UPDATE SET
-    f2a_secret = excluded.f2a_secret,
-    f2a_enabled = excluded.f2a_enabled;
+UPDATE
+    users
+SET
+    f2a_secret = :secret,
+    f2a_enabled = 0
+WHERE
+    id = :user_id;
+

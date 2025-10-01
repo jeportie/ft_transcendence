@@ -22,13 +22,16 @@ authenticator.options = { crypto };
 export async function enableF2a(fastify, userId) {
     if (!userId)
         throw AuthErrors.MissingCredentials();
+    console.log(userId);
 
     // TODO: encrypt with : AES-256
     const secret = authenticator.generateSecret();
+    console.log(secret);
 
     // QR code data for google authenticator : id - name - secret
     const serviceName = fastify.config.APP_NAME || "ft_transcendence";
     const otpauth = authenticator.keyuri(userId.toString(), serviceName, secret);
+    console.log(otpauth);
 
     // Create QR code -> Base 64 PNG
     let qr;
@@ -37,6 +40,7 @@ export async function enableF2a(fastify, userId) {
     } catch (err) {
         throw F2AErrors.CodeGenerationFailed();
     }
+    console.log("We are here !", qr);
 
     const db = await fastify.getDb();
     await db.run(storeSecretSql, {

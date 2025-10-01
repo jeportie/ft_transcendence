@@ -13,19 +13,25 @@
 <h1 class="ui-title">Settings</h1>
 <div class="ui-card">
     <form id="settings-form" class="ui-form-lg">
-        <div>
-            <label for="name" class="ui-label">Display name</label>
-            <input id="name" name="name" type="text" placeholder="Your name" class="ui-input" />
-        </div>
 
         <div>
-            <label for="theme" class="ui-label">Theme</label>
-            <select id="theme" name="theme" class="ui-input">
-                <option value="dark">Dark</option>
-                <option value="light">Light</option>
-            </select>
+            <label class="ui-label">Two-Factor Authentication</label>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="f2a-toggle" />
+                <span id="f2a-status" class="ui-text-muted">Disabled</span>
+            </div>
+        </div>
+
+        <!-- QR code area (hidden until enabling) -->
+        <div id="f2a-qr-section" class="hidden mt-4">
+            <p class="ui-text-small mb-2">Scan this QR code with your authenticator app:</p>
+            <img id="f2a-qr" class="ui-qr" />
+            <input id="f2a-code" type="text" class="ui-input mt-2" placeholder="Enter 6-digit code to confirm" />
+            <button id="f2a-verify-btn" class="ui-btn-primary mt-2">Verify</button>
         </div>
 
         <button type="submit" class="ui-btn-primary">Save</button>
     </form>
 </div>
+
+<!-- ui-input ui-label -->

@@ -16,49 +16,49 @@ import { ok } from "../../../utils/reply.js";
 
 const DOMAIN = "[Auth 2FA]";
 
-export async function enableF2a(req, reply) {
+export async function enableF2a(request, reply) {
     try {
-        const data = await f2aService.enableF2a(req.server, req.user.id);
+        const data = await f2aService.enableF2a(request.server, request.user.sub);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
 
-export async function verifyTotp(req, reply) {
+export async function verifyTotp(request, reply) {
     try {
-        const { code } = req.body || {};
-        const data = await f2aService.verifyTotp(req.server, req.user.id, code, req, reply);
+        const { code } = request.body || {};
+        const data = await f2aService.verifyTotp(request.server, request.user.sub, code, request, reply);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
 
-export async function verifyBackup(req, reply) {
+export async function verifyBackup(request, reply) {
     try {
-        const { code } = req.body || {};
-        const data = await f2aService.verifyBackup(req.server, req.user.id, code, req.reply);
+        const { code } = request.body || {};
+        const data = await f2aService.verifyBackup(request.server, request.user.sub, code, request.reply);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
 
-export async function disableF2a(req, reply) {
+export async function disableF2a(request, reply) {
     try {
-        const data = await f2aService.disableF2a(req.server, req.user.id);
+        const data = await f2aService.disableF2a(request.server, request.user.sub);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
 
-export async function generateBackupCodes(req, reply) {
+export async function generateBackupCodes(request, reply) {
     try {
-        const data = await f2aService.generateBackupCodes(req.server, req.user.id);
+        const data = await f2aService.generateBackupCodes(request.server, request.user.sub);
         return ok(reply, data);
     } catch (err) {
-        return AppError.handle(err, req, reply, DOMAIN);
+        return AppError.handle(err, request, reply, DOMAIN);
     }
 }
