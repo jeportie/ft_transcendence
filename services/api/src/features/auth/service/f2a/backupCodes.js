@@ -21,11 +21,10 @@ const generateBackupCodesSql = loadSql(PATH, "../sql/insertBackupCodes.sql");
 
 export async function generateBackupCodes(fastify, request, reply) {
     const userId = request.user.id;
+    const count = 10;
 
     if (!userId)
         throw AuthErrors.MissingCredentials();
-
-    const count = 10;
 
     try {
         const db = await fastify.getDb();

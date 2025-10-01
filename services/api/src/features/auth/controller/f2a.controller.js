@@ -36,7 +36,7 @@ export async function verifyTotp(request, reply) {
 
 export async function verifyBackup(request, reply) {
     try {
-        const data = await f2aService.verifyBackup(request.server, request.reply);
+        const data = await f2aService.verifyBackup(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
         return AppError.handle(err, request, reply, DOMAIN);
