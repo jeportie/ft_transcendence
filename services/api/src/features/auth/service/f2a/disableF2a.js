@@ -17,7 +17,9 @@ const PATH = import.meta.url;
 const disableF2aSql = loadSql(PATH, "../sql/disableF2a.sql");
 const deleteBackupCodeSql = loadSql(PATH, "../sql/deleteBackupCode.sql");
 
-export async function disableF2a(fastify, userId) {
+export async function disableF2a(fastify, request, reply) {
+    const userId = request.user.id;
+
     if (!userId)
         throw AuthErrors.MissingCredentials();
 

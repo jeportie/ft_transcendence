@@ -18,7 +18,10 @@ import { verifyBackupCode } from "./verifyBackupCode.js";
 const PATH = import.meta.url;
 const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
-export async function verifyBackup(fastify, userId, code, request, reply) {
+export async function verifyBackup(fastify, request, reply) {
+    const { code } = request.body || {};
+    const userId = request.user.id;
+
     if (!userId || !code)
         throw AuthErrors.MissingCredentials();
 

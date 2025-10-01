@@ -21,7 +21,11 @@ const getSecretSql = loadSql(PATH, "../sql/getF2aSecret.sql");
 const enableF2aSql = loadSql(PATH, "../sql/enableF2a.sql");
 const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
-export async function verifyTotp(fastify, userId, code, request, reply) {
+export async function verifyTotp(fastify, request, reply) {
+
+    const { code } = request.body || {};
+    const userId = request.user.id;
+
     if (!userId || !code)
         throw AuthErrors.MissingCredentials();
 

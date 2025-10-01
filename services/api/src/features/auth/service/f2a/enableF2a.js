@@ -19,7 +19,9 @@ import { AuthErrors, F2AErrors } from "../../errors.js";
 const storeSecretSql = loadSql(import.meta.url, "../sql/storeF2aSecret.sql");
 authenticator.options = { crypto };
 
-export async function enableF2a(fastify, userId) {
+export async function enableF2a(fastify, request, reply) {
+    const userId = request.user.id;
+
     if (!userId)
         throw AuthErrors.MissingCredentials();
     console.log(userId);

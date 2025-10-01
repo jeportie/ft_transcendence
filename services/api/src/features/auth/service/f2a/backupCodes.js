@@ -19,9 +19,13 @@ const PATH = import.meta.url;
 const deleteBackupCodeSql = loadSql(PATH, "../sql/deleteBackupCode.sql");
 const generateBackupCodesSql = loadSql(PATH, "../sql/insertBackupCodes.sql");
 
-export async function generateBackupCodes(fastify, userId, count = 10) {
+export async function generateBackupCodes(fastify, request, reply) {
+    const userId = request.user.id;
+
     if (!userId)
         throw AuthErrors.MissingCredentials();
+
+    const count = 10;
 
     try {
         const db = await fastify.getDb();
