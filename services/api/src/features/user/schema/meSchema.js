@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/10 17:23:24 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/10 17:23:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/02 21:25:26 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -36,7 +36,8 @@ export const meSchema = {
                             type: "string",
                             format: "date-time",
                             example: "2025-09-05T14:00:00.000Z"
-                        }
+                        },
+                        f2a_enabled: { type: "boolean" }
                     }
                 }
             }

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 19:19:28 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/23 13:51:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/02 21:42:18 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -37,8 +37,8 @@ export default class Settings extends AbstractView {
         // Load current state
         API.get("/user/me").then(user => {
             username = user.me.username;
-            toggle.checked = user.f2a_enabled;
-            status.textContent = user.f2a_enabled ? "Enabled" : "Disabled";
+            toggle.checked = user.me.f2a_enabled;
+            status.textContent = "2FA";
         });
 
         // Toggle → enable flow
@@ -50,7 +50,7 @@ export default class Settings extends AbstractView {
                 qrSection.classList.remove("hidden");
             } else {
                 await API.post("/auth/disable");
-                status.textContent = "Disabled";
+                // status.textContent = "Disabled";
             }
         });
 
@@ -58,10 +58,10 @@ export default class Settings extends AbstractView {
         verifyBtn.addEventListener("click", async e => {
             e.preventDefault();
             const code = codeInput.value;
-            const res = await API.post("/auth/verify-totp", { code });
+            const res = await API.post("/auth/verify-totp", { code, inSession: true });
             console.log(res);
             if (res.success) {
-                status.textContent = "Enabled";
+                // status.textContent = "Enabled";
                 qrSection.classList.add("hidden");
             } else {
                 alert("Invalid code. Try again.");

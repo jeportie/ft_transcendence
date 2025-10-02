@@ -6,7 +6,7 @@
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
 --   Created: 2025/09/26 15:24:36 by jeportie          #+#    #+#             --
---   Updated: 2025/09/26 15:29:27 by jeportie         ###   ########.fr       --
+--   Updated: 2025/10/02 21:26:57 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
@@ -15,7 +15,8 @@ SELECT
     username,
     email,
     role,
-    created_at
+    created_at,
+    f2a_enabled
 FROM
     users
 WHERE

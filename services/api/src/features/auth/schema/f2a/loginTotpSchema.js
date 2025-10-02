@@ -1,20 +1,20 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   verifyTotpSchema.js                                :+:      :+:    :+:   //
+//   loginTotpSchema.js                                 :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 14:50:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 18:11:56 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/02 21:07:09 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-export const verifyTotpSchema = {
-    summary: "Verify TOTP code",
-    description: "Verify a 6-digit time-based code from the user’s authenticator app.",
+export const loginTotpSchema = {
+    summary: "Login with TOTP code",
+    description: "Login with a 6-digit time-based code from the user’s authenticator app and issue a session.",
     tags: ["2FA"],
-    operationId: "verifyTotp",
+    operationId: "loginTotp",
 
     body: {
         type: "object",
@@ -34,10 +34,13 @@ export const verifyTotpSchema = {
     response: {
         200: {
             type: "object",
-            required: ["success", "enabled"],
+            required: ["success", "user", "role", "token", "exp"],
             properties: {
                 success: { type: "boolean", example: true },
-                enabled: { type: "boolean", example: "false" },
+                user: { type: "string", example: "alice" },
+                role: { type: "string", example: "user" },
+                token: { type: "string", description: "JWT access token" },
+                exp: { type: "number", example: 3600 },
             },
         },
         400: {

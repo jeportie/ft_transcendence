@@ -34,6 +34,15 @@ export async function verifyTotp(request, reply) {
     }
 }
 
+export async function loginTotp(request, reply) {
+    try {
+        const data = await f2aService.loginTotp(request.server, request, reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, request, reply, DOMAIN);
+    }
+}
+
 export async function verifyBackup(request, reply) {
     try {
         const data = await f2aService.verifyBackup(request.server, request, reply);
