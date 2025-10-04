@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   verifyTotp.js                                      :+:      :+:    :+:   //
+//   loginTotp.js                                       :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 00:23:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 17:23:33 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/03 21:59:17 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,7 +20,7 @@ const getSecretSql = loadSql(PATH, "../sql/getF2aSecret.sql");
 const enableF2aSql = loadSql(PATH, "../sql/enableF2a.sql");
 const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
-export async function verifyTotp(fastify, request, reply) {
+export async function loginTotp(fastify, request, reply) {
 
     const { code, inSession } = request.body || {};
     const userId = request.user?.id;

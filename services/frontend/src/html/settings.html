@@ -12,25 +12,36 @@
 
 <h1 class="ui-title">Settings</h1>
 <div class="ui-card">
-    <form id="settings-form" class="ui-form-lg">
-
-        <div>
-            <label class="ui-label">Two-Factor Authentication</label>
-            <div class="flex items-center gap-2">
-                <input type="checkbox" id="f2a-toggle" />
-                <span id="f2a-status" class="ui-text-muted">Disabled</span>
-            </div>
+    <div>
+        <label class="ui-label">Two-Factor Authentication</label>
+        <div class="flex items-center gap-2">
+            <input type="checkbox" id="f2a-toggle" />
+            <span id="f2a-status" class="ui-text-muted">Disabled</span>
         </div>
-
-        <!-- QR code area (hidden until enabling) -->
-        <div id="f2a-qr-section" class="hidden mt-4">
-            <p class="ui-text-small mb-2">Scan this QR code with your authenticator app:</p>
-            <img id="f2a-qr" class="ui-qr" />
-            <input id="f2a-code" type="text" class="ui-input mt-2" placeholder="Enter 6-digit code to confirm" />
-            <button id="f2a-verify-btn" class="ui-btn-primary mt-2">Verify</button>
+    </div>
+    <!-- QR code area (hidden until enabling) -->
+    <div id="f2a-qr-section" class="hidden mt-4">
+        <p class="ui-text-small mb-2">Scan this QR code with your authenticator app:</p>
+        <img id="f2a-qr" class="ui-qr" />
+        <input id="f2a-code" type="text" class="ui-input mt-2" placeholder="Enter 6-digit code to confirm" />
+        <button id="f2a-verify-btn" class="ui-btn-primary mt-2">Verify</button>
+    </div>
+    <div>
+        <label class="ui-label">Modify Password</label>
+        <div class="flex items-center gap-2">
+            <input type="checkbox" id="pwd-modify-toggle" />
+            <span id="pwd-status" class="ui-text-muted">PWD</span>
         </div>
-
-        <button type="submit" class="ui-btn-primary">Save</button>
+    </div>
+    <form id="pwd-form" class="hidden ui-form">
+        <input id="hidden-user" class="hidden ui-input" type="text" autocomplete="username"
+            placeholder="Old Password" />
+        <input id="old-pwd" class="ui-input" type="password" autocomplete="current-password"
+            placeholder="Old Password" />
+        <input id="new-pwd" class="ui-input" type="password" autocomplete="new-password" placeholder="New Password" />
+        <input id="confirm-pwd" class="ui-input" type="password" autocomplete="new-password"
+            placeholder="Confirm Password" />
+        <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
     </form>
 </div>
 

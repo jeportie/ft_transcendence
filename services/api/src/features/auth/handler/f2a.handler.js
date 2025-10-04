@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 14:39:46 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/02 21:10:02 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/03 22:45:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,4 +27,5 @@ export async function f2aRoutes(fastify) {
     fastify.post("/verify-backup", { ...authGuard, schema: verifyBackupSchema }, controller.verifyBackup);
     fastify.post("/disable", { ...authGuard, schema: disableSchema }, controller.disableF2a);
     fastify.post("/backup", { ...authGuard, schema: backupSchema }, controller.generateBackupCodes);
+    fastify.post("/check-2fa", { schema: null }, controller.checkF2a);
 }

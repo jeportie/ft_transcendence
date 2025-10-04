@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/16 17:34:53 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/04 10:22:08 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,6 +15,7 @@ import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
 import loginHTML from "../html/login.html";
+import AppLayout from "./AppLayout.js";
 
 export default class Login extends AbstractView {
     constructor(ctx: any) {
@@ -53,14 +54,23 @@ export default class Login extends AbstractView {
         loginForm?.addEventListener("submit", event => {
             event.preventDefault();
 
+            let f2aEnabled: boolean = false;
+            API.post("/auth/check-2fa", { user: userName.value }).then(user => {
+                f2aEnabled = user.f2a_enabled;
+            });
+
             API.post("/auth/login", {
                 user: userName.value,
                 pwd: userPwd.value,
             })
                 .then(data => {
-                    auth.setToken(data.token || "dev-token");
                     // @ts-ignore
-                    setTimeout(() => window.navigateTo(next), 0);
+                    if (f2aEnabled) {
+                        setTimeout(() => window.navigateTo("/f2a-login"), 0);
+                    } else {
+                        auth.setToken(data.token || "dev-token");
+                        setTimeout(() => window.navigateTo(next), 0);
+                    }
                 })
                 .catch(err => {
                     console.error("❌ Login failed:", err);

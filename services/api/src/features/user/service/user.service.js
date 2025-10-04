@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:14:55 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/02 21:34:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/04 09:48:31 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,6 +20,5 @@ export async function getMe(fastify, claims) {
     const me = await db.get(getMeSql, { ":id": Number(claims.sub) });
     if (!me)
         throw UserErrors.UserNotFound(Number(claims.sub));
-    console.log("is enabled: ", Boolean(me.f2a_enabled));
     return { me };
 }
