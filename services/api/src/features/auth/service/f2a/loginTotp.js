@@ -22,8 +22,8 @@ const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
 export async function loginTotp(fastify, request, reply) {
 
-    const { code, inSession } = request.body || {};
-    const userId = request.user?.id;
+    const { code, userId } = request.body || {};
+    // const userId = request.user?.id;
 
     console.log(`[2FA] Verifying TOTP for user=${userId}, code=${code}`);
 
@@ -43,11 +43,9 @@ export async function loginTotp(fastify, request, reply) {
 
     await db.run(enableF2aSql, { ":user_id": userId });
 
-    const userRow = await db.get(findUserByIdSql, { ":id": userId });
+    // const userRow = await db.get(findUserByIdSql, { ":id": userId });
     console.log(`[2FA] User ${userId} verified via TOTP`);
-    console.log(`[2FA] userRow: ${JSON.stringify(userRow)}`);
+    // console.log(`[2FA] userRow: ${JSON.stringify(userRow)}`);
 
-    if (!inSession)
-        return issueSession(fastify, request, reply, userRow);
-    return { enabled: true };
+    return issueSession(fastify, request, reply, userId);
 }

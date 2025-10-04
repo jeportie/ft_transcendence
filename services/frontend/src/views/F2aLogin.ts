@@ -123,11 +123,16 @@ export default class F2aLogin extends AbstractView {
         const code = inputs.map(i => i.value).join("");
         if (code.length !== 6) return;
 
+        // read ?next from URL
+        const params = new URLSearchParams(location.search);
+        const next = params.get("next") || "/dashboard";
+
         try {
-            const res = await API.post("/auth/f2a/verify", { code });
-            if (res.ok) {
-                await auth.restoreSession();
-                this.navigate("/dashboard");
+            const data = await API.post("/auth/login-totp", { code, userId: "test" });
+            if (data.ok) {
+                auth.setToken(data.token || "dev-token");
+                // @ts-ignore
+                setTimeout(() => window.navigateTo(next), 0);
             } else {
                 this.showError("Invalid code");
             }

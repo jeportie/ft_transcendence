@@ -54,19 +54,20 @@ export default class Login extends AbstractView {
         loginForm?.addEventListener("submit", event => {
             event.preventDefault();
 
-            let f2aEnabled: boolean = false;
-            API.post("/auth/check-2fa", { user: userName.value }).then(user => {
-                f2aEnabled = user.f2a_enabled;
-            });
+            // let f2aEnabled: boolean = false;
+            // API.post("/auth/check-2fa", { user: userName.value }).then(user => {
+            // f2aEnabled = user.f2a_enabled;
+            // });
 
             API.post("/auth/login", {
                 user: userName.value,
                 pwd: userPwd.value,
             })
                 .then(data => {
+                    console.log("[!!!]", data);
                     // @ts-ignore
-                    if (f2aEnabled) {
-                        setTimeout(() => window.navigateTo("/f2a-login"), 0);
+                    if (data.f2a_required) {
+                        setTimeout(() => window.navigateTo(`/f2a-login?userId=${data.user_id}`), 0);
                     } else {
                         auth.setToken(data.token || "dev-token");
                         setTimeout(() => window.navigateTo(next), 0);

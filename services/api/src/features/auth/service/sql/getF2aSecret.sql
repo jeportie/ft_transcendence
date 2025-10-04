@@ -15,6 +15,7 @@ SELECT
 FROM
     users
 WHERE
-    id = :user_id
+    -- id = :user_id
+    username = :user_id
 LIMIT
     1;
