@@ -58,11 +58,31 @@ export default class Settings extends AbstractView {
         verifyBtn.addEventListener("click", async e => {
             e.preventDefault();
             const code = codeInput.value;
-            const res = await API.post("/auth/verify-totp", { code, inSession: true });
+            const res = await API.post("/auth/verify-totp", { code });
             console.log(res);
             if (res.success) {
-                // status.textContent = "Enabled";
                 qrSection.classList.add("hidden");
+                const backups = await API.post("/auth/backup");
+                console.log(backups);
+            } else {
+                alert("Invalid code. Try again.");
+            }
+        });
+
+        // Verify code after scanning QR
+        verifyBtn.addEventListener("click", async e => {
+            e.preventDefault();
+            const code = codeInput.value;
+            const res = await API.post("/auth/verify-totp", { code });
+
+            if (res.success) {
+                qrSection.classList.add("hidden");
+
+                // Generate and show backup codes
+                const backups = await API.post("/auth/backup");
+                if (backups.success && backups.codes) {
+                    this.showBackupCodes(backups.codes);
+                }
             } else {
                 alert("Invalid code. Try again.");
             }
@@ -81,4 +101,50 @@ export default class Settings extends AbstractView {
             // });
         });
     }
+
+    showBackupCodes(codes: string[]) {
+        const section = document.querySelector("#f2a-backup-section") as HTMLElement;
+        const tableBody = document.querySelector("#f2a-backup-table") as HTMLElement;
+        const downloadBtn = document.querySelector("#f2a-backup-download") as HTMLButtonElement;
+        if (!section || !tableBody || !downloadBtn) return;
+
+        // Clear old rows
+        tableBody.innerHTML = "";
+
+        // Populate table
+        codes.forEach((code, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td class="border border-neutral-700 py-1">${index + 1}</td>
+            <td class="border border-neutral-700 py-1 font-mono tracking-wide">${code}</td>
+        `;
+            tableBody.appendChild(row);
+        });
+
+        // Attach one-time download handler
+        downloadBtn.onclick = () => {
+            const text = [
+                "Your 2FA Backup Codes",
+                "======================",
+                "",
+                "Each code can be used once if you lose access to your authenticator app.",
+                "",
+                ...codes.map((c, i) => `${i + 1}. ${c}`),
+                "",
+                "⚠️ Keep this file private and stored securely.",
+            ].join("\n");
+
+            const blob = new Blob([text], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "backup-codes.txt";
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // Show section
+        section.classList.remove("hidden");
+    }
+
 }

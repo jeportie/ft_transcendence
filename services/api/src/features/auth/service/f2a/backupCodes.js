@@ -52,7 +52,7 @@ export async function generateBackupCodes(fastify, request, reply) {
         } finally {
             await statement.finalize();
         }
-        return codes.map(code => code.raw);
+        return { codes: codes.map(code => code.raw) };
     } catch (err) {
         throw F2AErrors.BackupGenerateFailed();
     }

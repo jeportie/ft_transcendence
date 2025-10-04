@@ -21,7 +21,7 @@ const createUserSql = loadSql(PATH, "../sql/createUser.sql");
 const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
 export async function handleOAuthCallback(fastify, provider, code, state, request, reply) {
-    // Verify CSRF state
+    // --- (1) Verify CSRF state ---
     const cookieName = `oauth_state_${provider}`;
     const raw = request.cookies?.[cookieName];
     const { valid, value } = raw ? request.unsignCookie(raw) : { valid: false, value: null };
@@ -30,6 +30,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     if (!valid || !value || !state || state !== value)
         throw OAuthErrors.InvalidState();
 
+    // --- (2) Exchange code for user profile ---
     const p = getProvider(fastify, provider);
     let profile;
     try {
@@ -39,6 +40,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
         throw OAuthErrors.ExchangeFailed();
     }
 
+    // --- (3) Find or create user in DB ---
     const db = await fastify.getDb();
     let user = await db.get(findUserByEmailSql, { ":email": profile.email });
     if (!user) {
@@ -56,13 +58,20 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
         }
     }
 
-    // Issue your tokens, skipping password
-    await loginWithoutPwd(fastify, user.email || user.username, request, reply);
+    // --- (4) Attempt passwordless login ---
+    const loginResult = await loginWithoutPwd(fastify, user.email || user.username, request, reply);
 
-    // Read & clear the "next" cookie, then redirect back to the SPA
+    // --- (5) Handle "next" redirection target ---
     const nextCookie = `oauth_next_${provider}`;
     const next = request.cookies?.[nextCookie] || "/dashboard";
     reply.clearCookie(nextCookie, { path: `/api/auth/${provider}` });
+
+    // --- (6) Redirect depending on 2FA status ---
+    if (loginResult.f2a_required) {
+        // 2FA enabled → redirect to the 2FA login page
+        const redirectUrl = `/f2a-login?userId=${loginResult.user_id}&next=${encodeURIComponent(next)}`;
+        return reply.redirect(redirectUrl);
+    }
 
     return ({ redirect: String(next) });
 }

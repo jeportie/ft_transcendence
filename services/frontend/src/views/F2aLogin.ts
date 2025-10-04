@@ -38,48 +38,6 @@ export default class F2aLogin extends AbstractView {
 
         this.setupOtpInputs(inputs);
         inputs[0]?.focus();
-
-        // // read ?next from URL
-        // const params = new URLSearchParams(location.search);
-        // const next = params.get("next") || "/dashboard";
-        //
-        // // Hide error when focusing inputs
-        // userPwd.addEventListener("focus", () => {
-        //     if (errorBox) {
-        //         errorBox.classList.add("hidden");
-        //         errorBox.textContent = "";
-        //     }
-        // });
-        //
-        // loginForm?.addEventListener("submit", event => {
-        //     event.preventDefault();
-        //
-        //     API.post("/auth/login", {
-        //         user: userName.value,
-        //         pwd: userPwd.value,
-        //     })
-        //         .then(data => {
-        //             auth.setToken(data.token || "dev-token");
-        //             // @ts-ignore
-        //             setTimeout(() => window.navigateTo(next), 0);
-        //         })
-        //         .catch(err => {
-        //             console.error("❌ Login failed:", err);
-        //             userPwd.value = "";
-        //             userName.focus();
-        //
-        //             if (errorBox) {
-        //                 errorBox.textContent = "Invalid username or password.";
-        //                 errorBox.classList.remove("hidden");
-        //             }
-        //         });
-        // })
-        //
-        // googleBtn?.addEventListener("click", () => {
-        //     const params = new URLSearchParams(location.search);
-        //     const next = params.get("next") || "/dashboard";
-        //     window.location.href = `/api/auth/google/start?next=${encodeURIComponent(next)}`;
-        // });
     }
 
     setupOtpInputs(inputs: HTMLInputElement[]) {
@@ -123,13 +81,13 @@ export default class F2aLogin extends AbstractView {
         const code = inputs.map(i => i.value).join("");
         if (code.length !== 6) return;
 
-        // read ?next from URL
         const params = new URLSearchParams(location.search);
         const next = params.get("next") || "/dashboard";
+        const id = params.get("userId");
 
         try {
-            const data = await API.post("/auth/login-totp", { code, userId: "test" });
-            if (data.ok) {
+            const data = await API.post("/auth/login-totp", { code, userId: id });
+            if (data.success) {
                 auth.setToken(data.token || "dev-token");
                 // @ts-ignore
                 setTimeout(() => window.navigateTo(next), 0);

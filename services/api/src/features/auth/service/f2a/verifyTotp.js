@@ -20,8 +20,10 @@ const enableF2aSql = loadSql(PATH, "../sql/enableF2a.sql");
 
 export async function verifyTotp(fastify, request, reply) {
 
-    const { code, inSession } = request.body || {};
+    const { code } = request.body || {};
     const userId = request.user?.id;
+
+    console.log("[!!!]: ", code, userId);
 
     if (!userId || !code)
         throw AuthErrors.MissingCredentials();

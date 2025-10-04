@@ -23,29 +23,20 @@ const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 export async function loginTotp(fastify, request, reply) {
 
     const { code, userId } = request.body || {};
-    // const userId = request.user?.id;
-
-    console.log(`[2FA] Verifying TOTP for user=${userId}, code=${code}`);
 
     if (!userId || !code)
         throw AuthErrors.MissingCredentials();
 
     const db = await fastify.getDb();
     const row = await db.get(getSecretSql, { ":user_id": userId });
-    console.log(`[2FA] DB row: ${JSON.stringify(row)}`);
     if (!row || !row.f2a_secret)
         throw AuthErrors.UserNotFound(userId);
 
     const valid = authenticator.check(code, row.f2a_secret);
-    console.log(`[2FA] Code valid? ${valid}`);
     if (!valid)
         throw F2AErrors.Invalid2FACode();
 
-    await db.run(enableF2aSql, { ":user_id": userId });
+    const userRow = await db.get(findUserByIdSql, { ":id": userId });
 
-    // const userRow = await db.get(findUserByIdSql, { ":id": userId });
-    console.log(`[2FA] User ${userId} verified via TOTP`);
-    // console.log(`[2FA] userRow: ${JSON.stringify(userRow)}`);
-
-    return issueSession(fastify, request, reply, userId);
+    return issueSession(fastify, request, reply, userRow);
 }
