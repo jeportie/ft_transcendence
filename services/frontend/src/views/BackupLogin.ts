@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   F2aLogin.ts                                        :+:      :+:    :+:   //
+//   BackupLogin.ts                                     :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/04 11:54:09 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/04 21:55:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -34,7 +34,16 @@ export default class BackupLogin extends AbstractView {
         // DOM
         const f2aLoginForm = document.querySelector("#backup-login-form");
         const f2aLoginError = document.querySelector("#backup-login-error");
-        const inputs = Array.from(document.querySelectorAll<HTMLInputElement>(".otp-input"));
+        const inputs = Array.from(document.querySelectorAll<HTMLInputElement>(".backup-input"));
+        const previousBtn = document.querySelector("#previous-btn");
+
+        const params = new URLSearchParams(location.search);
+        const id = params.get("userId");
+        const next = params.get("next") || "/dashboard";
+
+        previousBtn?.addEventListener("click", () => {
+            window.navigateTo(`/f2a-login?userId=${id}&next=${next}`);
+        });
 
         this.setupOtpInputs(inputs);
         inputs[0]?.focus();
