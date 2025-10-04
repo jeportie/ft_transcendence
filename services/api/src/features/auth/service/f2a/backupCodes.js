@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 12:30:22 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 14:57:29 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/04 21:02:35 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -33,7 +33,7 @@ export async function generateBackupCodes(fastify, request, reply) {
         const codes = [];
         for (let i = 0; i < count; i++) {
             const raw = crypto.randomBytes(4).toString("hex");
-            const hash = hashPassword(raw);
+            const hash = await hashPassword(raw);
             codes.push({ raw, hash });
         }
 

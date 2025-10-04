@@ -20,6 +20,7 @@ const LandingLayout = () => import("../views/LandingLayout.ts");
 const Landing = () => import("../views/Landing.ts");
 const Login = () => import("../views/Login.ts");
 const F2aLogin = () => import("../views/F2aLogin.ts");
+const BackupLogin = () => import("../views/BackupLogin.ts");
 const Subscribe = () => import("../views/Subscribe.ts");
 
 // Lazy layout
@@ -41,6 +42,7 @@ export const routes = [
             { path: "", component: Landing },
             { path: "login", component: Login },
             { path: "f2a-login", component: F2aLogin },
+            { path: "backups", component: BackupLogin },
             { path: "subscribe", component: Subscribe },
         ]
     },

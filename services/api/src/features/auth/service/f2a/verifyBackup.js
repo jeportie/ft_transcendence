@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 00:23:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 17:32:47 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/04 20:55:39 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,18 +19,20 @@ const PATH = import.meta.url;
 const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
 export async function verifyBackup(fastify, request, reply) {
-    const { code } = request.body || {};
-    const userId = request.user.id;
+    const { code, userId } = request.body || {};
 
+    console.log("[!!!]: ", code, userId);
     if (!userId || !code)
         throw AuthErrors.MissingCredentials();
 
     const result = await verifyBackupCode(fastify, userId, code);
+    console.log("[!!!Res]: ", result);
 
     if (result === "VALID") {
         const db = await fastify.getDb();
         const userRow = await db.get(findUserByIdSql, { ":id": userId });
         fastify.log.info(`[2FA] User ${userId} verified via BACKUP`);
+        console.log(`[2FA] User ${userId} verified via BACKUP`);
         return issueSession(fastify, request, reply, userRow);
     }
 
