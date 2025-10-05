@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 13:56:00 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 12:40:28 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/05 14:32:08 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,7 +15,7 @@ import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
 import subscribeHTML from "../html/subscribe.html";
-import { initRecaptcha, getRecaptchaToken } from "../spa/utils/recaptcha.js";
+import { initRecaptcha, getRecaptchaToken, destroyRecaptcha } from "../spa/utils/recaptcha.js";
 
 export default class Subscribe extends AbstractView {
     constructor(ctx: any) {
@@ -43,6 +43,7 @@ export default class Subscribe extends AbstractView {
 
         const captchaContainer = document.querySelector("#recaptcha-container") as HTMLElement;
         const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
+
         await initRecaptcha(siteKey, captchaContainer);
 
         subscribePwd.addEventListener("focus", () => {
@@ -91,5 +92,9 @@ export default class Subscribe extends AbstractView {
         googleSubscribeBtn?.addEventListener("click", () => {
             window.location.href = `/api/auth/google/start?next=${encodeURIComponent("/dashboard")}`;
         });
+    }
+
+    destroy() {
+        destroyRecaptcha();
     }
 }

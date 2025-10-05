@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:14:37 by jeportie          #+#    #+#             */
-/*   Updated: 2025/09/11 22:39:11 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/05 14:54:12 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,11 @@
     .dark #app {
         @apply text-slate-100;
         background: transparent;
+    }
+
+    /* Hide reCAPTCHA leftovers only when app is tearing down */
+    .teardown iframe[src*="bframe"],
+    .teardown iframe[src*="anchor"] {
+        display: none !important;
     }
 }

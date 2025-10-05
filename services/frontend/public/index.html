@@ -10,7 +10,10 @@
 
 <body>
     <mini-router id="app"></mini-router>
-    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaLoaded&render=explicit" async defer></script>
+    <script>
+        window.recaptchaLoaded = () => console.log("[reCAPTCHA] Script loaded globally");
+    </script>
     <script src="/bundle.js"></script>
 </body>
 
