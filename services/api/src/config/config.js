@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 14:26:18 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 23:25:36 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/05 21:45:52 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -23,6 +23,7 @@ const config = {
     APP_NAME: asString(process.env.APP_NAME, "ft_transcendence"),
     HOST: asString(process.env.HOST, "0.0.0.0"),
     PORT: asNumber(process.env.PORT, 5000),
+    FRONTEND_URL: asString(process.env.FRONTEND_URL, "localhost:5000"),
 
     // Security
     JWT_SECRET: asString(process.env.JWT_SECRET, ""),
@@ -47,6 +48,9 @@ const config = {
 
     // ReCAPTCHA
     RECAPTCHA_SECRET: requireString(process.env.RECAPTCHA_SECRET, "RECAPTCHA_SECRET"),
+
+    // Resend API
+    RESEND_API_KEY: requireString(process.env.RESEND_API_KEY, "RESEND_API_KEY"),
 };
 
 const errors = [];

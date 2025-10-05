@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 18:57:53 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 19:06:51 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/05 20:11:51 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -22,5 +22,5 @@ export async function localRoutes(fastify, options) {
     fastify.post("/register", { schema: registerSchema }, controller.registerUser);
     fastify.post("/refresh", { schema: refreshSchema }, controller.refreshToken);
     fastify.post("/logout", { schema: logoutSchema }, controller.logoutUser);
-
+    fastify.get("/activate/:token", { schema: null }, controller.activateUser);
 }

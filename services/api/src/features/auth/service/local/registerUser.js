@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:47:42 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 15:35:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/05 21:54:18 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,10 +16,14 @@ import { AuthErrors } from "../../errors.js";
 import { RecaptchaErrors } from "../../errors.js";
 import { issueSession } from "../utils/issueSession.js";
 import { verifyRecaptcha } from "../utils/verifyRecaptcha.js";
+import { sendActivationEmail } from "../utils/mailer.js";
+import { randomBytes } from "crypto";
+import { addDaysUTC } from "../utils/tokens.js";
 
 const PATH = import.meta.url;
 const findUserSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
 const createUserSql = loadSql(PATH, "../sql/createUser.sql");
+const insertActivationSql = loadSql(PATH, "../sql/insertActivationToken.sql");
 
 export async function registerUser(fastify, request, reply) {
     const username = request.body?.username;
@@ -45,7 +49,7 @@ export async function registerUser(fastify, request, reply) {
         throw AuthErrors.UserAlreadyExists(username);
 
     const hashed = await hashPassword(pwd);
-    const result = await db.run(createUserSql, {
+    await db.run(createUserSql, {
         ":username": username,
         ":email": email,
         ":password_hash": hashed,
@@ -57,12 +61,28 @@ export async function registerUser(fastify, request, reply) {
         ":email": email
     });
 
+    const activationToken = randomBytes(32).toString("hex");
+    const expiresAt = addDaysUTC(1); // 24h validity
+
+    console.log("[!!!]:", activationToken, expiresAt);
+
+    const res = await db.run(insertActivationSql, {
+        ":user_id": row.id,
+        ":token": activationToken,
+        ":expires_at": expiresAt,
+    });
+
+    console.log("[!!!DB]:", res);
+
+    // Construct activation link (frontend or API)
+    const activationLink = `${fastify.config.FRONTEND_URL}/api/auth/activate/${activationToken}`;
+
+    await sendActivationEmail(/*email*/"jeromep.dev@gmail.com", activationLink);
+
     return issueSession(fastify, request, reply, row);
 
-    // Use this when implemented mail confirmation and anti bot registering.
-    // return ({
-    //     user: username,
-    //     role: "player",
-    //     id: result.lastID
-    // });
+    // Optionally don’t issue session yet:
+    // return {
+    //     message: "User created. Please check your email to activate your account.",
+    // };
 };

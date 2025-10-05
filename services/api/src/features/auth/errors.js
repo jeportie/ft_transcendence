@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/27 14:32:10 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 15:34:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/05 22:09:40 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -36,6 +36,14 @@ export const AuthErrors = {
         new AppError("REFRESH_REVOKED", "Session revoked", 401),
     RefreshExpired: () =>
         new AppError("REFRESH_EXPIRED", "Session expired", 401),
+    MissingActivationToken: () =>
+        new AppError("MISSING_ACTIVATION_TOKEN", "Session expired", 400),
+    InvalidActivationToken: () =>
+        new AppError("INVALID_OR_EXPIRED_TOKEN", "Invalid or expired token", 400),
+    UsedActivationToken: () =>
+        new AppError("USED_ACTIVATION_TOKEN", "Activation Token already used", 400),
+    LinkExpired: () =>
+        new AppError("LINK_EXPIRED", "Activation link expired", 400),
 };
 
 export const OAuthErrors = {

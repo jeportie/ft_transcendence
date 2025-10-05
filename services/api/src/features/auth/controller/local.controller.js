@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 19:07:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/26 23:01:58 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/05 20:11:39 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -46,6 +46,15 @@ export async function refreshToken(request, reply) {
 export async function logoutUser(request, reply) {
     try {
         const data = await localService.logoutUser(request.server, request, reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, request, reply, DOMAIN);
+    }
+}
+
+export async function activateUser(request, reply) {
+    try {
+        const data = await localService.activateUser(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
         return AppError.handle(err, request, reply, DOMAIN);
