@@ -44,6 +44,9 @@ const config = {
     GOOGLE_CLIENT_ID: requireString(process.env.GOOGLE_CLIENT_ID, "GOOGLE_CLIENT_ID"),
     GOOGLE_CLIENT_SECRET: requireString(process.env.GOOGLE_CLIENT_SECRET, "GOOGLE_CLIENT_SECRET"),
     GOOGLE_REDIRECT_URI: requireString(process.env.GOOGLE_REDIRECT_URI, "GOOGLE_REDIRECT_URI"),
+
+    // ReCAPTCHA
+    RECAPTCHA_SECRET: requireString(process.env.RECAPTCHA_SECRET, "RECAPTCHA_SECRET"),
 };
 
 const errors = [];

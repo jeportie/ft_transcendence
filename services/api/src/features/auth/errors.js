@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/27 14:32:10 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 17:30:35 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/05 15:34:57 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -60,4 +60,11 @@ export const F2AErrors = {
             "[Auth 2FA] Backup codes generation failed"),
     BackupExhausted: () =>
         new AppError("BACKUP_EXHAUSTED", "This backup code was already used", 401),
+}
+
+export const RecaptchaErrors = {
+    MissingToken: () =>
+        new AppError("MISSING_reCAPTCHA", "Missing reCAPTCHA token", 400),
+    InvalidRecaptcha: () =>
+        new AppError("INVALID_reCAPTCHA", "Invalid reCAPTCHA verification", 400),
 }
