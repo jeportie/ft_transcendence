@@ -64,25 +64,22 @@ export async function registerUser(fastify, request, reply) {
     const activationToken = randomBytes(32).toString("hex");
     const expiresAt = addDaysUTC(1); // 24h validity
 
-    console.log("[!!!]:", activationToken, expiresAt);
-
-    const res = await db.run(insertActivationSql, {
+    await db.run(insertActivationSql, {
         ":user_id": row.id,
         ":token": activationToken,
         ":expires_at": expiresAt,
     });
-
-    console.log("[!!!DB]:", res);
 
     // Construct activation link (frontend or API)
     const activationLink = `${fastify.config.FRONTEND_URL}/api/auth/activate/${activationToken}`;
 
     await sendActivationEmail(/*email*/"jeromep.dev@gmail.com", activationLink);
 
-    return issueSession(fastify, request, reply, row);
+    // return issueSession(fastify, request, reply, row);
 
-    // Optionally don’t issue session yet:
-    // return {
-    //     message: "User created. Please check your email to activate your account.",
-    // };
+    return {
+        activation_required: true,
+        user_id: row.id,
+        username: row.username,
+    };
 };

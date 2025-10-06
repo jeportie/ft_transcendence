@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/05 19:17:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 22:21:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 12:03:10 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,10 +24,8 @@ export async function activateUser(fastify, request, reply) {
     if (!token)
         throw AuthErrors.MissingActivationToken();
 
-    console.log("[!!!Here]");
     const db = await fastify.getDb();
     const row = await db.get(findTokenSql, { ":token": token });
-    console.log("[!!!Row]: ", row);
     if (!row)
         throw AuthErrors.InvalidActivationToken();
     if (row.used_at)
@@ -39,5 +37,6 @@ export async function activateUser(fastify, request, reply) {
     await db.run(activateUserSql, { ":user_id": row.user_id });
     await db.run(markUsedSql, { ":id": row.id });
 
-    return { message: "Account activated successfully" };
+    reply.redirect(`${fastify.config.FRONTEND_URL}/login?activated=1`);
+    // return { message: "Account activated successfully" };
 }

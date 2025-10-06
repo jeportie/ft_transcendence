@@ -13,7 +13,7 @@
 export const loginSchema = {
     summary: "Login (issue access & refresh, or request 2FA)",
     description:
-        "Authenticate with username/email + password. If 2FA is enabled, the server responds with `f2a_required` instead of issuing tokens.",
+        "Authenticate with username/email + password. If 2FA is enabled, the server responds with `f2a_required` instead of issuing tokens. If the account has not been activated, the server responds with 'activation_required' instead of issuing tokens.",
     tags: ["Authentication"],
     operationId: "login",
 
@@ -41,7 +41,7 @@ export const loginSchema = {
 
     response: {
         200: {
-            description: "Either a valid session OR a 2FA challenge",
+            description: "Either a valid session OR a 2FA challenge OR unactive session",
             oneOf: [
                 {
                     type: "object",
@@ -60,6 +60,16 @@ export const loginSchema = {
                     properties: {
                         success: { type: "boolean", example: false },
                         f2a_required: { type: "boolean", example: true },
+                        user_id: { type: "integer", example: 42 },
+                        username: { type: "string", example: "jeportie" },
+                    },
+                },
+                {
+                    type: "object",
+                    required: ["success", "activation_required", "user_id", "username"],
+                    properties: {
+                        success: { type: "boolean", example: false },
+                        activation_required: { type: "boolean", example: true },
                         user_id: { type: "integer", example: 42 },
                         username: { type: "string", example: "jeportie" },
                     },

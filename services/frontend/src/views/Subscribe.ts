@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 13:56:00 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 14:32:08 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 11:34:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -75,9 +75,9 @@ export default class Subscribe extends AbstractView {
                 pwd: subscribePwd.value,
                 captcha: captchaToken
             }).then(data => {
-                auth.setToken(data.token || "dev-token");
+                // auth.setToken(data.token || "dev-token");
                 // @ts-ignore
-                setTimeout(() => window.navigateTo("/dashboard"), 0);
+                setTimeout(() => window.navigateTo("/finalize-subscription"), 0);
             }).catch(err => {
                 console.error("❌ Subscrition Failed", err);
                 subscribePwd.value = "";

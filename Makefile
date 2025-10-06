@@ -36,7 +36,7 @@ build:
 	$(DC) --env-file $(ENVFILE) build
 
 up: prepare
-	$(DC) --env-file $(ENVFILE) up -d migrator api frontend sqlite-web
+	$(DC) --env-file $(ENVFILE) up -d api frontend sqlite-web #migrator
 
 down:
 	$(DC) --env-file $(ENVFILE) down

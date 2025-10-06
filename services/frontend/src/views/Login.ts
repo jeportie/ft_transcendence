@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/04 20:44:24 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 10:44:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -60,7 +60,9 @@ export default class Login extends AbstractView {
             })
                 .then(data => {
                     // @ts-ignore
-                    if (data.f2a_required) {
+                    if (data.activation_required) {
+                        setTimeout(() => window.navigateTo(`/not-active?userId=${data.user_id}`), 0);
+                    } else if (data.f2a_required) {
                         setTimeout(() => window.navigateTo(`/f2a-login?userId=${data.user_id}`), 0);
                     } else {
                         auth.setToken(data.token || "dev-token");

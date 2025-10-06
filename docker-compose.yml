@@ -118,8 +118,8 @@ services:
   #     - transc
 
 volumes:
-  prometheus_data:
-  grafana_data:
+  # prometheus_data:
+  # grafana_data:
   frontend_build:
 
 networks:

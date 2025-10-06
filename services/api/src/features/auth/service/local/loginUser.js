@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:37:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 21:06:05 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 11:00:27 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -18,12 +18,11 @@ import { AuthErrors } from "../../errors.js";
 const PATH = import.meta.url;
 const userSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
 
-export async function loginUser(fastify, request, reply, opts = {}) {
-    const skipPwd = Boolean(opts.skipPwd);
+export async function loginUser(fastify, request, reply) {
     const user = request.body?.user;
     const pwd = request.body?.pwd;
 
-    if (!user || (!skipPwd && !pwd))
+    if (!user || !pwd)
         throw AuthErrors.MissingCredentials();
 
     const db = await fastify.getDb();
@@ -35,19 +34,23 @@ export async function loginUser(fastify, request, reply, opts = {}) {
     if (!row)
         throw AuthErrors.UserNotFound(user);
 
-    if (!skipPwd) {
-        const ok = await verifyPassword(row.password_hash, pwd);
-        if (!ok)
-            throw AuthErrors.InvalidPassword(user);
-    }
+    const ok = await verifyPassword(row.password_hash, pwd);
+    if (!ok)
+        throw AuthErrors.InvalidPassword(user);
 
     if (row.f2a_enabled) {
         return {
-            success: false,
             f2a_required: true,
             user_id: row.id,
             username: row.username,
         };
+    }
+    if (!row.is_active) {
+        return {
+            activation_required: true,
+            user_id: row.id,
+            username: row.username,
+        }
     }
     return issueSession(fastify, request, reply, row);
 };
@@ -67,7 +70,6 @@ export async function loginWithoutPwd(fastify, id, request, reply) {
 
     if (row.f2a_enabled) {
         return {
-            success: true,
             f2a_required: true,
             user_id: row.id,
             username: row.username,
