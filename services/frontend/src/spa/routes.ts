@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 16:33:26 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 22:25:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -21,7 +21,7 @@ const Landing = () => import("../views/Landing.ts");
 const Login = () => import("../views/Login.ts");
 const F2aLogin = () => import("../views/F2aLogin.ts");
 const BackupLogin = () => import("../views/BackupLogin.ts");
-const Subscribe = () => import("../views/Subscribe.ts");
+const Signup = () => import("../views/Signup.ts");
 const NotActive = () => import("../views/NotActive.ts");
 const FinalizeSubscription = () => import("../views/FinalizeSubscription.ts");
 const Activate = () => import("../views/Activate.ts");
@@ -48,7 +48,7 @@ export const routes = [
             { path: "login", component: Login },
             { path: "f2a-login", component: F2aLogin },
             { path: "backups", component: BackupLogin },
-            { path: "subscribe", component: Subscribe },
+            { path: "signup", component: Signup },
             { path: "not-active", component: NotActive },
             { path: "finalize-subscription", component: FinalizeSubscription },
             { path: "activate", component: Activate },

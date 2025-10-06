@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 18:49:41 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 23:36:52 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,6 +16,7 @@ import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
 import loginHTML from "../html/login.html";
 import spaceShipSvg from "../assets/spaceship.svg";
+import googleIcon from "../assets/google.png";
 
 export default class Login extends AbstractView {
     constructor(ctx: any) {
@@ -39,6 +40,18 @@ export default class Login extends AbstractView {
         const errorBox = document.querySelector("#login-error");
         const googleBtn = document.querySelector("#google-btn") as HTMLButtonElement;
         const card = document.querySelector(".ui-card");
+
+        // Create animation element (absolute in same place)
+        const animWrapper = document.createElement("div");
+        animWrapper.innerHTML = `
+                        <dotlottie-wc
+                            src="https://lottie.host/ffd0055c-8d94-4608-8a8d-4a97fd97a035/WUB7J2v2eu.lottie"
+                            style="width: 100%; height: 100%;"
+                            autoplay
+                            loop
+                        ></dotlottie-wc>
+                    `;
+        animWrapper.className = "absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center";
 
         if (card) {
             // Add the <script> if not already present
@@ -114,24 +127,10 @@ export default class Login extends AbstractView {
                         staticLogo.classList.add("opacity-0", "transition-opacity", "duration-150", "ease-out"); // faster fade
 
                         // fully remove after fade completes
-                        setTimeout(() => staticLogo.remove(), 180);
+                        setTimeout(() => staticLogo.remove(), 50);
                     }
-
-                    // Create animation element (absolute in same place)
-                    const animWrapper = document.createElement("div");
-                    animWrapper.innerHTML = `
-                        <dotlottie-wc
-                            src="https://lottie.host/f3e95bb6-451c-47ed-a8c9-cd1797395398/eq3dQMcY4Y.lottie"
-                            style="width: 100%; height: 100%;"
-                            autoplay
-                            loop
-                        ></dotlottie-wc>
-                    `;
-                    animWrapper.className = "absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center";
                     logoContainer?.appendChild(animWrapper);
-
-                    // Fade in the animation smoothly
-                    setTimeout(() => animWrapper.classList.add("opacity-90"), 50);
+                    setTimeout(() => animWrapper.classList.add("opacity-90"), 1);
 
                     // Navigate after 2s
                     setTimeout(() => {
@@ -157,10 +156,36 @@ export default class Login extends AbstractView {
                 });
         })
 
+        if (googleBtn) {
+            const iconWrapper = document.createElement("span");
+            iconWrapper.className = "absolute left-4 flex items-center";
+
+            const icon = document.createElement("img");
+            icon.src = googleIcon;
+            icon.alt = "Google icon";
+            icon.className = "w-8 h-8";
+
+            iconWrapper.appendChild(icon);
+            googleBtn.prepend(iconWrapper);
+        }
+
         googleBtn?.addEventListener("click", () => {
             const params = new URLSearchParams(location.search);
             const next = params.get("next") || "/dashboard";
-            window.location.href = `/api/auth/google/start?next=${encodeURIComponent(next)}`;
+            const logoContainer = card?.querySelector("div.relative");
+            const staticLogo = logoContainer?.querySelector("div > svg")?.parentElement;
+
+            if (staticLogo) {
+                staticLogo.classList.remove("opacity-90"); // ensure starting from visible
+                staticLogo.classList.add("opacity-0", "transition-opacity", "duration-150", "ease-out"); // faster fade
+
+                // fully remove after fade completes
+                setTimeout(() => staticLogo.remove(), 50);
+            }
+            logoContainer?.appendChild(animWrapper);
+            setTimeout(() => animWrapper.classList.add("opacity-90"), 1);
+
+            setTimeout(() => window.location.href = `/api/auth/google/start?next=${encodeURIComponent(next)}`, 1800);
         });
     }
 }
