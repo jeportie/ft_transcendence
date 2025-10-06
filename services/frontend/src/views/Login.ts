@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 14:34:46 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 18:49:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,6 +15,7 @@ import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
 import loginHTML from "../html/login.html";
+import spaceShipSvg from "../assets/spaceship.svg";
 
 export default class Login extends AbstractView {
     constructor(ctx: any) {
@@ -37,6 +38,33 @@ export default class Login extends AbstractView {
         const userPwd = document.querySelector("#user-pwd") as HTMLInputElement;
         const errorBox = document.querySelector("#login-error");
         const googleBtn = document.querySelector("#google-btn") as HTMLButtonElement;
+        const card = document.querySelector(".ui-card");
+
+        if (card) {
+            // Add the <script> if not already present
+            if (!document.querySelector('script[src*="dotlottie-wc"]')) {
+                const lottieScript = document.createElement("script");
+                lottieScript.type = "module";
+                lottieScript.src = "https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.1/dist/dotlottie-wc.js";
+                document.head.appendChild(lottieScript);
+            }
+        }
+
+        if (card) {
+            // Create logo container
+            const logoContainer = document.createElement("div");
+            logoContainer.className = "relative mx-auto mb-4 w-[120px] h-[120px] flex items-center justify-center";
+
+            // Add static SVG (default visible)
+            const staticLogo = document.createElement("div");
+            staticLogo.innerHTML = spaceShipSvg;
+            staticLogo.className = "absolute inset-0 opacity-90 transition-opacity duration-300 flex items-center justify-center";
+            staticLogo.querySelector("svg")?.classList.add("w-full", "h-full");
+
+            // Add the container to the card
+            logoContainer.appendChild(staticLogo);
+            card.prepend(logoContainer);
+        }
 
         // read ?next from URL
         const params = new URLSearchParams(location.search);
@@ -78,15 +106,44 @@ export default class Login extends AbstractView {
                 pwd: userPwd.value,
             })
                 .then(data => {
-                    // @ts-ignore
-                    if (data.activation_required) {
-                        setTimeout(() => window.navigateTo(`/not-active?userId=${data.user_id}`), 0);
-                    } else if (data.f2a_required) {
-                        setTimeout(() => window.navigateTo(`/f2a-login?userId=${data.user_id}`), 0);
-                    } else {
-                        auth.setToken(data.token || "dev-token");
-                        setTimeout(() => window.navigateTo(next), 0);
+                    const logoContainer = card?.querySelector("div.relative");
+                    const staticLogo = logoContainer?.querySelector("div > svg")?.parentElement;
+
+                    if (staticLogo) {
+                        staticLogo.classList.remove("opacity-90"); // ensure starting from visible
+                        staticLogo.classList.add("opacity-0", "transition-opacity", "duration-150", "ease-out"); // faster fade
+
+                        // fully remove after fade completes
+                        setTimeout(() => staticLogo.remove(), 180);
                     }
+
+                    // Create animation element (absolute in same place)
+                    const animWrapper = document.createElement("div");
+                    animWrapper.innerHTML = `
+                        <dotlottie-wc
+                            src="https://lottie.host/f3e95bb6-451c-47ed-a8c9-cd1797395398/eq3dQMcY4Y.lottie"
+                            style="width: 100%; height: 100%;"
+                            autoplay
+                            loop
+                        ></dotlottie-wc>
+                    `;
+                    animWrapper.className = "absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center";
+                    logoContainer?.appendChild(animWrapper);
+
+                    // Fade in the animation smoothly
+                    setTimeout(() => animWrapper.classList.add("opacity-90"), 50);
+
+                    // Navigate after 2s
+                    setTimeout(() => {
+                        if (data.activation_required) {
+                            window.navigateTo(`/not-active?userId=${data.user_id}`);
+                        } else if (data.f2a_required) {
+                            window.navigateTo(`/f2a-login?userId=${data.user_id}`);
+                        } else {
+                            auth.setToken(data.token || "dev-token");
+                            window.navigateTo(next);
+                        }
+                    }, 2000);
                 })
                 .catch(err => {
                     console.error("❌ Login failed:", err);

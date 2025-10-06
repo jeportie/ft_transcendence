@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 13:54:04 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 16:33:26 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -25,6 +25,8 @@ const Subscribe = () => import("../views/Subscribe.ts");
 const NotActive = () => import("../views/NotActive.ts");
 const FinalizeSubscription = () => import("../views/FinalizeSubscription.ts");
 const Activate = () => import("../views/Activate.ts");
+const ServiceTerms = () => import("../views/ServiceTerms.ts");
+const PrivacyPolity = () => import("../views/PrivacyPolicy.ts");
 
 // Lazy layout
 const AppLayout = () => import("../views/AppLayout.ts");
@@ -50,6 +52,8 @@ export const routes = [
             { path: "not-active", component: NotActive },
             { path: "finalize-subscription", component: FinalizeSubscription },
             { path: "activate", component: Activate },
+            { path: "service-terms", component: ServiceTerms },
+            { path: "privacy-policy", component: PrivacyPolity },
         ]
     },
     {

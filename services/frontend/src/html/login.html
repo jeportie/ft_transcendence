@@ -6,23 +6,37 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/09/23 13:16:20 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/09/23 14:08:56 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/06 17:41:04 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
 <div class="ui-card">
-    <h2 class="ui-card-title">Login</h2>
+    <h1 class="ui-title">Log in to Transcend</h1>
+    <p class="ui-text-muted mt-3">
+        Don't have an account?
+        <a href="/subscribe" data-link class="ui-hint-link">Sign up.</a>
+    </p>
+    <br>
     <form id="login-form" class="ui-form">
-        <input id="user-name" class="ui-input" type="text" placeholder="Username" autocomplete="username" />
-        <input id="user-pwd" class="ui-input" type="password" placeholder="Password" autocomplete="current-password" />
+        <div class="ui-card-title mt-2">Email</div>
+        <input id="user-name" class="ui-input" type="text" placeholder="Username/Email..." autocomplete="username" />
+        <div class="ui-card-title mt-2">Password</div>
+        <input id="user-pwd" class="ui-input" type="password" placeholder="Password..."
+            autocomplete="current-password" />
+        <a href="/forgot-password" data-link class="flex justify-end ui-text-small">Forgot your password?</a>
         <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
     </form>
     <div id="login-error" class="ui-error hidden mt-2"></div>
-    <p class="ui-text-small mt-3">
-        You are new?<br>
-        <a href="/subscribe" data-link class="ui-hint-link">Subscribe</a>
-    </p>
+    <div class="ui-separator"><span>OR</span></div>
     <button id="google-btn" class="ui-btn-secondary w-full mt-2">
         Continue with Google
     </button>
+</div>
+<div>
+    <p class="ui-text-small mt-3 justify-between">
+        By signing in, you agree to our
+        <a href="/service-terms" data-link class="ui-hint-link">Terms of Service </a>
+        and
+        <a href="/privacy-policy" data-link class="ui-hint-link">Privacy Policy</a>
+    </p>
 </div>

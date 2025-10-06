@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:15:11 by jeportie          #+#    #+#             */
-/*   Updated: 2025/10/06 14:25:46 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/06 17:13:44 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@
   }
 
   .ui-error         { @apply text-red-500 font-semibold; }
+
+  /* --- Links --- */
+  .ui-hint-link {
+    @apply text-blue-400 hover:text-blue-300 font-medium transition-colors duration-150;
+  }
 
   /* --- Buttons --- */
   .ui-btn           { @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium
@@ -105,4 +110,43 @@
   .ui-alert-show    { @apply opacity-100 translate-y-0; }
 
   .ui-alert-hide    { @apply opacity-0 -translate-y-2; }
+
+  /* --- Separator --- */
+  .ui-separator {
+    @apply relative flex items-center justify-center text-slate-400/80 text-sm my-4 select-none;
+  }
+
+  .ui-separator::before,
+  .ui-separator::after {
+    @apply content-[''] flex-1 border-t border-white/10;
+  }
+
+  .ui-separator span {
+    @apply mx-3 text-slate-400/70;
+  }
+
+  /* --- Large Legal Card --- */
+
+  .ui-card-lg {
+    @apply ui-card shadow-2xl shadow-blue-500/10;
+  }
+
+  .ui-card-scroll {
+    @apply ui-card-lg overflow-y-auto max-h-[85vh];
+  }
+
+  /* --- Hide Scrollbar (global aesthetic) --- */
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+
+  /* For Firefox */
+  * {
+    scrollbar-width: none; /* hides scrollbar but keeps scroll */
+  }
+
+  *::-webkit-scrollbar {
+    display: none; /* hides for webkit browsers */
+  }
 }
