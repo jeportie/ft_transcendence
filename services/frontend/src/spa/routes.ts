@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 22:25:37 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/07 00:03:29 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,6 +19,7 @@ const LandingLayout = () => import("../views/LandingLayout.ts");
 // Lazy views 
 const Landing = () => import("../views/Landing.ts");
 const Login = () => import("../views/Login.ts");
+const Forgot = () => import("../views/Forgot.ts");
 const F2aLogin = () => import("../views/F2aLogin.ts");
 const BackupLogin = () => import("../views/BackupLogin.ts");
 const Signup = () => import("../views/Signup.ts");
@@ -46,6 +47,7 @@ export const routes = [
         children: [
             { path: "", component: Landing },
             { path: "login", component: Login },
+            { path: "forgot-password", component: Forgot },
             { path: "f2a-login", component: F2aLogin },
             { path: "backups", component: BackupLogin },
             { path: "signup", component: Signup },
