@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:47:42 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 21:54:18 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 14:46:35 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -71,7 +71,7 @@ export async function registerUser(fastify, request, reply) {
     });
 
     // Construct activation link (frontend or API)
-    const activationLink = `${fastify.config.FRONTEND_URL}/api/auth/activate/${activationToken}`;
+    const activationLink = `http://${fastify.config.FRONTEND_URL}/activate?token=${activationToken}`;
 
     await sendActivationEmail(/*email*/"jeromep.dev@gmail.com", activationLink);
 

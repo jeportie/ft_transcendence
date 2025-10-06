@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/05 19:17:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 12:03:10 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 14:45:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -37,6 +37,5 @@ export async function activateUser(fastify, request, reply) {
     await db.run(activateUserSql, { ":user_id": row.user_id });
     await db.run(markUsedSql, { ":id": row.id });
 
-    reply.redirect(`${fastify.config.FRONTEND_URL}/login?activated=1`);
-    // return { message: "Account activated successfully" };
+    return { message: "Account activated successfully" };
 }

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 10:44:37 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 14:34:46 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,7 +15,6 @@ import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
 import loginHTML from "../html/login.html";
-import AppLayout from "./AppLayout.js";
 
 export default class Login extends AbstractView {
     constructor(ctx: any) {
@@ -42,6 +41,26 @@ export default class Login extends AbstractView {
         // read ?next from URL
         const params = new URLSearchParams(location.search);
         const next = params.get("next") || "/dashboard";
+        const activated = params.get("activated");
+        const error = params.get("activation_failed");
+
+        // ✅ Show success message if account was just activated
+        if (activated) {
+            const msg = document.createElement("div");
+            msg.textContent = "Your account has been activated successfully!";
+            msg.className = "ui-card-alert ui-alert-success mb-4";
+            document.querySelector(".ui-card")?.prepend(msg);
+            // Optionally fade it out after a few seconds
+            setTimeout(() => msg.remove(), 4000);
+        }
+        if (error) {
+            const msg = document.createElement("div");
+            msg.textContent = "Error: Account not activated";
+            msg.className = "ui-alert ui-alert-error mb-4";
+            document.querySelector(".ui-card")?.prepend(msg);
+            // Optionally fade it out after a few seconds
+            setTimeout(() => msg.remove(), 4000);
+        }
 
         // Hide error when focusing inputs
         userPwd.addEventListener("focus", () => {

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 12:05:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 12:20:09 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 14:47:15 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,7 +20,6 @@ const deleteBackupCodeSql = loadSql(PATH, "../sql/deleteBackupCode.sql");
 export async function disableF2a(fastify, request, reply) {
     const userId = request.user.id;
 
-    console.log("[!!!]: ", userId);
     if (!userId)
         throw AuthErrors.MissingCredentials();
 

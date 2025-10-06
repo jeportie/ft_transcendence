@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 00:23:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 17:23:33 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/06 14:47:04 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -22,8 +22,6 @@ export async function verifyTotp(fastify, request, reply) {
 
     const { code } = request.body || {};
     const userId = request.user?.id;
-
-    console.log("[!!!]: ", code, userId);
 
     if (!userId || !code)
         throw AuthErrors.MissingCredentials();
