@@ -1,17 +1,17 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   markActivationTokenUsed.sql                        :+:      :+:    :+:   --
+--   markPwdResetTokenUsed.sql                          :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
 --   Created: 2025/10/05 19:25:31 by jeportie          #+#    #+#             --
---   Updated: 2025/10/07 15:44:13 by jeportie         ###   ########.fr       --
+--   Updated: 2025/10/07 15:44:11 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
 UPDATE
-    activation_tokens
+    password_reset_tokens
 SET
     used_at = datetime('now')
 WHERE

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/05 15:26:17 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 15:26:36 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/07 15:04:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -39,11 +39,9 @@ export async function verifyRecaptcha(token, remoteIp) {
         });
 
         const data = await res.json();
-        console.log("[reCAPTCHA] Verification result:", data);
 
         return data.success === true;
     } catch (err) {
-        console.error("[reCAPTCHA] Verification failed:", err);
         return false;
     }
 }

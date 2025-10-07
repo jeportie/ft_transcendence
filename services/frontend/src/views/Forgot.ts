@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 13:56:00 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 23:56:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/07 16:18:01 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -33,8 +33,8 @@ export default class Forgot extends AbstractView {
         // DOM
         const forgotForm = document.querySelector("#forgot-form");
         const forgotEmail = document.querySelector("#forgot-email") as HTMLInputElement;
-        const forgotError = document.querySelector("#forgot-error");
-        const forgotInfo = document.querySelector("#forgot-info");
+        const forgotError = document.querySelector("#forgot-error") as HTMLDivElement || null;
+        const forgotInfo = document.querySelector("#forgot-info") as HTMLDivElement || null;
 
         const captchaContainer = document.querySelector("#recaptcha-forgot-container") as HTMLElement;
         const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
@@ -61,15 +61,14 @@ export default class Forgot extends AbstractView {
                 return;
             }
 
-            forgotInfo.textContent = "If your email exists, we sent a link";
-            forgotInfo?.classList.remove("hidden");
-
             API.post("/auth/forgot-pwd", {
                 email: forgotEmail.value,
                 captcha: captchaToken
-            }).then(data => {
-
-            }).catch(err => {
+            }).then((data: any) => {
+                captchaContainer.classList.add("hidden");
+                forgotInfo.textContent = data.message;
+                forgotInfo?.classList.remove("hidden");
+            }).catch((err: any) => {
                 if (forgotError) {
                     forgotError.textContent = err.error;
                     forgotError.classList.remove("hidden");

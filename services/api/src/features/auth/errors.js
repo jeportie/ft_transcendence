@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/27 14:32:10 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 22:09:40 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/07 16:02:31 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,21 +27,27 @@ export const AuthErrors = {
         new AppError("USER_ALREADY_EXISTS", "User already exists", 400,
             `[Auth] Duplicate username/email: ${user}`),
     NoRefreshCookie: () =>
-        new AppError("NO_REFRESH_COOKIE", "Invalid session", 401),
+        new AppError("NO_REFRESH_COOKIE", "No Refresh Cookie. Invalid session", 401),
     InvalidRefreshCookie: () =>
-        new AppError("INVALID_REFRESH_COOKIE", "Invalid session", 401),
+        new AppError("INVALID_REFRESH_COOKIE", "Invalid Refresh Cookie. Invalid session", 401),
     RefreshNotFound: () =>
-        new AppError("REFRESH_NOT_FOUND", "Invalid session", 401),
+        new AppError("REFRESH_NOT_FOUND", "Refresh not found. Invalid session", 401),
     RefreshRevoked: () =>
         new AppError("REFRESH_REVOKED", "Session revoked", 401),
     RefreshExpired: () =>
         new AppError("REFRESH_EXPIRED", "Session expired", 401),
     MissingActivationToken: () =>
-        new AppError("MISSING_ACTIVATION_TOKEN", "Session expired", 400),
+        new AppError("MISSING_ACTIVATION_TOKEN", "Missing Activation Token", 400),
     InvalidActivationToken: () =>
         new AppError("INVALID_OR_EXPIRED_TOKEN", "Invalid or expired token", 400),
     UsedActivationToken: () =>
         new AppError("USED_ACTIVATION_TOKEN", "Activation Token already used", 400),
+    MissingResetPwdToken: () =>
+        new AppError("MISSING_RESET_PWD_TOKEN", "Missing Password Token", 400),
+    InvalidResetPwdToken: () =>
+        new AppError("INVALID_RESET_TOKEN", "Invalid or expired reset token", 400),
+    UsedResetPwdToken: () =>
+        new AppError("USED_RESET_PWD_TOKEN", "Reset Password Token already used", 400),
     LinkExpired: () =>
         new AppError("LINK_EXPIRED", "Activation link expired", 400),
 };

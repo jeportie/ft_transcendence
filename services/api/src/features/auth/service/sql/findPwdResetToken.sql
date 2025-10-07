@@ -1,18 +1,18 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   markActivationTokenUsed.sql                        :+:      :+:    :+:   --
+--   findPwdResetToken.sql                              :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/10/05 19:25:31 by jeportie          #+#    #+#             --
---   Updated: 2025/10/07 15:44:13 by jeportie         ###   ########.fr       --
+--   Created: 2025/10/05 19:23:58 by jeportie          #+#    #+#             --
+--   Updated: 2025/10/07 15:41:34 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-UPDATE
-    activation_tokens
-SET
-    used_at = datetime('now')
+SELECT
+    *
+FROM
+    password_reset_tokens
 WHERE
-    id = :id;
+    token_hash = :token;

@@ -60,3 +60,12 @@ export async function activateUser(request, reply) {
         return AppError.handle(err, request, reply, DOMAIN);
     }
 }
+
+export async function forgotPwd(request, reply) {
+    try {
+        const data = await localService.forgotPwd(request.server, request, reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, request, reply, DOMAIN);
+    }
+}

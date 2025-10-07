@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+              //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/05 11:17:35 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 15:01:17 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/07 15:20:24 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -105,7 +105,6 @@ export function getRecaptchaToken() {
         if (widgetId === null) throw new Error("Captcha not initialized");
 
         const token = g.getResponse(widgetId);
-        console.log("[reCAPTCHA] 🧩 Token:", token || "(empty)");
         return token;
     } catch (error) {
         console.error("[reCAPTCHA] ❌ Token retrieval failed:", error);

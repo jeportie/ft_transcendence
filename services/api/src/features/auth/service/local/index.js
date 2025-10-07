@@ -15,3 +15,4 @@ export { logoutUser } from "./logoutUser.js";
 export { refreshToken } from "./refreshToken.js";
 export { registerUser } from "./registerUser.js";
 export { activateUser } from "./activateUser.js";
+export { forgotPwd } from "./forgotPwd.js";

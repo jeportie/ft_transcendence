@@ -1,18 +1,18 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   markActivationTokenUsed.sql                        :+:      :+:    :+:   --
+--   updatePassword.sql                                 :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/10/05 19:25:31 by jeportie          #+#    #+#             --
---   Updated: 2025/10/07 15:44:13 by jeportie         ###   ########.fr       --
+--   Created: 2025/10/07 15:46:49 by jeportie          #+#    #+#             --
+--   Updated: 2025/10/07 16:12:54 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-UPDATE
-    activation_tokens
+UPDATE 
+    users
 SET
-    used_at = datetime('now')
+    password_hash = :password_hash
 WHERE
-    id = :id;
+    id = :user_id;

@@ -1,18 +1,16 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   markActivationTokenUsed.sql                        :+:      :+:    :+:   --
+--   insertResetPasswordToken.sql                       :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/10/05 19:25:31 by jeportie          #+#    #+#             --
---   Updated: 2025/10/07 15:44:13 by jeportie         ###   ########.fr       --
+--   Created: 2025/10/07 14:41:27 by jeportie          #+#    #+#             --
+--   Updated: 2025/10/07 15:11:28 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-UPDATE
-    activation_tokens
-SET
-    used_at = datetime('now')
-WHERE
-    id = :id;
+INSERT INTO
+    password_reset_tokens (user_id, token_hash, expires_at)
+VALUES
+    (:user_id, :token_hash, :expires_at);
