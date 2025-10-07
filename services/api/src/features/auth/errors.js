@@ -43,13 +43,15 @@ export const AuthErrors = {
     UsedActivationToken: () =>
         new AppError("USED_ACTIVATION_TOKEN", "Activation Token already used", 400),
     MissingResetPwdToken: () =>
-        new AppError("MISSING_RESET_PWD_TOKEN", "Missing Password Token", 400),
+        new AppError("MISSING_RESET_PWD_TOKEN", "Missing Reset Password Token", 400),
     InvalidResetPwdToken: () =>
         new AppError("INVALID_RESET_TOKEN", "Invalid or expired reset token", 400),
     UsedResetPwdToken: () =>
         new AppError("USED_RESET_PWD_TOKEN", "Reset Password Token already used", 400),
     LinkExpired: () =>
         new AppError("LINK_EXPIRED", "Activation link expired", 400),
+    DbFail: () =>
+        new AppError("DB_FAIL", "The database failed", 401),
 };
 
 export const OAuthErrors = {

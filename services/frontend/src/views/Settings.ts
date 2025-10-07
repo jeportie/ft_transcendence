@@ -27,11 +27,15 @@ export default class Settings extends AbstractView {
     mount() {
         const settings = document.querySelector("#settings-form") as HTMLFormElement | null;
         const toggle = document.querySelector("#f2a-toggle") as HTMLInputElement;
-        const status = document.querySelector("#f2a-status")!;
-        const qrSection = document.querySelector("#f2a-qr-section")!;
+        const status = document.querySelector("#f2a-status");
+        const qrSection = document.querySelector("#f2a-qr-section");
         const qrImg = document.querySelector("#f2a-qr") as HTMLImageElement;
-        const verifyBtn = document.querySelector("#f2a-verify-btn")!;
+        const verifyBtn = document.querySelector("#f2a-verify-btn");
         const codeInput = document.querySelector("#f2a-code") as HTMLInputElement;
+
+        const pwdModifyToogle = document.querySelector("#pwd-modify-toggle");
+        const pwdForm = document.querySelector("#pwd-form");
+
 
         let username: string | null = null;
         // Load current state
@@ -40,6 +44,12 @@ export default class Settings extends AbstractView {
             toggle.checked = user.me.f2a_enabled;
             status.textContent = "2FA";
         });
+
+        pwdModifyToogle?.addEventListener("click", () => {
+            pwdForm?.classList.remove("hidden");
+        });
+
+        ///////////////////////////////////////////////// --- 2FA ---
 
         // Toggle → enable flow
         toggle.addEventListener("change", async () => {

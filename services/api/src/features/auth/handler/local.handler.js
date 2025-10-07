@@ -23,6 +23,7 @@ export async function localRoutes(fastify, options) {
     fastify.post("/refresh", { schema: refreshSchema }, controller.refreshToken);
     fastify.post("/logout", { schema: logoutSchema }, controller.logoutUser);
     fastify.post("/forgot-pwd", { schema: null }, controller.forgotPwd);
+    fastify.post("/reset-pwd", { schema: null }, controller.resetPwd);
 
     fastify.get("/activate/:token", { schema: null }, controller.activateUser);
 }

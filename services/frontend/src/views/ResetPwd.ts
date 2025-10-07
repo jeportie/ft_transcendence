@@ -58,6 +58,7 @@ export default class ResetPwd extends AbstractView {
                 return;
             }
 
+            console.log("[!!!]: ", token, resetPwd.value);
             API.post("/auth/reset-pwd", {
                 token,
                 pwd: resetPwd.value,
@@ -66,10 +67,9 @@ export default class ResetPwd extends AbstractView {
                 resetInfo.textContent = data.message;
                 resetInfo?.classList.remove("hidden");
             }).catch((err: any) => {
-                if (resetError) {
-                    resetError.textContent = err.error;
-                    resetError.classList.remove("hidden");
-                }
+                console.log("[!ERR!]", err);
+                resetError.textContent = err.error;
+                resetError.classList.remove("hidden");
             })
         })
     }

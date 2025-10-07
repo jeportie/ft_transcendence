@@ -69,3 +69,12 @@ export async function forgotPwd(request, reply) {
         return AppError.handle(err, request, reply, DOMAIN);
     }
 }
+
+export async function resetPwd(request, reply) {
+    try {
+        const data = await localService.resetPwd(request.server, request, reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, request, reply, DOMAIN);
+    }
+}

@@ -43,5 +43,5 @@
 --   → Returns one row with role = 'player'.
 -- -------------------------------------------------------------------------- --
 
-INSERT OR IGNORE INTO users (username, email, password_hash, role)
-VALUES ('jeportie', 'jeportie@42.fr', 'dub', 'player');
+INSERT OR IGNORE INTO users (username, email, password_hash, role, is_active)
+VALUES ('jeportie', 'jeportie@42.fr', 'dub', 'player', 1);

@@ -19,16 +19,19 @@ const findResetTokenSql = loadSql(PATH, "../sql/findPwdResetToken.sql");
 const markResetUsedSql = loadSql(PATH, "../sql/markPwdResetTokenUsed.sql");
 const resetPwdSql = loadSql(PATH, "../sql/updatePassword.sql");
 
-export async function resetPassword(fastify, request, reply) {
-    const token = request.params.token;
-    const rawPwd = request.params.pwd;
+export async function resetPwd(fastify, request, reply) {
+    const token = request.body.token;
+    const rawPwd = request.body.pwd;
 
+    if (!rawPwd)
+        throw AuthErrors.MissingFields();
     if (!token)
         throw AuthErrors.MissingResetPwdToken();
 
     const db = await fastify.getDb();
     const row = await db.get(findResetTokenSql, { ":token": token });
-    console.log("[DB]: ", row);
+
+    console.log("[DB]: ", row || null);
 
     if (!row)
         throw AuthErrors.InvalidResetPwdToken();
@@ -38,11 +41,16 @@ export async function resetPassword(fastify, request, reply) {
     if (new Date(row.expires_at) < new Date())
         throw AuthErrors.LinkExpired();
 
-    const password_hash = hashPassword(rawPwd);
-    await db.run(resetPwdSql, {
-        ":password_hash": password_hash,
-        ":user_id": row.user_id,
-    });
-    await db.run(markResetUsedSql, { ":id": row.id });
+    const password_hash = await hashPassword(rawPwd);
+    try {
+        await db.run(resetPwdSql, {
+            ":password_hash": password_hash,
+            ":user_id": row.user_id,
+        });
+        await db.run(markResetUsedSql, { ":id": row.id });
+    } catch (err) {
+        console.log("[!DB!]:", err);
+        throw AuthErrors.DbFail();
+    }
     return { message: "Password has been changed." };
 }

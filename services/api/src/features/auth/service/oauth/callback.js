@@ -19,6 +19,7 @@ const PATH = import.meta.url;
 const findUserByEmailSql = loadSql(PATH, "../sql/findUserByEmail.sql");
 const createUserSql = loadSql(PATH, "../sql/createUser.sql");
 const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
+const activateUserSql = loadSql(PATH, "../sql/activateUser.sql");
 
 export async function handleOAuthCallback(fastify, provider, code, state, request, reply) {
     // --- (1) Verify CSRF state ---
@@ -52,6 +53,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
                 ":role": "player"
             });
             user = await db.get(findUserByIdSql, { ":id": r.lastID });
+            await db.run(activateUserSql, { ":user_id": user.id });
         } catch (err) {
             fastify.log.error(err, "[OAuth] User creation failed");
             throw OAuthErrors.UserCreateFailed();
