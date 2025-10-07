@@ -13,7 +13,6 @@
 // @ts-ignore
 import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
-import { auth } from "../spa/auth.js";
 import forgotHTML from "../html/forgotPwd.html";
 import { initRecaptcha, getRecaptchaToken, destroyRecaptcha } from "../spa/utils/recaptcha.js";
 
@@ -35,7 +34,7 @@ export default class Forgot extends AbstractView {
         const forgotForm = document.querySelector("#forgot-form");
         const forgotEmail = document.querySelector("#forgot-email") as HTMLInputElement;
         const forgotError = document.querySelector("#forgot-error");
-        const forgotBtn = document.querySelector("#forgot-btn");
+        const forgotInfo = document.querySelector("#forgot-info");
 
         const captchaContainer = document.querySelector("#recaptcha-forgot-container") as HTMLElement;
         const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
@@ -43,15 +42,18 @@ export default class Forgot extends AbstractView {
         await initRecaptcha(siteKey, captchaContainer);
 
         forgotEmail.addEventListener("focus", () => {
-            if (forgotError) {
-                forgotError.classList.add("hidden");
-                forgotError.textContent = "";
-            }
+            forgotError?.classList.add("hidden");
+            forgotError.textContent = "";
         })
 
         forgotForm?.addEventListener("submit", event => {
             event.preventDefault();
 
+            if (!forgotEmail.value) {
+                forgotError.textContent = "Please add your email before submiting";
+                forgotError?.classList.remove("hidden");
+                return;
+            }
             const captchaToken = getRecaptchaToken();
             if (!captchaToken) {
                 forgotError.textContent = "Please complete the captcha.";
@@ -59,13 +61,14 @@ export default class Forgot extends AbstractView {
                 return;
             }
 
-            API.post("/auth/register", {
+            forgotInfo.textContent = "If your email exists, we sent a link";
+            forgotInfo?.classList.remove("hidden");
+
+            API.post("/auth/forgot-pwd", {
                 email: forgotEmail.value,
                 captcha: captchaToken
             }).then(data => {
-                // auth.setToken(data.token || "dev-token");
-                // @ts-ignore
-                setTimeout(() => window.navigateTo("/finalize-subscription"), 0);
+
             }).catch(err => {
                 if (forgotError) {
                     forgotError.textContent = err.error;

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/07 00:03:29 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/07 10:50:56 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,12 +14,12 @@ import TailwindAnimationHook from "../styles/transitions/hooks/TailwindAnimation
 import OverlayAnimationHook from "../styles/transitions/hooks/OverlayAnimationHook.js";
 import { guards } from "./guards.js";
 
-// Lazy layout
+// Landing layout
 const LandingLayout = () => import("../views/LandingLayout.ts");
-// Lazy views 
 const Landing = () => import("../views/Landing.ts");
 const Login = () => import("../views/Login.ts");
 const Forgot = () => import("../views/Forgot.ts");
+const Reset = () => import("../views/ResetPwd.ts");
 const F2aLogin = () => import("../views/F2aLogin.ts");
 const BackupLogin = () => import("../views/BackupLogin.ts");
 const Signup = () => import("../views/Signup.ts");
@@ -29,9 +29,8 @@ const Activate = () => import("../views/Activate.ts");
 const ServiceTerms = () => import("../views/ServiceTerms.ts");
 const PrivacyPolity = () => import("../views/PrivacyPolicy.ts");
 
-// Lazy layout
+// App layout
 const AppLayout = () => import("../views/AppLayout.ts");
-// Lazy views 
 const Dashboard = () => import("../views/Dashboard.ts");
 const Settings = () => import("../views/Settings.ts");
 const Posts = () => import("../views/Posts.ts");
@@ -48,6 +47,7 @@ export const routes = [
             { path: "", component: Landing },
             { path: "login", component: Login },
             { path: "forgot-password", component: Forgot },
+            { path: "reset-password", component: Reset },
             { path: "f2a-login", component: F2aLogin },
             { path: "backups", component: BackupLogin },
             { path: "signup", component: Signup },
