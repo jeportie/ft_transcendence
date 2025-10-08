@@ -16,34 +16,4 @@ export const enableSchema = {
     tags: ["2FA"],
     operationId: "enable2FA",
 
-    response: {
-        200: {
-            type: "object",
-            required: ["success", "qr", "otpauth"],
-            properties: {
-                success: { type: "boolean", example: true },
-                qr: { type: "string", description: "QR code (base64 PNG)", example: "data:image/png;base64,iVBOR..." },
-                otpauth: { type: "string", description: "otpauth:// URI", example: "otpauth://totp/ft_transcendence:1?secret=ABC123&issuer=ft_transcendence" },
-                secret: { type: "string", description: "Generated secret (for debugging)", example: "JBSWY3DPEHPK3PXP" }
-            }
-        },
-        400: {
-            type: "object",
-            required: ["success", "error", "code"],
-            properties: {
-                success: { type: "boolean", example: false },
-                error: { type: "string", example: "Missing credentials" },
-                code: { type: "string", example: "MISSING_CREDENTIALS" }
-            }
-        },
-        500: {
-            type: "object",
-            required: ["success", "error", "code"],
-            properties: {
-                success: { type: "boolean", example: false },
-                error: { type: "string", example: "Failed to generate QR code" },
-                code: { type: "string", example: "QR_GENERATE_FAILED" }
-            }
-        }
-    }
 };
