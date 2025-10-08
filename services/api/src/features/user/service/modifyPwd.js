@@ -6,7 +6,10 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/07 22:26:29 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/07 22:29:30 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/08 10:51:35 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+export async function modifyPwd(fastify, request, reply) {
+
+}

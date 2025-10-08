@@ -13,6 +13,7 @@
 SELECT
     id,
     username,
+    password_hash,
     email,
     role,
     created_at,

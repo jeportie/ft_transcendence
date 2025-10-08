@@ -37,7 +37,8 @@ export const meSchema = {
                             format: "date-time",
                             example: "2025-09-05T14:00:00.000Z"
                         },
-                        f2a_enabled: { type: "boolean" }
+                        f2a_enabled: { type: "boolean" },
+                        oauth: { type: "boolean" }
                     }
                 }
             }

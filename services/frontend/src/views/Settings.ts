@@ -25,29 +25,72 @@ export default class Settings extends AbstractView {
     }
 
     mount() {
-        const settings = document.querySelector("#settings-form") as HTMLFormElement | null;
         const toggle = document.querySelector("#f2a-toggle") as HTMLInputElement;
-        const status = document.querySelector("#f2a-status");
         const qrSection = document.querySelector("#f2a-qr-section");
         const qrImg = document.querySelector("#f2a-qr") as HTMLImageElement;
         const verifyBtn = document.querySelector("#f2a-verify-btn");
         const codeInput = document.querySelector("#f2a-code") as HTMLInputElement;
 
+        const pwdOptionLabel = document.querySelector("#pwd-option-label") as HTMLLabelElement || null;
         const pwdModifyToogle = document.querySelector("#pwd-modify-toggle");
         const pwdForm = document.querySelector("#pwd-form");
-
+        const oldPwd = document.querySelector("#old-pwd") as HTMLInputElement || null;
+        const newPwd = document.querySelector("#new-pwd") as HTMLInputElement || null;
+        const confirPwd = document.querySelector("#confirm-pwd") as HTMLInputElement || null;
 
         let username: string | null = null;
+        let isOauth = false;
         // Load current state
-        API.get("/user/me").then(user => {
+        API.get("/user/me").then((user: any) => {
             username = user.me.username;
             toggle.checked = user.me.f2a_enabled;
-            status.textContent = "2FA";
+            isOauth = user.me.oauth;
+            if (isOauth) {
+                pwdOptionLabel.textContent = "Add local password.";
+                oldPwd.classList.add("hidden");
+                const note = document.createElement("p");
+                note.className = "ui-text-muted text-sm mt-2";
+                note.textContent = "This account was created with OAuth. You can set a local password below.";
+                pwdForm?.insertBefore(note, pwdForm.firstChild);
+            }
         });
 
         pwdModifyToogle?.addEventListener("click", () => {
             pwdForm?.classList.remove("hidden");
         });
+
+        pwdForm?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            if (!isOauth && !oldPwd.value) {
+                alert("Missing old password.");
+                return;
+            }
+            if (!newPwd.value) {
+                alert("Missing new password.");
+                return;
+            }
+            if (!confirPwd.value || confirPwd.value !== newPwd.value) {
+                alert("Please confrim new password.");
+                return;
+            }
+            try {
+                const res = await API.post("/user/modify-pwd", {
+                    oauth: isOauth,
+                    oldPwd: oldPwd.value,
+                    newPwd: newPwd.value,
+                });
+                if (res.success) {
+                    alert("Password updated successfully.");
+                    pwdForm.classList.add("hidden");
+                } else {
+                    alert(res.message || "Password update failed.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error while updating password.");
+            }
+        })
 
         ///////////////////////////////////////////////// --- 2FA ---
 
@@ -96,19 +139,6 @@ export default class Settings extends AbstractView {
             } else {
                 alert("Invalid code. Try again.");
             }
-        });
-
-        settings?.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const data = Object.fromEntries(new FormData(form).entries());
-            console.log("Settings submit:", data);
-
-            // Later: real API call
-            // await fetch("/api/settings", {
-            //   method: "POST",
-            //   headers: { "Content-Type": "application/json" },
-            //   body: JSON.stringify(data),
-            // });
         });
     }
 
