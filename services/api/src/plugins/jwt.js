@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/04 22:01:47 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/04 22:21:41 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/08 11:25:49 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -29,7 +29,6 @@ export default fp(async function jwtPlugin(fastify) {
             const decoded = await request.jwtVerify();
 
             request.user = {
-                id: decoded.sub,
                 username: decoded.username,
                 role: decoded.role,
                 ...decoded,
