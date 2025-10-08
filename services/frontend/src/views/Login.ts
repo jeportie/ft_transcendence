@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 23:36:52 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/08 15:33:09 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -44,13 +44,13 @@ export default class Login extends AbstractView {
         // Create animation element (absolute in same place)
         const animWrapper = document.createElement("div");
         animWrapper.innerHTML = `
-                        <dotlottie-wc
-                            src="https://lottie.host/ffd0055c-8d94-4608-8a8d-4a97fd97a035/WUB7J2v2eu.lottie"
-                            style="width: 100%; height: 100%;"
-                            autoplay
-                            loop
-                        ></dotlottie-wc>
-                    `;
+            <dotlottie-wc
+                src="https://lottie.host/ffd0055c-8d94-4608-8a8d-4a97fd97a035/WUB7J2v2eu.lottie"
+                style="width: 100%; height: 100%;"
+                autoplay
+                loop
+            ></dotlottie-wc>
+        `;
         animWrapper.className = "absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center";
 
         if (card) {
@@ -145,7 +145,7 @@ export default class Login extends AbstractView {
                     }, 2000);
                 })
                 .catch(err => {
-                    console.error("❌ Login failed:", err);
+                    console.error(`❌ [${err.code || err.status}] ${err.message}`);
                     userPwd.value = "";
                     userName.focus();
 
@@ -154,6 +154,7 @@ export default class Login extends AbstractView {
                         errorBox.classList.remove("hidden");
                     }
                 });
+
         })
 
         if (googleBtn) {

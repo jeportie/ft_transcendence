@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 17:10:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 18:50:28 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/08 14:30:12 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -23,6 +23,7 @@ import security from "./plugins/security.js";
 import jwtPlugin from "./plugins/jwt.js";
 import dbPlugin from "./plugins/db.js";
 import metricsPlugin from "./plugins/metrics.js";
+import errorHandler from "./plugins/errorHandler.js";
 
 // Features Plugins
 import systemPlugin from "./features/system/plugin.js";
@@ -44,6 +45,7 @@ export async function buildApp() {
 
     fastify.decorate("config", config);
 
+
     await fastify.register(docs);
     await fastify.register(security);
     await fastify.register(cookie, {
@@ -53,11 +55,14 @@ export async function buildApp() {
     await fastify.register(jwtPlugin);
     await fastify.register(dbPlugin);
     await fastify.register(metricsPlugin);
+    // Global Error Handler
+    await fastify.register(errorHandler);
 
     // Features API
     await fastify.register(systemPlugin);
     await fastify.register(userPlugin);
     await fastify.register(authPlugin);
+
 
     // Serve statics
     await fastify.register(statics, {

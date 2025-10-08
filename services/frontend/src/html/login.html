@@ -6,7 +6,7 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/09/23 13:16:20 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/06 23:22:31 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/08 15:31:02 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
@@ -18,11 +18,10 @@
     </p>
     <br>
     <form id="login-form" class="ui-form">
-        <div class="ui-card-title mt-2">Email</div>
-        <input id="user-name" class="ui-input" type="text" placeholder="Username/Email..." autocomplete="username" />
+        <div class="ui-card-title mt-2">Username or Email</div>
+        <input id="user-name" class="ui-input" type="text" placeholder="yourname@example.com" autocomplete="username" />
         <div class="ui-card-title mt-2">Password</div>
-        <input id="user-pwd" class="ui-input" type="password" placeholder="Password..."
-            autocomplete="current-password" />
+        <input id="user-pwd" class="ui-input" type="password" placeholder="••••••••" autocomplete="current-password" />
         <a href="/forgot-password" data-link class="flex justify-end ui-text-small">Forgot your password?</a>
         <button id="login-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
     </form>
@@ -34,7 +33,7 @@
 </div>
 <div>
     <p class="ui-text-small mt-3 justify-between">
-        By signing in, you agree to our
+        By signing in, you agree to the
         <a href="/service-terms" data-link class="ui-hint-link">Terms of Service </a>
         and
         <a href="/privacy-policy" data-link class="ui-hint-link">Privacy Policy</a>
