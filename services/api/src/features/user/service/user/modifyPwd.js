@@ -10,6 +10,39 @@
 //                                                                            //
 // ************************************************************************** //
 
-export async function modifyPwd(fastify, request, reply) {
+import { verifyPassword, hashPassword } from "../../../auth/service/utils/password.js";
+import { loadSql } from "../../../../utils/sqlLoader.js";
 
+const PATH = import.meta.url;
+const getMeSql = loadSql(PATH, "../sql/getMe.sql");
+const updatePwdSql = loadSql(PATH, "../../../auth/service/sql/updatePassword.sql");
+
+export async function modifyPwd(fastify, request, reply) {
+    const id = request.user.sub;
+    const isOauth = request.body.oauth;
+    const oldPwd = request.body.oldPwd;
+    const newPwd = request.body.newPwd;
+
+    const db = await fastify.getDb();
+    const row = await db.get(getMeSql, { ":id": id });
+    if (!row)
+        throw UserErrors.UserNotFound(id);
+
+    if (!isOauth) {
+        const ok = await verifyPassword(row.password_hash, oldPwd);
+        if (!ok)
+            throw AuthErrors.InvalidPassword(user);
+    }
+
+    const password_hash = await hashPassword(newPwd);
+    try {
+        await db.run(updatePwdSql, {
+            ":password_hash": password_hash,
+            ":user_id": id,
+        });
+    } catch (err) {
+        console.log("[!DB!]:", err);
+        throw AuthErrors.DbFail();
+    }
+    return { message: "Password has been changed." };
 }

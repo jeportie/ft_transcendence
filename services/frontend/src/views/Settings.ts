@@ -76,6 +76,7 @@ export default class Settings extends AbstractView {
             }
             try {
                 const res = await API.post("/user/modify-pwd", {
+                    username,
                     oauth: isOauth,
                     oldPwd: oldPwd.value,
                     newPwd: newPwd.value,
