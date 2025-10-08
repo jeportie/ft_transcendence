@@ -18,5 +18,5 @@ export async function userRoutes(fastify, options) {
 
     fastify.get("/me", { ...authGuard, schema: meSchema }, controller.getMe);
 
-    fastify.post("/modify-pwd", { ...authGuard, schema: null }, controller.modifPwd);
+    fastify.post("/modify-pwd", { ...authGuard, schema: null }, controller.modifyPwd);
 }

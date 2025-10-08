@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import * as service from "../service/index.js";
+import * as service from "../service/user/index.js";
 import { ok } from "../../../utils/reply.js";
 import { AppError } from "../../../utils/AppError.js";
 

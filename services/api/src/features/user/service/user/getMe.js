@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../utils/sqlLoader.js";
-import { UserErrors } from "../errors.js";
+import { loadSql } from "../../../../utils/sqlLoader.js";
+import { UserErrors } from "../../errors.js";
 
 const getMeSql = loadSql(import.meta.url, "./sql/getMe.sql");
 
