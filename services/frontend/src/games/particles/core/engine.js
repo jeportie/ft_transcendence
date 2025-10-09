@@ -22,6 +22,9 @@ export class ParticleEngine {
         this.ctx = ctx;
         this.state = state;
         this.loop = null;
+        this.accumulator = 0;
+        this.fixedDt = 1 / 60; // physics at 60 Hz
+        this.lastFrame = performance.now();
     }
 
     resize(canvas, DPR) {
@@ -68,15 +71,38 @@ export class ParticleEngine {
     }
 
     start() {
-        this.loop = new GameLoop((dt) => this._update(dt));
-        this.loop.start();
+        const step = () => {
+            const now = performance.now();
+            let frameTime = (now - this.lastFrame) / 1000;
+            this.lastFrame = now;
+            // clamp spikes (tab switch, etc.)
+            frameTime = Math.min(frameTime, 0.1);
+
+            this.accumulator += frameTime;
+            while (this.accumulator >= this.fixedDt) {
+                this._updatePhysics(this.fixedDt);
+                this.accumulator -= this.fixedDt;
+            }
+            this._render();
+            requestAnimationFrame(step);
+        };
+        // window.addEventListener("blur", () => {
+        //     this.accumulator = 0;
+        //     this.lastFrame = performance.now();
+        // });
+        // window.addEventListener("focus", () => {
+        //     this.accumulator = 0;
+        //     this.lastFrame = performance.now();
+        // });
+
+        requestAnimationFrame(step);
     }
 
     stop() {
         this.loop?.stop();
     }
 
-    _update(dt) {
+    _updatePhysics(dt) {
         const { ctx, state } = this;
         const { params, mouse } = state;
 
@@ -89,25 +115,37 @@ export class ParticleEngine {
         mouse.update();
         dt *= state.params.timeScale ?? 1.0;
 
-        drawBackground(ctx, state);
         for (const p of state.particles) p.update(dt);
+        for (const f of state.flyers) f.update(dt);
+        state.flyers = state.flyers.filter(f => f.life > 0);
 
-        state.activeSegments = [];
-        drawLinks(ctx, state);
-        for (const p of state.particles) p.render(ctx);
-
-        // flyer system
-        if (state.flyerSpawnCooldown <= 0) {
-            const n = Math.random() < 0.5 ? 1 : 2;
-            for (let i = 0; i < n; i++) {
+        // If all flyers are gone, trigger a new generation
+        if (state.flyers.length === 0) {
+            // small pause between spawns
+            state.flyerSpawnCooldown -= dt * 6000;
+            if (state.flyerSpawnCooldown <= 0) {
                 const randP = state.particles[Math.floor(Math.random() * state.particles.length)];
                 if (randP) state.flyers.push(new Flyer(randP, state));
+
+                // reset next spawn delay (in ms)
+                state.flyerSpawnCooldown = 4000 + Math.random() * 3000; // wait 4–7s
             }
-            state.flyerSpawnCooldown = 1500 + Math.random() * 1000;
+        } else {
+            // keep timer frozen while flyers still alive
+            state.flyerSpawnCooldown = 1000;
         }
 
         for (const f of state.flyers) f.update(dt);
         for (const f of state.flyers) f.render(ctx);
         state.flyers = state.flyers.filter(f => f.life > 0);
+    }
+
+    _render() {
+        const { ctx, state } = this;
+        drawBackground(ctx, state);
+        state.activeSegments = [];
+        drawLinks(ctx, state);
+        for (const p of state.particles) p.render(ctx);
+        for (const f of state.flyers) f.render(ctx);
     }
 }

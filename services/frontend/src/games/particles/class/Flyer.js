@@ -59,7 +59,7 @@ export default class Flyer {
         const newAngle = currentAngle + angleChange;
 
         this.dir = Vector.fromAngle(newAngle).normalize();
-        this.speed = 30 + Math.random() * 220; // wide speed variation
+        this.speed = 30 + Math.random() * 60; // wide speed variation
 
         // pick a distant pseudo-target to drift toward
         const travelDist = 200 + Math.random() * 500;
@@ -71,8 +71,9 @@ export default class Flyer {
 
     update(dt) {
         // Move forward in current direction
-        const vx = this.dir.x * this.speed * dt;
-        const vy = this.dir.y * this.speed * dt;
+        const scale = 0.2
+        const vx = this.dir.x * this.speed * dt * scale;
+        const vy = this.dir.y * this.speed * dt * scale;
         this.pos.x += vx;
         this.pos.y += vy;
 
@@ -115,7 +116,7 @@ export default class Flyer {
         const pB = this.next;
 
         // small local effect radius (~50 px)
-        const influenceR = 90;
+        const influenceR = 120;
         const glow = 0.8 + Math.sin(performance.now() * 0.002) * 0.2;
 
         // Interpolate along the path (flyer position)

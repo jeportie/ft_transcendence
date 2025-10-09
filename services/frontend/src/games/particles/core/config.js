@@ -13,13 +13,14 @@
 export const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
 export const defaults = {
-    N: 500,
+    N: 300,
     seed: 1337,
     mapName: null,
-    baseRadius: 200,
-    radiusVelocityGain: 3,
-    mouseStrength: 0.05,
-    originK: 0.001,
-    damping: 0.975,
+    baseRadius: 150,
+    radiusVelocityGain: 3.0,
+    mouseStrength: 0.095,
+    originK: 0.0012,
+    damping: 0.979,
     linkDist: 130,
+    timeScale: 0.8,
 };

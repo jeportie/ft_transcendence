@@ -19,19 +19,29 @@ export default class Particle extends Circle {
      * @param {number} y
      */
     constructor(x, y, stateRef) {
-        super(x, y, 1.5);
+        const r = 1.0 + Math.random() * 0.5; // radius variation
+        super(x, y, r);
         this.state = stateRef;
         this.origin = new Point(x, y);
         this.vel = new Vector((Math.random() - 0.5) * 0.4, (Math.random() - 0.5) * 0.4);
-        this.speedMag = 0; // cache magnitude for glow
+        this.speedMag = 0;
+
+        // assign subtle color offset (blue ↔ mint)
+        const baseMix = Math.random() * 0.5; // 0=blue, 1=mint
+        const blue = { r: 147, g: 197, b: 253 }; // #93c5fd
+        const mint = { r: 167, g: 243, b: 208 }; // #a7f3d0
+        this.baseColor = {
+            r: Math.round(blue.r + (mint.r - blue.r) * baseMix),
+            g: Math.round(blue.g + (mint.g - blue.g) * baseMix),
+            b: Math.round(blue.b + (mint.b - blue.b) * baseMix),
+        };
     }
 
     update(dt) {
         const { mouse, params } = this.state;
 
-        // --- mouse influence radius
+        // --- mouse influence ---
         const influenceR = params.baseRadius + mouse.speed * params.radiusVelocityGain;
-
 
         if (mouse.has) {
             const dx = mouse.pos.x - this.pos.x;
@@ -39,7 +49,7 @@ export default class Particle extends Circle {
             const dist2 = dx * dx + dy * dy;
             const dist = Math.sqrt(dist2);
 
-            if (dist > 0.5 && dist < influenceR) { // <-- safe zone
+            if (dist > 0.5 && dist < influenceR) {
                 const sigma = influenceR * 0.5;
                 const strength = params.mouseStrength * Math.exp(-(dist * dist) / (2 * sigma * sigma));
                 const fx = (dx / dist) * strength;
@@ -52,25 +62,29 @@ export default class Particle extends Circle {
             }
         }
 
-
-        // elastic pull back to origin
+        // --- constant pull toward origin (uniform) ---
         const ox = this.origin.x - this.pos.x;
         const oy = this.origin.y - this.pos.y;
+
         this.vel.x += ox * params.originK;
         this.vel.y += oy * params.originK;
 
+        // --- damping & motion ---
         this.vel.scaleSelf(params.damping);
-        this.pos.move(this.vel, 1);
 
+        const maxVel = 5;
+        this.vel.x = clamp(this.vel.x, -maxVel, maxVel);
+        this.vel.y = clamp(this.vel.y, -maxVel, maxVel);
+
+        this.pos.move(this.vel, 1);
 
         const { width, height } = this.state;
 
-        // wrap
+        // wrap edges
         if (this.pos.x < -10) this.pos.x = width + 10;
         if (this.pos.x > width + 10) this.pos.x = -10;
         if (this.pos.y < -10) this.pos.y = height + 10;
         if (this.pos.y > height + 10) this.pos.y = -10;
-
 
         this.speedMag = this.vel.magnitude;
     }
@@ -79,12 +93,13 @@ export default class Particle extends Circle {
         const { mouse, params } = this.state;
 
         // decay flyer-induced glow
-        this._flyerGlow = (this._flyerGlow || 0) * 0.93;
+        this._flyerGlow = (this._flyerGlow || 0) * 0.98;
 
         // --- color stops (cool → hot)
         const stops = [
-            { r: 147, g: 197, b: 253 }, // #93c5fd  blue
-            { r: 167, g: 243, b: 208 }, // #a7f3d0  mint
+            // { r: 147, g: 197, b: 253 }, // #93c5fd  blue
+            // { r: 167, g: 243, b: 208 }, // #a7f3d0  mint
+            this.baseColor,
             { r: 255, g: 255, b: 255 }, // #ffffff  white-hot
             { r: 253, g: 224, b: 71 }, // #fde047  yellow
             { r: 251, g: 146, b: 60 }  // #fb923c  orange

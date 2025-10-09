@@ -39,7 +39,7 @@ export default class Mouse {
 
         // Ease in/out fade when entering/leaving canvas
         const target = this.has ? 1 : 0;
-        this.fade = lerp(this.fade, target, 0.18);
+        this.fade = lerp(this.fade, target, this.has ? 0.05 : 0.1);
     }
 
     /**
@@ -48,7 +48,11 @@ export default class Mouse {
     move(x, y) {
         this.pos.x = x;
         this.pos.y = y;
+        const wasOutside = !this.has;
         this.has = true;
+        // if re-entering, jump-start fade to avoid sluggish first frames
+        if (wasOutside && this.fade < 0.5)
+            this.fade = Math.min(0.5, this.fade + 0.25);
     }
 
     /**
@@ -56,5 +60,6 @@ export default class Mouse {
      */
     leave() {
         this.has = false;
+        this.fade = Math.max(0, this.fade - 0.3);
     }
 }
