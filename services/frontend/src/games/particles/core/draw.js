@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 11:00:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 11:14:29 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/09 11:53:48 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -56,7 +56,7 @@ export function drawLinks(ctx, state) {
             const idleBoost = 0.3 + Math.pow(1 - mouse.fade, 1.6) * 1.5;
 
             const finalAlpha =
-                0.02 + alpha * (0.2 + 0.8 * mouseFade * mouse.fade) * glowBoost * hoverBoost * idleBoost;
+                0.01 + alpha * (0.2 + 0.8 * mouseFade * mouse.fade) * glowBoost * hoverBoost * idleBoost;
 
             ctx.strokeStyle = `rgba(${r},${g},${bcol},${finalAlpha})`;
             ctx.beginPath();

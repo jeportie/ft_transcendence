@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 10:14:58 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 11:03:50 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/09 11:40:50 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -21,6 +21,10 @@ export function mulberry32(seed) {
         t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
         return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
+}
+// alias for clarity inside engine.js
+export function seededRand(seed = 1) {
+    return mulberry32(seed >>> 0);
 }
 
 export function hexToRgb(hex) {
