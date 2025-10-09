@@ -53,7 +53,7 @@ export function drawLinks(ctx, state) {
             const bright = (ca.t + cb.t) * 0.5;
             const glowBoost = 0.6 + bright * 0.9;
             const hoverBoost = 0.3 + mouse.fade * 0.4;
-            const idleBoost = 0.3 + Math.pow(1 - mouse.fade, 1.6) * 1.5;
+            const idleBoost = 0.6 + Math.pow(1 - mouse.fade, 1.6) * 1.5;
 
             const finalAlpha =
                 0.01 + alpha * (0.2 + 0.8 * mouseFade * mouse.fade) * glowBoost * hoverBoost * idleBoost;

@@ -19,6 +19,7 @@ const motionPresets = {
         baseRadius: 110,
         backgroundAlpha: 0.15,
         breathe: true,
+        timeScale: 1.0,
     },
     reactive: {
         originK: 0.001,
@@ -28,6 +29,7 @@ const motionPresets = {
         baseRadius: 100,
         backgroundAlpha: 1,
         breathe: false,
+        timeScale: 1.8,
     },
 };
 

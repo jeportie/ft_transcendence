@@ -24,7 +24,7 @@ const state = {
     height: 0,
     flyers: [],
     flyerSpawnCooldown: 0,
-    // currentMode: "cinematic",
+    currentMode: "cinematic",
 };
 
 /**
@@ -62,6 +62,7 @@ export function runParticle(selector, options = {}) {
     (async () => {
         await onResize();
         engine.start();
+        toggleCinematicMode(state, true);
     })();
     return () => {
         engine.stop();
@@ -70,8 +71,5 @@ export function runParticle(selector, options = {}) {
         canvas.removeEventListener("mouseleave", onLeave);
     };
 }
-
-// Default to cinematic mode on load
-toggleCinematicMode(state, false);
 
 export { toggleCinematicMode, setParticleMap, setSeed };

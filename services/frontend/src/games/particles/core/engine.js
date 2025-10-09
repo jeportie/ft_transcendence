@@ -87,7 +87,7 @@ export class ParticleEngine {
         }
 
         mouse.update();
-        dt *= 0.5;
+        dt *= state.params.timeScale ?? 1.0;
 
         drawBackground(ctx, state);
         for (const p of state.particles) p.update(dt);

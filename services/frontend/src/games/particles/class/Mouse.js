@@ -31,7 +31,7 @@ export default class Mouse {
         const dist = Math.hypot(dx, dy);
 
         // Smooth motion speed
-        this.speed = lerp(this.speed, dist, 0.3);
+        this.speed = lerp(this.speed, dist, 0.5);
 
         // Remember position for next frame
         this.prev.x = this.pos.x;
@@ -39,7 +39,7 @@ export default class Mouse {
 
         // Ease in/out fade when entering/leaving canvas
         const target = this.has ? 1 : 0;
-        this.fade = lerp(this.fade, target, 0.02);
+        this.fade = lerp(this.fade, target, 0.18);
     }
 
     /**
