@@ -5,39 +5,74 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/09 09:23:47 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 10:21:09 by jeportie         ###   ########.fr       //
+//   Created: 2025/10/09 22:55:56 by jeportie          #+#    #+#             //
+//   Updated: 2025/10/09 22:56:30 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { Point, Vector } from "@jeportie/lib2d";
 
+function flowAngle(x, y, t) {
+    // Smooth pseudo-noise angle field (cheap & continuous)
+    // Tweak scales for different textures
+    const s = 0.002;          // spatial scale
+    const tt = t * 0.25;      // temporal scale
+    const a = Math.sin(x * s + tt * 0.9) * 0.6;
+    const b = Math.cos(y * s - tt * 0.7) * 0.6;
+    const c = Math.sin((x + y) * s * 0.6 - tt * 0.5) * 0.4;
+    return (a + b + c) * 0.45; // radians, gentle
+}
+
 export default class Flyer {
     constructor(particle, stateRef) {
+        this.theme = "default";
         this.state = stateRef;
         this.current = particle;
         this.prev = null;
-        this.dir = Vector.fromAngle(Math.random() * Math.PI * 2);
-        this.speed = this.state.params.flyerSpeedMin + Math.random() * (this.state.params.flyerSpeedMax - this.state.params.flyerSpeedMin);
-        this.progress = 0;
+
+        this.dir = Vector.fromAngle(Math.random() * Math.PI * 2).normalize();
+
+        // Base & variance pulled from preset min/max
+        const { flyerSpeedMin = 8, flyerSpeedMax = 18 } = this.state.params;
+        this.baseSpeed = flyerSpeedMin + Math.random() * (flyerSpeedMax - flyerSpeedMin);
+        this.speed = this.baseSpeed;
+        this.speedAmp = this.baseSpeed * 0.25;   // breathing amplitude
+        this.phase = Math.random() * Math.PI * 2;
+
+        // Wander parameters
+        this.wanderAngle = Math.random() * Math.PI * 2;
+        this.wanderJitter = 1.2;   // rad/sec of drift
+        this.wanderStrength = 0.55; // how strongly wander bends heading
+
+        // Flow field influence
+        this.flowStrength = 0.35;   // how much the field biases heading
+
+        // Heading response
+        this.turnResponsiveness = 4.0; // how quickly heading follows desired (rad/sec)
+
+        // Edge behaviour
+        this.avoidMargin = 120;   // start steering back before wrap
+        this.avoidStrength = 0.8; // weight of the avoidance vector
+
+        // Lifecycle
         this.age = 0;
-        this.life = 1;
+        this.life = 1;  // keep >0 to stay alive; you can fade this if needed later
+
+        // Position/target bookkeeping
         this.hops = 0;
         this.maxHops = 200;
         this.visited = new Set([particle]);
         this.next = null;
         this.pos = particle.pos.clone();
         this.startEdge = this._edgeZone(this.pos);
-        this.fadeTrail = []; // store fading segments {a,b,intensity}
-        this.setNextTarget();
     }
 
     _edgeZone(pos) {
-        const margin = 805
-        if (pos.x < margin) return "left";
-        if (pos.x > this.state.width - margin) return "right";
-        if (pos.y < margin) return "top";
-        if (pos.y > this.state.height - margin) return "bottom";
+        const m = 805;
+        if (pos.x < m) return "left";
+        if (pos.x > this.state.width - m) return "right";
+        if (pos.y < m) return "top";
+        if (pos.y > this.state.height - m) return "bottom";
         return "center";
     }
 
@@ -51,102 +86,99 @@ export default class Flyer {
         return false;
     }
 
+    _desiredDirection(dt) {
+        // Wander component (smoothly perturb a small circle ahead)
+        this.wanderAngle += (Math.random() - 0.5) * this.wanderJitter * dt;
+        const wanderDir = Vector.fromAngle(this.wanderAngle).normalize();
 
-    setNextTarget() {
-        // pick a new direction randomly but keep some inertia
-        const angleChange = (Math.random() - 0.5) * Math.PI * 0.5; // turn ±45°
-        const currentAngle = Math.atan2(this.dir.y, this.dir.x);
-        const newAngle = currentAngle + angleChange;
+        // Flow field component (smooth global swirl)
+        const t = performance.now() * 0.001;
+        const fa = flowAngle(this.pos.x, this.pos.y, t);
+        const flowDir = Vector.fromAngle(fa).normalize();
 
-        this.dir = Vector.fromAngle(newAngle).normalize();
-        this.speed = 30 + Math.random() * 60; // wide speed variation
+        // Edge avoidance (steer back toward center if near bounds)
+        const { width, height } = this.state;
+        let avoid = new Vector(0, 0);
+        if (this.pos.x < this.avoidMargin) avoid.x += (this.avoidMargin - this.pos.x) / this.avoidMargin;
+        if (this.pos.x > width - this.avoidMargin) avoid.x -= (this.pos.x - (width - this.avoidMargin)) / this.avoidMargin;
+        if (this.pos.y < this.avoidMargin) avoid.y += (this.avoidMargin - this.pos.y) / this.avoidMargin;
+        if (this.pos.y > height - this.avoidMargin) avoid.y -= (this.pos.y - (height - this.avoidMargin)) / this.avoidMargin;
 
-        // pick a distant pseudo-target to drift toward
-        const travelDist = 200 + Math.random() * 500;
-        this.target = new Point(
-            this.pos.x + this.dir.x * travelDist,
-            this.pos.y + this.dir.y * travelDist
-        );
+        // Blend everything: current heading + wander + flow + avoidance
+        const desired = new Vector(0, 0);
+        desired.x =
+            this.dir.x * (1.0 - this.wanderStrength - this.flowStrength) +
+            wanderDir.x * this.wanderStrength +
+            flowDir.x * this.flowStrength +
+            avoid.x * this.avoidStrength * 0.5;
+        desired.y =
+            this.dir.y * (1.0 - this.wanderStrength - this.flowStrength) +
+            wanderDir.y * this.wanderStrength +
+            flowDir.y * this.flowStrength +
+            avoid.y * this.avoidStrength * 0.5;
+
+        return desired.normalize();
+    }
+
+    _lightNearbyParticles() {
+        const influenceR = 90;
+        const influenceR2 = influenceR * influenceR;
+        let hits = 0;
+        const skip = 2 + Math.floor(Math.random() * 2);
+
+        for (let i = 0; i < this.state.particles.length; i += skip) {
+            const p = this.state.particles[i];
+            const dx = this.pos.x - p.pos.x;
+            const dy = this.pos.y - p.pos.y;
+            const dist2 = dx * dx + dy * dy;
+            if (dist2 < influenceR2) {
+                const falloff = Math.exp(-dist2 / (2 * (influenceR * 0.5) ** 2));
+                p.glowTarget = Math.min(1.5, (p.glowTarget || 0) + falloff * 0.6);
+                hits++;
+                if (hits > 90) break;
+            }
+        }
     }
 
     update(dt) {
-        // Move forward in current direction
-        const scale = 0.2
-        const vx = this.dir.x * this.speed * dt * scale;
-        const vy = this.dir.y * this.speed * dt * scale;
-        this.pos.x += vx;
-        this.pos.y += vy;
-
-        // excite local particles around flyer position
-        this._lightCurrentRoute();
-
-        // occasionally change direction
-        if (Math.random() < 0.02) this.setNextTarget();
-
-        // bounce or wrap at borders
-        if (this.pos.x < 0) {
-            this.pos.x = this.state.width;
-            this.setNextTarget();
-        }
-        if (this.pos.x > this.state.width) {
-            this.pos.x = 0;
-            this.setNextTarget();
-        }
-        if (this.pos.y < 0) {
-            this.pos.y = this.state.height;
-            this.setNextTarget();
-        }
-        if (this.pos.y > this.state.height) {
-            this.pos.y = 0;
-            this.setNextTarget();
-        }
-
-        // fade trail memory
-        for (const seg of this.fadeTrail) seg.intensity *= 0.96;
-        this.fadeTrail = this.fadeTrail.filter(s => s.intensity > 0.02);
-
-        // aging
         this.age += dt;
-        if (this.age > 15) this.life = 0; // die after ~15s
+
+        // Organic speed “breathing”
+        this.phase += dt * (0.6 + Math.random() * 0.2);
+        const breathe = Math.sin(this.phase) * 0.5 + 0.5;
+        this.speed = this.baseSpeed + (breathe - 0.5) * 2 * this.speedAmp;
+
+        // Compute desired heading (wander + flow + avoidance)
+        const desired = this._desiredDirection(dt);
+
+        // Turn toward desired smoothly
+        // Interpolate heading by an angular responsiveness (approx “slerp” for 2D)
+        const blend = Math.min(1, this.turnResponsiveness * dt);
+        this.dir.x = this.dir.x * (1 - blend) + desired.x * blend;
+        this.dir.y = this.dir.y * (1 - blend) + desired.y * blend;
+        this.dir.normalizeSelf?.() || this.dir.normalize(); // support either API
+
+        // Integrate position
+        this.pos.x += this.dir.x * this.speed * dt;
+        this.pos.y += this.dir.y * this.speed * dt;
+
+        // Light up nearby nodes
+        this._lightNearbyParticles();
+
+        // Soft wrap (keep your existing wrap if you prefer hard wrap)
+        const margin = 10;
+        const { width, height } = this.state;
+        if (this.pos.x < -margin) this.pos.x = width + margin;
+        if (this.pos.x > width + margin) this.pos.x = -margin;
+        if (this.pos.y < -margin) this.pos.y = height + margin;
+        if (this.pos.y > height + margin) this.pos.y = -margin;
+
+        // Optional: stop if crossed entire canvas (keeps paths varied)
+        if (this._shouldStop()) this.life = 0;
     }
 
-
-    _lightCurrentRoute() {
-        const pA = this.current;
-        const pB = this.next;
-
-        // small local effect radius (~50 px)
-        const influenceR = 120;
-        const glow = 0.8 + Math.sin(performance.now() * 0.002) * 0.2;
-
-        // Interpolate along the path (flyer position)
-        const fx = this.pos.x;
-        const fy = this.pos.y;
-
-        // excite nearby particles in small area
-        for (const p of this.state.particles) {
-            const dx = fx - p.pos.x;
-            const dy = fy - p.pos.y;
-            const dist2 = dx * dx + dy * dy;
-            if (dist2 < influenceR * influenceR) {
-                const dist = Math.sqrt(dist2);
-                const falloff = Math.exp(-(dist * dist) / (2 * (influenceR * 0.5) ** 2));
-
-                // stronger particle excitation
-                p._flyerGlow = Math.min(2, (p._flyerGlow || 0) + falloff * 1);
-
-                // small velocity kick
-                const kick = 0.02 * falloff;
-                p.vel.x += (Math.random() - 0.2) * kick;
-                p.vel.y += (Math.random() - 0.2) * kick;
-            }
-        }
-
-        // add bright local segment in visual memory
-        this.state.activeSegments.push({ a: pA, b: pB, fade: glow });
-    }
-
-    render(ctx) {
-        // nothing visible directly
+    render(_ctx) {
+        // kept empty on purpose — you already render trails/links elsewhere
     }
 }
+

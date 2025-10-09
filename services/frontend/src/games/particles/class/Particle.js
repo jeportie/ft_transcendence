@@ -12,6 +12,7 @@
 
 import { Circle, Point, Vector } from "@jeportie/lib2d";
 import { clamp, lerp } from "../core/utils.js";
+import { colorThemes } from "../core/config.js";
 
 export default class Particle extends Circle {
     /**
@@ -19,12 +20,14 @@ export default class Particle extends Circle {
      * @param {number} y
      */
     constructor(x, y, stateRef) {
-        const r = 1.0 + Math.random() * 0.5; // radius variation
+        const r = 0.7 + Math.random() * 1.0; // radius variation
         super(x, y, r);
         this.state = stateRef;
         this.origin = new Point(x, y);
         this.vel = new Vector((Math.random() - 0.5) * 0.4, (Math.random() - 0.5) * 0.4);
         this.speedMag = 0;
+        this.glow = 0;          // current eased glow
+        this.glowTarget = 0;    // target set by flyers
 
         // assign subtle color offset (blue ↔ mint)
         const baseMix = Math.random() * 0.5; // 0=blue, 1=mint
@@ -42,25 +45,33 @@ export default class Particle extends Circle {
 
         // --- mouse influence ---
         const influenceR = params.baseRadius + mouse.speed * params.radiusVelocityGain;
+        this.glowTarget *= 0.96;
+        const ease = 1 - Math.exp(-dt * 6); // ~200ms rise time
+        this.glow += (this.glowTarget - this.glow) * ease;
 
-        if (mouse.has) {
-            const dx = mouse.pos.x - this.pos.x;
-            const dy = mouse.pos.y - this.pos.y;
-            const dist2 = dx * dx + dy * dy;
-            const dist = Math.sqrt(dist2);
+        if (mouse.has && mouse.speed > 0.5) {
+            const speedFactor = clamp(mouse.speed / 20, 0, 1); // normalize motion intensity
+            const moveIntensity = 1 - speedFactor; // slower → stronger
+            if (moveIntensity > 0.05) {
+                const dx = mouse.pos.x - this.pos.x;
+                const dy = mouse.pos.y - this.pos.y;
+                const dist2 = dx * dx + dy * dy;
+                const dist = Math.sqrt(dist2);
 
-            if (dist > 0.5 && dist < influenceR) {
-                const sigma = influenceR * 0.5;
-                const strength = params.mouseStrength * Math.exp(-(dist * dist) / (2 * sigma * sigma));
-                const fx = (dx / dist) * strength;
-                const fy = (dy / dist) * strength;
+                if (dist > 0.9 && dist < influenceR) {
+                    const sigma = influenceR * 0.5;
+                    const strength = params.mouseStrength * moveIntensity *
+                        Math.exp(-(dist * dist) / (2 * sigma * sigma));
 
-                if (Number.isFinite(fx) && Number.isFinite(fy)) {
+                    const fx = (dx / dist) * strength;
+                    const fy = (dy / dist) * strength;
+
                     this.vel.x += fx;
                     this.vel.y += fy;
                 }
             }
         }
+
 
         // --- constant pull toward origin (uniform) ---
         const ox = this.origin.x - this.pos.x;
@@ -93,17 +104,10 @@ export default class Particle extends Circle {
         const { mouse, params } = this.state;
 
         // decay flyer-induced glow
-        this._flyerGlow = (this._flyerGlow || 0) * 0.98;
+        // this._flyerGlow = (this._flyerGlow || 0) * 0.98;
 
         // --- color stops (cool → hot)
-        const stops = [
-            // { r: 147, g: 197, b: 253 }, // #93c5fd  blue
-            // { r: 167, g: 243, b: 208 }, // #a7f3d0  mint
-            this.baseColor,
-            { r: 255, g: 255, b: 255 }, // #ffffff  white-hot
-            { r: 253, g: 224, b: 71 }, // #fde047  yellow
-            { r: 251, g: 146, b: 60 }  // #fb923c  orange
-        ];
+        const stops = colorThemes["default"];
 
         let t = 0;
         const influenceR = params.baseRadius + mouse.speed * params.radiusVelocityGain;
@@ -118,7 +122,7 @@ export default class Particle extends Circle {
         }
 
         // 🌀 Always apply fade, even if mouse.has = false
-        t = (t * this.state.mouse.fade) + (this._flyerGlow || 0);
+        t = (t * this.state.mouse.fade) + this.glow;
         t = Math.min(1, t);
 
         // Speed modulation — fast = cooler

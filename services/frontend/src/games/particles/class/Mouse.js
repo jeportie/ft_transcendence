@@ -12,6 +12,7 @@
 
 import { Point } from "@jeportie/lib2d";
 import { lerp } from "../core/utils.js";
+import { colorThemes } from "../core/config.js";
 
 export default class Mouse {
     constructor() {
@@ -20,6 +21,7 @@ export default class Mouse {
         this.has = false;       // whether mouse is over canvas
         this.speed = 0;         // smoothed pixel/frame motion
         this.fade = 0;          // fade factor [0..1] used for glow
+        this.theme = "electric"; // default mouse color aura
     }
 
     /**

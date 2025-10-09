@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/08 20:58:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 11:52:59 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/09 22:58:38 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,7 +24,8 @@ const state = {
     height: 0,
     flyers: [],
     flyerSpawnCooldown: 0,
-    currentMode: "cinematic",
+    currentMode: "reactive",
+    // currentMode: "cinematic",
 };
 
 /**

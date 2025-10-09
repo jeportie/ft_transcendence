@@ -86,15 +86,6 @@ export class ParticleEngine {
             this._render();
             requestAnimationFrame(step);
         };
-        // window.addEventListener("blur", () => {
-        //     this.accumulator = 0;
-        //     this.lastFrame = performance.now();
-        // });
-        // window.addEventListener("focus", () => {
-        //     this.accumulator = 0;
-        //     this.lastFrame = performance.now();
-        // });
-
         requestAnimationFrame(step);
     }
 
@@ -119,21 +110,37 @@ export class ParticleEngine {
         for (const f of state.flyers) f.update(dt);
         state.flyers = state.flyers.filter(f => f.life > 0);
 
-        // If all flyers are gone, trigger a new generation
-        if (state.flyers.length === 0) {
-            // small pause between spawns
-            state.flyerSpawnCooldown -= dt * 6000;
-            if (state.flyerSpawnCooldown <= 0) {
-                const randP = state.particles[Math.floor(Math.random() * state.particles.length)];
-                if (randP) state.flyers.push(new Flyer(randP, state));
+        // --- flyer lifecycle & spawning ---
+        for (const f of state.flyers) f.update(dt);
+        state.flyers = state.flyers.filter(f => f.life > 0);
 
-                // reset next spawn delay (in ms)
-                state.flyerSpawnCooldown = 4000 + Math.random() * 3000; // wait 4–7s
+        // When none or few are alive, consider spawning a small burst
+        state.flyerSpawnCooldown -= dt * 1000;
+        const {
+            flyerSpawnMin,
+            flyerSpawnMax,
+            flyerMaxAtOnce,
+            flyerCooldownMinMs,
+            flyerCooldownMaxMs,
+        } = state.params;
+
+        if (state.flyerSpawnCooldown <= 0) {
+            const capacity = Math.max(0, flyerMaxAtOnce - state.flyers.length);
+            if (capacity > 0) {
+                const want = Math.min(
+                    capacity,
+                    Math.floor(Math.random() * (flyerSpawnMax - flyerSpawnMin + 1)) + flyerSpawnMin
+                );
+                for (let i = 0; i < want; i++) {
+                    const randP = state.particles[Math.floor(Math.random() * state.particles.length)];
+                    if (randP) state.flyers.push(new Flyer(randP, state));
+                }
             }
-        } else {
-            // keep timer frozen while flyers still alive
-            state.flyerSpawnCooldown = 1000;
+            // reset next spawn delay (random window)
+            state.flyerSpawnCooldown =
+                flyerCooldownMinMs + Math.random() * (flyerCooldownMaxMs - flyerCooldownMinMs);
         }
+
 
         for (const f of state.flyers) f.update(dt);
         for (const f of state.flyers) f.render(ctx);

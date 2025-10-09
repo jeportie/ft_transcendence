@@ -12,14 +12,21 @@
 
 const motionPresets = {
     cinematic: {
-        originK: 0.00035,
+        originK: 0.00015,
         damping: 0.975,
-        flyerSpeedMin: 6,
-        flyerSpeedMax: 16,
+        flyerSpeedMin: 3,
+        flyerSpeedMax: 12,
         baseRadius: 110,
         backgroundAlpha: 0.15,
         breathe: true,
-        timeScale: 8.0,
+        timeScale: 6.0,
+
+        // optional overrides per preset
+        flyerSpawnMin: 1,
+        flyerSpawnMax: 2,
+        flyerMaxAtOnce: 2,
+        flyerCooldownMinMs: 2600,
+        flyerCooldownMaxMs: 5600,
     },
     reactive: {
         originK: 0.001,
@@ -30,8 +37,15 @@ const motionPresets = {
         backgroundAlpha: 1,
         breathe: false,
         timeScale: 1.2,
+
+        flyerSpawnMin: 2,
+        flyerSpawnMax: 3,
+        flyerMaxAtOnce: 3,
+        flyerCooldownMinMs: 1800,
+        flyerCooldownMaxMs: 3800,
     },
 };
+
 
 export function applyMotionPreset(state, name) {
     const preset = motionPresets[name];
