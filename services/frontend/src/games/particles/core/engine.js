@@ -71,7 +71,7 @@ export class ParticleEngine {
     }
 
     start() {
-        // this.loop.toggleFPS();
+        this.loop.toggleFPS();
         this.loop.start();
     }
 
