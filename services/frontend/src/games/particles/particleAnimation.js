@@ -13,6 +13,7 @@
 import { ParticleEngine } from "./core/engine.js";
 import { toggleCinematicMode, setParticleMap, setSeed } from "./core/controls.js";
 import { createConfig, DPR, defaults } from "./core/config.js";
+import { createUIPanel } from "./core/uiPanel.js";
 
 import Mouse from "./class/Mouse.js";
 import Particle from "./class/Particle.js";
@@ -67,6 +68,7 @@ export function runParticle(selector, options = {}) {
         await onResize();
         engine.start();
         toggleCinematicMode(state, true);
+        createUIPanel(state);
     })();
     return () => {
         engine.stop();

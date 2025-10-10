@@ -24,22 +24,3 @@ export function createConfig(overrides = {}) {
         schema: PARAM_SCHEMA,
     };
 }
-
-// export const defaults = {
-//     N: 700,
-//     seed: 1337,
-//     mapName: null,
-//     baseRadius: 150,
-//     radiusVelocityGain: 3.0,
-//     mouseStrength: 0.090,
-//     originK: 0.0012,
-//     damping: 0.979,
-//     linkDist: 130,
-//     timeScale: 0.6,
-//
-//     flyerSpawnMin: 1,
-//     flyerSpawnMax: 3,
-//     flyerMaxAtOnce: 3,
-//     flyerCooldownMinMs: 2200,
-//     flyerCooldownMaxMs: 5200,
-// };
