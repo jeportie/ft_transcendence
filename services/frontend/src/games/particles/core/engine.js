@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 10:59:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 11:00:01 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 09:44:22 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,6 +16,7 @@ import Flyer from "../class/Flyer.js";
 import { seededRand } from "./utils.js";
 import { drawBackground, drawLinks } from "./draw.js";
 import { loadMapJson, applyMapToParticles } from "./mapLoader.js";
+import { Events } from "./events.js";
 
 export class ParticleEngine {
     constructor(ctx, state) {
@@ -97,6 +98,8 @@ export class ParticleEngine {
         const { ctx, state } = this;
         const { params, mouse } = state;
 
+        Events.emit("flyer.spawn", state.flyers.length);
+        Events.emit("params.changed", state.params);
         // breathing mode
         if (params.breathe) {
             const t = performance.now() * 0.0002;

@@ -6,30 +6,15 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 11:13:50 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 23:03:01 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 09:37:23 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+import { normalizeParams } from "./params.js";
+
 export const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
-export const defaults = {
-    N: 700,
-    seed: 1337,
-    mapName: null,
-    baseRadius: 150,
-    radiusVelocityGain: 3.0,
-    mouseStrength: 0.090,
-    originK: 0.0012,
-    damping: 0.979,
-    linkDist: 130,
-    timeScale: 0.6,
-
-    flyerSpawnMin: 1,
-    flyerSpawnMax: 3,
-    flyerMaxAtOnce: 3,
-    flyerCooldownMinMs: 2200,
-    flyerCooldownMaxMs: 5200,
-};
+export const defaults = normalizeParams();
 
 export const colorThemes = {
     default: [
