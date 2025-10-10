@@ -20,7 +20,7 @@ const deleteBackupCodeSql = loadSql(PATH, "../sql/deleteBackupCode.sql");
 const generateBackupCodesSql = loadSql(PATH, "../sql/insertBackupCodes.sql");
 
 export async function generateBackupCodes(fastify, request, reply) {
-    const userId = request.user.id;
+    const userId = request.user.sub;
     const count = 10;
 
     if (!userId)

@@ -18,7 +18,7 @@ const disableF2aSql = loadSql(PATH, "../sql/disableF2a.sql");
 const deleteBackupCodeSql = loadSql(PATH, "../sql/deleteBackupCode.sql");
 
 export async function disableF2a(fastify, request, reply) {
-    const userId = request.user.id;
+    const userId = request.user.sub;
 
     if (!userId)
         throw AuthErrors.MissingCredentials();

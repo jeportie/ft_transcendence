@@ -42,6 +42,7 @@ export default class Settings extends AbstractView {
         let isOauth = false;
         // Load current state
         API.get("/user/me").then((user: any) => {
+            console.log(user);
             username = user.me.username;
             toggle.checked = user.me.f2a_enabled;
             isOauth = user.me.oauth;
@@ -113,27 +114,15 @@ export default class Settings extends AbstractView {
             e.preventDefault();
             const code = codeInput.value;
             const res = await API.post("/auth/verify-totp", { code });
+
             console.log(res);
-            if (res.success) {
-                qrSection.classList.add("hidden");
-                const backups = await API.post("/auth/backup");
-                console.log(backups);
-            } else {
-                alert("Invalid code. Try again.");
-            }
-        });
-
-        // Verify code after scanning QR
-        verifyBtn.addEventListener("click", async e => {
-            e.preventDefault();
-            const code = codeInput.value;
-            const res = await API.post("/auth/verify-totp", { code });
-
             if (res.success) {
                 qrSection.classList.add("hidden");
 
                 // Generate and show backup codes
                 const backups = await API.post("/auth/backup");
+
+                console.log(backups);
                 if (backups.success && backups.codes) {
                     this.showBackupCodes(backups.codes);
                 }

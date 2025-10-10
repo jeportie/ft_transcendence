@@ -23,7 +23,7 @@ export const verifyBackupSchema = {
             code: {
                 type: "string",
                 minLength: 8,
-                maxLength: 16,
+                maxLength: 8,
                 example: "12ab-34cd"
             }
         },
