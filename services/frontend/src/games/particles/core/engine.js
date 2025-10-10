@@ -22,10 +22,9 @@ export class ParticleEngine {
     constructor(ctx, state) {
         this.ctx = ctx;
         this.state = state;
-        this.loop = null;
+        this.fixedDt = 1 / 60;
         this.accumulator = 0;
-        this.fixedDt = 1 / 60; // physics at 60 Hz
-        this.lastFrame = performance.now();
+        this.loop = new GameLoop(this._tick.bind(this));
     }
 
     resize(canvas, DPR) {
@@ -72,26 +71,24 @@ export class ParticleEngine {
     }
 
     start() {
-        const step = () => {
-            const now = performance.now();
-            let frameTime = (now - this.lastFrame) / 1000;
-            this.lastFrame = now;
-            // clamp spikes (tab switch, etc.)
-            frameTime = Math.min(frameTime, 0.1);
-
-            this.accumulator += frameTime;
-            while (this.accumulator >= this.fixedDt) {
-                this._updatePhysics(this.fixedDt);
-                this.accumulator -= this.fixedDt;
-            }
-            this._render();
-            requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
+        this.loop.toggleFPS();
+        this.loop.start();
     }
 
     stop() {
-        this.loop?.stop();
+        this.loop.stop();
+    }
+
+    /** GameLoop callback: variable dt in seconds */
+    _tick(dt) {
+        // Clamp spikes (tab switch etc.)
+        dt = Math.min(dt, 0.1);
+        this.accumulator += dt;
+        while (this.accumulator >= this.fixedDt) {
+            this._updatePhysics(this.fixedDt);
+            this.accumulator -= this.fixedDt;
+        }
+        this._render();
     }
 
     _updatePhysics(dt) {
@@ -100,6 +97,7 @@ export class ParticleEngine {
 
         Events.emit("flyer.spawn", state.flyers.length);
         Events.emit("params.changed", state.params);
+
         // breathing mode
         if (params.breathe) {
             const t = performance.now() * 0.0002;

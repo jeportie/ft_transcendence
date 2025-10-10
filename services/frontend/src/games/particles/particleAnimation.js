@@ -6,20 +6,22 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/08 20:58:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 22:58:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 10:40:45 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { ParticleEngine } from "./core/engine.js";
 import { toggleCinematicMode, setParticleMap, setSeed } from "./core/controls.js";
-import { DPR, defaults } from "./core/config.js";
+import { createConfig, DPR, defaults } from "./core/config.js";
+
 import Mouse from "./class/Mouse.js";
 import Particle from "./class/Particle.js";
 
 const state = {
-    particles: /** @type {Particle[]} */ ([]),
+    config: createConfig(),
+    particles: ([]),
     mouse: new Mouse(),
-    params: { ...defaults },
+    params: null,
     width: 0,
     height: 0,
     flyers: [],
@@ -46,7 +48,8 @@ export function runParticle(selector, options = {}) {
         return;
     }
 
-    Object.assign(state.params, options);
+    Object.assign(state.config.params, options);
+    state.params = state.config.params;
     const engine = new ParticleEngine(ctx, state);
     const onResize = async () => {
         engine.resize(canvas, DPR);

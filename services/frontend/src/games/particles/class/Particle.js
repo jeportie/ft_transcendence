@@ -12,7 +12,7 @@
 
 import { Circle, Point, Vector } from "@jeportie/lib2d";
 import { clamp, lerp } from "../core/utils.js";
-import { colorThemes } from "../core/config.js";
+import { colorThemes } from "../core/colorThemes.js";
 
 export default class Particle extends Circle {
     /**

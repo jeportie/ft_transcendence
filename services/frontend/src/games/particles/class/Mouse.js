@@ -12,7 +12,7 @@
 
 import { Point } from "@jeportie/lib2d";
 import { lerp } from "../core/utils.js";
-import { colorThemes } from "../core/config.js";
+import { colorThemes } from "../core/colorThemes.js";
 
 export default class Mouse {
     constructor() {
