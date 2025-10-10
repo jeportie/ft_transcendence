@@ -19,7 +19,7 @@ export const AuthErrors = {
         new AppError("USER_NOT_FOUND", "Invalid credentials", 401,
             `[Auth] User not found: ${user}`),
     InvalidPassword: (user) =>
-        new AppError("INVALID_PASSWORD", "Invalid credentials", 401,
+        new AppError("INVALID CREDENTIALS", "Invalid credentials", 401,
             `[Auth] Bad password: ${user}`),
     MissingFields: () =>
         new AppError("MISSING_FIELDS", "Missing required fields", 400),
