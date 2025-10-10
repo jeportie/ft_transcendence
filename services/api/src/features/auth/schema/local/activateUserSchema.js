@@ -47,7 +47,6 @@ export const activateUserSchema = {
                 },
             },
         },
-
         400: {
             description: "Missing or invalid activation token",
             oneOf: [
@@ -71,7 +70,6 @@ export const activateUserSchema = {
                 },
             ],
         },
-
         401: {
             description: "Activation link has expired or token already used",
             oneOf: [

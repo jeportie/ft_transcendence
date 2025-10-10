@@ -11,16 +11,16 @@
 // ************************************************************************** //
 
 import * as controller from "../controller/f2a.controller.js";
-import * as schemas from "../schema/f2a/index.js";
+import * as schema from "../schema/f2a/index.js";
 
 export async function f2aRoutes(fastify) {
     const authGuard = { preHandler: [fastify.authenticate] };
 
-    fastify.post("/enable", { ...authGuard, schema: schemas.enableSchema }, controller.enableF2a);
-    fastify.post("/verify-totp", { ...authGuard, schema: schemas.verifyTotpSchema }, controller.verifyTotp);
-    fastify.post("/login-totp", { schema: schemas.loginTotpSchema }, controller.loginTotp);
-    fastify.post("/verify-backup", { schema: schemas.verifyBackupSchema }, controller.verifyBackup);
-    fastify.post("/disable", { ...authGuard, schema: schemas.disableSchema }, controller.disableF2a);
-    fastify.post("/backup", { ...authGuard, schema: schemas.backupSchema }, controller.generateBackupCodes);
-    fastify.post("/check-2fa", { schema: schemas.checkF2aSchema }, controller.checkF2a);
+    fastify.post("/enable", { ...authGuard, schema: schema.enableSchema }, controller.enableF2a);
+    fastify.post("/verify-totp", { ...authGuard, schema: schema.verifyTotpSchema }, controller.verifyTotp);
+    fastify.post("/login-totp", { schema: schema.loginTotpSchema }, controller.loginTotp);
+    fastify.post("/verify-backup", { schema: schema.verifyBackupSchema }, controller.verifyBackup);
+    fastify.post("/disable", { ...authGuard, schema: schema.disableSchema }, controller.disableF2a);
+    fastify.post("/backup", { ...authGuard, schema: schema.backupSchema }, controller.generateBackupCodes);
+    fastify.post("/check-2fa", { schema: schema.checkF2aSchema }, controller.checkF2a);
 }
