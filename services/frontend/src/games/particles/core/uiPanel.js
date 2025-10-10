@@ -70,7 +70,7 @@ export function createUIPanel(state) {
         Motion: ["baseRadius", "radiusVelocityGain", "mouseStrength", "originK", "damping", "linkDist", "timeScale"],
         Flyers: ["flyerSpeedMin", "flyerSpeedMax", "flyerSpawnMin", "flyerSpawnMax",
             "flyerMaxAtOnce", "flyerCooldownMinMs", "flyerCooldownMaxMs"],
-        Visual: ["breathe", "breatheSpeed", "breatheDepth"],
+        Visual: ["breathe", "breatheSpeed", "breatheDepth", "preset", "theme"],
     };
 
     const makeBinding = (folder, key, meta) => {
@@ -127,30 +127,33 @@ export function createUIPanel(state) {
             if (!meta) continue;
             makeBinding(folder, key, meta);
         }
+
+        // 👇 Add extra controls for Visual group
+        if (group === "Visual") {
+            // --- Preset selector ---
+            const presets = {
+                cinematic: "Cinematic",
+                reactive: "Reactive",
+            };
+            const presetObj = { preset: state.currentMode || "reactive" };
+            const presetBlade = folder.addBinding(presetObj, "preset", {
+                label: "Preset",
+                options: presets,
+            });
+            presetBlade.on("change", (ev) => toggleCinematicMode(state, ev.value === "cinematic"));
+
+            // --- Theme selector ---
+            const themeNames = Object.keys(state.config.colors);
+            const themeObj = { theme: state.currentTheme || "default" };
+            const themeBlade = folder.addBinding(themeObj, "theme", {
+                label: "Theme",
+                options: Object.fromEntries(themeNames.map((n) => [n, n])),
+            });
+            themeBlade.on("change", (ev) => {
+                state.currentTheme = ev.value;
+            });
+        }
     }
-
-    /* ---------------- Preset selector ---------------- */
-    const presets = {
-        cinematic: "Cinematic",
-        reactive: "Reactive",
-    };
-    const presetObj = { preset: state.currentMode || "reactive" };
-    const presetBlade = pane.addBinding(presetObj, "preset", {
-        label: "Preset",
-        options: presets,
-    });
-    presetBlade.on("change", (ev) => toggleCinematicMode(state, ev.value === "cinematic"));
-
-    /* ---------------- Theme selector ---------------- */
-    const themeNames = Object.keys(state.config.colors);
-    const themeObj = { theme: "default" };
-    const themeBlade = pane.addBinding(themeObj, "theme", {
-        label: "Theme",
-        options: Object.fromEntries(themeNames.map((n) => [n, n])),
-    });
-    themeBlade.on("change", (ev) => {
-        state.currentTheme = ev.value;
-    });
 
     /* ---------------- 📊 Stats (A: compact / B: detailed) ----------------- */
     const statsFolder = pane.addFolder({ title: "📊 Stats", expanded: false });
