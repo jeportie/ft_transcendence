@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 10:59:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/10 09:44:22 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 14:05:11 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -71,7 +71,7 @@ export class ParticleEngine {
     }
 
     start() {
-        this.loop.toggleFPS();
+        // this.loop.toggleFPS();
         this.loop.start();
     }
 
@@ -81,6 +81,7 @@ export class ParticleEngine {
 
     /** GameLoop callback: variable dt in seconds */
     _tick(dt) {
+        const t0 = performance.now();
         // Clamp spikes (tab switch etc.)
         dt = Math.min(dt, 0.1);
         this.accumulator += dt;
@@ -89,6 +90,10 @@ export class ParticleEngine {
             this.accumulator -= this.fixedDt;
         }
         this._render();
+        const t1 = performance.now();
+        const frameMs = t1 - t0;
+        const fps = dt > 0 ? (1 / dt) : 0;
+        Events.emit("stats.frame", { fps, frameMs });
     }
 
     _updatePhysics(dt) {

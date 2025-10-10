@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/08 20:58:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/10 10:40:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 15:28:08 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -68,7 +68,9 @@ export function runParticle(selector, options = {}) {
         await onResize();
         engine.start();
         toggleCinematicMode(state, true);
+        state.currentMode = "cinematic";
         createUIPanel(state);
+
     })();
     return () => {
         engine.stop();

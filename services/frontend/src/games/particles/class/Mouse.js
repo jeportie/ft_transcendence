@@ -6,13 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 11:12:00 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 10:56:36 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 13:28:39 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { Point } from "@jeportie/lib2d";
 import { lerp } from "../core/utils.js";
-import { colorThemes } from "../core/colorThemes.js";
 
 export default class Mouse {
     constructor() {
@@ -21,7 +20,6 @@ export default class Mouse {
         this.has = false;       // whether mouse is over canvas
         this.speed = 0;         // smoothed pixel/frame motion
         this.fade = 0;          // fade factor [0..1] used for glow
-        this.theme = "electric"; // default mouse color aura
     }
 
     /**

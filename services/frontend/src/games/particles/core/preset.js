@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 11:01:53 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 11:35:12 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 14:58:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -35,14 +35,14 @@ const motionPresets = {
         flyerSpeedMax: 30,
         baseRadius: 100,
         backgroundAlpha: 1,
-        breathe: false,
-        timeScale: 1.2,
+        breathe: true,
+        timeScale: 9.6,
 
-        flyerSpawnMin: 2,
-        flyerSpawnMax: 3,
-        flyerMaxAtOnce: 3,
-        flyerCooldownMinMs: 1800,
-        flyerCooldownMaxMs: 3800,
+        flyerSpawnMin: 1,
+        flyerSpawnMax: 6,
+        flyerMaxAtOnce: 6,
+        flyerCooldownMinMs: 500,
+        flyerCooldownMaxMs: 2000,
     },
 };
 

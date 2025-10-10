@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 09:27:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 10:56:43 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 15:14:39 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,11 +20,16 @@ export default class Particle extends Circle {
      * @param {number} y
      */
     constructor(x, y, stateRef) {
-        const r = 0.7 + Math.random() * 1.0; // radius variation
+        const p = stateRef?.params || {};
+        const rMin = Math.min(p.particleRadiusMin ?? 0.7, p.particleRadiusMax ?? 1.7);
+        const rMax = Math.max(p.particleRadiusMin ?? 0.7, p.particleRadiusMax ?? 1.7);
+        const r = rMin + Math.random() * (rMax - rMin);
         super(x, y, r);
         this.state = stateRef;
         this.origin = new Point(x, y);
-        this.vel = new Vector((Math.random() - 0.5) * 0.4, (Math.random() - 0.5) * 0.4);
+        const vScale = p.initVelScale ?? 0.4;
+        this.vel = new Vector((Math.random() - 0.5) * vScale, (Math.random() - 0.5) * vScale);
+
         this.speedMag = 0;
         this.glow = 0;          // current eased glow
         this.glowTarget = 0;    // target set by flyers
@@ -72,7 +77,6 @@ export default class Particle extends Circle {
             }
         }
 
-
         // --- constant pull toward origin (uniform) ---
         const ox = this.origin.x - this.pos.x;
         const oy = this.origin.y - this.pos.y;
@@ -83,7 +87,7 @@ export default class Particle extends Circle {
         // --- damping & motion ---
         this.vel.scaleSelf(params.damping);
 
-        const maxVel = 5;
+        const maxVel = params.maxVel ?? 5;
         this.vel.x = clamp(this.vel.x, -maxVel, maxVel);
         this.vel.y = clamp(this.vel.y, -maxVel, maxVel);
 
@@ -91,26 +95,44 @@ export default class Particle extends Circle {
 
         const { width, height } = this.state;
 
-        // wrap edges
-        if (this.pos.x < -10) this.pos.x = width + 10;
-        if (this.pos.x > width + 10) this.pos.x = -10;
-        if (this.pos.y < -10) this.pos.y = height + 10;
-        if (this.pos.y > height + 10) this.pos.y = -10;
 
-        this.speedMag = this.vel.magnitude;
+        // --- breathing offset (center-based global motion) ---
+        if (params.breathe) {
+            if (this.breathePhase === undefined)
+                this.breathePhase = Math.random() * Math.PI * 2;
+
+            // increment phase
+            this.breathePhase += dt * params.breatheSpeed * Math.PI * 2;
+
+            // center of the screen
+            const cx = this.state.width * 0.5;
+            const cy = this.state.height * 0.5;
+
+            // direction from center to particle
+            const dx = this.pos.x - cx;
+            const dy = this.pos.y - cy;
+            const dist = Math.hypot(dx, dy) || 1;
+            const dirX = dx / dist;
+            const dirY = dy / dist;
+
+            // breathing offset: slow sinusoidal push/pull
+            const globalBreath = Math.sin(performance.now() * 0.001 * params.breatheSpeed);
+            const personalPhase = Math.sin(this.breathePhase) * 0.3; // desync factor
+            const offset = (globalBreath + personalPhase) * params.breatheDepth;
+
+            this.pos.x += dirX * offset * dt;
+            this.pos.y += dirY * offset * dt;
+        }
     }
+
 
     render(ctx) {
         const { mouse, params } = this.state;
-
-        // decay flyer-induced glow
-        // this._flyerGlow = (this._flyerGlow || 0) * 0.98;
-
-        // --- color stops (cool → hot)
-        const stops = colorThemes["default"];
+        const themeName = this.state.currentTheme || "default";
+        const stops = colorThemes[themeName] || colorThemes.default;
+        const influenceR = params.baseRadius + mouse.speed * params.radiusVelocityGain;
 
         let t = 0;
-        const influenceR = params.baseRadius + mouse.speed * params.radiusVelocityGain;
 
         if (mouse.has) {
             const d = this.pos.distanceTo(mouse.pos);
@@ -121,7 +143,6 @@ export default class Particle extends Circle {
             t = Math.pow(norm, 1.4) * (0.9 + jitter);
         }
 
-        // 🌀 Always apply fade, even if mouse.has = false
         t = (t * this.state.mouse.fade) + this.glow;
         t = Math.min(1, t);
 
@@ -156,7 +177,6 @@ export default class Particle extends Circle {
 
         // Global idle brightness boost when mouse leaves (inverse of fade)
         const idleBoost = 0.4 + Math.pow(1 - this.state.mouse.fade, 2.0) * 1.8;
-
         // Glow increases near center + idle brightness + flicker
         const glow = (4 + Math.pow(t, 2.4) * 70 * (1 + flicker * 0.5)) * idleBoost;
 

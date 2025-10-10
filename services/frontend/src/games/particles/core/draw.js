@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 11:00:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 11:53:48 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 14:41:51 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,8 +16,11 @@ export function drawBackground(ctx, state) {
     const g = ctx.createLinearGradient(0, 0, state.width, state.height);
     g.addColorStop(0, "#0b0f16");
     g.addColorStop(1, "#05070b");
+    ctx.save();
+    ctx.globalAlpha = 1;
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, state.width, state.height);
+    ctx.restore();
 }
 
 export function drawLinks(ctx, state) {

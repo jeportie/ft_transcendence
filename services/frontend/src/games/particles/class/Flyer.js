@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/09 22:55:56 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/09 22:56:30 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/10 14:03:31 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -33,26 +33,34 @@ export default class Flyer {
         this.dir = Vector.fromAngle(Math.random() * Math.PI * 2).normalize();
 
         // Base & variance pulled from preset min/max
-        const { flyerSpeedMin = 8, flyerSpeedMax = 18 } = this.state.params;
+        const {
+            flyerSpeedMin = 8,
+            flyerSpeedMax = 18,
+            flyerSpeedAmpFac = 0.25,
+            flyerWanderJitter = 1.2,
+            flyerWanderStrength = 0.55,
+            flyerFlowStrength = 0.35,
+            flyerTurnResp = 4.0,
+            flyerAvoidMargin = 120,
+            flyerAvoidStrength = 0.8,
+        } = this.state.params;
         this.baseSpeed = flyerSpeedMin + Math.random() * (flyerSpeedMax - flyerSpeedMin);
         this.speed = this.baseSpeed;
-        this.speedAmp = this.baseSpeed * 0.25;   // breathing amplitude
+        this.speedAmp = this.baseSpeed * flyerSpeedAmpFac;   // breathing amplitude
         this.phase = Math.random() * Math.PI * 2;
 
         // Wander parameters
         this.wanderAngle = Math.random() * Math.PI * 2;
-        this.wanderJitter = 1.2;   // rad/sec of drift
-        this.wanderStrength = 0.55; // how strongly wander bends heading
-
+        this.wanderJitter = flyerWanderJitter;   // rad/sec of drift
+        this.wanderStrength = flyerWanderStrength; // how strongly wander bends heading
         // Flow field influence
-        this.flowStrength = 0.35;   // how much the field biases heading
-
+        this.flowStrength = flyerFlowStrength;   // how much the field biases heading
         // Heading response
-        this.turnResponsiveness = 4.0; // how quickly heading follows desired (rad/sec)
+        this.turnResponsiveness = flyerTurnResp; // how quickly heading follows desired (rad/sec)
 
         // Edge behaviour
-        this.avoidMargin = 120;   // start steering back before wrap
-        this.avoidStrength = 0.8; // weight of the avoidance vector
+        this.avoidMargin = flyerAvoidMargin;   // start steering back before wrap
+        this.avoidStrength = flyerAvoidStrength; // weight of the avoidance vector
 
         // Lifecycle
         this.age = 0;
@@ -121,7 +129,8 @@ export default class Flyer {
     }
 
     _lightNearbyParticles() {
-        const influenceR = 90;
+        const influenceR = this.state.params.flyerLightRadius ?? 90;
+        const maxAffectedParticules = this.state.params.flyerMaxAffectedParticles ?? 90;
         const influenceR2 = influenceR * influenceR;
         let hits = 0;
         const skip = 2 + Math.floor(Math.random() * 2);
@@ -135,7 +144,7 @@ export default class Flyer {
                 const falloff = Math.exp(-dist2 / (2 * (influenceR * 0.5) ** 2));
                 p.glowTarget = Math.min(1.5, (p.glowTarget || 0) + falloff * 0.6);
                 hits++;
-                if (hits > 90) break;
+                if (hits > maxAffectedParticules) break;
             }
         }
     }
