@@ -15,6 +15,11 @@ import { AppError } from "../../utils/AppError.js";
 export const UserErrors = {
     UserNotFound: (id) =>
         new AppError("USER_NOT_FOUND", "User not found", 404, `[User] No user with id=${id}`),
+    InvalidPassword: (user) =>
+        new AppError("INVALID CREDENTIALS", "Invalid credentials", 401,
+            `[Auth] Bad password: ${user}`),
+    DbFail: () =>
+        new AppError("DB_FAIL", "The database failed", 401),
 };
 
 export const AdminErrors = {

@@ -12,6 +12,7 @@
 
 import { verifyPassword, hashPassword } from "../../../auth/service/utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
+import { UserErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
 const getMeSql = loadSql(PATH, "../sql/getMe.sql");
@@ -31,7 +32,7 @@ export async function modifyPwd(fastify, request, reply) {
     if (!isOauth) {
         const ok = await verifyPassword(row.password_hash, oldPwd);
         if (!ok)
-            throw AuthErrors.InvalidPassword(user);
+            throw UserErrors.InvalidPassword(user);
     }
 
     const password_hash = await hashPassword(newPwd);
@@ -42,7 +43,7 @@ export async function modifyPwd(fastify, request, reply) {
         });
     } catch (err) {
         console.log("[!DB!]:", err);
-        throw AuthErrors.DbFail();
+        throw UserErrors.DbFail();
     }
     return { message: "Password has been changed." };
 }
