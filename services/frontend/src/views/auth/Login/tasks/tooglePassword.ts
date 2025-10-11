@@ -14,8 +14,8 @@
 import { DOM } from "../dom.generated.js";
 import { create } from "../../../../spa/utils/dom.js";
 
-import showIcon from "../../../assets/show.png";
-import hideIcon from "../../../assets/hide.png";
+import showIcon from "../../../../assets/show.png";
+import hideIcon from "../../../../assets/hide.png";
 
 export function togglePassword() {
     const userPwd = DOM.loginPwdInput;
