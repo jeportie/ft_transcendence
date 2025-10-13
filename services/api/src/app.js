@@ -73,19 +73,35 @@ export async function buildApp() {
     await fastify.register(userPlugin);
     await fastify.register(authPlugin);
 
-    // Serve statics
+    // Serve static assets first
     await fastify.register(statics, {
-        // root: path.join(__dirname, "../public"),
         root: "/app/public",
         prefix: "/",
     });
 
-    // SPA fallback to index.html for non /api paths
-    fastify.setNotFoundHandler((req, reply) => {
-        if (!req.raw.url?.startsWith("/api"))
-            return (reply.sendFile("index.html"));
-        reply.code(404).send({ error: "Not Found" });
+    // Debug logging (keep for now)
+    fastify.addHook("onRequest", (req, _, done) => {
+        if (req.url.match(/\.(js|css|png|svg|jpg|html|map)$/)) {
+            console.log("[Static hit]", req.url);
+        }
+        done();
     });
+
+    // SPA fallback (after static)
+    fastify.setNotFoundHandler((req, reply) => {
+        const url = req.raw.url || "";
+
+        // Don't intercept:
+        // - API requests
+        // - Static file requests (anything with a .ext)
+        if (url.startsWith("/api") || url.match(/\.[a-zA-Z0-9]+$/)) {
+            return reply.code(404).send({ error: "Not Found" });
+        }
+
+        // ✅ For /, /login, /dashboard, etc. → send index.html
+        return reply.sendFile("index.html");
+    });
+
 
     return (fastify);
 }

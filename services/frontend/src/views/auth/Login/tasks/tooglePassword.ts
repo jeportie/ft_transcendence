@@ -10,14 +10,10 @@
 //                                                                            //
 // ************************************************************************** //
 
-
 import { DOM } from "../dom.generated.js";
 import { create } from "../../../../spa/utils/dom.js";
 
-import showIcon from "../../../../assets/show.png";
-import hideIcon from "../../../../assets/hide.png";
-
-export function togglePassword() {
+export function togglePassword({ ASSETS }) {
     const userPwd = DOM.loginPwdInput;
     if (!userPwd) return;
 
@@ -33,7 +29,7 @@ export function togglePassword() {
     btn.style.cursor = "pointer";
 
     const icon = create("img", "w-5 h-5 select-none") as HTMLImageElement;
-    icon.src = showIcon;
+    icon.src = ASSETS.showIcon;
     icon.alt = "Show password";
 
     btn.appendChild(icon);
@@ -44,7 +40,7 @@ export function togglePassword() {
         e.preventDefault();
         visible = !visible;
         userPwd.type = visible ? "text" : "password";
-        icon.src = visible ? hideIcon : showIcon;
+        icon.src = visible ? ASSETS.hideIcon : ASSETS.showIcon;
         icon.alt = visible ? "Hide password" : "Show password";
     });
 }

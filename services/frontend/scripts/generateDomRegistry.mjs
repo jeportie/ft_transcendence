@@ -1,14 +1,4 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   generateDomRegistry.js                             :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/11 10:49:35 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/11 10:59:06 by jeportie         ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
+#!/usr/bin/env node
 
 import fs from "fs";
 import path from "path";
@@ -88,6 +78,10 @@ function generateForHTML(file) {
     }
 
     const outFile = path.join(folder, "dom.generated.ts");
+
+    /* ---------------------------------------------------------------------- */
+    /* ✨ Generate file content (dynamic proxy + typed getters)                */
+    /* ---------------------------------------------------------------------- */
     const outContent = `// ⚙️ AUTO-GENERATED FILE — DO NOT EDIT
 // Generated from ${path.basename(file)}
 // Created by scripts/generateDomRegistry.js
@@ -96,13 +90,19 @@ function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
   return document.getElementById(id) as T | null;
 }
 
-${entries
-            .map(({ id, camel, type }) => `export const ${camel} = $<${type}>("${id}");`)
-            .join("\n")}
+// 🔥 Dynamic Proxy: resolves elements lazily every time they're accessed
+export const DOM = new Proxy({}, {
+  get(_target, key: string) {
+    // convert camelCase key → dash-id (e.g. loginFormBtn → login-form-btn)
+    const id = key.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+    return $<HTMLElement>(id);
+  }
+});
 
-export const DOM = {
-${entries.map(({ camel }) => `  ${camel},`).join("\n")}
-};
+// 🧩 Typed accessors (runtime safe functions)
+${entries
+            .map(({ id, camel, type }) => `export const ${camel} = () => $<${type}>("${id}");`)
+            .join("\n")}
 `;
 
     fs.writeFileSync(outFile, outContent, "utf8");
@@ -114,7 +114,6 @@ ${entries.map(({ camel }) => `  ${camel},`).join("\n")}
 /* -------------------------------------------------------------------------- */
 const args = process.argv.slice(2);
 if (args.length > 0) {
-    // Process a single HTML file
     const targetFile = args[0];
     if (!fs.existsSync(targetFile)) {
         console.error(`❌ File not found: ${targetFile}`);
@@ -124,7 +123,6 @@ if (args.length > 0) {
     process.exit(0);
 }
 
-// Process all .html files under VIEWS_DIR
 const htmlFiles = findHTMLFiles(VIEWS_DIR);
 if (!htmlFiles.length) {
     console.log("⚠️ No HTML files found in", VIEWS_DIR);
@@ -133,4 +131,3 @@ if (!htmlFiles.length) {
 
 htmlFiles.forEach(generateForHTML);
 console.log(`✨ Done — ${htmlFiles.length} view(s) processed.`);
-

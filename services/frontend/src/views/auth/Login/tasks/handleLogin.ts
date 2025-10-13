@@ -15,14 +15,14 @@ import { auth } from "../../../../spa/auth.js";
 import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "./setupLogoAnimation.js";
 
-export function handleLogin() {
+export function handleLogin({ ASSETS }) {
     const form = DOM.loginForm;
     const userInput = DOM.loginUserInput;
     const pwdInput = DOM.loginPwdInput;
     const errorBox = DOM.loginErrorDiv;
     if (!form || !userInput || !pwdInput) return;
 
-    const logo = setupLogoAnimation();
+    const logo = setupLogoAnimation({ ASSETS });
 
     form.addEventListener("submit", event => {
         event.preventDefault();
@@ -64,3 +64,4 @@ export function handleLogin() {
         }
     });
 }
+

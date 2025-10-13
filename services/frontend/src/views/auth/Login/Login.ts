@@ -14,6 +14,13 @@ import { AbstractView } from "@jeportie/mini-spa";
 import * as tasks from "./tasks/index.ts";
 import loginHTML from "./login.html";
 
+import spaceShipSvg from "../../../assets/spaceship.svg";
+import googleIcon from "../../../assets/google.png";
+import hideIcon from "../../../assets/hide.png";
+import showIcon from "../../../assets/show.png";
+
+export const ASSETS = { spaceShipSvg, googleIcon, hideIcon, showIcon };
+
 export default class Login extends AbstractView {
     constructor(ctx) {
         super(ctx);
@@ -27,8 +34,7 @@ export default class Login extends AbstractView {
     async mount() {
         (this as any).layout?.reloadOnExit?.();
         for (const fn of Object.values(tasks)) {
-            if (typeof fn === "function")
-                fn();
+            if (typeof fn === "function") fn({ ASSETS });
         }
     }
 }

@@ -11,9 +11,8 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import spaceShipSvg from "../../../../assets/spaceship.svg";
 
-export function setupLogoAnimation() {
+export function setupLogoAnimation({ ASSETS }) {
     const card = DOM.loginCard;
     if (!card) return;
 
@@ -25,13 +24,13 @@ export function setupLogoAnimation() {
         document.head.appendChild(script);
     }
 
-    // Create logo container
     const logoContainer = document.createElement("div");
-    logoContainer.className = "relative mx-auto mb-4 w-[120px] h-[120px] flex items-center justify-center";
+    logoContainer.className =
+        "relative mx-auto mb-4 w-[120px] h-[120px] flex items-center justify-center";
 
-    // Static SVG
+    // Static spaceship SVG
     const staticLogo = document.createElement("div");
-    staticLogo.innerHTML = spaceShipSvg;
+    staticLogo.innerHTML = ASSETS.spaceShipSvg;
     staticLogo.className =
         "absolute inset-0 opacity-90 transition-opacity duration-300 flex items-center justify-center";
     staticLogo.querySelector("svg")?.classList.add("w-full", "h-full");
@@ -39,17 +38,16 @@ export function setupLogoAnimation() {
     logoContainer.appendChild(staticLogo);
     card.prepend(logoContainer);
 
-    // Return helper for later animation (e.g., fade + replace)
     return {
         logoContainer,
         fadeAndReplaceWithLottie: () => {
             const animWrapper = document.createElement("div");
             animWrapper.innerHTML = `
-        <dotlottie-wc
-          src="https://lottie.host/ffd0055c-8d94-4608-8a8d-4a97fd97a035/WUB7J2v2eu.lottie"
-          style="width: 100%; height: 100%;"
-          autoplay loop
-        ></dotlottie-wc>`;
+                <dotlottie-wc
+                  src="https://lottie.host/ffd0055c-8d94-4608-8a8d-4a97fd97a035/WUB7J2v2eu.lottie"
+                  style="width: 100%; height: 100%;"
+                  autoplay loop
+                ></dotlottie-wc>`;
             animWrapper.className =
                 "absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center";
 
