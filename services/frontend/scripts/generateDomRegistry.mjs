@@ -45,6 +45,11 @@ function camelCase(id) {
         .join("");
 }
 
+function pascalCase(str) {
+    const camel = camelCase(str);
+    return camel.charAt(0).toUpperCase() + camel.slice(1);
+}
+
 function findHTMLFiles(dir) {
     const results = [];
     for (const item of fs.readdirSync(dir)) {
@@ -77,35 +82,43 @@ function generateForHTML(file) {
         return;
     }
 
+    const viewName = pascalCase(path.basename(folder)); // e.g., "Login"
+    const className = `${viewName}DOM`;
+    const interfaceName = `${viewName}DomMap`;
     const outFile = path.join(folder, "dom.generated.ts");
 
     /* ---------------------------------------------------------------------- */
-    /* ✨ Generate file content (dynamic proxy + typed getters)                */
+    /* ✨ Generate file content (Lazy DOM class + interface pattern)           */
     /* ---------------------------------------------------------------------- */
     const outContent = `// AUTO-GENERATED FILE — DO NOT EDIT
 // Generated from ${path.basename(file)}
-// Created by scripts/generateDomRegistry.js
+// Created by scripts/generateDomRegistry.mjs
 
 function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
   return document.getElementById(id) as T | null;
 }
 
-// Dynamic Proxy: resolves elements lazily every time they're accessed
-export const DOM = new Proxy({}, {
-  get(_target, key: string) {
-    const id = key.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
-    return $<HTMLElement>(id);
-  }
-});
-
-// Typed accessors (runtime safe functions)
+/**
+ * ${className} — Lazy DOM accessor class
+ * Each getter queries the DOM dynamically when accessed.
+ */
+export class ${className} {
 ${entries
-            .map(({ id, camel, type }) => `export const ${camel} = () => $<${type}>("${id}");`)
+            .map(({ id, camel, type }) => `  get ${camel}() { return $<${type}>("${id}"); }`)
             .join("\n")}
+}
+
+export interface ${interfaceName} {
+${entries
+            .map(({ camel, type }) => `  ${camel}: ${type} | null;`)
+            .join("\n")}
+}
+
+export const DOM = new ${className}();
 `;
 
     fs.writeFileSync(outFile, outContent, "utf8");
-    console.log(`✅ Generated ${outFile} (${entries.length} IDs)`);
+    console.log(`✅ Generated ${outFile} (${entries.length} IDs → ${className})`);
 }
 
 /* -------------------------------------------------------------------------- */
