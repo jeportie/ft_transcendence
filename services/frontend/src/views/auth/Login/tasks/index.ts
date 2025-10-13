@@ -17,6 +17,7 @@ import { handleGoogleLogin } from "./handleGoogleLogin.js";
 import { setupLogoAnimation } from "./setupLogoAnimation.js";
 
 export const tasks = {
-    init: [setupLogoAnimation], // runs once before anything else
+    init: [setupLogoAnimation],
     ready: [togglePassword, showActivationMessages, handleLogin, handleGoogleLogin],
+    teardown: [],
 };

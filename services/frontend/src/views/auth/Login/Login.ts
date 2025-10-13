@@ -22,6 +22,8 @@ import showIcon from "../../../assets/show.png";
 export const ASSETS = { spaceShipSvg, googleIcon, hideIcon, showIcon };
 
 export default class Login extends AbstractView {
+    #cleanups = [];
+
     constructor(ctx) {
         super(ctx);
         this.setTitle("Login");
@@ -33,25 +35,44 @@ export default class Login extends AbstractView {
 
     async mount() {
         (this as any).layout?.reloadOnExit?.();
-
-        const context = { ASSETS };
-
-        // INIT TASKS — run once for foundational setup
+        const context = {
+            ASSETS,
+            addCleanup: (fn) => this.#cleanups.push(fn),
+        };
         if (tasks.init) {
             for (const fn of tasks.init) {
                 const result = fn(context);
                 if (result && typeof result === "object") {
-                    Object.assign(context, result); // <- merge returned objects into context
+                    Object.assign(context, result);
                 }
             }
         }
-
-        // READY TASKS — run after DOM is stable
         if (tasks.ready) {
             for (const fn of tasks.ready) fn(context);
         }
-
         console.log("[Login] Running init tasks:", tasks.init?.map(f => f.name));
         console.log("[Login] Running ready tasks:", tasks.ready?.map(f => f.name));
+    }
+
+    async destroy() {
+        console.log("[Login] Running teardown tasks:", tasks.teardown?.map(f => f.name));
+
+        for (const fn of this.#cleanups) {
+            try {
+                fn();
+            } catch (err) {
+                console.warn("Teardown error:", err);
+            }
+        }
+        if (tasks.teardown) {
+            for (const fn of tasks.teardown) {
+                try {
+                    fn();
+                } catch (err) {
+                    console.warn("Static teardown error:", err);
+                }
+            }
+        }
+        this.#cleanups = [];
     }
 }

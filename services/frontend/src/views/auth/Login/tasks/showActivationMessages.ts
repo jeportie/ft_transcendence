@@ -12,26 +12,33 @@
 
 import { DOM } from "../dom.generated.js";
 
-export function showActivationMessages() {
+export function showActivationMessages({ addCleanup }) {
     const params = new URLSearchParams(location.search);
     const activated = params.get("activated");
     const error = params.get("activation_failed");
     const card = DOM.loginCard;
     if (!card) return;
 
-    if (activated) {
+    const timeouts: number[] = [];
+    const messages: HTMLElement[] = [];
+
+    function show(text: string, className: string) {
         const msg = document.createElement("div");
-        msg.textContent = "Your account has been activated successfully!";
-        msg.className = "ui-card-alert ui-alert-success mb-4";
+        msg.textContent = text;
+        msg.className = className;
         card.prepend(msg);
-        setTimeout(() => msg.remove(), 4000);
+        messages.push(msg);
+        timeouts.push(window.setTimeout(() => msg.remove(), 4000));
     }
 
-    if (error) {
-        const msg = document.createElement("div");
-        msg.textContent = "Error: Account not activated";
-        msg.className = "ui-alert ui-alert-error mb-4";
-        card.prepend(msg);
-        setTimeout(() => msg.remove(), 4000);
-    }
+    if (activated)
+        show("Your account has been activated successfully!", "ui-card-alert ui-alert-success mb-4");
+    if (error)
+        show("Error: Account not activated", "ui-alert ui-alert-error mb-4");
+
+    // 🧹 Cleanup: clear timeouts + remove remaining messages
+    addCleanup(() => {
+        timeouts.forEach(clearTimeout);
+        messages.forEach(m => m.remove());
+    });
 }

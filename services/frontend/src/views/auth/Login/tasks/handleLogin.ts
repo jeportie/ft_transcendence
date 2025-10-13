@@ -13,53 +13,65 @@
 import { API } from "../../../../spa/api.js";
 import { auth } from "../../../../spa/auth.js";
 import { DOM } from "../dom.generated.js";
-import { setupLogoAnimation } from "./setupLogoAnimation.js";
 
-export function handleLogin({ ASSETS, logo }) {
+/**
+ * Handles login form submission and feedback display.
+ * Registers cleanup logic for event listeners.
+ */
+export function handleLogin({ ASSETS, logo, addCleanup }) {
     const form = DOM.loginForm;
     const userInput = DOM.loginUserInput;
     const pwdInput = DOM.loginPwdInput;
     const errorBox = DOM.loginErrorDiv;
+
     if (!form || !userInput || !pwdInput) return;
 
-    form.addEventListener("submit", event => {
+    const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();
 
-        API.post("/auth/login", {
-            user: userInput.value,
-            pwd: pwdInput.value,
-        })
-            .then(data => {
-                logo?.fadeAndReplaceWithLottie();
-
-                setTimeout(() => {
-                    if (data.activation_required) {
-                        window.navigateTo(`/not-active?userId=${data.user_id}`);
-                    } else if (data.f2a_required) {
-                        window.navigateTo(`/f2a-login?userId=${data.user_id}`);
-                    } else {
-                        auth.setToken(data.token || "dev-token");
-                        window.navigateTo("/dashboard");
-                    }
-                }, 2000);
-            })
-            .catch(err => {
-                console.error(`❌ [${err.code || err.status}] ${err.message}`);
-                pwdInput.value = "";
-                userInput.focus();
-
-                if (errorBox) {
-                    errorBox.textContent = "Invalid username or password.";
-                    errorBox.classList.remove("hidden");
-                }
+        try {
+            const data = await API.post("/auth/login", {
+                user: userInput.value,
+                pwd: pwdInput.value,
             });
-    });
 
-    pwdInput.addEventListener("focus", () => {
+            logo?.fadeAndReplaceWithLottie();
+
+            setTimeout(() => {
+                if (data.activation_required) {
+                    window.navigateTo(`/not-active?userId=${data.user_id}`);
+                } else if (data.f2a_required) {
+                    window.navigateTo(`/f2a-login?userId=${data.user_id}`);
+                } else {
+                    auth.setToken(data.token || "dev-token");
+                    window.navigateTo("/dashboard");
+                }
+            }, 2000);
+        } catch (err) {
+            console.error(`❌ [${err.code || err.status}] ${err.message}`);
+            pwdInput.value = "";
+            userInput.focus();
+
+            if (errorBox) {
+                errorBox.textContent = "Invalid username or password.";
+                errorBox.classList.remove("hidden");
+            }
+        }
+    };
+
+    const onFocus = () => {
         if (errorBox) {
             errorBox.classList.add("hidden");
             errorBox.textContent = "";
         }
+    };
+
+    form.addEventListener("submit", onSubmit);
+    pwdInput.addEventListener("focus", onFocus);
+
+    // 🧹 Register teardown to avoid leaks
+    addCleanup(() => {
+        form.removeEventListener("submit", onSubmit);
+        pwdInput.removeEventListener("focus", onFocus);
     });
 }
-

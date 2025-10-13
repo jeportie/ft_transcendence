@@ -13,7 +13,7 @@
 import { DOM } from "../dom.generated.js";
 import { create } from "../../../../spa/utils/dom.js";
 
-export function togglePassword({ ASSETS }) {
+export function togglePassword({ ASSETS, addCleanup }) {
     const userPwd = DOM.loginPwdInput;
     if (!userPwd) return;
 
@@ -36,11 +36,21 @@ export function togglePassword({ ASSETS }) {
     wrapper.appendChild(btn);
 
     let visible = false;
-    btn.addEventListener("click", e => {
+    const onClick = (e: MouseEvent) => {
         e.preventDefault();
         visible = !visible;
         userPwd.type = visible ? "text" : "password";
         icon.src = visible ? ASSETS.hideIcon : ASSETS.showIcon;
         icon.alt = visible ? "Hide password" : "Show password";
+    };
+
+    btn.addEventListener("click", onClick);
+
+    addCleanup(() => {
+        btn.removeEventListener("click", onClick);
+        const parent = wrapper.parentNode;
+        if (parent) parent.insertBefore(userPwd, wrapper);
+        wrapper.remove();
     });
 }
+

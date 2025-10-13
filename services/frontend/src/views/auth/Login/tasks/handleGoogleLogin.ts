@@ -11,14 +11,17 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { setupLogoAnimation } from "./setupLogoAnimation.js";
 import { create } from "../../../../spa/utils/dom.js";
 
-export function handleGoogleLogin({ ASSETS, logo }) {
+/**
+ * Handles Google OAuth button setup and click logic.
+ * Adds teardown to remove event listeners and UI icon.
+ */
+export function handleGoogleLogin({ ASSETS, logo, addCleanup }) {
     const btn = DOM.googleBtn;
     if (!btn) return;
 
-    // Create icon container
+    // Create icon container dynamically
     const iconWrapper = create("span", "absolute left-4 flex items-center");
     const icon = create("img", "w-5 h-5 mr-2") as HTMLImageElement;
     icon.src = ASSETS.googleIcon;
@@ -26,15 +29,25 @@ export function handleGoogleLogin({ ASSETS, logo }) {
     iconWrapper.appendChild(icon);
     btn.prepend(iconWrapper);
 
-    // Keep nice flex alignment
+    // Maintain layout consistency
     btn.classList.add("flex", "items-center", "justify-center", "gap-2");
 
-    btn.addEventListener("click", () => {
+    const onClick = () => {
         const params = new URLSearchParams(location.search);
         const next = params.get("next") || "/dashboard";
+
         logo?.fadeAndReplaceWithLottie();
+
         setTimeout(() => {
             window.location.href = `/api/auth/google/start?next=${encodeURIComponent(next)}`;
         }, 1800);
+    };
+
+    btn.addEventListener("click", onClick);
+
+    // 🧹 Register teardown: remove event listener + UI icon
+    addCleanup(() => {
+        btn.removeEventListener("click", onClick);
+        iconWrapper.remove();
     });
 }
