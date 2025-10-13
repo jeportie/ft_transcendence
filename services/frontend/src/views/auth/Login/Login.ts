@@ -6,12 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/11 13:29:23 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/13 22:43:06 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
-import { tasks } from "./tasks/index.ts";
+import { tasks } from "./tasks/index.js";
 import loginHTML from "./login.html";
 
 import spaceShipSvg from "../../../assets/spaceship.svg";
@@ -24,7 +24,7 @@ export const ASSETS = { spaceShipSvg, googleIcon, hideIcon, showIcon };
 export default class Login extends AbstractView {
     #cleanups = [];
 
-    constructor(ctx) {
+    constructor(ctx: any) {
         super(ctx);
         this.setTitle("Login");
     }
@@ -50,8 +50,6 @@ export default class Login extends AbstractView {
         if (tasks.ready) {
             for (const fn of tasks.ready) fn(context);
         }
-        console.log("[Login] Running init tasks:", tasks.init?.map(f => f.name));
-        console.log("[Login] Running ready tasks:", tasks.ready?.map(f => f.name));
     }
 
     async destroy() {

@@ -1,0 +1,48 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- signup.html                                        :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+              -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/09/23 13:57:02 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/13 19:32:25 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<div id="signup-card" class="ui-card">
+    <h1 class="ui-title">Sign up to Transcend</h1>
+    <p class="ui-text-muted mt-3">
+        Already have an account?
+        <a href="/login" data-link class="ui-hint-link">Login</a>
+    </p>
+    <br>
+    <form id="signup-form" class="ui-form">
+        <div class="ui-card-title mt-2">Username</div>
+        <input id="signup-user-input" class="ui-input" type="text" placeholder="username" autocomplete="username" />
+        <div class="ui-card-title mt-2">Email</div>
+        <input id="signup-email-input" class="ui-input" type="email" placeholder="yourname@example.com"
+            autocomplete="email" />
+        <div class="ui-card-title mt-2">Password</div>
+        <input id="signup-pwd-input" class="ui-input" type="password" placeholder="••••••••"
+            autocomplete="new-password" />
+        <div class="ui-card-title mt-2">Confirm Password</div>
+        <input id="signup-confirm-input" class="ui-input" type="password" placeholder="••••••••"
+            autocomplete="new-password" />
+        <div id="signup-recaptcha-container" class="recaptcha-manual"></div>
+        <button id="signup-form-btn" class="ui-btn-primary w-full mt-1">Create account</button>
+    </form>
+    <div id="signup-error-div" class="ui-error hidden mt-2"></div>
+    <div class="ui-separator"><span>OR</span></div>
+    <button id="signup-google-btn" class="ui-btn-secondary w-full mt-2 relative flex items-center justify-center">
+        Signup with Google
+    </button>
+</div>
+<div>
+    <p class="ui-text-small mt-3 justify-between">
+        By signing in, you agree to the
+        <a href="/service-terms" data-link class="ui-hint-link">Terms of Service </a>
+        and
+        <a href="/privacy-policy" data-link class="ui-hint-link">Privacy Policy</a>
+    </p>
+</div>

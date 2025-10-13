@@ -73,7 +73,7 @@ function generateForHTML(file) {
     }
 
     if (!entries.length) {
-        console.log(`⚠️ No IDs found in ${file}`);
+        console.log(`No IDs found in ${file}`);
         return;
     }
 
@@ -82,7 +82,7 @@ function generateForHTML(file) {
     /* ---------------------------------------------------------------------- */
     /* ✨ Generate file content (dynamic proxy + typed getters)                */
     /* ---------------------------------------------------------------------- */
-    const outContent = `// ⚙️ AUTO-GENERATED FILE — DO NOT EDIT
+    const outContent = `// AUTO-GENERATED FILE — DO NOT EDIT
 // Generated from ${path.basename(file)}
 // Created by scripts/generateDomRegistry.js
 
@@ -90,16 +90,15 @@ function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
   return document.getElementById(id) as T | null;
 }
 
-// 🔥 Dynamic Proxy: resolves elements lazily every time they're accessed
+// Dynamic Proxy: resolves elements lazily every time they're accessed
 export const DOM = new Proxy({}, {
   get(_target, key: string) {
-    // convert camelCase key → dash-id (e.g. loginFormBtn → login-form-btn)
     const id = key.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
     return $<HTMLElement>(id);
   }
 });
 
-// 🧩 Typed accessors (runtime safe functions)
+// Typed accessors (runtime safe functions)
 ${entries
             .map(({ id, camel, type }) => `export const ${camel} = () => $<${type}>("${id}");`)
             .join("\n")}

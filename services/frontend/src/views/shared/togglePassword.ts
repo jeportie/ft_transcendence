@@ -6,28 +6,45 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:24:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/13 16:49:35 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 00:06:26 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { create } from "../../spa/utils/dom.js";
+import { resolveElement } from "../../spa/utils/resolveElement.js";
 
-/**
- * Adds a show/hide toggle button to a password input.
- * @param {HTMLInputElement} input 
- */
-export function togglePassword({ ASSETS, addCleanup, input }: any) {
-    if (!input) return;
+interface TogglePasswordParams {
+    ASSETS: { showIcon: string; hideIcon: string };
+    addCleanup?: (fn: () => void) => void;
+    input?: HTMLInputElement | null;
+    getInput?: () => HTMLInputElement | null;
+    inputSelector?: string;
+}
+
+export function togglePassword(params: TogglePasswordParams) {
+    const { ASSETS, addCleanup, input, getInput, inputSelector } = params;
+
+    const targetInput = resolveElement<HTMLInputElement>({
+        el: input,
+        getEl: getInput,
+        selector: inputSelector,
+    });
+
+    if (!targetInput) {
+        console.warn("[togglePassword] No target input found");
+        return;
+    }
 
     const wrapper = create("div", "relative w-full");
-    input.parentNode?.insertBefore(wrapper, input);
-    wrapper.appendChild(input);
+    targetInput.parentNode?.insertBefore(wrapper, targetInput);
+    wrapper.appendChild(targetInput);
 
     const btn = create(
         "button",
         "absolute inset-y-0 right-3 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity"
     );
     btn.type = "button";
+
     const icon = create("img", "w-5 h-5 select-none") as HTMLImageElement;
     icon.src = ASSETS.showIcon;
     btn.appendChild(icon);
@@ -37,16 +54,15 @@ export function togglePassword({ ASSETS, addCleanup, input }: any) {
     const onClick = (e: MouseEvent) => {
         e.preventDefault();
         visible = !visible;
-        input.type = visible ? "text" : "password";
+        targetInput.type = visible ? "text" : "password";
         icon.src = visible ? ASSETS.hideIcon : ASSETS.showIcon;
     };
+
     btn.addEventListener("click", onClick);
 
-    addCleanup(() => {
+    addCleanup?.(() => {
         btn.removeEventListener("click", onClick);
-        const parent = wrapper.parentNode;
-        if (parent) parent.insertBefore(input, wrapper);
+        wrapper.parentNode?.insertBefore(targetInput, wrapper);
         wrapper.remove();
     });
 }
-

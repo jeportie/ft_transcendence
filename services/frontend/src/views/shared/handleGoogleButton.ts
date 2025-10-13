@@ -6,27 +6,45 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/13 16:39:05 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/13 16:39:26 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 00:06:00 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { create } from "../../spa/utils/dom.js";
+import { resolveElement } from "../../spa/utils/resolveElement.js";
 
-/**
- * Enhances a Google OAuth button with icon + navigation.
- */
-export function handleGoogleButton({ ASSETS, addCleanup, btnSelector, next = "/dashboard", logo }) {
-    const btn = document.querySelector(btnSelector) as HTMLButtonElement | null;
-    if (!btn) return;
+interface GoogleButtonParams {
+    ASSETS: { googleIcon: string };
+    addCleanup?: (fn: () => void) => void;
+    btn?: HTMLButtonElement | null;
+    getBtn?: () => HTMLButtonElement | null;
+    btnSelector?: string;
+    next?: string;
+    logo?: { fadeAndReplaceWithLottie?: () => void };
+}
+
+export function handleGoogleButton(params: GoogleButtonParams) {
+    const { ASSETS, addCleanup, btn, getBtn, btnSelector, next = "/dashboard", logo } = params;
+
+    const button = resolveElement<HTMLButtonElement>({
+        el: btn,
+        getEl: getBtn,
+        selector: btnSelector,
+    });
+
+    if (!button) {
+        console.warn("[handleGoogleButton] No target button found");
+        return;
+    }
 
     const iconWrapper = create("span", "absolute left-4 flex items-center");
-    const icon = create("img", "w-5 h-5 mr-2") as HTMLImageElement;
+    const icon = create("img", "w-5 h-5 mr-2");
     icon.src = ASSETS.googleIcon;
     icon.alt = "Google icon";
     iconWrapper.appendChild(icon);
-    btn.prepend(iconWrapper);
+    button.prepend(iconWrapper);
 
-    btn.classList.add("flex", "items-center", "justify-center", "gap-2");
+    button.classList.add("flex", "items-center", "justify-center", "gap-2");
 
     const onClick = () => {
         logo?.fadeAndReplaceWithLottie?.();
@@ -35,9 +53,10 @@ export function handleGoogleButton({ ASSETS, addCleanup, btnSelector, next = "/d
         }, 1800);
     };
 
-    btn.addEventListener("click", onClick);
-    addCleanup(() => {
-        btn.removeEventListener("click", onClick);
+    button.addEventListener("click", onClick);
+
+    addCleanup?.(() => {
+        button.removeEventListener("click", onClick);
         iconWrapper.remove();
     });
 }

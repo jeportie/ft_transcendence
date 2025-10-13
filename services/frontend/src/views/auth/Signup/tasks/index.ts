@@ -5,8 +5,8 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/11 10:37:24 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 00:11:18 by jeportie         ###   ########.fr       //
+//   Created: 2025/10/13 19:30:51 by jeportie          #+#    #+#             //
+//   Updated: 2025/10/13 19:48:16 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,37 +15,17 @@ import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "../../../shared/setupLogoAnimation.js";
 import { togglePassword } from "../../../shared/togglePassword.js";
 import { handleGoogleButton } from "../../../shared/handleGoogleButton.js";
-import { handleLogin } from "./handleLogin.js";
-import { showActivationMessages } from "./showActivationMessages.js";
 
 export const tasks = {
-
-    // In init we Use functions: () => DOM.xxx 
-    // Needs lazy access to the DOM to avoid concurence issues
     init: [
-        (ctx: any) =>
-            setupLogoAnimation({
-                ASSETS: ctx.ASSETS,
-                getCard: () => DOM.card,
-            }),
+        (ctx) => setupLogoAnimation({ ASSETS: ctx.ASSETS, getCard: () => DOM.signupCard }),
     ],
 
     ready: [
-        (ctx: any) =>
-            togglePassword({
-                ASSETS: ctx.ASSETS,
-                addCleanup: ctx.addCleanup,
-                input: DOM.pwdInput,
-            }),
+        (ctx) => togglePassword({ ASSETS: ctx.ASSETS, addCleanup: ctx.addCleanup, input: DOM.loginPwdInput }),
         showActivationMessages,
         handleLogin,
-        (ctx: any) =>
-            handleGoogleButton({
-                ASSETS: ctx.ASSETS,
-                addCleanup: ctx.addCleanup,
-                btn: DOM.googleBtn,
-                logo: ctx.logo,
-            }),
+        (ctx) => handleGoogleButton({ ...ctx, btnSelector: "#google-btn" }),
     ],
 
     teardown: [],
