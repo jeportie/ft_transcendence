@@ -14,9 +14,8 @@ import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "./setupLogoAnimation.js";
 import { create } from "../../../../spa/utils/dom.js";
 
-export function handleGoogleLogin({ ASSETS }) {
+export function handleGoogleLogin({ ASSETS, logo }) {
     const btn = DOM.googleBtn;
-    console.log("BTN FOUND:", btn, btn?.innerHTML);
     if (!btn) return;
 
     // Create icon container
@@ -26,12 +25,9 @@ export function handleGoogleLogin({ ASSETS }) {
     icon.alt = "Google icon";
     iconWrapper.appendChild(icon);
     btn.prepend(iconWrapper);
-    console.log("AFTER PREPEND:", btn.innerHTML);
 
     // Keep nice flex alignment
     btn.classList.add("flex", "items-center", "justify-center", "gap-2");
-
-    const logo = setupLogoAnimation({ ASSETS });
 
     btn.addEventListener("click", () => {
         const params = new URLSearchParams(location.search);

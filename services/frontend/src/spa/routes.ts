@@ -17,7 +17,6 @@ import { guards } from "./guards.js";
 // Landing layout
 const LandingLayout = () => import("../views/LandingLayout.ts");
 const Landing = () => import("../views/Landing.ts");
-// const Login = () => import("../views/Login.ts");
 const Login = () => import("../views/auth/Login/Login.ts");
 const Forgot = () => import("../views/Forgot.ts");
 const Reset = () => import("../views/ResetPwd.ts");

@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
-import * as tasks from "./tasks/index.ts";
+import { tasks } from "./tasks/index.ts";
 import loginHTML from "./login.html";
 
 import spaceShipSvg from "../../../assets/spaceship.svg";
@@ -33,8 +33,25 @@ export default class Login extends AbstractView {
 
     async mount() {
         (this as any).layout?.reloadOnExit?.();
-        for (const fn of Object.values(tasks)) {
-            if (typeof fn === "function") fn({ ASSETS });
+
+        const context = { ASSETS };
+
+        // INIT TASKS — run once for foundational setup
+        if (tasks.init) {
+            for (const fn of tasks.init) {
+                const result = fn(context);
+                if (result && typeof result === "object") {
+                    Object.assign(context, result); // <- merge returned objects into context
+                }
+            }
         }
+
+        // READY TASKS — run after DOM is stable
+        if (tasks.ready) {
+            for (const fn of tasks.ready) fn(context);
+        }
+
+        console.log("[Login] Running init tasks:", tasks.init?.map(f => f.name));
+        console.log("[Login] Running ready tasks:", tasks.ready?.map(f => f.name));
     }
 }

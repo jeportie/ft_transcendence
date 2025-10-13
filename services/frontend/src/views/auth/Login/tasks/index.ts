@@ -10,8 +10,13 @@
 //                                                                            //
 // ************************************************************************** //
 
-export { togglePassword } from "./tooglePassword.js";
-export { setupLogoAnimation } from "./setupLogoAnimation.js";
-export { showActivationMessages } from "./showActivationMessages.js";
-export { handleLogin } from "./handleLogin.js";
-export { handleGoogleLogin } from "./handleGoogleLogin.js";
+import { togglePassword } from "./tooglePassword.js";
+import { showActivationMessages } from "./showActivationMessages.js";
+import { handleLogin } from "./handleLogin.js";
+import { handleGoogleLogin } from "./handleGoogleLogin.js";
+import { setupLogoAnimation } from "./setupLogoAnimation.js";
+
+export const tasks = {
+    init: [setupLogoAnimation], // runs once before anything else
+    ready: [togglePassword, showActivationMessages, handleLogin, handleGoogleLogin],
+};

@@ -15,14 +15,12 @@ import { auth } from "../../../../spa/auth.js";
 import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "./setupLogoAnimation.js";
 
-export function handleLogin({ ASSETS }) {
+export function handleLogin({ ASSETS, logo }) {
     const form = DOM.loginForm;
     const userInput = DOM.loginUserInput;
     const pwdInput = DOM.loginPwdInput;
     const errorBox = DOM.loginErrorDiv;
     if (!form || !userInput || !pwdInput) return;
-
-    const logo = setupLogoAnimation({ ASSETS });
 
     form.addEventListener("submit", event => {
         event.preventDefault();
