@@ -11,26 +11,21 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
+
 import { setupLogoAnimation } from "../../../shared/setupLogoAnimation.js";
 import { togglePassword } from "../../../shared/togglePassword.js";
 import { handleGoogleButton } from "../../../shared/handleGoogleButton.js";
 import { handleLogin } from "./handleLogin.js";
 import { showActivationMessages } from "./showActivationMessages.js";
 
+
 export const tasks = {
     init: [
-        (ctx) => setupLogoAnimation({
-            ...ctx,
-            getCard: () => DOM.loginCard, // ✅ Login’s own card element
-        }),
+        (ctx) => setupLogoAnimation({ ASSETS: ctx.ASSETS, getCard: () => DOM.loginCard }),
     ],
 
     ready: [
-        ({ ASSETS, addCleanup }) => togglePassword({
-            ASSETS,
-            addCleanup,
-            input: DOM.loginPwdInput,
-        }),
+        (ctx) => togglePassword({ ASSETS: ctx.ASSETS, addCleanup: ctx.addCleanup, input: DOM.loginPwdInput }),
         showActivationMessages,
         handleLogin,
         (ctx) => handleGoogleButton({ ...ctx, btnSelector: "#google-btn" }),
