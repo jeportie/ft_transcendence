@@ -11,6 +11,7 @@
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
+import * as tasks from "./tasks/index.ts";
 import loginHTML from "./login.html";
 
 export default class Login extends AbstractView {
@@ -25,6 +26,9 @@ export default class Login extends AbstractView {
 
     async mount() {
         (this as any).layout?.reloadOnExit?.();
-        await super.mount(); // Auto-runs all tasks/*.js
+        for (const fn of Object.values(tasks)) {
+            if (typeof fn === "function")
+                fn();
+        }
     }
 }

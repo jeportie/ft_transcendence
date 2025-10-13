@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import spaceShipSvg from "../../../assets/spaceship.svg";
+import spaceShipSvg from "../../../../assets/spaceship.svg";
 
 export function setupLogoAnimation() {
     const card = DOM.loginCard;
