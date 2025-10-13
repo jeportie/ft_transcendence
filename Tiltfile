@@ -1,12 +1,6 @@
 # Use your docker-compose services
 docker_compose('docker-compose.yml')
 
-local_resource(
-  'seed-frontend',
-  'docker exec frontend sh -lc "npm run build:css && npm run build:js"',
-  deps=['services/frontend/src', 'services/frontend/input.css']
-)
-
 # API service
 docker_build(
     'api',

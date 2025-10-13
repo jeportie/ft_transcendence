@@ -17,7 +17,6 @@ services:
     env_file:
       - services/frontend/.env.local
     volumes:
-      # - frontend_build:/app/public
       - ./services/frontend/public:/app/public
     networks:
       - transc
@@ -41,7 +40,6 @@ services:
     env_file:
       - services/api/.env.local
     volumes:
-      # - frontend_build:/app/public:ro
       - ~/data/sqlite:/data
       - ./services/frontend/public:/app/public:ro
     networks:
