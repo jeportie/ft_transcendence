@@ -2,6 +2,14 @@
 
 Last common core project of 42 school
 
+If you clone `ft_transcendence` elsewhere, run:
+
+```bash
+git clone --recurse-submodules https://github.com/jeportie/ft_transcendence.git
+# or, if already cloned:
+git submodule update --init --recursive
+```
+
 ## some general notes
 
 ### Ports
