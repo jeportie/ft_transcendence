@@ -11,10 +11,10 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
+import { API } from "../../../../spa/api.js";
 
 import { initRecaptcha, getRecaptchaToken } from "../../../../spa/utils/recaptcha.js";
 import { showError, clearError } from "../../../../spa/utils/errors.js";
-import { safePost } from "../../../../spa/utils/safeFetch.js";
 
 const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
 
@@ -45,7 +45,7 @@ export async function handleSignup({ ASSETS, logo, addCleanup }) {
             showError(errorBox, "Passwords do not match.");
         }
 
-        const { data, error } = await safePost("/auth/register", {
+        const { data, error } = await API.Post("/auth/register", {
             username: userInput.value,
             email: emailInput.value,
             pwd: pwdInput.value,

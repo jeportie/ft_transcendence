@@ -11,8 +11,9 @@
 // ************************************************************************** //
 
 // @ts-ignore
-import { defineMiniRouter, onBeforeNavigate } from "@jeportie/mini-spa";
-// import TailwindAnimationHook from "./transitions/TailwindAnimationHook.js";
+import { defineMiniRouter } from "@jeportie/mini-spa";
+import { onBeforeNavigate } from "@jeportie/mini-fetch";
+
 import { routes } from "./spa/routes.js";
 import { showLoading, hideLoading } from "./views/LoadingOverlay.js";
 import { auth } from "./spa/auth.js";

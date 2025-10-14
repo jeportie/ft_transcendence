@@ -16,6 +16,7 @@
     "license": "ISC",
     "dependencies": {
         "@jeportie/lib2d": "github:jeportie/lib2d#main",
+        "@jeportie/mini-fetch": "github:jeportie/mini-fetch#main",
         "@jeportie/mini-spa": "github:jeportie/mini-router#main",
         "autoprefixer": "^10.4.21",
         "esbuild": "^0.25.8",

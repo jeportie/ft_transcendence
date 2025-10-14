@@ -11,10 +11,10 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
+import { API } from "../../../../spa/api.js";
 
 import { auth } from "../../../../spa/auth.js";
 import { showError, clearError } from "../../../../spa/utils/errors.js";
-import { safePost } from "../../../../spa/utils/safeFetch.js";
 
 /**
  * Handles login form submission and feedback display.
@@ -33,7 +33,7 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
         event.preventDefault();
         clearError(errorBox);
 
-        const { data, error } = await safePost("/auth/login", {
+        const { data, error } = await API.Post("/auth/login", {
             user: userInput.value,
             pwd: pwdInput.value,
         });

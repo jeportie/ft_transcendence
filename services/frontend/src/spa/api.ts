@@ -11,13 +11,14 @@
 // ************************************************************************** //
 
 import { Fetch, safeGet, safePost, safePut, safeDelete } from "@jeportie/mini-fetch";
+import { type FetchOptions, type SafeResult } from "@jeportie/mini-fetch";
 import { auth } from "./auth.js";
 import { logger } from "./logger.js";
 import { refreshToken } from "./refreshToken.js";
 
 const fetcher = new Fetch("/api", {
     getToken: () => auth.getToken(),
-    onToken: (t) => auth.setToken(t),
+    onToken: (t: string | null) => auth.setToken(t),
     refreshFn: async () => {
         const tok = await refreshToken();
         if (tok) {
@@ -32,8 +33,8 @@ const fetcher = new Fetch("/api", {
 
 export const API = {
     ...fetcher,
-    safeGet: (url) => safeGet(fetcher, url, logger),
-    safePost: (url, body) => safePost(fetcher, url, body, logger),
-    safePut: (url, body) => safePut(fetcher, url, body, logger),
-    safeDelete: (url, body) => safeDelete(fetcher, url, body, logger),
+    Get: <T>(url: string): Promise<SafeResult<T>> => safeGet<T>(fetcher, url, logger),
+    Post: <T>(url: string, body?: object): Promise<SafeResult<T>> => safePost<T>(fetcher, url, body, logger),
+    Put: <T>(url: string, body?: object): Promise<SafeResult<T>> => safePut<T>(fetcher, url, body, logger),
+    Delete: <T>(url: string, body?: object): Promise<SafeResult<T>> => safeDelete<T>(fetcher, url, body, logger),
 };

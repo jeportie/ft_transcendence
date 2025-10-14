@@ -10,9 +10,9 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AuthService } from "@jeportie/mini-spa";
-import { logger } from "./logger.ts";
-import { refreshToken } from "./refreshToken.ts";
+import { AuthService } from "@jeportie/mini-fetch";
+import { logger } from "./logger.js";
+import { refreshToken } from "./refreshToken.js";
 
 export const auth = new AuthService({
     storageKey: "hasSession",

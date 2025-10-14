@@ -10,10 +10,10 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { requireAuth } from "@jeportie/mini-spa";
-import { logger } from "./logger.ts";
-import { auth } from "./auth.ts";
-import { API } from "./api.ts";
+import { requireAuth } from "@jeportie/mini-fetch";
+import { logger } from "./logger.js";
+import { auth } from "./auth.js";
+import { API } from "./api.js";
 
 export const guards = {
     requireAuth: requireAuth(auth, {
