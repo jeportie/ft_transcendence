@@ -52,16 +52,12 @@ export default class AppLayout extends AbstractLayout {
         btn.addEventListener("click", this.#onToggle);
 
         logoutBtn.addEventListener("click", () => {
-            API.post("/auth/logout")
-                .then(() => {
-                    auth.clear(); // clear local token
-                    window.navigateTo("/login");
-                })
-                .catch((err) => {
-                    console.error("❌ Logout failed:", err);
-                    auth.clear();
-                    window.navigateTo("/login");
-                });
+
+            API.Post("/auth/logout");
+
+            auth.clear();
+            window.navigateTo("/login");
+
         });
 
         const saved = localStorage.getItem("sidebar");

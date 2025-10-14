@@ -24,25 +24,29 @@ export default class Dashboard extends AbstractView {
         return (dashboardHTML);
     }
 
-    mount() {
+    async mount() {
         const userInfoEl = document.querySelector("#user-info");
+        if (!userInfoEl)
+            return;
 
-        API.get("/user/me")
-            .then((data: any) => {
-                console.log(data); // backend response
-                if (data?.success || data?.username) {
-                    const username = data.username || data.me?.username;
-                    const email = data.email || data.me?.email;
-                    userInfoEl!.innerHTML =
-                        `<p><strong>Logged in as:</strong> ${username} (${email})</p>`;
-                } else {
-                    userInfoEl!.innerHTML = `<p class="ui-error">Could not load user info.</p>`;
-                }
-            })
-            .catch((err: any) => {
-                console.error("[Dashboard] Failed to fetch /me:", err);
-                userInfoEl!.innerHTML = `<p class="ui-error">Error loading user info.</p>`;
-            });
+        const { data, error } = await API.Get("/user/me");
+
+        if (error) {
+            console.error("[Dashboard] Failed to fetch /user/me:", error);
+            userInfoEl.innerHTML = `<p class="ui-error">Error loading user info.</p>`;
+            return;
+        }
+
+        console.log(data);
+
+        const user = data.me;
+        if (!data.success || !user) {
+            userInfoEl!.innerHTML = `<p class="ui-error">Could not load user info.</p>`;
+        } else {
+            userInfoEl.innerHTML = `
+                <p><strong>Logged in as:</strong> ${user.username} (${user.email})</p>
+            `;
+        }
     }
 }
 

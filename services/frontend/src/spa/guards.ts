@@ -19,13 +19,13 @@ export const guards = {
     requireAuth: requireAuth(auth, {
         loginPath: "/login",
         checkSessionFn: async () => {
-            try {
-                const data = await API.get("/user/me");
-                return data?.success === true;
-            } catch (err) {
-                logger.warn("[Guard] /me check failed:", err);
+            const { data, error } = await API.Get("/user/me");
+
+            if (error) {
+                logger.warn("[Guard] /me check failed:", error);
                 return false;
             }
+            return (data?.success === true);
         },
         logger,
     }),
