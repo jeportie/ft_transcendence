@@ -6,13 +6,15 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:33:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 11:50:28 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 14:53:19 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../spa/api.js";
-import { auth } from "../../../../spa/auth.js";
 import { DOM } from "../dom.generated.js";
+
+import { auth } from "../../../../spa/auth.js";
+import { showError, clearError } from "../../../../spa/utils/errors.js";
+import { safePost } from "../../../../spa/utils/safeFetch.js";
 
 /**
  * Handles login form submission and feedback display.
@@ -29,42 +31,36 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
 
     const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();
+        clearError(errorBox);
 
-        try {
-            const data = await API.post("/auth/login", {
-                user: userInput.value,
-                pwd: pwdInput.value,
-            });
+        const { data, error } = await safePost("/auth/login", {
+            user: userInput.value,
+            pwd: pwdInput.value,
+        });
 
-            logo?.fadeAndReplaceWithLottie();
-
-            setTimeout(() => {
-                if (data.activation_required) {
-                    window.navigateTo(`/not-active?userId=${data.user_id}`);
-                } else if (data.f2a_required) {
-                    window.navigateTo(`/f2a-login?userId=${data.user_id}`);
-                } else {
-                    auth.setToken(data.token || "dev-token");
-                    window.navigateTo("/dashboard");
-                }
-            }, 2000);
-        } catch (err) {
-            console.error(`❌ [${err.code || err.status}] ${err.message}`);
+        if (error) {
             pwdInput.value = "";
             userInput.focus();
-
-            if (errorBox) {
-                errorBox.textContent = "Invalid username or password.";
-                errorBox.classList.remove("hidden");
-            }
+            showError(errorBox, "Invalid username or password.");
+            return;
         }
+
+        logo?.fadeAndReplaceWithLottie();
+
+        setTimeout(() => {
+            if (data.activation_required) {
+                window.navigateTo(`/not-active?userId=${data.user_id}`);
+            } else if (data.f2a_required) {
+                window.navigateTo(`/f2a-login?userId=${data.user_id}`);
+            } else {
+                auth.setToken(data.token || "dev-token");
+                window.navigateTo("/dashboard");
+            }
+        }, 2000);
     };
 
     const onFocus = () => {
-        if (errorBox) {
-            errorBox.classList.add("hidden");
-            errorBox.textContent = "";
-        }
+        clearError(errorBox);
     };
 
     form.addEventListener("submit", onSubmit);
