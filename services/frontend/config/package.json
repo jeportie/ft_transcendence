@@ -5,9 +5,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "dev": "concurrently \"npm run watch:css\" \"npm run watch:js\"",
+        "watch:css": "tailwindcss -i src/input.css -o public/styles.css --watch",
+        "watch:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --public-path=/ --watch --log-level=info --loader:.png=file --loader:.svg=text --loader:.html=text --asset-names=assets/[name]",
         "build:css": "tailwindcss -i src/input.css -o public/styles.css",
-        "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --public-path=/ --log-level=info --loader:.png=file --loader:.svg=text --loader:.html=text --asset-names=assets/[name]",
-        "start": "npm run build:css && npm run build:js"
+        "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --public-path=/ --log-level=info --loader:.png=file --loader:.svg=text --loader:.html=text --asset-names=assets/[name]"
     },
     "keywords": [],
     "author": "",
@@ -23,6 +25,7 @@
         "typescript": "^5.8.3"
     },
     "devDependencies": {
-        "@tweakpane/plugin-essentials": "^0.2.1"
+        "@tweakpane/plugin-essentials": "^0.2.1",
+        "concurrently": "^9.2.1"
     }
 }

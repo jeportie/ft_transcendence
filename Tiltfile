@@ -12,23 +12,26 @@ docker_build(
     ],
 )
 
-# Frontend service
+# FRONTEND SERVICE — ultra fast live update (modern Tilt syntax)
 docker_build(
     'frontend',
     'services/frontend',
     dockerfile='services/frontend/Dockerfile',
 
-    # ✅ Only sync source files (no public folder!)
+    # Live-update instead of full rebuild
     live_update=[
+        # ⚡ Sync editable sources directly into container
         sync('services/frontend/src', '/app/src'),
-        run('npm run build:css', trigger=['services/frontend/src', 'services/frontend/input.css']),
+
+        # 🧱 Optional incremental rebuilds inside container
         run('npm run build:js', trigger=['services/frontend/src/**/*.ts', 'services/frontend/src/**/*.js']),
+        run('npm run build:css', trigger=['services/frontend/src/**/*.css', 'services/frontend/input.css']),
     ],
 
-    # ✅ Ignore all build outputs so Tilt won’t re-trigger
+    # 🚫 Ignore generated / heavy paths so Tilt doesn’t re-trigger
     ignore=[
         'services/frontend/public/**',
         'services/frontend/node_modules/**',
+        'services/frontend/.cache/**',
     ],
 )
-

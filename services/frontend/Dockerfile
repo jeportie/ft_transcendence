@@ -34,4 +34,7 @@ COPY src /app/src
 COPY public /app/public
 
 # In dev, let Tilt build assets, container stays alive
-CMD ["sh", "-c", "npm run build:css && npm run build:js && tail -f /dev/null"]
+# CMD ["sh", "-c", "npm run build:css && npm run build:js && tail -f /dev/null"]
+
+# Watch CSS and JS continuously
+CMD ["sh", "-c", "npm run dev"]

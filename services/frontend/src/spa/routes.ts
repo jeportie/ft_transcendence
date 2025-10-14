@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/11 13:33:23 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 14:09:54 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,29 +15,28 @@ import OverlayAnimationHook from "../styles/transitions/hooks/OverlayAnimationHo
 import { guards } from "./guards.js";
 
 // Landing layout
-const LandingLayout = () => import("../views/LandingLayout.ts");
-const Landing = () => import("../views/Landing.ts");
-const Login = () => import("../views/auth/Login/Login.ts");
-const Signup = () => import("../views/auth/Signup/Signup.ts");
-// const Signup = () => import("../views/Signup.ts");
-const Forgot = () => import("../views/Forgot.ts");
-const Reset = () => import("../views/ResetPwd.ts");
-const F2aLogin = () => import("../views/F2aLogin.ts");
-const BackupLogin = () => import("../views/BackupLogin.ts");
-const NotActive = () => import("../views/NotActive.ts");
-const FinalizeSubscription = () => import("../views/FinalizeSubscription.ts");
-const Activate = () => import("../views/Activate.ts");
-const ServiceTerms = () => import("../views/ServiceTerms.ts");
-const PrivacyPolity = () => import("../views/PrivacyPolicy.ts");
+const LandingLayout = () => import("../views/LandingLayout.js");
+const Landing = () => import("../views/Landing.js");
+const Login = () => import("../views/auth/Login/Login.js");
+const Signup = () => import("../views/auth/Signup/Signup.js");
+const Forgot = () => import("../views/Forgot.js");
+const Reset = () => import("../views/ResetPwd.js");
+const F2aLogin = () => import("../views/F2aLogin.js");
+const BackupLogin = () => import("../views/BackupLogin.js");
+const NotActive = () => import("../views/NotActive.js");
+const FinalizeSubscription = () => import("../views/FinalizeSubscription.js");
+const Activate = () => import("../views/Activate.js");
+const ServiceTerms = () => import("../views/ServiceTerms.js");
+const PrivacyPolity = () => import("../views/PrivacyPolicy.js");
 
 // App layout
-const AppLayout = () => import("../views/AppLayout.ts");
-const Dashboard = () => import("../views/Dashboard.ts");
-const Settings = () => import("../views/Settings.ts");
-const Posts = () => import("../views/Posts.ts");
-const PostShow = () => import("../views/PostShow.ts");
-const Game = () => import("../views/Game.ts");
-const NotFound = () => import("../views/NotFound.ts");
+const AppLayout = () => import("../views/AppLayout.js");
+const Dashboard = () => import("../views/Dashboard.js");
+const Settings = () => import("../views/Settings.js");
+const Posts = () => import("../views/Posts.js");
+const PostShow = () => import("../views/PostShow.js");
+const Game = () => import("../views/Game.js");
+const NotFound = () => import("../views/NotFound.js");
 
 export const routes = [
     {
