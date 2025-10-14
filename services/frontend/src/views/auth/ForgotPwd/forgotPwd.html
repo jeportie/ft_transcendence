@@ -1,0 +1,25 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- forgotPwd.html                                     :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+              -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/09/23 13:57:02 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/07 10:04:24 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<div id="forgot-pwd-card" class="ui-card">
+    <h2 class="ui-card-title">Forgot Password</h2>
+    <form id="forgot-pwd-form" class="ui-form">
+        <input id="forgot-pwd-email-input" class="ui-input" type="email" placeholder="Email" autocomplete="email" />
+        <div id="forgot-pwd-recaptcha-container" class="recaptcha-manual"></div>
+        <button id="forgot-pwd-form-btn" class="ui-btn-primary w-full mt-1">Get a Reset Link</button>
+    </form>
+    <div id="forgot-pwd-error-div" class="ui-error hidden mt-2"></div>
+    <div id="forgot-pwd-info-div" class="ui-alert-success hidden mt-2"></div>
+    <p class="ui-text-small mt-3">
+        <a href="/login" data-link class="ui-hint-link">Back to Login</a>
+    </p>
+</div>

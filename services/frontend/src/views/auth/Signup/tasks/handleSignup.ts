@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/14 11:24:59 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 15:19:02 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 18:55:48 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,7 +14,7 @@ import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
 import { initRecaptcha, getRecaptchaToken } from "../../../../spa/utils/recaptcha.js";
-import { showError, clearError } from "../../../../spa/utils/errors.js";
+import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
 const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
 
@@ -35,14 +35,16 @@ export async function handleSignup({ ASSETS, logo, addCleanup }) {
 
         const captchaToken = getRecaptchaToken();
         if (!captchaToken) {
-            showError(errorBox, "Please complete the captcha.");
+            showBox(errorBox, "Please complete the captcha.");
+            return;
         }
 
         if (!userInput || !emailInput || !pwdInput || !confirmInput)
             return;
 
         if (pwdInput.value !== confirmInput.value) {
-            showError(errorBox, "Passwords do not match.");
+            showBox(errorBox, "Passwords do not match.");
+            return;
         }
 
         const { data, error } = await API.Post("/auth/register", {
@@ -53,9 +55,9 @@ export async function handleSignup({ ASSETS, logo, addCleanup }) {
         })
 
         if (error) {
-            pwdInput.value = ""
+            pwdInput.value = "";
             userInput.focus();
-            showError(errorBox, error.message);
+            showBox(errorBox, error.message);
             return;
         }
 
@@ -64,7 +66,7 @@ export async function handleSignup({ ASSETS, logo, addCleanup }) {
     }
 
     const onFocus = () => {
-        clearError(errorBox);
+        clearBox(errorBox);
     };
 
     await initRecaptcha(siteKey, captchaContainer);

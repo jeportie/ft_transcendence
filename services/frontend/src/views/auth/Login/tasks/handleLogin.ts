@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:33:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 14:53:19 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 18:56:12 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,7 +14,7 @@ import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
 import { auth } from "../../../../spa/auth.js";
-import { showError, clearError } from "../../../../spa/utils/errors.js";
+import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
 /**
  * Handles login form submission and feedback display.
@@ -31,7 +31,7 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
 
     const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();
-        clearError(errorBox);
+        clearBox(errorBox);
 
         const { data, error } = await API.Post("/auth/login", {
             user: userInput.value,
@@ -41,7 +41,7 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
         if (error) {
             pwdInput.value = "";
             userInput.focus();
-            showError(errorBox, "Invalid username or password.");
+            showBox(errorBox, "Invalid username or password.");
             return;
         }
 
@@ -60,7 +60,7 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
     };
 
     const onFocus = () => {
-        clearError(errorBox);
+        clearBox(errorBox);
     };
 
     form.addEventListener("submit", onSubmit);

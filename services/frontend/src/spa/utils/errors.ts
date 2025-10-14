@@ -6,17 +6,17 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/14 14:18:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 14:21:00 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 18:53:09 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-export function showError(box: HTMLElement | null, message: string) {
+export function showBox(box: HTMLElement | null, message: string) {
     if (!box) return;
     box.textContent = message;
     box.classList.remove("hidden");
 }
 
-export function clearError(box: HTMLElement | null) {
+export function clearBox(box: HTMLElement | null) {
     if (!box) return;
     box.textContent = "";
     box.classList.add("hidden");
