@@ -13,7 +13,7 @@
 // @ts-expect-error
 import { AbstractView } from "@jeportie/mini-spa";
 import { tasks } from "../Signup/tasks/index.js";
-import signupHTML from "../html/signup.html";
+import signupHTML from "./signup.html";
 
 import spaceShipSvg from "../../../assets/spaceship.svg";
 import googleIcon from "../../../assets/google.png";

@@ -50,27 +50,26 @@ export async function handleSignup({ ASSETS, logo, addCleanup }) {
         if (!captchaToken) {
             showError("Please complete the captcha.");
         }
-
-        if (!userInput || !emailInput || !pwdInput || !confirmInput)
-            return;
-
-        if (pwdInput.value !== confirmInput.value) {
+        if (pwdInput?.value !== confirmInput?.value) {
             showError("Passwords do not match.");
         }
 
+        if (!userInput || !emailInput || !pwdInput)
+            return;
+
         try {
             const data = API.post("/auth/register", {
-                username: userInput.value,
-                email: emailInput.value,
-                pwd: pwdInput.value,
+                username: userInput?.value,
+                email: emailInput?.value,
+                pwd: pwdInput?.value,
                 captcha: captchaToken
             });
             setTimeout(() => window.navigateTo("/finalize-subscription"), 0);
 
         } catch (err: any) {
             console.error(`❌ [${err.code || err.status}] ${err.message}`);
-            pwdInput.value = ""
-            userInput.focus();
+            pwdInput.value = "";
+            userInput?.focus();
 
             if (errorBox) {
                 errorBox.textContent = "Invalid username or password.";
