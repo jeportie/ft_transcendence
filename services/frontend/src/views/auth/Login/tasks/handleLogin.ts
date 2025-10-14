@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:33:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/11 11:34:58 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 11:50:28 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,7 +24,8 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
     const pwdInput = DOM.loginPwdInput;
     const errorBox = DOM.loginErrorDiv;
 
-    if (!form || !userInput || !pwdInput) return;
+    if (!form || !userInput || !pwdInput)
+        return;
 
     const onSubmit = async (event: SubmitEvent) => {
         event.preventDefault();
@@ -69,7 +70,6 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
     form.addEventListener("submit", onSubmit);
     pwdInput.addEventListener("focus", onFocus);
 
-    // 🧹 Register teardown to avoid leaks
     addCleanup(() => {
         form.removeEventListener("submit", onSubmit);
         pwdInput.removeEventListener("focus", onFocus);

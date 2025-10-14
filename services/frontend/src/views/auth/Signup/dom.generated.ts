@@ -1,27 +1,39 @@
 // AUTO-GENERATED FILE — DO NOT EDIT
 // Generated from signup.html
-// Created by scripts/generateDomRegistry.js
+// Created by scripts/generateDomRegistry.mjs
 
 function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
   return document.getElementById(id) as T | null;
 }
 
-// Dynamic Proxy: resolves elements lazily every time they're accessed
-export const DOM = new Proxy({}, {
-  get(_target, key: string) {
-    const id = key.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
-    return $<HTMLElement>(id);
-  }
-});
+/**
+ * SignupDOM — Lazy DOM accessor class
+ * Each getter queries the DOM dynamically when accessed.
+ */
+export class SignupDOM {
+  get signupCard() { return $<HTMLDivElement>("signup-card"); }
+  get signupForm() { return $<HTMLFormElement>("signup-form"); }
+  get signupUserInput() { return $<HTMLInputElement>("signup-user-input"); }
+  get signupEmailInput() { return $<HTMLInputElement>("signup-email-input"); }
+  get signupPwdInput() { return $<HTMLInputElement>("signup-pwd-input"); }
+  get signupConfirmInput() { return $<HTMLInputElement>("signup-confirm-input"); }
+  get signupRecaptchaContainer() { return $<HTMLElement>("signup-recaptcha-container"); }
+  get signupFormBtn() { return $<HTMLButtonElement>("signup-form-btn"); }
+  get signupErrorDiv() { return $<HTMLDivElement>("signup-error-div"); }
+  get signupGoogleBtn() { return $<HTMLButtonElement>("signup-google-btn"); }
+}
 
-// Typed accessors (runtime safe functions)
-export const signupCard = () => $<HTMLDivElement>("signup-card");
-export const signupForm = () => $<HTMLFormElement>("signup-form");
-export const signupUserInput = () => $<HTMLInputElement>("signup-user-input");
-export const signupEmailInput = () => $<HTMLInputElement>("signup-email-input");
-export const signupPwdInput = () => $<HTMLInputElement>("signup-pwd-input");
-export const signupConfirmInput = () => $<HTMLInputElement>("signup-confirm-input");
-export const signupRecaptchaContainer = () => $<HTMLElement>("signup-recaptcha-container");
-export const signupFormBtn = () => $<HTMLButtonElement>("signup-form-btn");
-export const signupErrorDiv = () => $<HTMLDivElement>("signup-error-div");
-export const signupGoogleBtn = () => $<HTMLButtonElement>("signup-google-btn");
+export interface SignupDomMap {
+  signupCard: HTMLDivElement | null;
+  signupForm: HTMLFormElement | null;
+  signupUserInput: HTMLInputElement | null;
+  signupEmailInput: HTMLInputElement | null;
+  signupPwdInput: HTMLInputElement | null;
+  signupConfirmInput: HTMLInputElement | null;
+  signupRecaptchaContainer: HTMLElement | null;
+  signupFormBtn: HTMLButtonElement | null;
+  signupErrorDiv: HTMLDivElement | null;
+  signupGoogleBtn: HTMLButtonElement | null;
+}
+
+export const DOM = new SignupDOM();

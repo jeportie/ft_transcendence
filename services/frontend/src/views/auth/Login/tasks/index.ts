@@ -15,6 +15,7 @@ import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "../../../shared/setupLogoAnimation.js";
 import { togglePassword } from "../../../shared/togglePassword.js";
 import { handleGoogleButton } from "../../../shared/handleGoogleButton.js";
+
 import { handleLogin } from "./handleLogin.js";
 import { showActivationMessages } from "./showActivationMessages.js";
 

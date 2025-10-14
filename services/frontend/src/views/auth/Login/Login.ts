@@ -10,6 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
+// @ts-expect-error
 import { AbstractView } from "@jeportie/mini-spa";
 import { tasks } from "./tasks/index.js";
 import loginHTML from "./login.html";
@@ -24,6 +25,7 @@ export const ASSETS = { spaceShipSvg, googleIcon, hideIcon, showIcon };
 export default class Login extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
+        // @ts-expect-error
         this.setTitle("Login");
     }
 
