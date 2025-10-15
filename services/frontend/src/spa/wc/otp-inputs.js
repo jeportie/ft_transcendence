@@ -10,52 +10,23 @@
 //                                                                            //
 // ************************************************************************** //
 
-/**
- * <otp-input length="6"></otp-input>
- *
- * Emits a 'submit' CustomEvent when all digits are filled.
- * Usage:
- *   const otp = document.querySelector("otp-input");
- *   otp.addEventListener("submit", (e) => console.log(e.detail.code));
- */
-
 export class OtpInput extends HTMLElement {
+    static formAssociated = true;
+
     #inputs = [];
     #length = 6;
+    #internals;
 
     constructor() {
         super();
-        const shadow = this.attachShadow({ mode: "open" });
+        this.#internals = this.attachInternals();
 
-        // Style (you can customize)
-        const style = document.createElement("style");
-        style.textContent = `
-      .otp-wrapper {
-        display: flex;
-        justify-content: space-between;
-        gap: 0.5rem;
-      }
-      input {
-        width: 2rem;
-        height: 2.5rem;
-        text-align: center;
-        font-size: 1.25rem;
-        border: 1px solid #666;
-        border-radius: 6px;
-      }
-      input:focus {
-        outline: 2px solid #00bcd4;
-        border-color: #00bcd4;
-      }
-    `;
-        shadow.appendChild(style);
-
-        // Structure
         const wrapper = document.createElement("div");
-        wrapper.classList.add("otp-wrapper");
-        shadow.appendChild(wrapper);
+        wrapper.className = "flex justify-between gap-2 mb-4";
+        this.appendChild(wrapper);
 
         this.#length = parseInt(this.getAttribute("length") || "6", 10);
+
         for (let i = 0; i < this.#length; i++) {
             const input = document.createElement("input");
             input.type = "text";
@@ -68,9 +39,18 @@ export class OtpInput extends HTMLElement {
     }
 
     connectedCallback() {
+        const mode = this.getAttribute("submit") || "manual";
         this.#inputs[0]?.focus();
 
         this.#inputs.forEach((input, idx) => {
+            // forward focus/blur events
+            input.addEventListener("focus", () => {
+                this.dispatchEvent(new FocusEvent("focus", { bubbles: true }));
+            });
+            input.addEventListener("blur", () => {
+                this.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
+            });
+
             input.addEventListener("input", () => {
                 input.value = input.value.replace(/\D/g, "");
                 if (input.value && idx < this.#inputs.length - 1)
@@ -78,11 +58,8 @@ export class OtpInput extends HTMLElement {
 
                 const code = this.#inputs.map(i => i.value).join("");
                 if (code.length === this.#length) {
-                    this.dispatchEvent(new CustomEvent("submit", {
-                        detail: { code },
-                        bubbles: true,
-                        composed: true,
-                    }));
+                    this.#internals.setFormValue(code);
+                    if (mode === "auto") this.#internals.form?.requestSubmit();
                 }
             });
 
@@ -90,32 +67,28 @@ export class OtpInput extends HTMLElement {
                 if (e.key === "Backspace" && !input.value && idx > 0)
                     this.#inputs[idx - 1].focus();
             });
-
-            input.addEventListener("paste", (e) => {
-                e.preventDefault();
-                const paste = (e.clipboardData?.getData("text") ?? "")
-                    .replace(/\D/g, "")
-                    .slice(0, this.#length);
-
-                paste.split("").forEach((digit, i) => {
-                    if (this.#inputs[i]) this.#inputs[i].value = digit;
-                });
-
-                const code = this.#inputs.map(i => i.value).join("");
-                if (code.length === this.#length) {
-                    this.dispatchEvent(new CustomEvent("submit", {
-                        detail: { code },
-                        bubbles: true,
-                        composed: true,
-                    }));
-                }
-            });
         });
     }
 
-    clear() {
-        this.#inputs.forEach(i => i.value = "");
+    focus() {
         this.#inputs[0]?.focus();
+    }
+
+    get value() {
+        return this.#inputs.map(i => i.value).join("");
+    }
+
+    set value(v) {
+        const str = String(v || "").replace(/\D/g, "").slice(0, this.#length);
+        this.#inputs.forEach((i, idx) => {
+            i.value = str[idx] || "";
+        });
+        this.#internals.setFormValue(this.value);
+    }
+
+    clear() {
+        this.value = "";
+        this.focus();
     }
 }
 

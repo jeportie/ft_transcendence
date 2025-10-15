@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/15 14:19:41 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/15 13:11:45 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,6 +19,7 @@ import { showLoading, hideLoading } from "./views/LoadingOverlay.js";
 import { auth } from "./spa/auth.js";
 import { API } from "./spa/api.js";
 import { logger } from "./spa/logger.js";
+import "./spa/wc/index.js";
 
 //DOM
 const app = document.querySelector("#app") as any;
@@ -43,8 +44,10 @@ app.beforeStart(async () => {
 
         try {
             // 2. Health check
-            const health = await API.get("/system/health");
-            logger.info("[Health] ✅ OK:", health);
+            const { data, error } = await API.Get("/system/health");
+            if (error)
+                throw new Error(error.message);
+            logger.info("[Health] ✅ OK:", data);
             // 3. Simulated preload (e.g. assets/fonts)
             await new Promise(resolve => setTimeout(resolve, 2000));
             logger.info("[Boot] Preload done");

@@ -12,16 +12,12 @@
 
 <div id="f2a-card" class="ui-card">
     <h2 class="ui-card-title">2FA Code</h2>
+
     <form id="f2a-form" class="ui-form">
-        <div class="flex justify-between gap-2 mb-4" id="f2a-inputs">
-            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
-            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
-            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" /> _
-            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
-            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
-            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
-        </div>
+        <otp-input id="f2a-otp" name="otp" length="6" submit="auto"></otp-input>
+        <!-- <button type="submit" class="ui-btn-primary w-full mt-2">Verify</button> -->
     </form>
+
     <div id="f2a-error-div" class="ui-error hidden mt-2"></div>
     <button id="f2a-backup-btn" class="ui-btn-secondary w-full mt-2">
         Lost Key?
