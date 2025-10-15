@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/15 12:06:57 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/15 12:08:01 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/15 15:50:57 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -54,7 +54,8 @@ export class OtpInput extends HTMLElement {
             if (this.#positions.includes(i + 1) && i < this.#length - 1) {
                 const sep = document.createElement("span");
                 sep.textContent = symbol;
-                sep.className = "otp-separator select-none text-gray-400";
+                sep.className =
+                    "otp-separator select-none text-gray-400 text-xl font-semibold flex items-center justify-center";
                 wrapper.appendChild(sep);
             }
         }

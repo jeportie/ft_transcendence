@@ -6,20 +6,20 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/09/23 13:16:20 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/04 21:53:04 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/15 15:53:28 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<div class="ui-card">
+<div id="backup-card" class="ui-card">
     <h2 class="ui-card-title">Backup Code</h2>
 
-    <form id="backup-form" class="ui-form">
-        <otp-input id="backup-otp" length="8" position="4" divclass="flex flex-wrap justify-center gap-2 mb-4"
+    <form id="backup-form" class="ui-form mt-4">
+        <otp-input id="backup-otp" length="8" position="4" divclass="flex justify-between gap-2 mb-4 w-full"
             inclass="backup-input" submit="auto"></otp-input>
     </form>
-    <div id="backup-login-error" class="ui-error hidden mt-2"></div>
+    <div id="backup-error-div" class="ui-error hidden mt-2"></div>
 
-    <button id="previous-btn" class="ui-btn-secondary w-full mt-2">
+    <button id="backup-previous-btn" class="ui-btn-secondary w-full mt-2">
         Back to 2fa
     </button>
 
