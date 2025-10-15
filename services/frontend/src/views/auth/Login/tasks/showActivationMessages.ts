@@ -36,7 +36,6 @@ export function showActivationMessages({ addCleanup }) {
     if (error)
         show("Error: Account not activated", "ui-alert ui-alert-error mb-4");
 
-    // 🧹 Cleanup: clear timeouts + remove remaining messages
     addCleanup(() => {
         timeouts.forEach(clearTimeout);
         messages.forEach(m => m.remove());

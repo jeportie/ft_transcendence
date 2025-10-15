@@ -1,26 +1,34 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   PrivacyPolicy.ts                                   :+:      :+:    :+:   //
+//   Landing.ts                                         :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/06 16:28:59 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 16:30:20 by jeportie         ###   ########.fr       //
+//   Created: 2025/08/22 14:42:22 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/23 13:31:11 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
-import privacyPolicyHTML from "../html/privacyPolicy.html";
+import landingHTML from "./landing.html"
 
-export default class privacyPolicy extends AbstractView {
+export default class Landing extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
-        this.setTitle("Privacy Policy");
+        this.setTitle("Welcome");
     }
 
     async getHTML() {
-        return (privacyPolicyHTML);
+        return (landingHTML);
     }
 
+    // mount() {
+    //     const btn = document.querySelector("#login-btn");
+    //     btn?.addEventListener("click", (e) => {
+    //         e.preventDefault();
+    //         // @ts-ignore
+    //         window.navigateTo("/dashboard");
+    //     });
+    // }
 }

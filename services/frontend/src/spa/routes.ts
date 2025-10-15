@@ -16,7 +16,11 @@ import { guards } from "./guards.js";
 
 // Landing layout
 const LandingLayout = () => import("../views/LandingLayout.js");
-const Landing = () => import("../views/Landing.js");
+// |-- Landing
+const Landing = () => import("../views/landing/Landing/Landing.js");
+const ServiceTerms = () => import("../views/landing/Terms/ServiceTerms.js");
+const PrivacyPolity = () => import("../views/landing/Policy/PrivacyPolicy.js");
+// |-- Auth
 const Login = () => import("../views/auth/Login/Login.js");
 const Signup = () => import("../views/auth/Signup/Signup.js");
 const Forgot = () => import("../views/auth/ForgotPwd/ForgotPwd.js");
@@ -24,8 +28,6 @@ const F2aLogin = () => import("../views/auth/F2A/F2aLogin.js");
 const BackupLogin = () => import("../views/auth/Backup/BackupLogin.js");
 const Reset = () => import("../views/ResetPwd.js");
 const Activate = () => import("../views/Activate.js");
-const ServiceTerms = () => import("../views/ServiceTerms.js");
-const PrivacyPolity = () => import("../views/PrivacyPolicy.js");
 
 // App layout
 const AppLayout = () => import("../views/AppLayout.js");

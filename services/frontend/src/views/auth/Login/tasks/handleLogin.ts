@@ -52,6 +52,7 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         setTimeout(() => {
             if (data.activation_required) {
                 view.swapContent(notActiveHtml).then(() => {
+                    DOM.inactiveP.innerText = `Sorry ${data.username}, your account is not active yet. Please validate your account with the validation link we sent you by email.`;
                     DOM.inactiveBackBtn?.addEventListener("click", (e) => {
                         e.preventDefault();
                         window.navigateTo("/login");

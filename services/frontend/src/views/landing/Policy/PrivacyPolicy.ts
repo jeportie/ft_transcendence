@@ -1,26 +1,26 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   ServiceTerms.ts                                    :+:      :+:    :+:   //
+//   PrivacyPolicy.ts                                   :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/06 16:27:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 16:28:40 by jeportie         ###   ########.fr       //
+//   Created: 2025/10/06 16:28:59 by jeportie          #+#    #+#             //
+//   Updated: 2025/10/06 16:30:20 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
-import serviceTermsHTML from "../html/serviceTerms.html";
+import privacyPolicyHTML from "./privacyPolicy.html";
 
-export default class ServiceTerms extends AbstractView {
+export default class privacyPolicy extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
-        this.setTitle("Service Terms");
+        this.setTitle("Privacy Policy");
     }
 
     async getHTML() {
-        return (serviceTermsHTML);
+        return (privacyPolicyHTML);
     }
 
 }
