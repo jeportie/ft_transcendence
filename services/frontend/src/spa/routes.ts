@@ -24,7 +24,6 @@ const F2aLogin = () => import("../views/auth/F2A/F2aLogin.js");
 const BackupLogin = () => import("../views/auth/Backup/BackupLogin.js");
 const Reset = () => import("../views/ResetPwd.js");
 const NotActive = () => import("../views/NotActive.js");
-const FinalizeSubscription = () => import("../views/FinalizeSubscription.js");
 const Activate = () => import("../views/Activate.js");
 const ServiceTerms = () => import("../views/ServiceTerms.js");
 const PrivacyPolity = () => import("../views/PrivacyPolicy.js");
@@ -52,7 +51,6 @@ export const routes = [
             { path: "backups", component: BackupLogin },
             { path: "signup", component: Signup },
             { path: "not-active", component: NotActive },
-            { path: "finalize-subscription", component: FinalizeSubscription },
             { path: "activate", component: Activate },
             { path: "service-terms", component: ServiceTerms },
             { path: "privacy-policy", component: PrivacyPolity },

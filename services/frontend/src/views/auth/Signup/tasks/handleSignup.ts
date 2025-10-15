@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/14 11:24:59 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 18:55:48 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/15 17:14:05 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,9 +16,11 @@ import { API } from "../../../../spa/api.js";
 import { initRecaptcha, getRecaptchaToken } from "../../../../spa/utils/recaptcha.js";
 import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
+import finalizeHTML from "../validateSignup.html";
+
 const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
 
-export async function handleSignup({ ASSETS, logo, addCleanup }) {
+export async function handleSignup({ ASSETS, logo, addCleanup, view }) {
     const form = DOM.signupForm;
     const userInput = DOM.signupUserInput;
     const emailInput = DOM.signupEmailInput;
@@ -61,8 +63,12 @@ export async function handleSignup({ ASSETS, logo, addCleanup }) {
             return;
         }
 
-        logo?.fadeAndReplaceWithLottie();
-        setTimeout(() => window.navigateTo("/finalize-subscription"), 2000);
+        if (data.success) {
+            logo?.fadeAndReplaceWithLottie();
+            setTimeout(() => {
+                view.swapContent(finalizeHTML);
+            }, 2000);
+        }
     }
 
     const onFocus = () => {
