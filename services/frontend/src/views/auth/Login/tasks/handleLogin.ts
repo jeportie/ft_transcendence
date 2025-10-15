@@ -16,11 +16,14 @@ import { API } from "../../../../spa/api.js";
 import { auth } from "../../../../spa/auth.js";
 import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
+import notActiveHtml from "../notActive.html";
+import loginHtml from "../login.html";
+
 /**
  * Handles login form submission and feedback display.
  * Registers cleanup logic for event listeners.
  */
-export function handleLogin({ ASSETS, logo, addCleanup }) {
+export function handleLogin({ ASSETS, logo, addCleanup, view }) {
     const form = DOM.loginForm;
     const userInput = DOM.loginUserInput;
     const pwdInput = DOM.loginPwdInput;
@@ -49,7 +52,13 @@ export function handleLogin({ ASSETS, logo, addCleanup }) {
 
         setTimeout(() => {
             if (data.activation_required) {
-                window.navigateTo(`/not-active?userId=${data.user_id}`);
+                view.swapContent(notActiveHtml).then(() => {
+                    const backBtn = document.getElementById("back-btn");
+                    backBtn?.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        view.swapContent(loginHtml);
+                    });
+                });
             } else if (data.f2a_required) {
                 window.navigateTo(`/f2a-login?userId=${data.user_id}`);
             } else {
