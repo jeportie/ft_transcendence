@@ -1,0 +1,29 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- f2aLogin.html                                      :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/09/23 13:16:20 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/04 20:38:34 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<div id="f2a-card" class="ui-card">
+    <h2 class="ui-card-title">2FA Code</h2>
+    <form id="f2a-form" class="ui-form">
+        <div class="flex justify-between gap-2 mb-4" id="f2a-inputs">
+            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
+            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
+            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" /> _
+            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
+            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
+            <input type="text" maxlength="1" class="otp-input" inputmode="numeric" />
+        </div>
+    </form>
+    <div id="f2a-error-div" class="ui-error hidden mt-2"></div>
+    <button id="f2a-backup-btn" class="ui-btn-secondary w-full mt-2">
+        Lost Key?
+    </button>
+</div>

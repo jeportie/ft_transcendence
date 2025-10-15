@@ -1,37 +1,45 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   ForgotPwd.ts                                       :+:      :+:    :+:   //
+//   F2aLogin.ts                                        :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/23 13:56:00 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 18:59:28 by jeportie         ###   ########.fr       //
+//   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
+//   Updated: 2025/10/15 09:51:28 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 // @ts-expect-error
 import { AbstractView } from "@jeportie/mini-spa";
-import { tasks } from "./tasks/index.js";
-import forgotHTML from "./forgotPwd.html";
+import f2aLoginHTML from "../html/f2aLogin.html";
+import { tasks } from "../Login/tasks";
 
-export default class Forgot extends AbstractView {
+
+interface Layout {
+    reloadOnExit?: () => void;
+}
+
+export default class F2aLogin extends AbstractView {
+    layout?: Layout;
+
     constructor(ctx: any) {
         super(ctx);
         // @ts-expect-error
-        this.setTitle("Forgot");
+        this.setTitle("F2aLogin");
     }
 
     async getHTML() {
-        return (forgotHTML);
+        return (f2aLoginHTML);
     }
 
     async mount() {
-        (this as any).layout?.reloadOnExit?.();
+        this.layout?.reloadOnExit?.();
         await super.mount({ tasks });
     }
 
     async destroy() {
         await super.destroy({ tasks });
     }
+
 }
