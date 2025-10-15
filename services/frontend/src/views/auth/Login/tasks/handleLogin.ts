@@ -55,8 +55,7 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
                     const backBtn = document.getElementById("back-btn");
                     backBtn?.addEventListener("click", (e) => {
                         e.preventDefault();
-                        console.log("[BackBtn] Clicked!");
-                        window.navigateTo("/login", { force: true });
+                        window.navigateTo("/login");
                     });
                 });
             } else if (data.f2a_required) {
