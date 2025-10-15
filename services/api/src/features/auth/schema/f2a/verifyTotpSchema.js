@@ -26,7 +26,7 @@ export const verifyTotpSchema = {
                 maxLength: 6,
                 pattern: "^[0-9]{6}$",
                 example: "123456"
-            }
+            },
         },
         additionalProperties: false
     },

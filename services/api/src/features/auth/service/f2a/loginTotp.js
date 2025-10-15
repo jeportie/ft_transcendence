@@ -17,7 +17,6 @@ import { issueSession } from "../utils/issueSession.js";
 
 const PATH = import.meta.url;
 const getSecretSql = loadSql(PATH, "../sql/getF2aSecret.sql");
-const enableF2aSql = loadSql(PATH, "../sql/enableF2a.sql");
 const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
 export async function loginTotp(fastify, request, reply) {

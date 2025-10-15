@@ -18,7 +18,7 @@ export const loginTotpSchema = {
 
     body: {
         type: "object",
-        required: ["code"],
+        required: ["code", "userId"],
         properties: {
             code: {
                 type: "string",
@@ -26,7 +26,8 @@ export const loginTotpSchema = {
                 maxLength: 6,
                 pattern: "^[0-9]{6}$",
                 example: "123456"
-            }
+            },
+            userId: { type: "integer" },
         },
         additionalProperties: false
     },

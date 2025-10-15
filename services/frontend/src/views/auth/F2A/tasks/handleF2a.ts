@@ -16,7 +16,7 @@ import { API } from "../../../../spa/api.js";
 import { auth } from "../../../../spa/auth.js";
 import { clearBox, showBox } from "../../../../spa/utils/errors.js";
 
-export async function handleF2a({ ASSETS, logo, addCleanup }) {
+export async function handleF2a({ addCleanup }) {
     const form = DOM.f2aForm;
     const otpInput = DOM.f2aOtp as HTMLInputElement;
     const backupBtn = DOM.f2aBackupBtn;
@@ -35,9 +35,8 @@ export async function handleF2a({ ASSETS, logo, addCleanup }) {
         event.preventDefault();
         clearBox(errorBox);
 
-        const code = otpInput.value;
+        const { data, error } = await API.Post("/auth/login-totp", { code: otpInput.value, userId: id });
 
-        const { data, error } = await API.Post("/auth/login-totp", { code, userId: id });
         if (error) {
             otpInput.value = "";
             otpInput?.focus();

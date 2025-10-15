@@ -15,6 +15,7 @@ export class OtpInput extends HTMLElement {
 
     #inputs = [];
     #length = 6;
+    #positions = [];
     #internals;
 
     constructor() {
@@ -22,19 +23,37 @@ export class OtpInput extends HTMLElement {
         this.#internals = this.attachInternals();
 
         const wrapper = document.createElement("div");
-        wrapper.className = "flex justify-between gap-2 mb-4";
+        wrapper.className = "flex justify-between gap-2 mb-4 items-center";
         this.appendChild(wrapper);
 
         this.#length = parseInt(this.getAttribute("length") || "6", 10);
+
+        const symbol = this.getAttribute("separator") || "-";
+
+        // Parse "position" attribute: e.g. "1-3-5" → [1, 3, 5]
+        const positionAttr = this.getAttribute("position");
+        if (positionAttr) {
+            this.#positions = positionAttr
+                .split("-")
+                .map((n) => parseInt(n.trim(), 10))
+                .filter((n) => !isNaN(n) && n > 0 && n < this.#length);
+        }
 
         for (let i = 0; i < this.#length; i++) {
             const input = document.createElement("input");
             input.type = "text";
             input.maxLength = 1;
             input.inputMode = "numeric";
-            input.className = "otp-input";
+            input.className = "otp-input w-10 text-center";
             wrapper.appendChild(input);
             this.#inputs.push(input);
+
+            if (this.#positions.includes(i + 1) && i < this.#length - 1) {
+                const sep = document.createElement("span");
+                sep.textContent = symbol;
+                sep.className = "otp-separator select-none text-gray-400";
+                wrapper.appendChild(sep);
+            }
         }
     }
 
@@ -43,7 +62,6 @@ export class OtpInput extends HTMLElement {
         this.#inputs[0]?.focus();
 
         this.#inputs.forEach((input, idx) => {
-            // forward focus/blur events
             input.addEventListener("focus", () => {
                 this.dispatchEvent(new FocusEvent("focus", { bubbles: true }));
             });
@@ -56,7 +74,7 @@ export class OtpInput extends HTMLElement {
                 if (input.value && idx < this.#inputs.length - 1)
                     this.#inputs[idx + 1].focus();
 
-                const code = this.#inputs.map(i => i.value).join("");
+                const code = this.#inputs.map((i) => i.value).join("");
                 if (code.length === this.#length) {
                     this.#internals.setFormValue(code);
                     if (mode === "auto") this.#internals.form?.requestSubmit();
@@ -75,7 +93,7 @@ export class OtpInput extends HTMLElement {
     }
 
     get value() {
-        return this.#inputs.map(i => i.value).join("");
+        return this.#inputs.map((i) => i.value).join("");
     }
 
     set value(v) {
