@@ -10,12 +10,15 @@
 //                                                                            //
 // ************************************************************************** //
 
+// @ts-expect-error
 import { AbstractView } from "@jeportie/mini-spa";
 import landingHTML from "./landing.html"
+import { tasks } from "./tasks/index.js";
 
 export default class Landing extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
+        // @ts-expect-error
         this.setTitle("Welcome");
     }
 
@@ -23,12 +26,12 @@ export default class Landing extends AbstractView {
         return (landingHTML);
     }
 
-    // mount() {
-    //     const btn = document.querySelector("#login-btn");
-    //     btn?.addEventListener("click", (e) => {
-    //         e.preventDefault();
-    //         // @ts-ignore
-    //         window.navigateTo("/dashboard");
-    //     });
-    // }
+    async mount() {
+        (this as any).layout?.reloadOnExit?.();
+        await super.mount({ tasks });
+    }
+
+    async destroy() {
+        await super.destroy({ tasks });
+    }
 }

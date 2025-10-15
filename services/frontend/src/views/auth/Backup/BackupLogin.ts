@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-// @ts-ignore
+// @ts-expect-error
 import { AbstractView } from "@jeportie/mini-spa";
 import backupLoginHTML from "./backupLogin.html";
 import { tasks } from "./tasks/index.js";
@@ -18,7 +18,7 @@ import { tasks } from "./tasks/index.js";
 export default class BackupLogin extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
-        // @ts-ignore
+        // @ts-expect-error
         this.setTitle("BackupLogin");
     }
 
