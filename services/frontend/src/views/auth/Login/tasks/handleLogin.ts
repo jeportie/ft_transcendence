@@ -17,7 +17,6 @@ import { auth } from "../../../../spa/auth.js";
 import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
 import notActiveHtml from "../notActive.html";
-import loginHtml from "../login.html";
 
 /**
  * Handles login form submission and feedback display.
@@ -56,7 +55,8 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
                     const backBtn = document.getElementById("back-btn");
                     backBtn?.addEventListener("click", (e) => {
                         e.preventDefault();
-                        view.swapContent(loginHtml);
+                        console.log("[BackBtn] Clicked!");
+                        window.navigateTo("/login", { force: true });
                     });
                 });
             } else if (data.f2a_required) {
