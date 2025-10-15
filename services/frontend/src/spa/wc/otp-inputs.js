@@ -22,13 +22,16 @@ export class OtpInput extends HTMLElement {
         super();
         this.#internals = this.attachInternals();
 
+        const divclass = this.getAttribute("divclass") || "flex justify-between gap-2 mb-4 items-center";
+
         const wrapper = document.createElement("div");
-        wrapper.className = "flex justify-between gap-2 mb-4 items-center";
+        wrapper.className = divclass;
         this.appendChild(wrapper);
 
         this.#length = parseInt(this.getAttribute("length") || "6", 10);
 
         const symbol = this.getAttribute("separator") || "-";
+        const inclass = this.getAttribute("inclass") || "otp-input w-10 text-center";
 
         // Parse "position" attribute: e.g. "1-3-5" → [1, 3, 5]
         const positionAttr = this.getAttribute("position");
@@ -44,7 +47,7 @@ export class OtpInput extends HTMLElement {
             input.type = "text";
             input.maxLength = 1;
             input.inputMode = "numeric";
-            input.className = "otp-input w-10 text-center";
+            input.className = inclass;
             wrapper.appendChild(input);
             this.#inputs.push(input);
 

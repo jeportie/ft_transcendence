@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   F2aLogin.ts                                        :+:      :+:    :+:   //
+//   BackupLogin.ts                                     :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:13:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/04 20:47:17 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/04 21:55:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,17 +14,17 @@
 import { AbstractView } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
-import f2aLoginHTML from "../html/f2aLogin.html";
+import backupLoginHTML from "../html/backupLogin.html";
 
-export default class F2aLogin extends AbstractView {
+export default class BackupLogin extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
         // @ts-ignore
-        this.setTitle("F2aLogin");
+        this.setTitle("BackupLogin");
     }
 
     async getHTML() {
-        return (f2aLoginHTML);
+        return (backupLoginHTML);
     }
 
     mount() {
@@ -32,18 +32,19 @@ export default class F2aLogin extends AbstractView {
         (this as any).layout?.reloadOnExit?.();
 
         // DOM
-        const f2aLoginForm = document.querySelector("#f2a-login-form");
-        const f2aLoginError = document.querySelector("#f2a-login-error");
-        const inputs = Array.from(document.querySelectorAll<HTMLInputElement>(".otp-input"));
-        const backupBtn = document.querySelector("#backup-btn");
+        const f2aLoginForm = document.querySelector("#backup-login-form");
+        const f2aLoginError = document.querySelector("#backup-login-error");
+        const inputs = Array.from(document.querySelectorAll<HTMLInputElement>(".backup-input"));
+        const previousBtn = document.querySelector("#previous-btn");
 
         const params = new URLSearchParams(location.search);
         const id = params.get("userId");
         const next = params.get("next") || "/dashboard";
 
-        backupBtn?.addEventListener("click", () => {
-            window.navigateTo(`/backups?userId=${id}&next=${next}`);
+        previousBtn?.addEventListener("click", () => {
+            window.navigateTo(`/f2a-login?userId=${id}&next=${next}`);
         });
+
         this.setupOtpInputs(inputs);
         inputs[0]?.focus();
     }
@@ -51,8 +52,7 @@ export default class F2aLogin extends AbstractView {
     setupOtpInputs(inputs: HTMLInputElement[]) {
         inputs.forEach((input, idx) => {
             input.addEventListener("input", () => {
-                const value = input.value.replace(/\D/g, "");
-                input.value = value;
+                const value = input.value;
 
                 if (value && idx < inputs.length - 1) {
                     inputs[idx + 1].focus();
@@ -73,7 +73,6 @@ export default class F2aLogin extends AbstractView {
             input.addEventListener("paste", (e) => {
                 e.preventDefault();
                 const paste = (e.clipboardData?.getData("text") ?? "")
-                    .replace(/\D/g, "")
                     .slice(0, inputs.length);
 
                 paste.split("").forEach((digit, i) => {
@@ -87,14 +86,14 @@ export default class F2aLogin extends AbstractView {
 
     async submitCode(inputs: HTMLInputElement[]) {
         const code = inputs.map(i => i.value).join("");
-        if (code.length !== 6) return;
+        if (code.length !== 8) return;
 
         const params = new URLSearchParams(location.search);
         const next = params.get("next") || "/dashboard";
         const id = params.get("userId");
 
         try {
-            const data = await API.post("/auth/login-totp", { code, userId: id });
+            const data = await API.post("/auth/verify-backup", { code, userId: id });
             if (data.success) {
                 auth.setToken(data.token || "dev-token");
                 // @ts-ignore
@@ -109,7 +108,7 @@ export default class F2aLogin extends AbstractView {
     }
 
     showError(msg: string) {
-        const el = document.querySelector("#f2a-login-error");
+        const el = document.querySelector("#backup-login-error");
         if (!el) return;
         el.textContent = msg;
         el.classList.remove("hidden");
