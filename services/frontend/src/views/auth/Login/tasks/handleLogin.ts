@@ -52,8 +52,7 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         setTimeout(() => {
             if (data.activation_required) {
                 view.swapContent(notActiveHtml).then(() => {
-                    const backBtn = document.getElementById("back-btn");
-                    backBtn?.addEventListener("click", (e) => {
+                    DOM.inactiveBackBtn?.addEventListener("click", (e) => {
                         e.preventDefault();
                         window.navigateTo("/login");
                     });

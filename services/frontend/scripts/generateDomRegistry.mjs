@@ -62,7 +62,7 @@ function findHTMLFiles(dir) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 🧩 Generate DOM registry for a given HTML file                              */
+/* 🧩 Generate DOM registry for a single HTML file                             */
 /* -------------------------------------------------------------------------- */
 function generateForHTML(file) {
     const folder = path.dirname(file);
@@ -78,7 +78,7 @@ function generateForHTML(file) {
     }
 
     if (!entries.length) {
-        console.log(`No IDs found in ${file}`);
+        console.log(`⚠️ No IDs found in ${file}`);
         return;
     }
 
@@ -87,9 +87,6 @@ function generateForHTML(file) {
     const interfaceName = `${viewName}DomMap`;
     const outFile = path.join(folder, "dom.generated.ts");
 
-    /* ---------------------------------------------------------------------- */
-    /* ✨ Generate file content (Lazy DOM class + interface pattern)           */
-    /* ---------------------------------------------------------------------- */
     const outContent = `// AUTO-GENERATED FILE — DO NOT EDIT
 // Generated from ${path.basename(file)}
 // Created by scripts/generateDomRegistry.mjs
@@ -103,15 +100,11 @@ function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
  * Each getter queries the DOM dynamically when accessed.
  */
 export class ${className} {
-${entries
-            .map(({ id, camel, type }) => `  get ${camel}() { return $<${type}>("${id}"); }`)
-            .join("\n")}
+${entries.map(({ id, camel, type }) => `  get ${camel}() { return $<${type}>("${id}"); }`).join("\n")}
 }
 
 export interface ${interfaceName} {
-${entries
-            .map(({ camel, type }) => `  ${camel}: ${type} | null;`)
-            .join("\n")}
+${entries.map(({ camel, type }) => `  ${camel}: ${type} | null;`).join("\n")}
 }
 
 export const DOM = new ${className}();
@@ -122,19 +115,93 @@ export const DOM = new ${className}();
 }
 
 /* -------------------------------------------------------------------------- */
-/* 🚀 CLI Mode: process a single file or all views                            */
+/* 🧩 Generate DOM registry for a folder (merge all .html)                     */
+/* -------------------------------------------------------------------------- */
+function generateForFolder(folder) {
+    const htmlFiles = findHTMLFiles(folder);
+    const allEntries = new Map(); // avoid duplicate IDs
+
+    for (const file of htmlFiles) {
+        const content = fs.readFileSync(file, "utf8");
+        let match;
+        while ((match = idRegex.exec(content)) !== null) {
+            const id = match[1];
+            if (!allEntries.has(id)) {
+                const camel = camelCase(id);
+                const type = guessType(id);
+                allEntries.set(id, { id, camel, type });
+            }
+        }
+    }
+
+    if (allEntries.size === 0) {
+        console.log(`⚠️ No IDs found in ${folder}`);
+        return;
+    }
+
+    const folderName = pascalCase(path.basename(folder));
+    const className = `${folderName}DOM`;
+    const interfaceName = `${folderName}DomMap`;
+    const outFile = path.join(folder, "dom.generated.ts");
+
+    const outContent = `// AUTO-GENERATED FILE — DO NOT EDIT
+// Aggregated from ${htmlFiles.length} HTML file(s)
+// Created by scripts/generateDomRegistry.mjs
+
+function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
+  return document.getElementById(id) as T | null;
+}
+
+/**
+ * ${className} — Lazy DOM accessor for all elements in this folder.
+ */
+export class ${className} {
+${Array.from(allEntries.values())
+            .map(({ id, camel, type }) => `  get ${camel}() { return $<${type}>("${id}"); }`)
+            .join("\n")}
+}
+
+export interface ${interfaceName} {
+${Array.from(allEntries.values())
+            .map(({ camel, type }) => `  ${camel}: ${type} | null;`)
+            .join("\n")}
+}
+
+export const DOM = new ${className}();
+`;
+
+    fs.writeFileSync(outFile, outContent, "utf8");
+    console.log(
+        `✅ Generated ${outFile} (${allEntries.size} unique IDs from ${htmlFiles.length} HTML file${htmlFiles.length > 1 ? "s" : ""})`
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 🚀 CLI Mode: process a single file, a folder, or all views                 */
 /* -------------------------------------------------------------------------- */
 const args = process.argv.slice(2);
 if (args.length > 0) {
-    const targetFile = args[0];
-    if (!fs.existsSync(targetFile)) {
-        console.error(`❌ File not found: ${targetFile}`);
+    const target = args[0];
+    if (!fs.existsSync(target)) {
+        console.error(`❌ Path not found: ${target}`);
         process.exit(1);
     }
-    generateForHTML(targetFile);
+
+    const stat = fs.statSync(target);
+    if (stat.isDirectory()) {
+        generateForFolder(target);
+    } else if (target.endsWith(".html")) {
+        generateForHTML(target);
+    } else {
+        console.error("❌ Please provide either an HTML file or a folder path.");
+        process.exit(1);
+    }
     process.exit(0);
 }
 
+/* -------------------------------------------------------------------------- */
+/* 🏗️ Default mode: process all views in src/views                            */
+/* -------------------------------------------------------------------------- */
 const htmlFiles = findHTMLFiles(VIEWS_DIR);
 if (!htmlFiles.length) {
     console.log("⚠️ No HTML files found in", VIEWS_DIR);
