@@ -35,3 +35,14 @@ docker_build(
         'services/frontend/.cache/**',
     ],
 )
+
+# AUTOMATION SERVICE
+docker_build(
+    'automation',
+    'services/automation',
+    dockerfile='services/automation/Dockerfile',
+    live_update=[
+        sync('services/automation', '/app/cleanup'),
+        run('node cleanup/cleanup.js', trigger=['services/automation/**/*']),
+    ],
+)

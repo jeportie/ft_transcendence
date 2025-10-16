@@ -6,7 +6,7 @@
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/12 17:27:29 by jeportie          #+#    #+#              #
-#    Updated: 2025/09/28 20:15:00 by jeportie         ###   ########.fr        #
+#    Updated: 2025/10/16 15:44:41 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ build:
 	$(DC) --env-file $(ENVFILE) build
 
 up: prepare
-	$(DC) --env-file $(ENVFILE) up -d api frontend sqlite-web #migrator
+	$(DC) --env-file $(ENVFILE) up -d api frontend sqlite-web automation #migrator
 
 down:
 	$(DC) --env-file $(ENVFILE) down
@@ -56,7 +56,7 @@ dev:
 	cd services/api/config && npm i && mv node_modules/ .. && cp package.json ..
 
 logs:
-	$(DC) --env-file $(ENVFILE) logs -f
+	$(DC) --env-file $(ENVFILE) logs -f api frontend automation
 
 re: clean all
 
