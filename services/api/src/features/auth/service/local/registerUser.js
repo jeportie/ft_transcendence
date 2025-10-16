@@ -10,7 +10,6 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 import { RecaptchaErrors } from "../../errors.js";
 import { issueSession } from "../utils/issueSession.js";
@@ -20,11 +19,12 @@ import { randomBytes } from "crypto";
 import { addDaysUTC } from "../utils/tokens.js";
 
 const PATH = import.meta.url;
-const findUserSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
-const createUserSql = loadSql(PATH, "../sql/createUser.sql");
-const insertActivationSql = loadSql(PATH, "../sql/insertActivationToken.sql");
 
 export async function registerUser(fastify, request, reply) {
+    const findUserSql = fastify.loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
+    const createUserSql = fastify.loadSql(PATH, "../sql/createUser.sql");
+    const insertActivationSql = fastify.loadSql(PATH, "../sql/insertActivationToken.sql");
+
     const username = request.body?.username;
     const email = request.body?.email;
     const pwd = request.body?.pwd;

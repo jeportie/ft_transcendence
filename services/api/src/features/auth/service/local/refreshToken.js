@@ -12,15 +12,14 @@
 
 import { generateRefreshToken, hashToken, addDaysUTC } from "../utils/tokens.js";
 import { setRefreshCookie } from "../utils/cookie.js";
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const deleteRefreshTokenSql = loadSql(PATH, "../sql/deleteRefreshTokenByID.sql");
-const findRefreshTokenSql = loadSql(PATH, "../sql/findRefreshTokenWithUserByHash.sql");
-const refreshTokenSql = loadSql(PATH, "../sql/insertRefreshToken.sql");
 
 export async function refreshToken(fastify, request, reply) {
+    const deleteRefreshTokenSql = fastify.loadSql(PATH, "../sql/deleteRefreshTokenByID.sql");
+    const findRefreshTokenSql = fastify.loadSql(PATH, "../sql/findRefreshTokenWithUserByHash.sql");
+    const refreshTokenSql = fastify.loadSql(PATH, "../sql/insertRefreshToken.sql");
     const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];
     if (!rawSigned)

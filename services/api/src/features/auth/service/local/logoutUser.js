@@ -12,12 +12,11 @@
 
 import { hashToken } from "../utils/tokens.js";
 import { clearRefreshCookie } from "../utils/cookie.js";
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 
-const deleteRefreshToken = loadSql(import.meta.url, "../sql/deleteRefreshTokenByHash.sql");
-
 export async function logoutUser(fastify, request, reply) {
+    const deleteRefreshToken = fastify.loadSql(import.meta.url, "../sql/deleteRefreshTokenByHash.sql");
+
     const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];
     if (!rawSigned)

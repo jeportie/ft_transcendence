@@ -10,7 +10,6 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 import { RecaptchaErrors } from "../../errors.js";
 import { verifyRecaptcha } from "../utils/verifyRecaptcha.js";
@@ -19,10 +18,10 @@ import { randomBytes } from "crypto";
 import { addHoursUTC } from "../utils/tokens.js";
 
 const PATH = import.meta.url;
-const findUserByEmailSql = loadSql(PATH, "../sql/findUserByEmail.sql");
-const insertResetPwdSql = loadSql(PATH, "../sql/insertResetPasswordToken.sql");
 
 export async function forgotPwd(fastify, request, reply) {
+    const findUserByEmailSql = fastify.loadSql(PATH, "../sql/findUserByEmail.sql");
+    const insertResetPwdSql = fastify.loadSql(PATH, "../sql/insertResetPasswordToken.sql");
     const email = request.body.email;
     const captchaToken = request.body.captcha;
 

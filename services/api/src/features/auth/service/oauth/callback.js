@@ -12,16 +12,16 @@
 
 import { getProvider } from "./providers.js";
 import { loginWithoutPwd } from "../local/loginUser.js";
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { OAuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const findUserByEmailSql = loadSql(PATH, "../sql/findUserByEmail.sql");
-const createUserSql = loadSql(PATH, "../sql/createUser.sql");
-const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
-const activateUserSql = loadSql(PATH, "../sql/activateUser.sql");
 
 export async function handleOAuthCallback(fastify, provider, code, state, request, reply) {
+    const findUserByEmailSql = fastify.loadSql(PATH, "../sql/findUserByEmail.sql");
+    const createUserSql = fastify.loadSql(PATH, "../sql/createUser.sql");
+    const findUserByIdSql = fastify.loadSql(PATH, "../sql/findUserById.sql");
+    const activateUserSql = fastify.loadSql(PATH, "../sql/activateUser.sql");
+
     // --- (1) Verify CSRF state ---
     const cookieName = `oauth_state_${provider}`;
     const raw = request.cookies?.[cookieName];

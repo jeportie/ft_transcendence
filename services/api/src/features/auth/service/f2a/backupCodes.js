@@ -11,14 +11,13 @@
 // ************************************************************************** //
 
 import crypto from "crypto";
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const deleteBackupCodeSql = loadSql(PATH, "../sql/deleteBackupCode.sql");
-const generateBackupCodesSql = loadSql(PATH, "../sql/insertBackupCodes.sql");
 
 export async function generateBackupCodes(fastify, request, reply) {
+    const deleteBackupCodeSql = fastify.loadSql(PATH, "../sql/deleteBackupCode.sql");
+    const generateBackupCodesSql = fastify.loadSql(PATH, "../sql/insertBackupCodes.sql");
     const userId = request.user.sub;
     const count = 10;
 

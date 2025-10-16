@@ -10,13 +10,12 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AdminErrors } from "../../errors.js";
-
-const getUsersSql = loadSql(import.meta.url, "../sql/getUsers.sql");
 
 export async function getUsers(fastify) {
     const db = await fastify.getDb();
+    const getUsersSql = fastify.loadSql(import.meta.url, "../sql/getUsers.sql");
+
     const rows = await db.all(getUsersSql);
     if (!rows || rows.length === 0)
         throw AdminErrors.NoUsers();

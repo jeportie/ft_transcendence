@@ -10,15 +10,14 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 import { issueSession } from "../utils/issueSession.js";
 import { verifyBackupCode } from "./verifyBackupCode.js";
 
 const PATH = import.meta.url;
-const findUserByIdSql = loadSql(PATH, "../sql/findUserById.sql");
 
 export async function verifyBackup(fastify, request, reply) {
+    const findUserByIdSql = fastify.loadSql(PATH, "../sql/findUserById.sql");
     const { code, userId } = request.body || {};
 
     if (!userId || !code)

@@ -13,26 +13,21 @@
 import { authenticator } from "otplib";
 import crypto from "crypto";
 import qrcode from "qrcode";
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 
-const storeSecretSql = loadSql(import.meta.url, "../sql/storeF2aSecret.sql");
 authenticator.options = { crypto };
 
 export async function enableF2a(fastify, request, reply) {
+    const storeSecretSql = fastify.loadSql(import.meta.url, "../sql/storeF2aSecret.sql");
     const userId = request.user.sub;
 
     if (!userId)
         throw AuthErrors.MissingCredentials();
 
-    // TODO: encrypt with : AES-256
     const secret = authenticator.generateSecret();
-
-    // QR code data for google authenticator : id - name - secret
     const serviceName = fastify.config.APP_NAME || "ft_transcendence";
     const otpauth = authenticator.keyuri(userId.toString(), serviceName, secret);
 
-    // Create QR code -> Base 64 PNG
     let qr;
     try {
         qr = await qrcode.toDataURL(otpauth);

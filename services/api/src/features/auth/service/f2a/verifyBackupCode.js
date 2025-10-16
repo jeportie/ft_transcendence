@@ -10,17 +10,16 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
-
 const PATH = import.meta.url;
-const getBackupCodesSql = loadSql(PATH, "../sql/getBackupCodes.sql");
-const useBackupCodeSql = loadSql(PATH, "../sql/useBackupCode.sql");
 
 export async function verifyBackupCode(fastify, userId, rawCode) {
     if (!userId || !rawCode)
         return ("INVALID");
 
     const db = await fastify.getDb();
+    const getBackupCodesSql = fastify.loadSql(PATH, "../sql/getBackupCodes.sql");
+    const useBackupCodeSql = fastify.loadSql(PATH, "../sql/useBackupCode.sql");
+
     const codes = await db.all(getBackupCodesSql, { ":user_id": userId });
 
     for (const code of codes) {

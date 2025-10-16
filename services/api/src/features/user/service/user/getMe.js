@@ -10,14 +10,13 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { UserErrors } from "../../errors.js";
 
-const getMeSql = loadSql(import.meta.url, "../sql/getMe.sql");
-
 export async function getMe(fastify, request, reply) {
-    const jwtClaim = request.user;
     const db = await fastify.getDb();
+    const getMeSql = fastify.loadSql(import.meta.url, "../sql/getMe.sql");
+
+    const jwtClaim = request.user;
     const row = await db.get(getMeSql, { ":id": jwtClaim.sub });
     if (!row)
         throw UserErrors.UserNotFound(jwtClaim.sub);

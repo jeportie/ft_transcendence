@@ -10,14 +10,14 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { UserErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const getMeSql = loadSql(PATH, "../sql/getMe.sql");
-const updatePwdSql = loadSql(PATH, "../../../auth/service/sql/updatePassword.sql");
 
 export async function modifyPwd(fastify, request, reply) {
+    const getMeSql = fastify.loadSql(PATH, "../sql/getMe.sql");
+    const updatePwdSql = fastify.loadSql(PATH, "../../../auth/service/sql/updatePassword.sql");
+
     const id = request.user.sub;
     const isOauth = request.body.oauth;
     const oldPwd = request.body.oldPwd;

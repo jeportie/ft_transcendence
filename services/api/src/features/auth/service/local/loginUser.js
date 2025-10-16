@@ -10,14 +10,13 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { issueSession } from "../utils/issueSession.js";
 import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const userSql = loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
 
 export async function loginUser(fastify, request, reply) {
+    const userSql = fastify.loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
     const user = request.body?.user;
     const pwd = request.body?.pwd;
 
@@ -55,6 +54,7 @@ export async function loginUser(fastify, request, reply) {
 };
 
 export async function loginWithoutPwd(fastify, id, request, reply) {
+    const userSql = fastify.loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
     if (!id)
         throw AuthErrors.MissingCredentials();
 

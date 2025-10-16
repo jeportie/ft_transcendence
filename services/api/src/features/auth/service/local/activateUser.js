@@ -10,15 +10,15 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const findTokenSql = loadSql(PATH, "../sql/findActivationToken.sql");
-const markUsedSql = loadSql(PATH, "../sql/markActivationTokenUsed.sql");
-const activateUserSql = loadSql(PATH, "../sql/activateUser.sql");
 
 export async function activateUser(fastify, request, reply) {
+    const findTokenSql = fastify.loadSql(PATH, "../sql/findActivationToken.sql");
+    const markUsedSql = fastify.loadSql(PATH, "../sql/markActivationTokenUsed.sql");
+    const activateUserSql = fastify.loadSql(PATH, "../sql/activateUser.sql");
+
     const token = request.params.token;
 
     if (!token)

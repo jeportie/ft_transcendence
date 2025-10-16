@@ -11,16 +11,14 @@
 // ************************************************************************** //
 
 import { authenticator } from "otplib";
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const getSecretSql = loadSql(PATH, "../sql/getF2aSecret.sql");
-const enableF2aSql = loadSql(PATH, "../sql/enableF2a.sql");
 
 export async function verifyTotp(fastify, request, reply) {
+    const getSecretSql = fastify.loadSql(PATH, "../sql/getF2aSecret.sql");
+    const enableF2aSql = fastify.loadSql(PATH, "../sql/enableF2a.sql");
 
-    console.log("[!!!]: ", request.user || null);
     const { code } = request.body || {};
     const userId = request.user?.sub;
 

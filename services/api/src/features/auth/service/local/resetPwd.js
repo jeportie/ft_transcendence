@@ -10,15 +10,15 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const findResetTokenSql = loadSql(PATH, "../sql/findPwdResetToken.sql");
-const markResetUsedSql = loadSql(PATH, "../sql/markPwdResetTokenUsed.sql");
-const resetPwdSql = loadSql(PATH, "../sql/updatePassword.sql");
 
 export async function resetPwd(fastify, request, reply) {
+    const findResetTokenSql = fastify.loadSql(PATH, "../sql/findPwdResetToken.sql");
+    const markResetUsedSql = fastify.loadSql(PATH, "../sql/markPwdResetTokenUsed.sql");
+    const resetPwdSql = fastify.loadSql(PATH, "../sql/updatePassword.sql");
+
     const token = request.body.token;
     const rawPwd = request.body.pwd;
 

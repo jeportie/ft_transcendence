@@ -10,14 +10,13 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const disableF2aSql = loadSql(PATH, "../sql/disableF2a.sql");
-const deleteBackupCodeSql = loadSql(PATH, "../sql/deleteBackupCode.sql");
 
 export async function disableF2a(fastify, request, reply) {
+    const disableF2aSql = fastify.loadSql(PATH, "../sql/disableF2a.sql");
+    const deleteBackupCodeSql = fastify.loadSql(PATH, "../sql/deleteBackupCode.sql");
     const userId = request.user.sub;
 
     if (!userId)

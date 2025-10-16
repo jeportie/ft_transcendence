@@ -10,18 +10,18 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 
 const PATH = import.meta.url;
-const checkF2aSql = loadSql(PATH, "../sql/checkF2a.sql");
-const checkF2aByMailSql = loadSql(PATH, "../sql/checkF2aByMail.sql");
 
 export async function checkF2a(fastify, request, reply) {
     const user = request.body?.user;
     if (!user)
         throw AuthErrors.MissingCredentials();
-    const db = await fastify.getDb(); 0
+    const db = await fastify.getDb();
+    const checkF2aSql = fastify.loadSql(PATH, "../sql/checkF2a.sql");
+    const checkF2aByMailSql = fastify.loadSql(PATH, "../sql/checkF2aByMail.sql");
+
     let row = await db.get(checkF2aSql, {
         ":username": user,
     })
