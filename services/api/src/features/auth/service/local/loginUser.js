@@ -10,7 +10,6 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { verifyPassword } from "../utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { issueSession } from "../utils/issueSession.js";
 import { AuthErrors } from "../../errors.js";
@@ -34,7 +33,7 @@ export async function loginUser(fastify, request, reply) {
     if (!row)
         throw AuthErrors.UserNotFound(user);
 
-    const ok = await verifyPassword(row.password_hash, pwd);
+    const ok = await fastify.verifyPassword(row.password_hash, pwd);
     if (!ok)
         throw AuthErrors.InvalidPassword(user);
 

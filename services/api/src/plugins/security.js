@@ -12,6 +12,7 @@
 
 import fp from "fastify-plugin";
 import cors from "@fastify/cors";
+import { hashPassword, verifyPassword } from "../../shared/utils/password.js";
 
 export default fp(async function security(fastify) {
     const config = fastify.config;
@@ -30,4 +31,7 @@ export default fp(async function security(fastify) {
         // CSP comes later when we know all assets/endpoints
         return payload;
     });
+
+    fastify.decorate("hashPassword", hashPassword);
+    fastify.decorate("verifyPassword", verifyPassword);
 });

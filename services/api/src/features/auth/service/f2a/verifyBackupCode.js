@@ -10,7 +10,6 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { verifyPassword } from "../utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 
 const PATH = import.meta.url;
@@ -23,10 +22,9 @@ export async function verifyBackupCode(fastify, userId, rawCode) {
 
     const db = await fastify.getDb();
     const codes = await db.all(getBackupCodesSql, { ":user_id": userId });
-    let isUsed = false;
 
     for (const code of codes) {
-        const match = await verifyPassword(code.code_hash, rawCode);
+        const match = await fastify.verifyPassword(code.code_hash, rawCode);
         if (match) {
             if (code.used_at)
                 return ("USED");

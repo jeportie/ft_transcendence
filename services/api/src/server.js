@@ -11,14 +11,12 @@
 // ************************************************************************** //
 
 import { buildApp } from "./app.js";
-import { getDb } from "../shared/db/connection.js";
-import { runMigrations } from "../shared/db/migrations.js";
-import { ensureDemoUserHashed } from "../shared/db/hashDemoUserPwd.js";
+import { ensureDemoUserHashed } from "./db/hashDemoUserPwd.js";
 
 const fastify = await buildApp();
-const db = await getDb();
-await runMigrations(db);
-await ensureDemoUserHashed(db);
+const db = await fastify.getDb();
+await fastify.runMigrations(db);
+await ensureDemoUserHashed(fastify);
 
 const { HOST, PORT, NODE_ENV } = fastify.config;
 

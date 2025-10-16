@@ -10,7 +10,6 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { hashPassword } from "../utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
 import { RecaptchaErrors } from "../../errors.js";
@@ -48,7 +47,7 @@ export async function registerUser(fastify, request, reply) {
     if (exists)
         throw AuthErrors.UserAlreadyExists(username);
 
-    const hashed = await hashPassword(pwd);
+    const hashed = await fastify.hashPassword(pwd);
     await db.run(createUserSql, {
         ":username": username,
         ":email": email,

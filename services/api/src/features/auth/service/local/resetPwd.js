@@ -12,7 +12,6 @@
 
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors } from "../../errors.js";
-import { hashPassword } from "../utils/password.js"
 
 const PATH = import.meta.url;
 const findResetTokenSql = loadSql(PATH, "../sql/findPwdResetToken.sql");
@@ -41,7 +40,7 @@ export async function resetPwd(fastify, request, reply) {
     if (new Date(row.expires_at) < new Date())
         throw AuthErrors.LinkExpired();
 
-    const password_hash = await hashPassword(rawPwd);
+    const password_hash = await fastify.hashPassword(rawPwd);
     try {
         await db.run(resetPwdSql, {
             ":password_hash": password_hash,

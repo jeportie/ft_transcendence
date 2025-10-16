@@ -10,7 +10,6 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { verifyPassword, hashPassword } from "../../../auth/service/utils/password.js";
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { UserErrors } from "../../errors.js";
 
@@ -30,12 +29,12 @@ export async function modifyPwd(fastify, request, reply) {
         throw UserErrors.UserNotFound(id);
 
     if (!isOauth) {
-        const ok = await verifyPassword(row.password_hash, oldPwd);
+        const ok = await fastify.verifyPassword(row.password_hash, oldPwd);
         if (!ok)
             throw UserErrors.InvalidPassword(user);
     }
 
-    const password_hash = await hashPassword(newPwd);
+    const password_hash = await fastify.hashPassword(newPwd);
     try {
         await db.run(updatePwdSql, {
             ":password_hash": password_hash,

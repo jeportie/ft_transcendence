@@ -11,7 +11,6 @@
 // ************************************************************************** //
 
 import crypto from "crypto";
-import { hashPassword } from "../utils/password.js"
 import { loadSql } from "../../../../utils/sqlLoader.js";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 
@@ -33,7 +32,7 @@ export async function generateBackupCodes(fastify, request, reply) {
         const codes = [];
         for (let i = 0; i < count; i++) {
             const raw = crypto.randomBytes(4).toString("hex");
-            const hash = await hashPassword(raw);
+            const hash = await fastify.hashPassword(raw);
             codes.push({ raw, hash });
         }
 
