@@ -33,5 +33,5 @@ FROM users u
 JOIN activation_tokens t ON t.user_id = u.id
 WHERE u.is_active = 0
   AND t.used_at IS NULL
-  AND datetime(t.expires_at) <= datetime('now');
+  AND datetime(t.expires_at || 'Z') <= datetime('now');
 

@@ -14,4 +14,4 @@ DELETE FROM
     activation_tokens
 WHERE
     used_at IS NULL
-  AND datetime(expires_at) <= datetime('now');
+  AND datetime(expires_at || 'Z') <= datetime('now');

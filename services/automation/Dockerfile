@@ -13,6 +13,8 @@
 FROM node:20-slim
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 && rm -rf /var/lib/apt/lists/*
+
 COPY config/package.json ./package.json
 RUN npm install --omit=dev
 
