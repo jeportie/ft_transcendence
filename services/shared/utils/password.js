@@ -1,18 +1,26 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   db.js                                              :+:      :+:    :+:   //
+//   password.js                                        :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/19 14:33:46 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/02 17:42:59 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/04 18:18:52 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/23 14:40:07 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { getDb } from "../../shared/db/connection.js";
-import fp from "fastify-plugin";
+import argon2 from "argon2";
 
-export default fp(async function dbPlugin(fastify) {
-    fastify.decorate("getDb", getDb);
-});
+// need to fine tune it before production !
+export async function hashPassword(plain) {
+    return (argon2.hash(plain, { type: argon2.argon2id }));
+}
+
+export async function verifyPassword(hash, plain) {
+    try {
+        return (await argon2.verify(hash, plain));
+    } catch {
+        return (false);
+    }
+}

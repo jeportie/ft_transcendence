@@ -16,7 +16,6 @@ WORKDIR /app
 COPY config/package.json ./package.json
 RUN npm install --omit=dev
 
-COPY ../api/src/db ./db
-COPY cleanup ./cleanup
+COPY src ./src
 
-CMD ["node", "cleanup/cleanup.js"]
+CMD ["node", "src/cleanup.js"]

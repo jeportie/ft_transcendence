@@ -11,9 +11,9 @@
 // ************************************************************************** //
 
 import { buildApp } from "./app.js";
-import { getDb } from "./db/connection.js";
-import { runMigrations } from "./db/migrations.js";
-import { ensureDemoUserHashed } from "./db/hashDemoUserPwd.js";
+import { getDb } from "../shared/db/connection.js";
+import { runMigrations } from "../shared/db/migrations.js";
+import { ensureDemoUserHashed } from "../shared/db/hashDemoUserPwd.js";
 
 const fastify = await buildApp();
 const db = await getDb();
