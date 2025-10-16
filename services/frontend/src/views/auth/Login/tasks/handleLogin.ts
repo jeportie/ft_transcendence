@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:33:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 18:56:12 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/16 10:04:31 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -41,6 +41,7 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         });
 
         if (error) {
+            console.log("[ERR-OBJ]: ", error);
             pwdInput.value = "";
             userInput.focus();
             showBox(errorBox, "Invalid username or password.");
