@@ -6,18 +6,19 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/16 11:54:18 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/16 11:54:22 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/16 16:22:53 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { getDb } from "../../api/src/db/connection.js";
+import { getDb } from "../../shared/db/connection.js";
+import { loadSql } from "../../shared/utils/sqlLoader.js";
+
+const PATH = import.meta.url;
 
 export async function purgeExpiredTokens() {
     const db = await getDb();
-    const res = await db.run(`
-    DELETE FROM activation_tokens
-    WHERE used_at IS NULL
-      AND datetime(expires_at) <= datetime('now');
-  `);
-    console.log(`[Cleanup] Purged ${res.changes} expired activation tokens`);
+    const purgeExpiredTokensSql = loadSql(PATH, "./sql/purgeExpiredTokens.sql");
+
+    const row = await db.run(purgeExpiredTokensSql);
+    console.log(`[Cleanup] Purged ${row.changes} expired activation tokens`);
 }
