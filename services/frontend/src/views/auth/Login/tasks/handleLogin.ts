@@ -41,7 +41,6 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         });
 
         if (error) {
-            console.log("[ERR-OBJ]: ", error);
             pwdInput.value = "";
             userInput.focus();
             showBox(errorBox, "Invalid username or password.");
