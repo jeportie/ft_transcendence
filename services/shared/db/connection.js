@@ -17,14 +17,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import * as dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const dbFile = process.env.DB_FILE
-    ? process.env.DB_FILE
-    : path.join(__dirname, "./data/app.db");
+const dbFile = process.env.DB_FILE || path.join(__dirname, "../../data/app.db");
 
 let dbPromise = null;
 

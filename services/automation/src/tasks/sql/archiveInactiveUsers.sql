@@ -10,15 +10,28 @@
 --                                                                            --
 -- ************************************************************************** --
 
-INSERT INTO
-    archived_users
+INSERT INTO archived_users (
+    id,
+    username,
+    email,
+    password_hash,
+    role,
+    created_at,
+    updated_at,
+    is_active
+)
 SELECT
-    u.*
-FROM
-    users u
-JOIN
-    activation_tokens t ON t.user_id = u.id
-WHERE
-    u.is_active = 0
-    AND t.used_at IS NULL
-    AND datetime(t.expires_at) <= datetime('now');
+    u.id,
+    u.username,
+    u.email,
+    u.password_hash,
+    u.role,
+    u.created_at,
+    u.updated_at,
+    u.is_active
+FROM users u
+JOIN activation_tokens t ON t.user_id = u.id
+WHERE u.is_active = 0
+  AND t.used_at IS NULL
+  AND datetime(t.expires_at) <= datetime('now');
+

@@ -15,6 +15,10 @@ DELETE FROM
 WHERE
     id
 IN (
-  SELECT id FROM archived_users
-  WHERE is_active = 0
+    SELECT u.id
+    FROM users u
+    JOIN activation_tokens t ON t.user_id = u.id
+    WHERE u.is_active = 0
+      AND t.used_at IS NULL
+      AND datetime(t.expires_at) <= datetime('now')
 );

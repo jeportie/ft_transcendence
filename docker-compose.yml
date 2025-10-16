@@ -67,7 +67,7 @@ services:
     build: ./services/automation
     image: automation
     env_file:
-      - services/api/.env.local
+      - services/automation/.env.local
     volumes:
       - ~/data/sqlite:/data
       - ./services/shared:/app/shared:ro
