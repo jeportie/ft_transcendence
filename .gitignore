@@ -1,5 +1,6 @@
 services/frontend/.env.local
 services/api/.env.local
+service/automation/.env.local
 .env
 
 services/frontend/public/bundle.js

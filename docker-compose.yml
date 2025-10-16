@@ -6,7 +6,7 @@
 #    By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/28 19:22:31 by jeportie          #+#    #+#              #
-#    Updated: 2025/10/16 12:31:01 by jeportie         ###   ########.fr        #
+#    Updated: 2025/10/16 13:22:16 by jeportie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ services:
     volumes:
       - ~/data/sqlite:/data
       - ./services/frontend/public:/app/public:ro
+      - ./services/shared:/app/shared:ro
     networks:
       - transc
     ports:
@@ -69,6 +70,7 @@ services:
       - services/api/.env.local
     volumes:
       - ~/data/sqlite:/data
+      - ./services/shared:/app/shared:ro
     networks:
       - transc
     restart: always
