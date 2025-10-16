@@ -18,16 +18,15 @@ export async function handleActivate() {
     const token = params.get("token");
 
     if (!token) {
-        console.error("No token found in URL");
-        return window.navigateTo("/login?activation_failed=1");
+        const msg = encodeURIComponent("No token found in URL");
+        return window.navigateTo(`/login?activation_failed=1&error_message=${msg}`);
     }
 
     const { data, error } = await API.Get(`/auth/activate/${token}`);
 
     if (error) {
-        console.error("Activation failed:", error);
-        window.navigateTo("/login?activation_failed=1");
-        window.navigateTo(`/login?activation_failed=1?error_message=${error.error}`);
+        const msg = encodeURIComponent(error.message || "Activation failed");
+        return window.navigateTo(`/login?activation_failed=1&error_message=${msg}`);
     }
 
     window.navigateTo("/login?activated=1");

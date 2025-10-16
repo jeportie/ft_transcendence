@@ -12,7 +12,7 @@
 
 // @ts-expect-error
 import { AbstractView } from "@jeportie/mini-spa";
-import activateHTML from "../html/activate.html";
+import activateHTML from "./activate.html";
 import { tasks } from "./tasks/index.js";
 
 export default class Activate extends AbstractView {

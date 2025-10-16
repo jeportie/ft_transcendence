@@ -16,6 +16,7 @@ export function showActivationMessages({ addCleanup }) {
     const params = new URLSearchParams(location.search);
     const activated = params.get("activated");
     const error = params.get("activation_failed");
+    const error_message = params.get("error_message");
     const card = DOM.loginCard;
     if (!card) return;
 
@@ -31,10 +32,12 @@ export function showActivationMessages({ addCleanup }) {
         timeouts.push(window.setTimeout(() => msg.remove(), 4000));
     }
 
+    let decodedErrorMsg = error_message ? decodeURIComponent(error_message) : null;
+
     if (activated)
         show("Your account has been activated successfully!", "ui-card-alert ui-alert-success mb-4");
     if (error)
-        show("Error: Account not activated", "ui-alert ui-alert-error mb-4");
+        show(`Error: Account not activated: ${decodedErrorMsg}`, "ui-card-alert ui-alert-error mb-4");
 
     addCleanup(() => {
         timeouts.forEach(clearTimeout);

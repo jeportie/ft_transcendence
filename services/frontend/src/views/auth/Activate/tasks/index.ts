@@ -10,8 +10,10 @@
 //                                                                            //
 // ************************************************************************** //
 
+import { handleActivate } from "./handleActivate.js";
+
 export const tasks = {
     init: [],
-    ready: [],
+    ready: [handleActivate],
     teardown: [],
 };

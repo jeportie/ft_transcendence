@@ -26,8 +26,8 @@ const Signup = () => import("../views/auth/Signup/Signup.js");
 const Forgot = () => import("../views/auth/ForgotPwd/ForgotPwd.js");
 const F2aLogin = () => import("../views/auth/F2A/F2aLogin.js");
 const BackupLogin = () => import("../views/auth/Backup/BackupLogin.js");
+const Activate = () => import("../views/auth/Activate/Activate.js");
 const Reset = () => import("../views/ResetPwd.js");
-const Activate = () => import("../views/Activate.js");
 
 // App layout
 const AppLayout = () => import("../views/AppLayout.js");
