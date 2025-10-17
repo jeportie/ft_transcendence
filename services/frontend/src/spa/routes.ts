@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/17 12:01:47 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/17 14:07:40 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,7 +27,7 @@ const Forgot = () => import("../views/auth/ForgotPwd/ForgotPwd.js");
 const F2aLogin = () => import("../views/auth/F2A/F2aLogin.js");
 const BackupLogin = () => import("../views/auth/Backup/BackupLogin.js");
 const Activate = () => import("../views/auth/Activate/Activate.js");
-const Reset = () => import("../views/ResetPwd.js");
+const Reset = () => import("../views/auth/Reset/ResetPwd.js");
 
 // App layout
 const AppLayout = () => import("../views/AppLayout.js");
