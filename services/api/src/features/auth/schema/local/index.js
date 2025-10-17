@@ -17,4 +17,4 @@ export { registerSchema } from "./registerSchema.js";
 export { forgotPwdSchema } from "./forgotPwdSchema.js";
 export { resetPwdSchema } from "./resetPwdSchema.js";
 export { activateUserSchema } from "./activateUserSchema.js";
-export { sendActivateLink } from "./sendActivateLinkSchema.js";
+export { sendActivateLinkSchema } from "./sendActivateLinkSchema.js";

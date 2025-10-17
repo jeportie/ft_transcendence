@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-export const activateUserSchema = {
+export const sendActivateLinkSchema = {
     summary: "Resend the activation link to the user email adresse.",
     description: "Emit a new token if no token has beed found of if the old one has expired.",
     tags: ["Authentication"],
