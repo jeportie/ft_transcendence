@@ -34,12 +34,10 @@ const AppLayout = () => import("../views/AppLayout.js");
 // |--> User
 const Dashboard = () => import("../views/user/Dashboard/Dashboard.js");
 const Settings = () => import("../views/Settings.js");
-const Posts = () => import("../views/Posts.js");
-const PostShow = () => import("../views/PostShow.js");
 // |--> Game
 const Game = () => import("../views/Game.js");
 // |--> Other
-const NotFound = () => import("../views/NotFound.js");
+const NotFound = () => import("../views/404/NotFound.js");
 
 export const routes = [
     {
@@ -66,8 +64,6 @@ export const routes = [
         children: [
             { path: "dashboard", component: Dashboard, beforeEnter: guards.requireAuth },
             { path: "settings", component: Settings, beforeEnter: guards.requireAuth },
-            { path: "posts", component: Posts, beforeEnter: guards.requireAuth },
-            { path: "posts/:id", component: PostShow, beforeEnter: guards.requireAuth },
             { path: "game", component: Game, beforeEnter: guards.requireAuth },
         ],
     },

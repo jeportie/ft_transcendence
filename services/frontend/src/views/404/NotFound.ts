@@ -1,25 +1,25 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Posts.ts                                           :+:      :+:    :+:   //
+//   NotFound.ts                                        :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/14 19:12:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/23 13:44:05 by jeportie         ###   ########.fr       //
+//   Created: 2025/08/16 19:51:07 by jeportie          #+#    #+#             //
+//   Updated: 2025/09/23 13:39:00 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractView } from "@jeportie/mini-spa";
-import postsHTML from "../html/posts.html";
+import notFoundHTML from "./notFound.html";
 
-export default class Posts extends AbstractView {
+export default class NotFound extends AbstractView {
     constructor(ctx: any) {
         super(ctx);
-        this.setTitle("Posts");
+        this.setTitle("NotFound");
     }
 
     async getHTML() {
-        return (postsHTML);
+        return (notFoundHTML);
     }
 }
