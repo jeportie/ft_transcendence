@@ -18,33 +18,25 @@ import { randomBytes } from "crypto";
 const PATH = import.meta.url;
 
 export async function sendActivateLink(fastify, request, reply) {
-    const findUserSql = fastify.loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
     const insertActivationSql = fastify.loadSql(PATH, "../sql/insertActivationToken.sql");
     const findActivationTokenByUserIdSql = fastify.loadSql(PATH, "../sql/findActivationTokenByUserId.sql")
 
-    const { username, email } = request.body || {};
+    const user_id = request.body.user_id;
 
     let activationToken = null;
     let activationLink = null;
 
     const db = await fastify.getDb();
-    const row = await db.get(findUserSql, {
-        ":username": username,
-        ":email": email
+    const row = await db.get(findActivationTokenByUserIdSql, {
+        ":user_id": user_id,
     });
-    if (!row)
-        throw AuthErrors.UserNotFound(username);
-
-    const tok = await db.get(findActivationTokenByUserIdSql, {
-        ":user_id": row.id,
-    });
-    if (!tok || new Date(tok.expires_at) <= new Date()) {
+    if (!row || new Date(tok.expires_at) <= new Date()) {
         activationToken = randomBytes(32).toString("hex");
         const expiresAt = addDaysUTC(1); // 24h validity
 
         try {
             await db.run(insertActivationSql, {
-                ":user_id": row.id,
+                ":user_id": user_id,
                 ":token": activationToken,
                 ":expires_at": expiresAt,
             });
@@ -54,7 +46,7 @@ export async function sendActivateLink(fastify, request, reply) {
         }
 
     } else {
-        activationToken = tok.token;
+        activationToken = row.token;
     }
 
     activationLink = `http://${fastify.config.FRONTEND_URL}/activate?token=${activationToken}`;

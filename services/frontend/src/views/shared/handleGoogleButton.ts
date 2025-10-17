@@ -38,7 +38,7 @@ export function handleGoogleButton(params: GoogleButtonParams) {
     }
 
     const iconWrapper = create("span", "absolute left-4 flex items-center");
-    const icon = create("img", "w-5 h-5 mr-2");
+    const icon = create("img", "w-10 h-10 mr-2");
     icon.src = ASSETS.googleIcon;
     icon.alt = "Google icon";
     iconWrapper.appendChild(icon);

@@ -48,24 +48,37 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         }
 
         logo?.fadeAndReplaceWithLottie();
-
+        console.log(data);
         setTimeout(() => {
             if (data.activation_required) {
                 view.swapContent(notActiveHtml).then(() => {
-                    DOM.inactiveP.innerText = `
-                        Sorry ${data.username}, your account is not active yet.
+                    // @ts-expect-error
+                    DOM.inactiveP.innerHTML = `
+                        Sorry <strong>${data.username}</strong>, your account is not active yet.
                         Please validate your account with the validation link we sent 
                         you by email.
                     `;
-                    DOM.inactiveBackBtn?.addEventListener("click", (e) => {
-                        e.preventDefault();
+                    DOM.inactiveRetryBtn?.addEventListener("click", async () => {
+                        const { data: data2, error: error2 } = await API.Post("/auth/resend-link", {
+                            user_id: data.user_id,
+                        });
+                        if (error2) {
+                            showBox(DOM.inactiveBoxDiv, error2.message);
+                            return;
+                        }
+                        showBox(DOM.inactiveBoxDiv, "Done!");
+                    })
+                    DOM.inactiveBackBtn?.addEventListener("click", () => {
+                        // @ts-expect-error
                         window.navigateTo("/login");
                     });
                 });
             } else if (data.f2a_required) {
+                // @ts-expect-error
                 window.navigateTo(`/f2a-login?userId=${data.user_id}`);
             } else {
                 auth.setToken(data.token || "dev-token");
+                // @ts-expect-error
                 window.navigateTo("/dashboard");
             }
         }, 2000);

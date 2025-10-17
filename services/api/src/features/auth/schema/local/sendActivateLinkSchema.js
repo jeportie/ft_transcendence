@@ -16,17 +16,13 @@ export const sendActivateLinkSchema = {
     tags: ["Authentication"],
     operationId: "activateUser",
 
-    params: {
+    body: {
         type: "object",
-        required: ["user", "email"],
+        required: ["user_id"],
         properties: {
-            user: {
-                type: "string",
-                description: "The username used for connect.",
-            },
-            email: {
-                type: "string",
-                description: "The user email used to connect",
+            user_id: {
+                type: "integer",
+                description: "The user_id returned after connection.",
             },
         },
     },
@@ -40,7 +36,7 @@ export const sendActivateLinkSchema = {
                 success: { type: "boolean", example: true },
                 message: {
                     type: "string",
-                    example: "Account activated successfully.",
+                    example: "Link has been successfully resent.",
                 },
             },
         },
