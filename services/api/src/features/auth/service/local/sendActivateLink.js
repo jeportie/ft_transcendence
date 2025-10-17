@@ -30,7 +30,9 @@ export async function sendActivateLink(fastify, request, reply) {
     const row = await db.get(findActivationTokenByUserIdSql, {
         ":user_id": user_id,
     });
-    if (!row || new Date(tok.expires_at) <= new Date()) {
+    console.log(row);
+    if (!row || new Date(row.expires_at) <= new Date()) {
+        console.log("[IF]");
         activationToken = randomBytes(32).toString("hex");
         const expiresAt = addDaysUTC(1); // 24h validity
 
@@ -46,6 +48,7 @@ export async function sendActivateLink(fastify, request, reply) {
         }
 
     } else {
+        console.log("[ELSE]");
         activationToken = row.token;
     }
 
