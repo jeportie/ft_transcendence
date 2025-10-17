@@ -56,8 +56,11 @@ export async function handleForgot({ addCleanup }) {
             return;
         }
 
-        captchaContainer?.classList.add("hidden");
-        showBox(infoBox, data.message);
+        if (data.success) {
+            captchaContainer?.classList.add("hidden");
+            showBox(infoBox, data.message);
+            form.classList.add("hidden");
+        }
     }
 
     const onFocus = () => {

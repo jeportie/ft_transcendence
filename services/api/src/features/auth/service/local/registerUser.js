@@ -6,13 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:47:42 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 14:46:35 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/16 22:28:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AuthErrors } from "../../errors.js";
 import { RecaptchaErrors } from "../../errors.js";
-import { issueSession } from "../utils/issueSession.js";
 import { verifyRecaptcha } from "../utils/verifyRecaptcha.js";
 import { sendActivationEmail } from "../utils/mailer.js";
 import { randomBytes } from "crypto";

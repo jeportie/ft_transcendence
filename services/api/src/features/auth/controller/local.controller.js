@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 19:07:21 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 20:11:39 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/17 09:47:02 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -73,6 +73,15 @@ export async function forgotPwd(request, reply) {
 export async function resetPwd(request, reply) {
     try {
         const data = await localService.resetPwd(request.server, request, reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, request, reply, DOMAIN);
+    }
+}
+
+export async function sendActivateLink(request, reply) {
+    try {
+        const data = await localService.sendActivateLink(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
         return AppError.handle(err, request, reply, DOMAIN);

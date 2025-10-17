@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 22:06:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 20:10:55 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/17 09:44:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,3 +17,4 @@ export { registerUser } from "./registerUser.js";
 export { activateUser } from "./activateUser.js";
 export { forgotPwd } from "./forgotPwd.js";
 export { resetPwd } from "./resetPwd.js";
+export { sendActivateLink } from "./sendActivateLink.js";

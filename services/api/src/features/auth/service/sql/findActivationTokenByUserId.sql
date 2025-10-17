@@ -1,23 +1,21 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   findUserById.sql                                   :+:      :+:    :+:   --
+--   findActivationTokenByUserId.sql                    :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/26 18:46:27 by jeportie          #+#    #+#             --
---   Updated: 2025/10/16 22:49:17 by jeportie         ###   ########.fr       --
+--   Created: 2025/10/16 22:45:06 by jeportie          #+#    #+#             --
+--   Updated: 2025/10/16 23:09:10 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
 SELECT
-    id,
-    username,
-    email,
-    password_hash,
-    role
+    *
 FROM
-    users
+    activation_tokens
 WHERE
-    id = :id
+    user_id = :user_id
+ORDER BY 
+    created_at DESC
 LIMIT 1;

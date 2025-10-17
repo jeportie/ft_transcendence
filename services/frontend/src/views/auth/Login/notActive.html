@@ -12,12 +12,11 @@
 
 <div class="ui-card-error">
     <h1 class="ui-title flex justify-center">Account Not Activated!</h1>
-    <div class="flex justify-center">
-        <p id="inactive-p" class="ui-text-error">Sorry, your account is not active yet. Please
-            validate your account with the validation link we sent you by email.
-        </p>
+    <div class="flex justify-center mt-4">
+        <p id="inactive-p" class="ui-text-error"></p>
     </div>
-    <p class="ui-btn-secondary mt-3 flex justify-center">
+    <button id="inactive-retry-btn" class="ui-btn-secondary w-full mt-1">Resend Link</button>
+    <p class="ui-text-small mt-3">
         <a id="inactive-back-btn" href="/login" data-link class="ui-hint-link">Back to Login</a>
     </p>
 </div>

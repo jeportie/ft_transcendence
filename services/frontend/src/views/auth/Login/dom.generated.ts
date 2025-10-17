@@ -18,6 +18,7 @@ export class LoginDOM {
   get loginErrorDiv() { return $<HTMLDivElement>("login-error-div"); }
   get loginGoogleBtn() { return $<HTMLButtonElement>("login-google-btn"); }
   get inactiveP() { return $<HTMLElement>("inactive-p"); }
+  get inactiveRetryBtn() { return $<HTMLButtonElement>("inactive-retry-btn"); }
   get inactiveBackBtn() { return $<HTMLButtonElement>("inactive-back-btn"); }
 }
 
@@ -30,6 +31,7 @@ export interface LoginDomMap {
   loginErrorDiv: HTMLDivElement | null;
   loginGoogleBtn: HTMLButtonElement | null;
   inactiveP: HTMLElement | null;
+  inactiveRetryBtn: HTMLButtonElement | null;
   inactiveBackBtn: HTMLButtonElement | null;
 }
 
