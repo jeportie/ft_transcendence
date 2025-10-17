@@ -66,7 +66,10 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
                             showBox(DOM.inactiveBoxDiv, error2.message);
                             return;
                         }
-                        showBox(DOM.inactiveBoxDiv, "Done!");
+                        if (data2.success) {
+                            // @ts-expect-error
+                            window.navigateTo("/login");
+                        }
                     })
                     DOM.inactiveBackBtn?.addEventListener("click", () => {
                         // @ts-expect-error
