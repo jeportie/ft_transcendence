@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/15 15:33:17 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/17 12:01:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,11 +16,11 @@ import { guards } from "./guards.js";
 
 // Landing layout
 const LandingLayout = () => import("../views/LandingLayout.js");
-// |-- Landing
+// |--> Landing
 const Landing = () => import("../views/landing/Landing/Landing.js");
 const ServiceTerms = () => import("../views/landing/Terms/ServiceTerms.js");
 const PrivacyPolity = () => import("../views/landing/Policy/PrivacyPolicy.js");
-// |-- Auth
+// |--> Auth
 const Login = () => import("../views/auth/Login/Login.js");
 const Signup = () => import("../views/auth/Signup/Signup.js");
 const Forgot = () => import("../views/auth/ForgotPwd/ForgotPwd.js");
@@ -31,11 +31,14 @@ const Reset = () => import("../views/ResetPwd.js");
 
 // App layout
 const AppLayout = () => import("../views/AppLayout.js");
-const Dashboard = () => import("../views/Dashboard.js");
+// |--> User
+const Dashboard = () => import("../views/user/Dashboard/Dashboard.js");
 const Settings = () => import("../views/Settings.js");
 const Posts = () => import("../views/Posts.js");
 const PostShow = () => import("../views/PostShow.js");
+// |--> Game
 const Game = () => import("../views/Game.js");
+// |--> Other
 const NotFound = () => import("../views/NotFound.js");
 
 export const routes = [
