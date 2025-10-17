@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/17 14:07:40 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/17 15:31:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -35,7 +35,7 @@ const AppLayout = () => import("../views/AppLayout.js");
 const Dashboard = () => import("../views/user/Dashboard/Dashboard.js");
 const Settings = () => import("../views/Settings.js");
 // |--> Game
-const Game = () => import("../views/Game.js");
+const Game = () => import("../views/pong/Match/Pong.js");
 // |--> Other
 const NotFound = () => import("../views/404/NotFound.js");
 
@@ -64,7 +64,7 @@ export const routes = [
         children: [
             { path: "dashboard", component: Dashboard, beforeEnter: guards.requireAuth },
             { path: "settings", component: Settings, beforeEnter: guards.requireAuth },
-            { path: "game", component: Game, beforeEnter: guards.requireAuth },
+            { path: "pong", component: Game, beforeEnter: guards.requireAuth },
         ],
     },
     { path: "*", component: NotFound },
