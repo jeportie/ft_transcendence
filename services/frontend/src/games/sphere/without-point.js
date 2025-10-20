@@ -1,19 +1,7 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   full-sphere-3d.js                                  :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/20 15:36:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/20 15:36:05 by jeportie         ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
-
 const createScene = () => {
     const scene = new BABYLON.Scene(engine);
 
-    // === BACKGROUND GRADIENT ===
+    /* BACKGROUND / CAMERA / LIGHT / GLOW */
     scene.clearColor = new BABYLON.Color3(0.02, 0.02, 0.05);
     const gradient = new BABYLON.Layer("gradient", null, scene, true);
     gradient.isBackground = true;
@@ -28,7 +16,6 @@ const createScene = () => {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     });
 
-    // === CAMERA & LIGHT ===
     const camera = new BABYLON.ArcRotateCamera(
         "cam",
         BABYLON.Tools.ToRadians(0),
@@ -41,61 +28,34 @@ const createScene = () => {
     camera.wheelPrecision = 30;
     engine.getRenderingCanvas().style.cursor = "none";
 
-    const lightDir = new BABYLON.Vector3(0.5, 1, -0.3).normalize();
+    new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0.3, 1, -0.3), scene);
+    const glow = new BABYLON.GlowLayer("glow", scene, { blurKernelSize: 64 });
+    glow.intensity = 0.8;
 
-    // === ROOT ===
+    /* ROOT NODE */
     const root = new BABYLON.TransformNode("root", scene);
     root.rotation.x = BABYLON.Tools.ToRadians(23.5);
     const ROT_SPEED = BABYLON.Tools.ToRadians(1.0);
     let tAccum = 0;
 
-    // === SHADERS ===
-    BABYLON.Effect.ShadersStore["dotsVertexShader"] = `
-    precision highp float;
-    attribute vec3 position;
-    attribute vec4 color;
-    uniform mat4 world;
-    uniform mat4 viewProjection;
-    uniform float pointSize;
-    varying vec4 vColor;
-    varying vec3 vPos;
-    void main(void){
-      vec4 worldPos = world * vec4(position,1.0);
-      gl_Position = viewProjection * worldPos;
-      float size = pointSize / gl_Position.w;   // perspective scaling
-      gl_PointSize = size;
-      vPos = normalize(position);
-      vColor = color;
-    }
-  `;
+    /* BRUSH CURSOR */
+    const brushCursor = BABYLON.MeshBuilder.CreateSphere("brushCursor", { diameter: 0.1 }, scene);
+    const brushMat = new BABYLON.StandardMaterial("brushMat", scene);
+    brushMat.emissiveColor = new BABYLON.Color3(1, 0, 0);
+    brushMat.alpha = 0.9;
+    brushCursor.material = brushMat;
+    brushCursor.setParent(root);
 
-    BABYLON.Effect.ShadersStore["dotsFragmentShader"] = `
-    precision highp float;
-    varying vec4 vColor;
-    varying vec3 vPos;
-    void main(void){
-      vec2 d = gl_PointCoord - vec2(0.5);
-      float dist = length(d);
-      if(dist>0.5) discard;
-      float alpha = smoothstep(0.5,0.45,dist);
-      vec3 lightDir = normalize(vec3(0.5,1.0,-0.3));
-      float light = clamp(dot(vPos,lightDir)*0.5+0.5,0.0,1.0);
-      vec3 shaded = mix(vColor.rgb*0.3, vColor.rgb, light);
-      gl_FragColor = vec4(shaded, vColor.a*alpha);
-    }
-  `;
-
-    // === GRID GEOMETRY ===
+    /* CONSTANTS */
     const R = 1.5;
-    const latSeg = 60;  // vertical divisions
-    const lonSeg = 120; // horizontal divisions
+    const latSeg = 120, lonSeg = 120;
     const COUNT = (latSeg + 1) * (lonSeg + 1);
-
+    const rest = [], pos = [], vel = [];
     const positions = new Float32Array(COUNT * 3);
     const colors = new Float32Array(COUNT * 4);
-    const rest = [], pos = [], vel = [];
 
-    let i = 0;
+    /* SPHERE GRID */
+    let idx = 0;
     for (let lat = 0; lat <= latSeg; lat++) {
         const phi = (lat / latSeg) * Math.PI;
         const y = Math.cos(phi);
@@ -105,68 +65,74 @@ const createScene = () => {
             const x = r * Math.cos(theta);
             const z = r * Math.sin(theta);
             const p = new BABYLON.Vector3(x * R, y * R, z * R);
-            rest[i] = p.clone();
-            pos[i] = p.clone();
-            vel[i] = BABYLON.Vector3.Zero();
-            const k = i * 3;
+            rest[idx] = p.clone();
+            pos[idx] = p.clone();
+            vel[idx] = BABYLON.Vector3.Zero();
+            const k = idx * 3;
             positions[k] = p.x; positions[k + 1] = p.y; positions[k + 2] = p.z;
-            const c = i * 4;
-            colors[c] = colors[c + 1] = colors[c + 2] = 1.0; colors[c + 3] = 1.0;
-            i++;
+            const c = idx * 4;
+            colors[c] = 1; colors[c + 1] = 1; colors[c + 2] = 1; colors[c + 3] = 1;
+            idx++;
         }
     }
 
-    // === CREATE MESH ===
-    const mesh = new BABYLON.Mesh("gridSphere", scene);
-    mesh.setParent(root);
-    const vData = new BABYLON.VertexData();
-    vData.positions = Array.from(positions);
-    vData.colors = Array.from(colors);
-    vData.applyToMesh(mesh, true);
-
-    const mat = new BABYLON.ShaderMaterial("dotMat", scene, { vertex: "dots", fragment: "dots" }, {
-        attributes: ["position", "color"],
-        uniforms: ["world", "viewProjection", "pointSize"],
+    /* SINGLE POINT CLOUD SYSTEM (updatable!) */
+    const pcs = new BABYLON.PointsCloudSystem("pcs", 1, scene, { updatable: true });
+    pcs.addPoints(COUNT, (pt, i) => {
+        pt.position = rest[i].clone();
+        pt.color = new BABYLON.Color4(1, 1, 1, 1);
     });
-    mat.pointsCloud = true;
-    mat.disableLighting = true;
-    mat.setFloat("pointSize", 5.0);
-    mat.alphaMode = BABYLON.Engine.ALPHA_ADD;
-    mesh.material = mat;
 
-    // === GRID LINKS (wireframe) ===
-    const lines = [];
+    pcs.buildMeshAsync().then(() => {
+        pcs.mesh.setParent(root);
+        const mat = new BABYLON.StandardMaterial("mat", scene);
+        mat.disableLighting = true;
+        mat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+        mat.pointsCloud = true;
+        mat.pointSize = 0.0;
+        pcs.mesh.material = mat;
+
+        pcs.updateParticle = (pt, i) => {
+            if (!pos[i]) return;
+            pt.position.copyFrom(pos[i]);
+            const ci = i * 4;
+            pt.color.set(colors[ci], colors[ci + 1], colors[ci + 2], 1);
+        };
+        pcs.setParticles();
+    });
+
+    /* LINES */
+    const connections = [];
     for (let lat = 0; lat < latSeg; lat++) {
         for (let lon = 0; lon < lonSeg; lon++) {
             const i0 = lat * (lonSeg + 1) + lon;
             const i1 = i0 + 1;
             const i2 = i0 + (lonSeg + 1);
             const i3 = i2 + 1;
-            lines.push([rest[i0], rest[i1]]);
-            lines.push([rest[i0], rest[i2]]);
-            if (lat === latSeg - 1) lines.push([rest[i2], rest[i3]]);
-            if (lon === lonSeg - 1) lines.push([rest[i1], rest[i3]]);
+            connections.push([i0, i1]);
+            connections.push([i0, i2]);
+            if (lat === latSeg - 1) connections.push([i2, i3]);
+            if (lon === lonSeg - 1) connections.push([i1, i3]);
         }
     }
-
+    const initLines = connections.map(([a, b]) => [rest[a].clone(), rest[b].clone()]);
     const lineSys = BABYLON.MeshBuilder.CreateLineSystem("grid", {
-        lines: lines.map(([a, b]) => [a.clone(), b.clone()]),
+        lines: initLines,
         updatable: true,
         useVertexAlpha: true,
     }, scene);
     lineSys.color = new BABYLON.Color3(1, 1, 1);
-    lineSys.alpha = 0.2;
+    lineSys.alpha = 0.15;
     lineSys.setParent(root);
 
-    // === BRUSH ===
+    /* RAY / BRUSH INTERSECTION */
     const brushLocal = new BABYLON.Vector3();
     const EPS = 0.08;
     let hasPointer = false;
     let lastHit = new BABYLON.Vector3(0, R + EPS, 0);
-
     const canvasEl = engine.getRenderingCanvas();
-    canvasEl.addEventListener("mouseenter", () => hasPointer = true);
-    canvasEl.addEventListener("mouseleave", () => hasPointer = false);
+    canvasEl.addEventListener("mouseenter", () => (hasPointer = true));
+    canvasEl.addEventListener("mouseleave", () => (hasPointer = false));
 
     function raySphereNearestT(o, d, R) {
         const b = BABYLON.Vector3.Dot(o, d);
@@ -180,22 +146,19 @@ const createScene = () => {
         return null;
     }
 
-    // === PHYSICS PARAMS ===
+    /* PHYSICS CONSTANTS */
     const K_REST = 90, K_RAD = 55, DAMP = 3, MAX = 2.5, BR = 0.45, BS = 10, PUSH = 3;
     const tmp1 = new BABYLON.Vector3(), tmp2 = new BABYLON.Vector3();
 
-    // === RIPPLE SYSTEM ===
+    /* RIPPLE SYSTEM */
     const ripples = [];
-    const RIPPLE_COUNT = 10;
-    const RIPPLE_RADIUS = 0.35;
-    const RIPPLE_STRENGTH = 30;
-    const RIPPLE_DECAY = 0.975;
+    const RIPPLE_COUNT = 15, RIPPLE_RADIUS = 0.35, RIPPLE_STRENGTH = 30, RIPPLE_DECAY = 0.975;
     window.addEventListener("keydown", (e) => {
         if (e.code === "Space") {
             ripples.length = 0;
             for (let i = 0; i < RIPPLE_COUNT; i++) {
                 ripples.push({
-                    pos: rest[Math.floor(Math.random() * rest.length)].clone(),
+                    pos: rest[(Math.random() * rest.length) | 0].clone(),
                     phase: Math.random() * Math.PI * 2,
                     strength: RIPPLE_STRENGTH,
                     t: 0,
@@ -204,47 +167,52 @@ const createScene = () => {
         }
     });
 
-    // === LOOP ===
+    /* COLOR PALETTE */
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const smooth = (t) => t * t * (3 - 2 * t);
+    const palette = [
+        { r: 147 / 255, g: 197 / 255, b: 253 / 255 },
+        { r: 167 / 255, g: 243 / 255, b: 208 / 255 },
+        { r: 1.0, g: 1.0, b: 1.0 },
+        { r: 253 / 255, g: 224 / 255, b: 71 / 255 },
+        { r: 251 / 255, g: 146 / 255, b: 60 / 255 },
+    ];
+
+    /* BEFORE RENDER LOOP */
     scene.registerBeforeRender(() => {
         const dt = Math.min(engine.getDeltaTime() / 1000, 0.033);
         tAccum += dt;
         root.rotation.y = tAccum * ROT_SPEED;
 
-        // Brush tracking
+        // brush
         if (hasPointer) {
             const ray = scene.createPickingRay(scene.pointerX, scene.pointerY, BABYLON.Matrix.Identity(), camera);
-            const inv = root.getWorldMatrix().clone().invert();
-            const oL = BABYLON.Vector3.TransformCoordinates(ray.origin, inv);
-            const dL = BABYLON.Vector3.TransformNormal(ray.direction, inv).normalize();
-            let t = raySphereNearestT(oL, dL, R);
+            const localRay = BABYLON.Ray.Transform(ray, root.getWorldMatrix().clone().invert());
+            const t = raySphereNearestT(localRay.origin, localRay.direction, R);
             let hitL;
-            if (t !== null) hitL = oL.add(dL.scale(t));
+            if (t !== null) hitL = localRay.origin.add(localRay.direction.scale(t));
             else {
-                const tC = -BABYLON.Vector3.Dot(oL, dL);
-                hitL = oL.add(dL.scale(tC)).normalize().scale(R);
+                const tC = -BABYLON.Vector3.Dot(localRay.origin, localRay.direction);
+                hitL = localRay.origin.add(localRay.direction.scale(tC)).normalize().scale(R);
             }
             lastHit.copyFrom(hitL);
             brushLocal.copyFrom(hitL.normalizeToNew().scale(R + EPS));
         } else brushLocal.copyFrom(lastHit);
+        brushCursor.position.copyFrom(brushLocal);
 
-        // Ripple advance
+        // ripple
         for (const r of ripples) {
             r.t += dt;
             r.strength *= RIPPLE_DECAY;
         }
-        for (let i = ripples.length - 1; i >= 0; i--) {
-            if (ripples[i].strength < 0.05) ripples.splice(i, 1);
-        }
 
-        // Physics + ripples
+        // physics
         for (let i = 0; i < COUNT; i++) {
             const p = pos[i], v = vel[i], r0 = rest[i];
             const fRest = r0.subtractToRef(p, tmp1).scaleInPlace(K_REST);
             const rLen = p.length();
             const fRad = rLen > 1e-6 ? p.scale(-1 / rLen).scale((R - rLen) * K_RAD) : BABYLON.Vector3.Zero();
             const fDamp = v.scale(-DAMP);
-
-            // brush
             let fBrush = BABYLON.Vector3.Zero();
             const toB = brushLocal.subtractToRef(p, tmp2);
             const dist = toB.length();
@@ -254,36 +222,51 @@ const createScene = () => {
                 const n = p.normalizeToNew();
                 fBrush = n.scale(PUSH * BS * fall);
             }
-
-            // ripples
             let fRipple = BABYLON.Vector3.Zero();
             for (const r of ripples) {
-                const toR = r.pos.subtract(p);
-                const d = toR.length();
+                const d = BABYLON.Vector3.Distance(p, r.pos);
                 if (d < RIPPLE_RADIUS) {
                     const n = p.normalizeToNew();
                     const amp = Math.sin(d * 10 - r.t * 15 + r.phase) * r.strength * (1 - d / RIPPLE_RADIUS);
                     fRipple.addInPlace(n.scale(amp));
                 }
             }
-
             v.addInPlace(fRest.add(fRad).add(fDamp).add(fBrush).add(fRipple).scale(dt));
             if (v.lengthSquared() > MAX * MAX) v.normalize().scaleInPlace(MAX);
             p.addInPlace(v.scale(dt));
-
-            const k = i * 3;
-            positions[k] = p.x; positions[k + 1] = p.y; positions[k + 2] = p.z;
         }
 
-        mesh.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions, true);
+        // color
+        let maxDisp = 0;
+        for (let i = 0; i < COUNT; i++) {
+            const d = BABYLON.Vector3.Distance(pos[i], rest[i]);
+            if (d > maxDisp) maxDisp = d;
+        }
+        const maxExpected = Math.max(0.25, maxDisp);
+        for (let i = 0; i < COUNT; i++) {
+            const d = BABYLON.Vector3.Distance(pos[i], rest[i]);
+            let t = Math.min(d / maxExpected, 1.0);
+            t = smooth(t);
+            const idx = Math.min(Math.floor(t * (palette.length - 1)), palette.length - 2);
+            const localT = t * (palette.length - 1) - idx;
+            const c1 = palette[idx], c2 = palette[idx + 1];
+            const r = lerp(c1.r, c2.r, localT);
+            const g = lerp(c1.g, c2.g, localT);
+            const b = lerp(c1.b, c2.b, localT);
+            const ci = i * 4;
+            colors[ci] = r; colors[ci + 1] = g; colors[ci + 2] = b; colors[ci + 3] = 1;
+        }
 
-        // update line grid
-        const newLines = lines.map(([a, b]) => {
-            const ai = rest.indexOf(a);
-            const bi = rest.indexOf(b);
-            return [pos[ai], pos[bi]];
-        });
-        BABYLON.MeshBuilder.CreateLineSystem("grid", { lines: newLines, instance: lineSys });
+        pcs.setParticles(undefined, true); // ✅ force GPU update
+        lineSys.updateMeshPositions((lp) => {
+            let ptr = 0;
+            for (let e = 0; e < connections.length; e++) {
+                const [ai, bi] = connections[e];
+                const pa = pos[ai], pb = pos[bi];
+                lp[ptr++] = pa.x; lp[ptr++] = pa.y; lp[ptr++] = pa.z;
+                lp[ptr++] = pb.x; lp[ptr++] = pb.y; lp[ptr++] = pb.z;
+            }
+        }, false);
     });
 
     return scene;
