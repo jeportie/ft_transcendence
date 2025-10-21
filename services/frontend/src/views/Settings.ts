@@ -24,7 +24,7 @@ export default class Settings extends AbstractView {
         return (settingsHTML);
     }
 
-    mount() {
+    async mount() {
         const toggle = document.querySelector("#f2a-toggle") as HTMLInputElement;
         const qrSection = document.querySelector("#f2a-qr-section");
         const qrImg = document.querySelector("#f2a-qr") as HTMLImageElement;
@@ -41,20 +41,25 @@ export default class Settings extends AbstractView {
         let username: string | null = null;
         let isOauth = false;
         // Load current state
-        API.get("/user/me").then((user: any) => {
-            console.log(user);
-            username = user.me.username;
-            toggle.checked = user.me.f2a_enabled;
-            isOauth = user.me.oauth;
-            if (isOauth) {
-                pwdOptionLabel.textContent = "Add local password.";
-                oldPwd.classList.add("hidden");
-                const note = document.createElement("p");
-                note.className = "ui-text-muted text-sm mt-2";
-                note.textContent = "This account was created with OAuth. You can set a local password below.";
-                pwdForm?.insertBefore(note, pwdForm.firstChild);
-            }
-        });
+
+        const { data, error } = await API.Get("/user/me");
+
+        if (error) {
+            console.log(error.message);
+            return;
+        }
+
+        username = data.me.username;
+        toggle.checked = data.me.f2a_enabled;
+        isOauth = data.me.oauth;
+        if (isOauth) {
+            pwdOptionLabel.textContent = "Add local password.";
+            oldPwd.classList.add("hidden");
+            const note = document.createElement("p");
+            note.className = "ui-text-muted text-sm mt-2";
+            note.textContent = "This account was created with OAuth. You can set a local password below.";
+            pwdForm?.insertBefore(note, pwdForm.firstChild);
+        }
 
         pwdModifyToogle?.addEventListener("click", () => {
             pwdForm?.classList.remove("hidden");
@@ -75,22 +80,25 @@ export default class Settings extends AbstractView {
                 alert("Please confrim new password.");
                 return;
             }
-            try {
-                const res = await API.post("/user/modify-pwd", {
-                    username,
-                    oauth: isOauth,
-                    oldPwd: oldPwd.value,
-                    newPwd: newPwd.value,
-                });
-                if (res.success) {
-                    alert("Password updated successfully.");
-                    pwdForm.classList.add("hidden");
-                } else {
-                    alert(res.message || "Password update failed.");
-                }
-            } catch (err) {
-                console.error(err);
+
+            const { data, error } = await API.Post("/user/modify-pwd", {
+                username,
+                oauth: isOauth,
+                oldPwd: oldPwd.value,
+                newPwd: newPwd.value,
+            })
+
+            if (error) {
+                console.error(error.message);
                 alert("Error while updating password.");
+                return;
+            }
+
+            if (data.success) {
+                alert("Password updated successfully.");
+                pwdForm.classList.add("hidden");
+            } else {
+                alert(data.message || "Password update failed.");
             }
         })
 
@@ -100,11 +108,15 @@ export default class Settings extends AbstractView {
         toggle.addEventListener("change", async () => {
             if (toggle.checked) {
                 // Call backend to start enabling 2FA
-                const data = await API.post("/auth/enable");
+                const { data, error } = await API.Post("/auth/enable");
+                if (error) {
+                    console.error(error.message);
+                    return;
+                }
                 qrImg.src = data.qr; // backend should return otpauth:// as QR URL
-                qrSection.classList.remove("hidden");
+                qrSection?.classList.remove("hidden");
             } else {
-                await API.post("/auth/disable");
+                await API.Post("/auth/disable");
                 // status.textContent = "Disabled";
             }
         });
@@ -120,11 +132,15 @@ export default class Settings extends AbstractView {
                 qrSection.classList.add("hidden");
 
                 // Generate and show backup codes
-                const backups = await API.post("/auth/backup");
+                const { data, error } = await API.Post("/auth/backup");
 
-                console.log(backups);
-                if (backups.success && backups.codes) {
-                    this.showBackupCodes(backups.codes);
+                if (error) {
+                    console.error(error.message)
+                    return;
+                }
+                console.log(data);
+                if (data.success && data.codes) {
+                    this.showBackupCodes(data.codes);
                 }
             } else {
                 alert("Invalid code. Try again.");
