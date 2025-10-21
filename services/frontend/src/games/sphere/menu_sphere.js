@@ -180,34 +180,6 @@ function createGridGeometry(scene, root) {
     return { R, rest, pos, vel, positions, colors, COUNT, latSeg, lonSeg, mesh };
 }
 
-function createLineGrid(scene, root, rest, latSeg, lonSeg) {
-    const connections = [];
-    for (let lat = 0; lat < latSeg; lat++) {
-        for (let lon = 0; lon < lonSeg; lon++) {
-            const i0 = lat * (lonSeg + 1) + lon;
-            const i1 = i0 + 1;
-            const i2 = i0 + (lonSeg + 1);
-            const i3 = i2 + 1;
-            connections.push([i0, i1]);
-            connections.push([i0, i2]);
-            if (lat === latSeg - 1) connections.push([i2, i3]);
-            if (lon === lonSeg - 1) connections.push([i1, i3]);
-        }
-    }
-
-    const initLines = connections.map(([a, b]) => [rest[a].clone(), rest[b].clone()]);
-    const lineSys = BABYLON.MeshBuilder.CreateLineSystem("grid", {
-        lines: initLines,
-        updatable: true,
-        useVertexAlpha: true,
-    }, scene);
-    lineSys.color = new BABYLON.Color3(1, 1, 1);
-    lineSys.alpha = 0.15;
-    lineSys.setParent(root);
-
-    return { lineSys, connections };
-}
-
 // function createLineGrid(scene, root, rest, latSeg, lonSeg) {
 //     const connections = [];
 //     for (let lat = 0; lat < latSeg; lat++) {
@@ -229,77 +201,105 @@ function createLineGrid(scene, root, rest, latSeg, lonSeg) {
 //         updatable: true,
 //         useVertexAlpha: true,
 //     }, scene);
+//     lineSys.color = new BABYLON.Color3(1, 1, 1);
+//     lineSys.alpha = 0.15;
 //     lineSys.setParent(root);
-//
-//     // === DEPTH-FADE LINE MATERIAL ===
-//
-//
-//     BABYLON.Effect.ShadersStore["depthlineVertexShader"] = `
-//     precision highp float;
-//     attribute vec3 position;
-//     uniform mat4 worldViewProjection;
-//     uniform float time;
-//     varying vec3 vPos;
-//     void main(void){
-//         vPos = position;
-//         gl_Position = worldViewProjection * vec4(position, 1.0);
-//         gl_Position.z += 0.002 * gl_Position.w; // depth offset
-//     }
-//     `;
-//
-//     BABYLON.Effect.ShadersStore["depthlineFragmentShader"] = `
-//     precision highp float;
-//     uniform vec3 cameraPosition;
-//     uniform float time;
-//     varying vec3 vPos;
-//     vec3 rgb(float r, float g, float b){ return vec3(r/255.0, g/255.0, b/255.0); }
-//     void main(void){
-//         vec3 N = normalize(vPos);
-//         vec3 V = normalize(cameraPosition - vPos);
-//         float facing = dot(N, V);
-//         float alpha = smoothstep(-0.2, 0.4, facing);
-//         alpha = pow(alpha, 2.0);
-//         // deformation (distance from rest radius 1.5)
-//         float deform = abs(length(vPos) - 1.5);
-//         // ---- color palette (cold → warm)
-//         vec3 c0 = rgb(147.0,197.0,253.0); // blue
-//         vec3 c1 = rgb(167.0,243.0,208.0); // mint
-//         vec3 c2 = rgb(253.0,224.0, 71.0); // yellow
-//         vec3 c3 = rgb(251.0,146.0, 60.0); // orange
-//         // smooth gradient along deform
-//         float t = smoothstep(0.0, 0.25, deform);
-//         vec3 heat = mix(c0, c1, clamp(t*2.0,0.0,1.0));
-//         heat = mix(heat, c2, clamp((t-0.5)*2.0,0.0,1.0));
-//         heat = mix(heat, c3, clamp((t-0.75)*4.0,0.0,1.0));
-//         // energy pulse (optional)
-//         float wave = sin(time * 1.5 + length(vPos) * 6.0) * 0.5 + 0.5;
-//         heat = mix(vec3(1.0), heat, wave * smoothstep(0.0, 0.2, deform));
-//         // front/back base tone (grayish)
-//         vec3 frontColor = vec3(0.55, 0.6, 0.65);
-//         vec3 backColor  = vec3(0.15, 0.10, 0.12);
-//         vec3 base = mix(backColor, frontColor, alpha);
-//         vec3 color = mix(base, heat, smoothstep(0.05, 0.25, deform));
-//         gl_FragColor = vec4(color, 0.3 * alpha);
-//     }
-//     `;
-//
-//     // === Material setup
-//     const lineMat = new BABYLON.ShaderMaterial("lineMat", scene, {
-//         vertex: "depthline",
-//         fragment: "depthline",
-//     }, {
-//         attributes: ["position"],
-//         uniforms: ["worldViewProjection", "cameraPosition", "time"],
-//     });
-//
-//     lineMat.backFaceCulling = false;
-//     lineMat.disableLighting = true;
-//     lineMat.alphaMode = BABYLON.Engine.ALPHA_COMBINE;
-//     lineSys.material = lineMat;
-//
 //
 //     return { lineSys, connections };
 // }
+
+function createLineGrid(scene, root, rest, latSeg, lonSeg) {
+    const connections = [];
+    for (let lat = 0; lat < latSeg; lat++) {
+        for (let lon = 0; lon < lonSeg; lon++) {
+            const i0 = lat * (lonSeg + 1) + lon;
+            const i1 = i0 + 1;
+            const i2 = i0 + (lonSeg + 1);
+            const i3 = i2 + 1;
+            connections.push([i0, i1]);
+            connections.push([i0, i2]);
+            if (lat === latSeg - 1) connections.push([i2, i3]);
+            if (lon === lonSeg - 1) connections.push([i1, i3]);
+        }
+    }
+
+    const initLines = connections.map(([a, b]) => [rest[a].clone(), rest[b].clone()]);
+    const lineSys = BABYLON.MeshBuilder.CreateLineSystem("grid", {
+        lines: initLines,
+        updatable: true,
+        useVertexAlpha: true,
+    }, scene);
+    lineSys.setParent(root);
+
+    // === DEPTH-FADE LINE MATERIAL ===
+
+
+    BABYLON.Effect.ShadersStore["depthlineVertexShader"] = `
+    precision highp float;
+    attribute vec3 position;
+    uniform mat4 worldViewProjection;
+    uniform float time;
+    varying vec3 vPos;
+    void main(void){
+        vPos = position;
+        gl_Position = worldViewProjection * vec4(position, 1.0);
+        gl_Position.z += 0.002 * gl_Position.w; // depth offset
+    }
+    `;
+
+    BABYLON.Effect.ShadersStore["depthlineFragmentShader"] = `
+    precision highp float;
+    uniform vec3 cameraPosition;
+    uniform float time;
+    varying vec3 vPos;
+    vec3 rgb(float r, float g, float b){ return vec3(r/255.0, g/255.0, b/255.0); }
+    void main(void){
+        vec3 N = normalize(vPos);
+        vec3 V = normalize(cameraPosition - vPos);
+        float facing = dot(N, V);
+        float alpha = smoothstep(-0.2, 0.4, facing);
+        alpha = pow(alpha, 2.0);
+        // deformation (distance from rest radius 1.5)
+        float deform = abs(length(vPos) - 1.5);
+        // ---- color palette (cold → warm)
+        vec3 c0 = rgb(147.0,197.0,253.0); // blue
+        vec3 c1 = rgb(167.0,243.0,208.0); // mint
+        vec3 c2 = rgb(253.0,224.0, 71.0); // yellow
+        vec3 c3 = rgb(251.0,146.0, 60.0); // orange
+        // smooth gradient along deform
+        float t = smoothstep(0.0, 0.25, deform);
+        vec3 heat = mix(c0, c1, clamp(t*2.0,0.0,1.0));
+        heat = mix(heat, c2, clamp((t-0.5)*2.0,0.0,1.0));
+        heat = mix(heat, c3, clamp((t-0.75)*4.0,0.0,1.0));
+        // energy pulse (optional)
+        float wave = sin(time * 1.5 + length(vPos) * 6.0) * 0.5 + 0.5;
+        heat = mix(vec3(1.0), heat, wave * smoothstep(0.0, 0.2, deform));
+        // front/back base tone (grayish)
+        vec3 frontColor = vec3(0.55, 0.6, 0.65);
+        vec3 backColor  = vec3(0.15, 0.10, 0.12);
+        vec3 base = mix(backColor, frontColor, alpha);
+        vec3 color = mix(base, heat, smoothstep(0.05, 0.25, deform));
+        gl_FragColor = vec4(color, 0.3 * alpha);
+    }
+    `;
+
+    // === Material setup
+    const lineMat = new BABYLON.ShaderMaterial("lineMat", scene, {
+        vertex: "depthline",
+        fragment: "depthline",
+    }, {
+        attributes: ["position"],
+        uniforms: ["worldViewProjection", "cameraPosition", "time"],
+    });
+
+    lineMat.backFaceCulling = false;
+    lineMat.disableLighting = true;
+    lineMat.alphaMode = BABYLON.Engine.ALPHA_COMBINE;
+    lineSys.material = lineMat;
+
+
+    return { lineSys, connections };
+}
 
 function createBrush(scene, root) {
     const brush = BABYLON.MeshBuilder.CreateSphere("brush", { diameter: 0.12 }, scene);
@@ -426,7 +426,7 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
             if (r.strength < 0.05) ripples.splice(i, 1);
         }
 
-        // lineSys.material.setFloat("time", performance.now() * 0.001); // For shader version of the sphere
+        lineSys.material.setFloat("time", performance.now() * 0.001); // For shader version of the sphere
 
         // --- Physics update
         const rippleCount = ripples.length;
