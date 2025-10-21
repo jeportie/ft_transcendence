@@ -27,6 +27,7 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
     const userInput = DOM.loginUserInput;
     const pwdInput = DOM.loginPwdInput;
     const errorBox = DOM.loginErrorDiv;
+    DOM.while
 
     if (!form || !userInput || !pwdInput)
         return;

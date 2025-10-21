@@ -12,6 +12,7 @@
 
 import TailwindAnimationHook from "../styles/transitions/hooks/TailwindAnimationHook.js";
 import OverlayAnimationHook from "../styles/transitions/hooks/OverlayAnimationHook.js";
+import PersistentAnimationHook from "../styles/transitions/hooks/PersistentAnimationHook.js";
 import { guards } from "./guards.js";
 
 // Landing layout
@@ -60,13 +61,14 @@ export const routes = [
     {
         path: "/",
         layout: AppLayout,
-        animationHook: new TailwindAnimationHook({ variant: "zoom" }),
+        animationHook: new PersistentAnimationHook(),
         children: [
             { path: "dashboard", component: Dashboard, beforeEnter: guards.requireAuth },
             { path: "settings", component: Settings, beforeEnter: guards.requireAuth },
             { path: "pong", component: Game, beforeEnter: guards.requireAuth },
         ],
     },
+
     { path: "*", component: NotFound },
 ];
 

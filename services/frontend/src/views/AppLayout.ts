@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:11:48 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/23 13:24:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/21 12:04:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,26 +14,28 @@ import { AbstractLayout } from "@jeportie/mini-spa";
 import { API } from "../spa/api.js";
 import { auth } from "../spa/auth.js";
 import appLayoutHTML from "../html/appLayout.html";
+import { runMenuSphere } from "../games/sphere/runMenuSphere.js";
+
 
 export default class AppLayout extends AbstractLayout {
     #onToggle?: (e: Event) => void;
-    #open = true; // current state
+    #open = true;
+    #cleanup?: () => void;
+    #keepCanvas = true; // 🆕 just like LandingLayout
 
     async getHTML() {
-        return (appLayoutHTML);
+        return appLayoutHTML;
     }
 
     mount() {
-        // DOM
-        const appLayout = document.querySelector("#app-layout")
-        const btnList = document.querySelectorAll("#sidebar-toggle");
-        const sidebarList = document.querySelectorAll("#app-sidebar");
-        const logoutBtn = document.querySelector("#logout-btn");
-        if (!appLayout || !btnList || !sidebarList || !logoutBtn) return;
+        this.#cleanup = runMenuSphere("#menu-canvas");
+        this.#keepCanvas = true;
 
-        const btn = (btnList[btnList.length - 1] ?? null) as HTMLButtonElement | null;
-        const sidebar = (sidebarList[sidebarList.length - 1] ?? null) as HTMLElement | null;
-        if (!btn || !sidebar) return;
+        const appLayout = document.querySelector("#app-layout");
+        const btn = document.querySelector("#sidebar-toggle");
+        const sidebar = document.querySelector("#app-sidebar");
+        const logoutBtn = document.querySelector("#logout-btn");
+        if (!appLayout || !btn || !sidebar || !logoutBtn) return;
 
         const apply = (state: "open" | "closed") => {
             appLayout.setAttribute("data-state", state);
@@ -51,25 +53,27 @@ export default class AppLayout extends AbstractLayout {
 
         btn.addEventListener("click", this.#onToggle);
 
-        logoutBtn.addEventListener("click", () => {
-
+        logoutBtn.addEventListener("click", async () => {
             API.Post("/auth/logout");
-
             auth.clear();
+            this.#keepCanvas = false; // 🆕 destroy Babylon on exit
             window.navigateTo("/login");
-
         });
 
         const saved = localStorage.getItem("sidebar");
         apply(saved === "closed" ? "closed" : "open");
+    }
 
-        (this as any)._cleanup = () => {
-            btn.removeEventListener("click", this.#onToggle!);
-        };
+    /** Allow child views to force a full reload on layout exit */
+    reloadOnExit() {
+        this.#keepCanvas = false;
     }
 
     destroy() {
-        (this as any)._cleanup?.();
+        if (!this.#keepCanvas) this.#cleanup?.(); // 🆕 Only destroy if requested
+        const btn = document.querySelector("#sidebar-toggle");
+        if (btn && this.#onToggle) btn.removeEventListener("click", this.#onToggle);
     }
 }
+
 
