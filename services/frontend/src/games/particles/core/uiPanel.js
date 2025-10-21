@@ -228,5 +228,11 @@ export function createUIPanel(state) {
     document.body.appendChild(toggleBtn);
 
     console.log("[UI] Panel created (Tweakpane v4.0.5)");
+
+    // 👉 return a cleanup so callers can fully remove the UI when the layout exits
+    return function destroyUIPanel() {
+        try { pane.dispose?.(); } catch { }
+        try { toggleBtn.remove(); } catch { }
+    };
 }
 

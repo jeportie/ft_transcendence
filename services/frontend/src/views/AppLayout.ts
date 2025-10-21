@@ -28,6 +28,7 @@ export default class AppLayout extends AbstractLayout {
     }
 
     mount() {
+        console.log("[AppLayout] mount()");
         this.#cleanup = runMenuSphere("#menu-canvas");
         this.#keepCanvas = true;
 
@@ -70,10 +71,18 @@ export default class AppLayout extends AbstractLayout {
     }
 
     destroy() {
-        if (!this.#keepCanvas) this.#cleanup?.(); // 🆕 Only destroy if requested
+        console.log("[AppLayout] destroy()", {
+            keepCanvas: this.#keepCanvas,
+            path: window.location.pathname
+        });
+        const nextIsLanding = window.location.pathname === "/" || window.location.pathname.startsWith("/login");
+
+        if (nextIsLanding || !this.#keepCanvas) this.#cleanup?.();
+
         const btn = document.querySelector("#sidebar-toggle");
         if (btn && this.#onToggle) btn.removeEventListener("click", this.#onToggle);
     }
+
 }
 
 

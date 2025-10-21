@@ -12,7 +12,7 @@
 
 export const PARAM_SCHEMA = {
     /* ---------- System / Layout ---------- */
-    N: { type: "number", default: 250, min: 0, max: 1200, description: "Total particles rendered." },
+    N: { type: "number", default: 500, min: 0, max: 1200, description: "Total particles rendered." },
     seed: { type: "number", default: 1337, description: "Deterministic random seed for layout & init velocities." },
     mapName: { type: "string", default: "", description: "Optional map file name under /maps (without .json). Empty = random scatter." },
 

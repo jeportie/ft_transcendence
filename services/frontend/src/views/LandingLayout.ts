@@ -51,8 +51,12 @@ export default class LandingLayout extends AbstractLayout {
     destroy() {
         this.#obs?.disconnect();
         if (this.#onPop) window.removeEventListener("popstate", this.#onPop);
-        // Only tear down the canvas if a child opted into reloading
-        if (!this.#keepCanvas) this.#cleanup?.();
+
+        const nextIsApp = window.location.pathname.startsWith("/dashboard")
+            || window.location.pathname.startsWith("/settings")
+            || window.location.pathname.startsWith("/pong");
+
+        if (nextIsApp || !this.#keepCanvas) this.#cleanup?.();
     }
 
     #updateAuthToggle() {

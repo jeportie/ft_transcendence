@@ -12,6 +12,7 @@
 
 <div id="app-layout" class="ui-app-layout">
     <canvas id="menu-canvas" class="ui-hero-canvas"></canvas>
+
     <div class="ui-app-wrapper">
         <aside id="app-sidebar" class="ui-sidebar">
             <h2 class="ui-sidebar-title">Menu</h2>
@@ -20,13 +21,13 @@
                 <a href="/settings" data-link class="ui-sidebar-link">Settings</a>
                 <a href="/pong" data-link class="ui-sidebar-link">Pong</a>
             </nav>
-            <button id="logout-btn" class="ui-sidebar-link">
-                Logout
-            </button>
+            <button id="logout-btn" class="ui-sidebar-link">Logout</button>
         </aside>
 
         <main class="ui-main">
-            <!-- router-slot -->
+            <div data-router-outlet class="ui-main-slot">
+                <!-- router-slot -->
+            </div>
         </main>
     </div>
 

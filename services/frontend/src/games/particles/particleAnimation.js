@@ -64,12 +64,13 @@ export function runParticle(selector, options = {}) {
     window.addEventListener("resize", onResize);
     canvas.addEventListener("mousemove", onMouse);
     canvas.addEventListener("mouseleave", onLeave);
+    let destroyUI = null;
     (async () => {
         await onResize();
         engine.start();
         toggleCinematicMode(state, true);
         state.currentMode = "cinematic";
-        createUIPanel(state);
+        destroyUI = createUIPanel(state);
 
     })();
     return () => {
@@ -77,6 +78,7 @@ export function runParticle(selector, options = {}) {
         window.removeEventListener("resize", onResize);
         canvas.removeEventListener("mousemove", onMouse);
         canvas.removeEventListener("mouseleave", onLeave);
+        destroyUI?.();
     };
 }
 

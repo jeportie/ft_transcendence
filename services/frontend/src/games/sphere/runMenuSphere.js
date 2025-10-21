@@ -20,6 +20,16 @@ export function runMenuSphere(selector = "#menu-canvas") {
         return;
     }
 
+    if (canvas.__menuSphere?.engine && !canvas.__menuSphere.engine.isDisposed()) {
+        console.log("[Babylon] 🔁 Reusing existing engine");
+        return canvas.__menuSphere.cleanup;
+    }
+
+    // ✅ Idempotent: if already running on this canvas, don’t rebuild the scene
+    if (canvas.__menuSphere?.engine && !canvas.__menuSphere.engine.isDisposed()) {
+        return canvas.__menuSphere.cleanup; // return the existing cleanup
+    }
+
     // --- Try to get WebGL context manually first
     const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
     if (!gl) {
@@ -42,15 +52,21 @@ export function runMenuSphere(selector = "#menu-canvas") {
 
     // --- Create and render scene
     const scene = createScene(engine);
+    const onResize = () => engine.resize();
     engine.runRenderLoop(() => scene.render());
-    window.addEventListener("resize", () => engine.resize());
+    window.addEventListener("resize", onResize);
 
     // --- Cleanup
-    return () => {
+    const cleanup = () => {
         engine.stopRenderLoop();
         scene.dispose();
         engine.dispose();
-        window.removeEventListener("resize", () => engine.resize());
+        window.removeEventListener("resize", onResize);
+        if (canvas.__menuSphere) delete canvas.__menuSphere;
     };
+
+    // stash on the canvas so re-mounts can reuse/skip
+    canvas.__menuSphere = { engine, scene, cleanup };
+    return cleanup;
 }
 

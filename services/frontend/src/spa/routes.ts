@@ -40,11 +40,14 @@ const Game = () => import("../views/pong/Match/Pong.js");
 // |--> Other
 const NotFound = () => import("../views/404/NotFound.js");
 
+const appHook = new PersistentAnimationHook();
+const landingHook = new OverlayAnimationHook();
+
 export const routes = [
     {
         path: "/",
         layout: LandingLayout,
-        animationHook: new OverlayAnimationHook(),
+        animationHook: landingHook,
         children: [
             { path: "", component: Landing },
             { path: "login", component: Login },
@@ -61,7 +64,7 @@ export const routes = [
     {
         path: "/",
         layout: AppLayout,
-        animationHook: new PersistentAnimationHook(),
+        animationHook: appHook,
         children: [
             { path: "dashboard", component: Dashboard, beforeEnter: guards.requireAuth },
             { path: "settings", component: Settings, beforeEnter: guards.requireAuth },
