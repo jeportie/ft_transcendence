@@ -134,10 +134,10 @@ function createDotMaterial(scene) {
         attributes: ["position", "color"],
         uniforms: ["worldViewProjection", "pointSize"],
     });
-    // mat.pointsCloud = true;           // <--- ADD THIS
+    mat.pointsCloud = true;           // <--- ADD THIS
     mat.disableLighting = true;
     mat.setFloat("pointSize", 4.0);
-    // mat.alphaMode = BABYLON.Engine.ALPHA_ADD;
+    mat.alphaMode = BABYLON.Engine.ALPHA_ADD;
     return mat;
 }
 
