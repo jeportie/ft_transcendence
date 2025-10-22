@@ -6,12 +6,15 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/21 11:59:14 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/21 12:51:54 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/22 13:31:27 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import * as BABYLON from "babylonjs";
-import { createScene } from "./menu_sphere.js";
+// import { createScene } from "./menu_sphere.js";
+// import { createScene } from "./particle-sphere.js";
+import { createScene } from "./test.js";
+// import { createScene } from "./latitudeSystem.js";
 
 export function runMenuSphere(selector = "#menu-canvas") {
     const canvas = document.querySelector(selector);

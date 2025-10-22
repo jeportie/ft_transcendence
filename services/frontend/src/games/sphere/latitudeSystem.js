@@ -1,47 +1,45 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   menu_sphere.js                                     :+:      :+:    :+:   //
+//   latitudeSystem.js                                  :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/21 11:49:27 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/22 20:45:00 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/22 11:38:44 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import * as BABYLON from "babylonjs";
 
-// ============================================================================
-// === MAIN SCENE =============================================================
-// ============================================================================
-
 export const createScene = (engine) => {
     const scene = createBaseScene(engine);
+
     const camera = createCamera(scene);
     const root = createRoot(scene);
 
-    const geom = createGridGeometry(scene, root);
+    const geom = createGridGeometry(scene, root); // { R, rest, pos, vel, positions, colors, COUNT, latSeg, lonSeg, mesh }
     const { lineSys, connections } = createLineGrid(scene, root, geom.rest, geom.latSeg, geom.lonSeg);
     const brush = createBrush(scene, root);
 
-    setupInteractions(scene, camera, root, brush, geom, lineSys, connections, 80);
+    setupInteractions(scene, camera, root, brush, geom, lineSys, connections);
+
     return scene;
 };
 
 // ============================================================================
-// === SCENE BASICS ===========================================================
+// === SCENE / CAMERA / ROOT =================================================
 // ============================================================================
 
 function createBaseScene(engine) {
     const scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color4(0.15, 0.15, 0.17);
 
-    // === Background gradient ===
+    // Dynamic gradient background
     const layer = new BABYLON.Layer("bg", null, scene, true);
     layer.isBackground = true;
 
-    const makeGradientTexture = () => {
+    function makeGradientTexture() {
         const canvas = engine.getRenderingCanvas();
         const w = Math.max(2, canvas?.width || 2);
         const h = Math.max(2, canvas?.height || 2);
@@ -49,12 +47,12 @@ function createBaseScene(engine) {
         const ctx = tex.getContext();
         const g = ctx.createLinearGradient(0, 0, 0, h);
         g.addColorStop(0, "#0b0f16");
-        g.addColorStop(1, "#1d1d1d");
+        g.addColorStop(1, "#3f0f0b");
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, w, h);
         tex.update();
         return tex;
-    };
+    }
 
     layer.texture = makeGradientTexture();
     engine.onResizeObservable.add(() => {
@@ -62,21 +60,13 @@ function createBaseScene(engine) {
         layer.texture = makeGradientTexture();
     });
 
-    // === FIXED LIGHT (does not rotate with the sphere) ===
-    const light = new BABYLON.HemisphericLight(
-        "fixedLight",
-        new BABYLON.Vector3(0.4, 1, -0.3), // fixed world direction
-        scene
-    );
-    light.intensity = 0.8; // softer light
-    light.groundColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+    new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0.4, 1, -0.3), scene);
 
     return scene;
 }
 
-
 function createCamera(scene) {
-    const canvas = scene.getEngine().getRenderingCanvas();
+    const canvasEl = scene.getEngine().getRenderingCanvas();
     const camera = new BABYLON.ArcRotateCamera(
         "cam",
         BABYLON.Tools.ToRadians(0),
@@ -85,9 +75,9 @@ function createCamera(scene) {
         BABYLON.Vector3.Zero(),
         scene
     );
-    camera.attachControl(canvas, true);
+    camera.attachControl(canvasEl, true);
     camera.wheelPrecision = 30;
-    if (canvas) canvas.style.cursor = "none";
+    if (canvasEl) canvasEl.style.cursor = "none";
     return camera;
 }
 
@@ -98,7 +88,20 @@ function createRoot(scene) {
 }
 
 // ============================================================================
-// === GEOMETRY ===============================================================
+// === GPU POINTS MATERIAL ====================================================
+// ============================================================================
+
+function createDotMaterial(scene) {
+    const mat = new BABYLON.StandardMaterial("dotMat", scene);
+    mat.pointsCloud = true;        // GPU point rendering
+    mat.pointSize = 1;           // Control dot size globally
+    mat.disableLighting = true;
+    mat.emissiveColor = new BABYLON.Color3(1, 1, 255);
+    return mat;
+}
+
+// ============================================================================
+// === SPHERE GEOMETRY ========================================================
 // ============================================================================
 
 function createGridGeometry(scene, root) {
@@ -106,9 +109,11 @@ function createGridGeometry(scene, root) {
     const latSeg = 120, lonSeg = 120;
     const COUNT = (latSeg + 1) * (lonSeg + 1);
 
-    const rest = [], pos = [], vel = [], positions = new Float32Array(COUNT * 3);
-    let idx = 0;
+    const positions = new Float32Array(COUNT * 3);
+    const colors = new Float32Array(COUNT * 4);
+    const rest = [], pos = [], vel = [];
 
+    let idx = 0;
     for (let lat = 0; lat <= latSeg; lat++) {
         const phi = (lat / latSeg) * Math.PI;
         const y = Math.cos(phi);
@@ -119,34 +124,44 @@ function createGridGeometry(scene, root) {
             rest[idx] = p.clone();
             pos[idx] = p.clone();
             vel[idx] = BABYLON.Vector3.Zero();
+
             const k = idx * 3;
-            positions[k] = p.x; positions[k + 1] = p.y; positions[k + 2] = p.z;
+            positions[k] = p.x;
+            positions[k + 1] = p.y;
+            positions[k + 2] = p.z;
+            const c = idx * 4;
+            colors[c] = colors[c + 1] = colors[c + 2] = 1;
+            colors[c + 3] = 1;
         }
     }
 
     const mesh = new BABYLON.Mesh("gridSphere", scene);
     mesh.setParent(root);
+
     const vData = new BABYLON.VertexData();
     vData.positions = positions;
+    vData.colors = colors;
     vData.applyToMesh(mesh, true);
 
-    return { R, rest, pos, vel, positions, COUNT, latSeg, lonSeg, mesh };
+    mesh.material = createDotMaterial(scene);
+
+    return { R, rest, pos, vel, positions, colors, COUNT, latSeg, lonSeg, mesh };
 }
 
 // ============================================================================
-// === LINE SYSTEM + SHADER ===================================================
+// === LINE GRID =============================================================
 // ============================================================================
 
 function createLineGrid(scene, root, rest, latSeg, lonSeg) {
     const connections = [];
-
     for (let lat = 0; lat < latSeg; lat++) {
         for (let lon = 0; lon < lonSeg; lon++) {
             const i0 = lat * (lonSeg + 1) + lon;
             const i1 = i0 + 1;
             const i2 = i0 + (lonSeg + 1);
             const i3 = i2 + 1;
-            connections.push([i0, i1], [i0, i2]);
+            connections.push([i0, i1]);
+            connections.push([i0, i2]);
             if (lat === latSeg - 1) connections.push([i2, i3]);
             if (lon === lonSeg - 1) connections.push([i1, i3]);
         }
@@ -158,111 +173,15 @@ function createLineGrid(scene, root, rest, latSeg, lonSeg) {
         updatable: true,
         useVertexAlpha: true,
     }, scene);
+    lineSys.color = new BABYLON.Color3(1, 1, 1);
+    lineSys.alpha = 0.15;
     lineSys.setParent(root);
-
-    // === Vertex Shader ===
-    BABYLON.Effect.ShadersStore["depthlineVertexShader"] = `
-    precision highp float;
-    attribute vec3 position;
-    attribute vec3 restPos;
-    uniform mat4 worldViewProjection;
-    varying vec3 vPos;
-    varying vec3 vRest;
-    void main(void){
-      vPos = position;
-      vRest = restPos;
-      gl_Position = worldViewProjection * vec4(position, 1.0);
-    }
-  `;
-
-    // === Fragment Shader ===
-    BABYLON.Effect.ShadersStore["depthlineFragmentShader"] = `
-    precision highp float;
-    uniform vec3 cameraPosition;
-    uniform float uScale;
-    varying vec3 vPos;
-    varying vec3 vRest;
-
-    vec3 rgb(float r, float g, float b){ return vec3(r/255.0, g/255.0, b/255.0); }
-
-    void main(void){
-      vec3 N = normalize(vPos);
-      vec3 V = normalize(cameraPosition - vPos);
-      float facing = dot(N, V);
-      float alpha = pow(smoothstep(-0.2, 0.4, facing), 2.0);
-
-      float deform = length(vPos) - length(vRest);
-      float d = clamp(deform * uScale * 0.05, -1.0, 1.0);
-      float deformAmt = abs(deform);
-
-      // --- Color palette (cold → warm)
-      vec3 c0 = rgb(147.0,197.0,253.0); // blue
-      vec3 c1 = rgb(167.0,243.0,208.0); // mint
-      vec3 c2 = rgb(255.0,255.0,255.0); // white-hot
-      vec3 c3 = rgb(253.0,224.0, 71.0); // yellow
-      vec3 c4 = rgb(251.0,146.0, 60.0); // orange
-
-      vec3 heat;
-      float a = abs(d);
-      if (a < 0.35)
-        heat = mix(c0, c1, smoothstep(0.0, 0.25, a));
-      else if (a < 0.6)
-        heat = mix(c1, c2, smoothstep(0.25, 0.5, a));
-      else if (a < 0.7)
-        heat = mix(c2, c3, smoothstep(0.5, 0.75, a));
-      else
-        heat = mix(c3, c4, smoothstep(0.75, 1.0, a));
-
-      if (d < 0.0)
-        heat = mix(heat, c0, 0.6 * abs(d));
-
-      vec3 frontColor = vec3(0.55, 0.6, 0.65);
-      vec3 backColor  = vec3(0.12, 0.10, 0.14);
-      vec3 base = mix(backColor, frontColor, alpha);
-
-      float heatMix = smoothstep(0.02, 0.05, deformAmt);
-      vec3 color = mix(base, heat, heatMix);
-
-      gl_FragColor = vec4(color, 0.6 * alpha);
-    }
-  `;
-
-    // === Material ===
-    const lineMat = new BABYLON.ShaderMaterial("lineMat", scene, {
-        vertex: "depthline",
-        fragment: "depthline",
-    }, {
-        attributes: ["position", "restPos"],
-        uniforms: ["worldViewProjection", "cameraPosition", "uScale"],
-    });
-
-    lineMat.backFaceCulling = false;
-    lineMat.disableLighting = true;
-    lineMat.alphaMode = BABYLON.Engine.ALPHA_COMBINE;
-    lineMat.setFloat("uScale", 80);
-    lineSys.material = lineMat;
-
-    // === Custom attribute restPos ===
-    const restPositions = new Float32Array(initLines.length * 2 * 3);
-    let ptr = 0;
-    for (const [a, b] of connections) {
-        const ra = rest[a], rb = rest[b];
-        restPositions[ptr++] = ra.x;
-        restPositions[ptr++] = ra.y;
-        restPositions[ptr++] = ra.z;
-        restPositions[ptr++] = rb.x;
-        restPositions[ptr++] = rb.y;
-        restPositions[ptr++] = rb.z;
-    }
-
-    const geo = lineSys.geometry;
-    geo.setVerticesData("restPos", restPositions, true, 3);
 
     return { lineSys, connections };
 }
 
 // ============================================================================
-// === BRUSH ==================================================================
+// === BRUSH =================================================================
 // ============================================================================
 
 function createBrush(scene, root) {
@@ -272,15 +191,15 @@ function createBrush(scene, root) {
     mat.alpha = 0.9;
     brush.material = mat;
     brush.setParent(root);
-    brush.isVisible = false;
+    brush.isVisible = false; // hide brush
     return brush;
 }
 
 // ============================================================================
-// === PHYSICS / INTERACTION ==================================================
+// === INTERACTIONS / PHYSICS ================================================
 // ============================================================================
 
-function setupInteractions(scene, camera, root, brush, geom, lineSys, connections, SCALE) {
+function setupInteractions(scene, camera, root, brush, geom, lineSys, connections) {
     const { R, rest, pos, vel, positions, mesh, COUNT } = geom;
     const engine = scene.getEngine();
 
@@ -293,6 +212,7 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
     canvasEl?.addEventListener("mouseenter", () => (hasPointer = true));
     canvasEl?.addEventListener("mouseleave", () => (hasPointer = false));
 
+    // Ripple effect trigger
     const ripples = [];
     const RIPPLE_COUNT = 50;
     const RIPPLE_RADIUS = 0.45;
@@ -313,7 +233,7 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
         }
     });
 
-    const raySphereNearestT = (o, d, R) => {
+    function raySphereNearestT(o, d, R) {
         const b = BABYLON.Vector3.Dot(o, d);
         const c = BABYLON.Vector3.Dot(o, o) - R * R;
         const disc = b * b - c;
@@ -323,27 +243,35 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
         if (t0 >= 0) return t0;
         if (t1 >= 0) return t1;
         return null;
-    };
+    }
 
     const ROT_SPEED = BABYLON.Tools.ToRadians(1.0);
-    let tAccum = 0, frame = 0;
-    const tmp1 = new BABYLON.Vector3(), tmp2 = new BABYLON.Vector3();
+    const tmp1 = new BABYLON.Vector3();
+    const tmp2 = new BABYLON.Vector3();
     const K_REST = 90, K_RAD = 55, DAMP = 3, MAX = 4, BR = 0.45, BS = 8, PUSH = 10;
     const MAX_CURSOR_GAP_PX = 180;
 
+    let cursorHidden = false; // keep track of cursor visibility state
+
+    const canvas = engine.getRenderingCanvas();
+    canvas?.addEventListener("mousemove", () => {
+        if (cursorHidden) canvas.style.cursor = "none";
+    });
+
     scene.registerBeforeRender(() => {
         const dt = Math.min(engine.getDeltaTime() / 1000, 0.033);
-        tAccum += dt;
-        frame++;
-        root.rotation.y = tAccum * ROT_SPEED;
+        root.rotation.y += dt * ROT_SPEED;
 
+        // Brush tracking
         if (hasPointer) {
             const ray = scene.createPickingRay(scene.pointerX, scene.pointerY, BABYLON.Matrix.Identity(), camera);
             const inv = root.getWorldMatrix().invert();
             const oL = BABYLON.Vector3.TransformCoordinates(ray.origin, inv);
             const dL = BABYLON.Vector3.TransformNormal(ray.direction, inv).normalize();
             const t = raySphereNearestT(oL, dL, R);
-            const hitL = (t !== null) ? oL.add(dL.scale(t)) : oL.add(dL.scale(-BABYLON.Vector3.Dot(oL, dL))).normalize().scale(R);
+            let hitL;
+            if (t !== null) hitL = oL.add(dL.scale(t));
+            else hitL = oL.add(dL.scale(-BABYLON.Vector3.Dot(oL, dL))).normalize().scale(R);
             lastHit.copyFrom(hitL);
             brushLocal.copyFrom(hitL.normalizeToNew().scale(R + EPS));
         } else {
@@ -352,7 +280,7 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
 
         brush.position.copyFrom(brushLocal);
 
-        // Cursor activation
+        // Brush active range
         let active = false;
         if (hasPointer) {
             const renderW = engine.getRenderWidth();
@@ -365,8 +293,24 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
             );
             const dx = scene.pointerX - brush2D.x;
             const dy = scene.pointerY - brush2D.y;
-            active = Math.hypot(dx, dy) < MAX_CURSOR_GAP_PX;
+            const gap = Math.sqrt(dx * dx + dy * dy);
+            active = gap < MAX_CURSOR_GAP_PX;
+            // === Hide / show the OS cursor depending on distance ===
+            const canvas = engine.getRenderingCanvas();
+            if (canvas) {
+                // hide when entering zone
+                if (active && !cursorHidden) {
+                    canvas.style.cursor = "none";
+                    cursorHidden = true;
+                }
+                // show again when leaving
+                else if (!active && cursorHidden) {
+                    canvas.style.cursor = "default";
+                    cursorHidden = false;
+                }
+            }
         }
+
 
         // Ripple decay
         for (let i = ripples.length - 1; i >= 0; i--) {
@@ -376,10 +320,10 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
             if (r.strength < 0.05) ripples.splice(i, 1);
         }
 
-        // Physics
+        // Physics update
         const rippleCount = ripples.length;
         const rippleActive = rippleCount > 0;
-        const skipRippleUpdate = frame % 2;
+        const skipRippleUpdate = performance.now() % 2;
 
         for (let i = 0; i < COUNT; i++) {
             const p = pos[i], v = vel[i], r0 = rest[i];
@@ -390,6 +334,7 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
             tmp1.addInPlace(tmp2);
             tmp1.addInPlace(v.scale(-DAMP));
 
+            // Brush influence
             if (active) {
                 const toB = brushLocal.subtract(p);
                 const dist = toB.length();
@@ -399,11 +344,14 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
                 }
             }
 
+            // Ripple influence
             if (rippleActive && !skipRippleUpdate) {
                 let fx = 0, fy = 0, fz = 0;
                 for (let j = 0; j < rippleCount; j++) {
                     const r = ripples[j];
-                    const dx = p.x - r.pos.x, dy = p.y - r.pos.y, dz = p.z - r.pos.z;
+                    const dx = p.x - r.pos.x;
+                    const dy = p.y - r.pos.y;
+                    const dz = p.z - r.pos.z;
                     const d2 = dx * dx + dy * dy + dz * dz;
                     if (d2 < RIPPLE_RADIUS * RIPPLE_RADIUS) {
                         const d = Math.sqrt(d2);
@@ -414,20 +362,27 @@ function setupInteractions(scene, camera, root, brush, geom, lineSys, connection
                         fz += p.z * invLen * amp;
                     }
                 }
-                v.x += fx * dt; v.y += fy * dt; v.z += fz * dt;
+                v.x += fx * dt;
+                v.y += fy * dt;
+                v.z += fz * dt;
             }
 
+            // Integrate motion
             v.addInPlace(tmp1.scale(dt));
             if (v.lengthSquared() > MAX * MAX) v.normalize().scaleInPlace(MAX);
             p.addInPlace(v.scale(dt));
 
             const k = i * 3;
-            positions[k] = p.x; positions[k + 1] = p.y; positions[k + 2] = p.z;
+            positions[k] = p.x;
+            positions[k + 1] = p.y;
+            positions[k + 2] = p.z;
         }
 
+        // Update GPU vertex buffer
         mesh.updateVerticesData(BABYLON.VertexBuffer.PositionKind, positions, false);
 
-        if (frame % 3 === 0) {
+        // Lines update (every 3 frames)
+        if (Math.floor(performance.now() / 16) % 3 === 0) {
             lineSys.updateMeshPositions((lp) => {
                 let ptr = 0;
                 for (let e = 0; e < connections.length; e++) {
