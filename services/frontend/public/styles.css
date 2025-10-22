@@ -1031,12 +1031,6 @@ body {
   z-index: 10;
 }
 
-.ui-footer-text {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: rgb(203 213 225 / 0.7);
-}
-
 /* --- App Layout (Sidebar style update to match Landing) --- */
 
 .ui-app-layout {

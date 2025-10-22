@@ -15,7 +15,7 @@ import { runParticle } from "../../../../games/particles/particleAnimation.js";
 let cleanupFn: (() => void) | null = null;
 
 export async function setupParticles() {
-    cleanupFn = runParticle("#hero-canvas");
+    cleanupFn = runParticle("#layout-landing-hero-canvas");
 }
 
 export function teardownParticles(ctx?: { keepCanvas?: boolean }) {

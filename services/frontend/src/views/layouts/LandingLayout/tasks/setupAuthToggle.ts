@@ -10,6 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
+import { DOM } from "../dom.generated.ts";
+
 let obs: MutationObserver | null = null;
 let onPop: (() => void) | null = null;
 
@@ -32,7 +34,7 @@ export function teardownAuthToggle() {
 }
 
 function updateAuthToggle() {
-    const a = document.getElementById("auth-toggle") as HTMLAnchorElement | null;
+    const a = DOM.layoutLandingAuthToggle;
     if (!a) return;
     const path = window.location.pathname;
     a.href = path === "/login" ? "/" : "/login";
