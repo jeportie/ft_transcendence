@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/17 15:31:41 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/22 16:12:35 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,7 +16,7 @@ import PersistentAnimationHook from "../styles/transitions/hooks/PersistentAnima
 import { guards } from "./guards.js";
 
 // Landing layout
-const LandingLayout = () => import("../views/LandingLayout.js");
+const LandingLayout = () => import("../views/layouts/LandingLayout/LandingLayout.js");
 // |--> Landing
 const Landing = () => import("../views/landing/Landing/Landing.js");
 const ServiceTerms = () => import("../views/landing/Terms/ServiceTerms.js");
