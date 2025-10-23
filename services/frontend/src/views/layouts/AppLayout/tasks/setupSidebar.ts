@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 09:09:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 15:36:59 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/23 23:34:05 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -18,7 +18,6 @@ export function setupSidebar() {
     const appLayout = DOM.appLayout;
     const btn = DOM.appSidebarToggleBtn;
     const sidebar = DOM.appSidebar;
-
     if (!appLayout || !btn || !sidebar) return;
 
     const apply = (state: "open" | "closed") => {
@@ -34,7 +33,8 @@ export function setupSidebar() {
 
     onToggle = (e: Event) => {
         e.preventDefault();
-        const next = appLayout.getAttribute("data-state") === "open" ? "closed" : "open";
+        const next =
+            appLayout.getAttribute("data-state") === "open" ? "closed" : "open";
         apply(next as "open" | "closed");
     };
 
@@ -42,7 +42,8 @@ export function setupSidebar() {
 }
 
 export function teardownSidebar() {
-    const btn = document.querySelector("#sidebar-toggle");
+    const btn = DOM.appSidebarToggleBtn;
     if (btn && onToggle) btn.removeEventListener("click", onToggle);
     onToggle = null;
 }
+

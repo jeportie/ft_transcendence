@@ -6,29 +6,28 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/09/23 13:20:06 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/23 15:36:35 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/23 23:40:43 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<div id="app-layout" class="ui-app-layout app-theme">
+<div id="app-layout" class="ui-app-layout app-theme" data-state="open">
     <canvas id="app-menu-canvas" class="ui-hero-canvas"></canvas>
     <canvas id="app-overlay-canvas" class="ui-overlay-canvas"></canvas>
 
     <div class="ui-app-wrapper">
+        <!-- ✨ Floating glass sidebar -->
         <aside id="app-sidebar" class="ui-sidebar">
-            <h2 class="ui-sidebar-title">Menu</h2>
             <nav class="ui-sidebar-nav">
-                <a href="/dashboard" data-link class="ui-sidebar-link">Dashboard</a>
-                <a href="/settings" data-link class="ui-sidebar-link">Settings</a>
-                <a href="/pong" data-link class="ui-sidebar-link">Pong</a>
+                <h2 class="ui-title mb-6"> Menu</h2>
+                <a href="/dashboard" data-link class="ui-sidebar-link ui-text">Dashboard</a>
+                <a href="/settings" data-link class="ui-sidebar-link ui-text">Settings</a>
+                <a href="/pong" data-link class="ui-sidebar-link ui-text">Pong</a>
+                <button id="app-logout-btn" class="ui-sidebar-link ui-text">Logout</button>
             </nav>
-            <button id="app-logout-btn" class="ui-sidebar-link">Logout</button>
         </aside>
 
         <main class="ui-main">
-            <div data-router-outlet class="ui-main-slot">
-                <!-- router-slot -->
-            </div>
+            <div data-router-outlet class="ui-main-slot"><!-- router-slot --></div>
         </main>
     </div>
 

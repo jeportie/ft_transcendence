@@ -1,127 +1,105 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   layout.css                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/22 18:50:37 by jeportie          #+#    #+#             */
-/*   Updated: 2025/10/22 18:50:37 by jeportie         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 @tailwind components;
 
 @layer components {
-  /* =======================================================================
-     🧩 App Layout Scoped Styles
-     Purpose: visually DISTINCT from LandingLayout (.landing-theme)
-     ======================================================================= */
-
-  /* --- Global App look --- */
   .app-theme {
-    @apply bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 text-amber-200;
+    @apply relative min-h-screen text-white;
+    background: linear-gradient(180deg, #0b1020 0%, #0e152b 50%, #291313 100%);
+    color: rgba(255,255,255,0.84);
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
+  /* Canvas layers */
+  .app-theme .ui-hero-canvas   { @apply absolute inset-0 w-full h-full z-0; }
+  .app-theme .ui-overlay-canvas{ @apply absolute inset-0 w-full h-full z-10 pointer-events-none; }
+
+  /* Typography */
   .app-theme .ui-title {
-    @apply text-3xl font-extrabold tracking-wider text-amber-300 drop-shadow-lg;
+    font-family: 'Michroma', sans-serif;
+    font-weight: 100;
+    font-size: 2rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .app-theme .ui-text {
+    font-family: 'Michroma', sans-serif;
+    font-weight: 100;
+    font-size: 1rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.8);
   }
 
-  .app-theme .ui-subtitle {
-    @apply text-lg text-amber-100/80 italic;
-  }
+/* ==========================================================================
+   🧱 FLOATING SIDEBAR (centered, indented title, glass chip links)
+   ========================================================================== */
 
-  .app-theme .ui-text-muted { @apply text-amber-200/70; }
-  .app-theme .ui-text-small { @apply text-amber-300 text-sm; }
-  .app-theme .ui-text-error { @apply text-rose-400 font-bold underline; }
+.app-theme .ui-sidebar {
+  @apply flex flex-col items-stretch w-64 rounded-2xl transition-all duration-500;
+  position: absolute;
+  top: 50%;
+  left: 2rem;
+  transform: translateY(-50%);
+  padding: 2rem 1.5rem;
 
-
-  /* --- Layouts --- */
-  .app-theme .ui-hero-canvas   { @apply absolute inset-0 w-full h-full block z-0; }
-  
-  .app-theme .ui-overlay-canvas { 
-    @apply absolute inset-0 w-full h-full pointer-events-none z-10;
-  }
-
-  /* --- Cards --- */
-  .app-theme .ui-card {
-    @apply rounded-none bg-amber-950/40 border border-amber-700 text-amber-100 p-8 shadow-inner;
-  }
-
-  .app-theme .ui-card-error {
-    @apply rounded-none bg-rose-900 border border-rose-700 text-white p-8 shadow-inner;
-  }
-
-  /* --- Buttons --- */
-  .app-theme .ui-btn {
-    @apply inline-flex items-center justify-center px-5 py-3 font-bold rounded-none
-             transition-all duration-300 border-2 border-amber-500 text-amber-100
-             hover:bg-amber-600 hover:text-black active:scale-95;
-  }
-
-  .app-theme .ui-btn-primary {
-    @apply bg-amber-500 text-black hover:bg-amber-400 border-amber-300;
-  }
-
-  .app-theme .ui-btn-secondary {
-    @apply bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700;
-  }
-
-  .app-theme .ui-btn-ghost {
-    @apply bg-transparent border-none text-amber-300 hover:text-white;
-  }
-
-  .app-theme .ui-btn-danger {
-    @apply bg-rose-700 hover:bg-rose-600 text-white border-rose-400;
-  }
-
-  /* --- Inputs --- */
-  .app-theme .ui-input {
-    @apply w-full px-4 py-3 border-2 border-amber-600 bg-transparent text-amber-100
-           rounded-none outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-amber-300/50;
-  }
-
-  /* --- Sidebar --- */
-  .app-theme .ui-sidebar {
-    @apply bg-amber-900/40 border border-amber-600 text-amber-200 rounded-none p-6;
-  }
-
-  .app-theme .ui-sidebar-link {
-    @apply px-3 py-2 block rounded-none hover:bg-amber-700 hover:text-black font-semibold;
-  }
-
-  /* --- Alerts --- */
-  .app-theme .ui-alert {
-    @apply px-4 py-3 border-2 border-amber-400 bg-amber-800 text-amber-100 font-semibold rounded-none;
-  }
-
-  .app-theme .ui-alert-success {
-    @apply bg-green-800 border-green-500 text-green-100;
-  }
-
-  .app-theme .ui-alert-error {
-    @apply bg-rose-800 border-rose-500 text-white;
-  }
-
-  /* --- Scrollbar (show it on purpose for contrast) --- */
-  .app-theme ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-
-  .app-theme ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #fbbf24, #f59e0b);
-    border-radius: 0;
-  }
-
-  .app-theme ::-webkit-scrollbar-track {
-    background: #1e1e1e;
-  }
-
-  /* --- Debug frame --- */
-  .app-theme .ui-card,
-  .app-theme .ui-btn,
-  .app-theme .ui-input {
-    outline: 1px dashed rgba(255, 255, 255, 0.3);
-  }
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  box-shadow:
+    inset 0 0 25px rgba(255,255,255,0.04),
+    0 4px 40px rgba(0,0,0,0.3);
 }
+
+/* Stack the content */
+.app-theme .ui-sidebar-nav {
+  @apply flex flex-col gap-3;
+}
+
+/* Title: subtle right indent to align visually with card padding */
+.app-theme .ui-sidebar .ui-title {
+  font-family: 'Michroma', sans-serif;
+  font-weight: 100;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  margin-left: 0.75rem; /* 👈 creates perfect optical alignment with inner link padding */
+}
+
+/* Each link looks like a tiny floating glass card */
+.app-theme .ui-sidebar-link {
+  @apply block rounded-md px-4 py-2 text-left transition;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.82);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,0.03),
+    0 2px 6px rgba(0,0,0,0.25);
+}
+.app-theme .ui-sidebar-link:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.95);
+  transform: translateX(2px);
+}
+
+/* Logout link spacing */
+.app-theme #app-logout-btn {
+  @apply mt-3;
+}
+
+/* Subtle fade animation when sidebar toggled */
+.app-theme[data-state='closed'] .ui-sidebar {
+  opacity: 0;
+  transform: translate(-120%, -50%);
+  pointer-events: none;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.app-theme[data-state='open'] .ui-sidebar {
+  opacity: 1;
+  transform: translate(0, -50%);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
