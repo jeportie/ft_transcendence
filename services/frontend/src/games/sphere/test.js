@@ -114,7 +114,7 @@ function generatePattern(name, R, count, scene) {
 
         // --- 5. Lat/Lon grid pattern ---
         case "latlon": {
-            const latSeg = 180, lonSeg = 180;
+            const latSeg = 120, lonSeg = 120;
             for (let lat = 0; lat <= latSeg; lat++) {
                 const phi = (lat / latSeg) * Math.PI;
                 const y = Math.cos(phi);
@@ -128,7 +128,7 @@ function generatePattern(name, R, count, scene) {
             }
             pts.latSeg = latSeg;
             pts.lonSeg = lonSeg;
-            ROT_SPEED = BABYLON.Tools.ToRadians(25);
+            ROT_SPEED = BABYLON.Tools.ToRadians(5);
             break;
         }
     }
@@ -140,39 +140,71 @@ function generatePattern(name, R, count, scene) {
 // === SCENE / CAMERA / ROOT =================================================
 // ============================================================================
 
+
+
 function createBaseScene(engine) {
     const scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color4(0.15, 0.15, 0.17);
 
-    // Dynamic gradient background
+    // === Dynamic gradient background ==========================================
     const layer = new BABYLON.Layer("bg", null, scene, true);
     layer.isBackground = true;
 
-    function makeGradientTexture() {
-        const canvas = engine.getRenderingCanvas();
-        const w = Math.max(2, canvas?.width || 2);
-        const h = Math.max(2, canvas?.height || 2);
-        const tex = new BABYLON.DynamicTexture("bgTex", { width: w, height: h }, scene, false);
-        const ctx = tex.getContext();
-        const g = ctx.createLinearGradient(0, 0, 0, h);  // <--- ADD THIS
-        g.addColorStop(0, "#0b0f16");
-        g.addColorStop(1, "#3f0f0b");
+    // Base colors
+    const colorTop = "#0b0f16";   // dark blue sky tone
+    const colorBottom = "#3f0f0b"; // reddish brown ground tone
+
+    // Create gradient texture
+    const tex = new BABYLON.DynamicTexture("bgTex", { width: 512, height: 512 }, scene, false);
+    const ctx = tex.getContext();
+    layer.texture = tex;
+
+    // Draw gradient (base)
+    function drawGradient(shift = 0) {
+        const w = tex.getSize().width;
+        const h = tex.getSize().height;
+
+        // small vertical drift in gradient stops (subtle: ±5%)
+        const topShift = Math.max(0, Math.min(0.5 + shift * 0.1, 1));
+        const bottomShift = Math.max(0, Math.min(0.5 + shift * 0.1, 1));
+
+        const g = ctx.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0 + topShift * 0.05, colorTop);
+        g.addColorStop(1 - bottomShift * 0.05, colorBottom);
+
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, w, h);
         tex.update();
-        return tex;
     }
 
-    layer.texture = makeGradientTexture();
-    engine.onResizeObservable.add(() => {
-        layer.texture?.dispose();
-        layer.texture = makeGradientTexture();
+    // Initial gradient
+    drawGradient(0);
+
+    // === Camera-dependent drift ================================================
+    let smoothShift = 0;
+
+    scene.onBeforeRenderObservable.add(() => {
+        const cam = scene.activeCamera;
+        if (!cam) return;
+
+        // map beta (0 → π) to range (-1 → 1)
+        const targetShift = Math.cos(cam.beta); // +1 above → -1 below
+        smoothShift += (targetShift - smoothShift) * 0.05; // smooth easing
+        drawGradient(smoothShift);
     });
 
+    // === Resize handling =======================================================
+    engine.onResizeObservable.add(() => {
+        tex.scaleTo(engine.getRenderWidth(), engine.getRenderHeight());
+    });
+
+    // === Lighting ==============================================================
     new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0.4, 1, -0.3), scene);
 
     return scene;
 }
+
+
 
 function createCamera(scene) {
     const canvasEl = scene.getEngine().getRenderingCanvas();

@@ -37,4 +37,4 @@ COPY public /app/public
 # CMD ["sh", "-c", "npm run build:css && npm run build:js && tail -f /dev/null"]
 
 # Watch CSS and JS continuously
-CMD ["sh", "-c", "npm run dev"]
+CMD ["sh", "-c", "npm run build:css && npm run dev"]

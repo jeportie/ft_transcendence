@@ -25,13 +25,19 @@
   }
 }
 
-@layer components {
+@layer Landing {
   .ui-loader-overlay {
     @apply fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 text-white;
   }
 
   .microchip {
     @apply w-24 h-24 text-blue-400;
+  }
+}
+
+@layer App {
+  .ui-loader-overlay {
+    @apply fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 text-white;
   }
 }
 

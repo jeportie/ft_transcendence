@@ -13,7 +13,6 @@
 import { AbstractLayout } from "@jeportie/mini-spa";
 import landingLayoutHTML from "./landingLayout.html";
 import { tasks } from "./tasks/index.js";
-import "./layout.css";
 
 export default class LandingLayout extends AbstractLayout {
     #keepCanvas = true;

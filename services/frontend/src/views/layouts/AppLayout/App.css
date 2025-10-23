@@ -1,0 +1,119 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   layout.css                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/22 18:50:37 by jeportie          #+#    #+#             */
+/*   Updated: 2025/10/22 18:50:37 by jeportie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+@tailwind components;
+
+@layer components {
+  /* =======================================================================
+     🧩 App Layout Scoped Styles
+     Purpose: visually DISTINCT from LandingLayout (.landing-theme)
+     ======================================================================= */
+
+  /* --- Global App look --- */
+  .app-theme {
+    @apply bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 text-amber-200;
+  }
+
+  .app-theme .ui-title {
+    @apply text-3xl font-extrabold tracking-wider text-amber-300 drop-shadow-lg;
+  }
+
+  .app-theme .ui-subtitle {
+    @apply text-lg text-amber-100/80 italic;
+  }
+
+  .app-theme .ui-text-muted { @apply text-amber-200/70; }
+  .app-theme .ui-text-small { @apply text-amber-300 text-sm; }
+  .app-theme .ui-text-error { @apply text-rose-400 font-bold underline; }
+
+  /* --- Cards --- */
+  .app-theme .ui-card {
+    @apply rounded-none bg-amber-950/40 border border-amber-700 text-amber-100 p-8 shadow-inner;
+  }
+
+  .app-theme .ui-card-error {
+    @apply rounded-none bg-rose-900 border border-rose-700 text-white p-8 shadow-inner;
+  }
+
+  /* --- Buttons --- */
+  .app-theme .ui-btn {
+    @apply inline-flex items-center justify-center px-5 py-3 font-bold rounded-none
+             transition-all duration-300 border-2 border-amber-500 text-amber-100
+             hover:bg-amber-600 hover:text-black active:scale-95;
+  }
+
+  .app-theme .ui-btn-primary {
+    @apply bg-amber-500 text-black hover:bg-amber-400 border-amber-300;
+  }
+
+  .app-theme .ui-btn-secondary {
+    @apply bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700;
+  }
+
+  .app-theme .ui-btn-ghost {
+    @apply bg-transparent border-none text-amber-300 hover:text-white;
+  }
+
+  .app-theme .ui-btn-danger {
+    @apply bg-rose-700 hover:bg-rose-600 text-white border-rose-400;
+  }
+
+  /* --- Inputs --- */
+  .app-theme .ui-input {
+    @apply w-full px-4 py-3 border-2 border-amber-600 bg-transparent text-amber-100
+           rounded-none outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-amber-300/50;
+  }
+
+  /* --- Sidebar --- */
+  .app-theme .ui-sidebar {
+    @apply bg-amber-900/40 border border-amber-600 text-amber-200 rounded-none p-6;
+  }
+
+  .app-theme .ui-sidebar-link {
+    @apply px-3 py-2 block rounded-none hover:bg-amber-700 hover:text-black font-semibold;
+  }
+
+  /* --- Alerts --- */
+  .app-theme .ui-alert {
+    @apply px-4 py-3 border-2 border-amber-400 bg-amber-800 text-amber-100 font-semibold rounded-none;
+  }
+
+  .app-theme .ui-alert-success {
+    @apply bg-green-800 border-green-500 text-green-100;
+  }
+
+  .app-theme .ui-alert-error {
+    @apply bg-rose-800 border-rose-500 text-white;
+  }
+
+  /* --- Scrollbar (show it on purpose for contrast) --- */
+  .app-theme ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .app-theme ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #fbbf24, #f59e0b);
+    border-radius: 0;
+  }
+
+  .app-theme ::-webkit-scrollbar-track {
+    background: #1e1e1e;
+  }
+
+  /* --- Debug frame --- */
+  .app-theme .ui-card,
+  .app-theme .ui-btn,
+  .app-theme .ui-input {
+    outline: 1px dashed rgba(255, 255, 255, 0.3);
+  }
+}

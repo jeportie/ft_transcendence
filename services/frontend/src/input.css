@@ -10,15 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
+/* --- Global style stack --- */
 @import "./styles/base.css";
-@import "./styles/components.css";
+@import "./views/layouts/AppLayout/App.css";
+@import "./views/layouts/LandingLayout/Landing.css";
 @import "./styles/utilities.css";
 @import "./styles/loaders.css";
 
-/* transitions split */
+/* --- Transitions --- */
 @import "./styles/transitions/base.css";
 @import "./styles/transitions/fade.css";
 @import "./styles/transitions/slide.css";
 @import "./styles/transitions/zoom.css";
 @import "./styles/transitions/slide-push.css";
 @import "./styles/transitions/track.css";
+
