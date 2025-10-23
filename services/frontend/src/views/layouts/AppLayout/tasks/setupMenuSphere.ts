@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 09:07:32 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 12:13:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/23 15:38:09 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -21,11 +21,11 @@ let cleanupFn: (() => void) | null = null;
  */
 export function setupMenuSphere() {
     // Prevent duplicate runs
-    // if (cleanupFn) {
-    //     console.warn("[MenuSphere] Already running — skipping reinit");
-    //     return;
-    // }
-    cleanupFn = runMenuSphere('#menu-canvas');
+    if (cleanupFn) {
+        console.warn("[MenuSphere] Already running — skipping reinit");
+        return;
+    }
+    cleanupFn = runMenuSphere('#app-menu-canvas');
 }
 
 /**

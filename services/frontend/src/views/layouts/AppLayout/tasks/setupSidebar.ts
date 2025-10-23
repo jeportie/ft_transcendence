@@ -6,16 +6,18 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 09:09:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 09:14:48 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/23 15:36:59 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
+
+import { DOM } from "../dom.generated.js";
 
 let onToggle: ((e: Event) => void) | null = null;
 
 export function setupSidebar() {
-    const appLayout = document.querySelector("#app-layout");
-    const btn = document.querySelector("#sidebar-toggle");
-    const sidebar = document.querySelector("#app-sidebar");
+    const appLayout = DOM.appLayout;
+    const btn = DOM.appSidebarToggleBtn;
+    const sidebar = DOM.appSidebar;
 
     if (!appLayout || !btn || !sidebar) return;
 
