@@ -6,9 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 15:25:43 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 15:25:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/23 19:17:24 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
+
+import * as BABYLON from "babylonjs";
+import { DropletManager } from "./DropletManager.js";
 
 export class PhysicsEngine {
     constructor(scene, camera, root, brush, geom) {
@@ -25,12 +28,53 @@ export class PhysicsEngine {
         this.hasPointer = false;
         this.lastHit = new BABYLON.Vector3(0, geom.R + 0.08, 0);
 
+        // Hover “extra rest” shaping
+        this.hoverAnchorIdx = null;
+        this.hoverTarget = 0;            // 1 when active, 0 when inactive
+        this.hoverAlpha = 0;             // smoothed towards target
+        this.hoverProfile = new Float32Array(geom.COUNT); // per-point weights
+        this.HOVER_RADIUS = 0.22;        // narrow footprint (σ)
+        this.HOVER_HEIGHT = 0.12;        // tall lift
+        this.HOVER_SMOOTH = 8.0;         // how fast alpha eases (larger = snappier)
+
+        this.droplets = new DropletManager(scene, root);
         this.register();
     }
 
     // === INPUT / EVENTS =======================================================
     handleMouse() {
         this.hasPointer = true;
+    }
+
+    setHoverAnchor(idx, color = null) {
+        this.hoverAnchorIdx = Number.isInteger(idx) ? idx : null;
+
+        if (this.hoverAnchorIdx === null) {
+            // release all droplets
+            for (const [k] of this.droplets.droplets) this.droplets.release(k);
+        } else {
+            // ensure droplet exists & appears, forward color
+            this.droplets.ensure(this.hoverAnchorIdx, { color });
+        }
+    }
+
+    rebuildHoverProfile() {
+        const { COUNT, rest } = this.geom;
+        this.hoverProfile.fill(0);
+        if (this.hoverAnchorIdx === null) return;
+        const anchor = rest[this.hoverAnchorIdx];
+        if (!anchor) return;
+        const sigma2 = this.HOVER_RADIUS * this.HOVER_RADIUS; // Gaussian σ²
+        for (let i = 0; i < COUNT; i++) {
+            const p0 = rest[i];
+            const dx = p0.x - anchor.x;
+            const dy = p0.y - anchor.y;
+            const dz = p0.z - anchor.z;
+            const d2 = dx * dx + dy * dy + dz * dz;
+            // Gaussian falloff; clamp tiny tails to zero
+            const w = Math.exp(-d2 / (2 * sigma2));
+            this.hoverProfile[i] = w > 1e-3 ? w : 0;
+        }
     }
 
     triggerRipple() {
@@ -64,6 +108,15 @@ export class PhysicsEngine {
         this.updateCursor(engine);
         this.updateRipples(dt);
         this.updateParticles(dt);
+        // update droplets after particles so overlay reads latest centers
+        this.droplets.update(
+            dt,
+            (idx) => this.geom.pos[idx] ?? this.geom.rest[idx],
+            (idx) => {
+                const p = this.geom.pos[idx] ?? this.geom.rest[idx];
+                return p ? p.normalizeToNew() : null;
+            }
+        );
         this.updateDepthFade();
     }
 
@@ -150,12 +203,25 @@ export class PhysicsEngine {
 
         const tmp1 = new BABYLON.Vector3();
         const tmp2 = new BABYLON.Vector3();
-        const K_REST = 90, K_RAD = 55, DAMP = 3, MAX = 4;
+        const K_REST = 90, K_RAD = 55, DAMP_BASE = 3, MAX = 4;
+
+        // slightly higher damping while bulge is active (prevents wiggle)
+        const DAMP = DAMP_BASE + 2.0 * this.hoverAlpha;
 
         for (let i = 0; i < COUNT; i++) {
             const p = pos[i], v = vel[i], r0 = rest[i];
 
+            // --- “extra rest” along normal, narrow & tall, eased by hoverAlpha
+            const lift = this.HOVER_HEIGHT * this.hoverAlpha * this.hoverProfile[i];
+            // normal from origin (like your radial spring)
+            const nrm = p.length() > 1e-6 ? p.normalizeToNew() : r0.normalizeToNew();
+            const rTargetX = r0.x + nrm.x * lift;
+            const rTargetY = r0.y + nrm.y * lift;
+            const rTargetZ = r0.z + nrm.z * lift;
+
             tmp1.copyFrom(r0).subtractInPlace(p).scaleInPlace(K_REST);
+            // spring to (rest + extraLift)
+            tmp1.set(rTargetX - p.x, rTargetY - p.y, rTargetZ - p.z).scaleInPlace(K_REST);
             const rLen = p.length();
             tmp2.copyFrom(p).normalize().scaleInPlace((R - rLen) * K_RAD);
             tmp1.addInPlace(tmp2);
@@ -163,13 +229,15 @@ export class PhysicsEngine {
 
             // Brush force
             if (cursorActive) {
-                const toB = brushLocal.subtract(p);
+                const toB = brushLocal.clone().subtractInPlace(p);
                 const dist = toB.length();
                 if (dist < 0.45) {
                     const fall = (1 - dist / 0.45) ** 2;
                     tmp1.addInPlace(p.normalizeToNew().scale(80 * fall));
                 }
             }
+
+
 
             // Ripple force
             for (const r of ripples) {

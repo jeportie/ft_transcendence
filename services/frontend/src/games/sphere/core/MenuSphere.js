@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 11:54:16 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 16:12:13 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/23 19:19:36 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -34,13 +34,22 @@ export class MenuSphere {
         // --- Key map
         this.patterns = ["ico", "fibonacci", "spiral", "noise", "latlon"];
 
-        this.metadata = MetaParser.fromNavbar(".ui-sidebar-nav a", this.geom);
+        this.metadata = MetaParser.fromNavbar(this.geom);
         this.activeName = null;
 
         // react to hover events
         this.metadata.forEach(meta => {
-            meta.element.addEventListener("mouseenter", () => this.setActive(meta.name));
-            meta.element.addEventListener("mouseleave", () => this.setActive(null));
+            meta.element.addEventListener("mouseenter", () => {
+                this.activeName = meta.name;
+                // tell physics which cluster to nudge
+                this.physics.setHoverAnchor(meta.idx, meta.color);
+                this.updateMetadataVisuals();
+            });
+            meta.element.addEventListener("mouseleave", () => {
+                this.activeName = null;
+                this.physics.setHoverAnchor(null);
+                this.updateMetadataVisuals();
+            });
         });
     }
 
@@ -62,6 +71,10 @@ export class MenuSphere {
     setActive(name) {
         this.activeName = name;
         this.updateMetadataVisuals();
+    }
+
+    getDropletWorld(idx) {
+        return this.physics?.droplets?.getWorldCenter(idx) ?? null;
     }
 
     updateMetadataVisuals() {

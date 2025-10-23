@@ -10,32 +10,48 @@
 //                                                                            //
 // ************************************************************************** //
 
+import * as BABYLON from "babylonjs";
+
 export class MetaParser {
-    static fromNavbar(selector = ".ui-sidebar a, .ui-sidebar button", geom) {
-        const elements = document.querySelectorAll(selector);
+    static fromNavbar(geom, {
+        linksSelector = ".ui-sidebar-nav a",
+        logoutSelector = "#app-logout-btn",
+    } = {}) {
+        const links = [...document.querySelectorAll(linksSelector)];
+        const logoutBtn = document.querySelector(logoutSelector);
         const meta = [];
         if (!geom?.COUNT) return meta;
 
-        const step = Math.floor(geom.COUNT / (elements.length + 1));
+        // distribute along front hemisphere
+        const step = Math.floor(geom.COUNT / (links.length + 1));
         let i = step;
 
-        elements.forEach((el, n) => {
+        links.forEach((el, n) => {
             const color = ["#4ef0a9", "#e64f4f", "#f0e64f", "#66aaff"][n % 4];
-            const name = el.textContent.trim() || el.id || `Link${n}`;
-            meta.push({ name, element: el, idx: i, color });
+            meta.push({
+                name: el.textContent.trim(),
+                element: el,
+                idx: i,        // anchor point index into geom.pos/rest
+                href: el.getAttribute("href") || "",
+                color,
+            });
             i += step;
         });
 
-        return meta;
-    }
-
-    static getActiveName(meta) {
-        const currentPath = window.location.pathname;
-        for (const m of meta) {
-            if (m.element.getAttribute("href") === currentPath)
-                return m.name;
+        // Add logout as a virtual nav item (anchor near bottom/front)
+        if (logoutBtn) {
+            const color = "#ffaa66";
+            const idx = Math.min(geom.COUNT - 1, i + Math.floor(step * 0.6));
+            meta.push({
+                name: "Logout",
+                element: logoutBtn,
+                idx,
+                href: "/logout",
+                color,
+                isLogout: true,
+            });
         }
-        return meta.find(m => /logout/i.test(m.name)) ? null : null;
+        return meta;
     }
 }
 
