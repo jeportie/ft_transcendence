@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 11:55:55 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 12:38:25 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/23 16:03:54 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -36,42 +36,38 @@ export class OverlayBridge {
     render(sphere) {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.canvas2D.width, this.canvas2D.height);
-        const geom = sphere.geom;
-        if (!geom || !geom.pos.length) return;
+        const { geom, metadata, activeName, scene, root, camera } = sphere;
+        if (!metadata || !geom || !activeName) return;
 
-        const i = Math.floor(geom.COUNT / 2);
-        const p = geom.pos[i];
-        const scene = sphere.scene;
-        const engine = scene.getEngine();
-        const camera = sphere.camera;
-        const world = BABYLON.Vector3.TransformCoordinates(p, sphere.root.getWorldMatrix());
+        const meta = metadata.find(m => m.name === activeName);
+        if (!meta) return;
+
+        const p = geom.pos[meta.idx];
+        const world = BABYLON.Vector3.TransformCoordinates(p, root.getWorldMatrix());
         const proj = BABYLON.Vector3.Project(
             world,
             BABYLON.Matrix.Identity(),
             scene.getTransformMatrix(),
-            camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight())
+            camera.viewport.toGlobal(scene.getEngine().getRenderWidth(), scene.getEngine().getRenderHeight())
         );
 
-        const margin = 280; // fixed vertical border area
         const x1 = proj.x;
         const y1 = proj.y;
+        const margin = 250;
         const x2 = proj.x < this.canvas2D.width / 2 ? margin : this.canvas2D.width - margin;
         const y2 = y1;
 
-        ctx.strokeStyle = "rgba(0,255,255,0.6)";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = meta.color;
+        ctx.lineWidth = 0.5;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
 
-        ctx.fillStyle = "white";
         ctx.font = "13px monospace";
-        const label = "Particle";
-        const offsetX = proj.x < this.canvas2D.width / 2
-            ? -ctx.measureText(label).width - 10
-            : 10;
-        ctx.fillText(label, x2 + offsetX, y2 + 4);
+        ctx.fillStyle = meta.color;
+        const offset = proj.x < this.canvas2D.width / 2 ? -ctx.measureText(meta.name).width - 10 : 10;
+        ctx.fillText(meta.name, x2 + offset, y2 + 4);
     }
 
     dispose() {
