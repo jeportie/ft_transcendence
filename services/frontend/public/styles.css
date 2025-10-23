@@ -14,7 +14,7 @@
 
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/08/26 11:34:20 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/23 10:21:02 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -630,6 +630,30 @@ body {
 
 /*                                                        :::      ::::::::   */
 
+/*   utilities.css                                      :+:      :+:    :+:   */
+
+/*                                                    +:+ +:+         +:+     */
+
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+
+/*                                                +#+#+#+#+#+   +#+           */
+
+/*   Created: 2025/08/26 11:15:28 by jeportie          #+#    #+#             */
+
+/*   Updated: 2025/08/26 11:15:37 by jeportie         ###   ########.fr       */
+
+/*                                                                            */
+
+/* ************************************************************************** */
+
+@tailwind utilities;
+
+/* ************************************************************************** */
+
+/*                                                                            */
+
+/*                                                        :::      ::::::::   */
+
 /*   layout.css                                         :+:      :+:    :+:   */
 
 /*                                                    +:+ +:+         +:+     */
@@ -781,6 +805,26 @@ body {
   --tw-text-opacity: 1;
   color: rgb(251 113 133 / var(--tw-text-opacity, 1));
   text-decoration-line: underline;
+}
+
+/* --- Layouts --- */
+
+.app-theme .ui-hero-canvas {
+  position: absolute;
+  inset: 0px;
+  z-index: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.app-theme .ui-overlay-canvas {
+  pointer-events: none;
+  position: absolute;
+  inset: 0px;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
 }
 
 /* --- Cards --- */
@@ -1893,30 +1937,6 @@ body {
   display: none;
   /* hides for webkit browsers */
 }
-
-/* ************************************************************************** */
-
-/*                                                                            */
-
-/*                                                        :::      ::::::::   */
-
-/*   utilities.css                                      :+:      :+:    :+:   */
-
-/*                                                    +:+ +:+         +:+     */
-
-/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
-
-/*                                                +#+#+#+#+#+   +#+           */
-
-/*   Created: 2025/08/26 11:15:28 by jeportie          #+#    #+#             */
-
-/*   Updated: 2025/08/26 11:15:37 by jeportie         ###   ########.fr       */
-
-/*                                                                            */
-
-/* ************************************************************************** */
-
-@tailwind utilities;
 
 /* ************************************************************************** */
 

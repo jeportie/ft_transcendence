@@ -35,6 +35,14 @@
   .app-theme .ui-text-small { @apply text-amber-300 text-sm; }
   .app-theme .ui-text-error { @apply text-rose-400 font-bold underline; }
 
+
+  /* --- Layouts --- */
+  .app-theme .ui-hero-canvas   { @apply absolute inset-0 w-full h-full block z-0; }
+  
+  .app-theme .ui-overlay-canvas { 
+    @apply absolute inset-0 w-full h-full pointer-events-none z-10;
+  }
+
   /* --- Cards --- */
   .app-theme .ui-card {
     @apply rounded-none bg-amber-950/40 border border-amber-700 text-amber-100 p-8 shadow-inner;

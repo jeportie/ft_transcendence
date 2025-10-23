@@ -6,16 +6,16 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
-/*   Updated: 2025/08/26 11:34:20 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/23 10:21:02 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 /* --- Global style stack --- */
 @import "./styles/base.css";
+@import "./styles/utilities.css";
 @import "./views/layouts/AppLayout/App.css";
 @import "./views/layouts/LandingLayout/Landing.css";
-@import "./styles/utilities.css";
 @import "./styles/loaders.css";
 
 /* --- Transitions --- */
