@@ -43,4 +43,3 @@ export default class LandingLayout extends AbstractLayout {
         await super.destroy();
     }
 }
-

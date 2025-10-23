@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/10 09:34:53 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/10 15:22:40 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/23 09:26:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 export const PARAM_SCHEMA = {
     /* ---------- System / Layout ---------- */
-    N: { type: "number", default: 200, min: 0, max: 1200, description: "Total particles rendered." },
+    N: { type: "number", default: 1000, min: 0, max: 1200, description: "Total particles rendered." },
     seed: { type: "number", default: 1337, description: "Deterministic random seed for layout & init velocities." },
     mapName: { type: "string", default: "", description: "Optional map file name under /maps (without .json). Empty = random scatter." },
 

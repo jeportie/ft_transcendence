@@ -11,78 +11,36 @@
 // ************************************************************************** //
 
 import { AbstractLayout } from "@jeportie/mini-spa";
-import { API } from "../spa/api.js";
-import { auth } from "../spa/auth.js";
-import appLayoutHTML from "../html/appLayout.html";
-import { runMenuSphere } from "../games/sphere/runMenuSphere.js";
+import appLayoutHTML from "./appLayout.html";
+import { tasks } from "./tasks/index.ts";
 
 
 export default class AppLayout extends AbstractLayout {
-    #onToggle?: (e: Event) => void;
-    #open = true;
-    #cleanup?: () => void;
-    #keepCanvas = true; // 🆕 just like LandingLayout
+    #keepCanvas = true;
 
     async getHTML() {
         return appLayoutHTML;
     }
 
-    mount() {
-        console.log("[AppLayout] mount()");
-        this.#cleanup = runMenuSphere("#menu-canvas");
+    async mount() {
         this.#keepCanvas = true;
+        await super.mount();
 
-        const appLayout = document.querySelector("#app-layout");
-        const btn = document.querySelector("#sidebar-toggle");
-        const sidebar = document.querySelector("#app-sidebar");
-        const logoutBtn = document.querySelector("#logout-btn");
-        if (!appLayout || !btn || !sidebar || !logoutBtn) return;
-
-        const apply = (state: "open" | "closed") => {
-            appLayout.setAttribute("data-state", state);
-            const expanded = state === "open";
-            btn.setAttribute("aria-expanded", String(expanded));
-            btn.textContent = expanded ? "Hide sidebar" : "Show sidebar";
-            this.#open = expanded;
-            localStorage.setItem("sidebar", state);
-        };
-
-        this.#onToggle = (e: Event) => {
-            e.preventDefault();
-            apply(this.#open ? "closed" : "open");
-        };
-
-        btn.addEventListener("click", this.#onToggle);
-
-        logoutBtn.addEventListener("click", async () => {
-            API.Post("/auth/logout");
-            auth.clear();
-            this.#keepCanvas = false; // 🆕 destroy Babylon on exit
-            window.navigateTo("/login");
-        });
-
-        const saved = localStorage.getItem("sidebar");
-        apply(saved === "closed" ? "closed" : "open");
+        // Run lifecycle tasks manually
+        for (const fn of tasks.init || []) await fn({ layout: this });
+        for (const fn of tasks.ready || []) await fn({ layout: this });
     }
 
-    /** Allow child views to force a full reload on layout exit */
+    /** Allow child views to request full teardown next exit */
     reloadOnExit() {
         this.#keepCanvas = false;
     }
 
-    destroy() {
-        console.log("[AppLayout] destroy()", {
-            keepCanvas: this.#keepCanvas,
-            path: window.location.pathname
-        });
-        const nextIsLanding = window.location.pathname === "/" || window.location.pathname.startsWith("/login");
-
-        if (nextIsLanding || !this.#keepCanvas) this.#cleanup?.();
-
-        const btn = document.querySelector("#sidebar-toggle");
-        if (btn && this.#onToggle) btn.removeEventListener("click", this.#onToggle);
+    async destroy() {
+        const ctx = { keepCanvas: this.#keepCanvas, layout: this };
+        if (tasks.teardown) {
+            for (const fn of tasks.teardown) await fn(ctx);
+        }
+        await super.destroy();
     }
-
 }
-
-

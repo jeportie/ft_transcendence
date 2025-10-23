@@ -1,0 +1,36 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   setupLogout.ts                                     :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/10/23 09:11:06 by jeportie          #+#    #+#             //
+//   Updated: 2025/10/23 09:14:05 by jeportie         ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
+import { API } from "../../../../spa/api.js";
+import { auth } from "../../../../spa/auth.js";
+
+let onLogout: ((e: Event) => void) | null = null;
+
+export function setupLogout() {
+    const logoutBtn = document.querySelector("#logout-btn");
+    if (!logoutBtn) return;
+
+    onLogout = async (e: Event) => {
+        e.preventDefault();
+        await API.Post("/auth/logout");
+        auth.clear();
+        window.navigateTo("/login");
+    };
+
+    logoutBtn.addEventListener("click", onLogout);
+}
+
+export function teardownLogout() {
+    const logoutBtn = document.querySelector("#logout-btn");
+    if (logoutBtn && onLogout) logoutBtn.removeEventListener("click", onLogout);
+    onLogout = null;
+}
