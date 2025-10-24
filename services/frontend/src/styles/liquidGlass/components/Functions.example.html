@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Function Plot Demo</title>
+    <link rel="stylesheet" href="./FunctionPlot.css" />
+</head>
+
+<body style="display:flex; gap:2rem; padding:2rem; background:#f9fafb;">
+    <div id="plots"></div>
+
+    <script type="module">
+        import {
+            createFunctionPlot,
+        } from "./FunctionPlot.js";
+        import {
+            CONCAVE,
+            CONVEX,
+            CONVEX_CIRCLE,
+            LIP,
+        } from "./surfaceEquations.js";
+
+        const plots = document.getElementById("plots");
+        plots.append(
+            createFunctionPlot(CONVEX.fn),
+            createFunctionPlot(CONCAVE.fn),
+            createFunctionPlot(CONVEX_CIRCLE.fn),
+            createFunctionPlot(LIP.fn)
+        );
+    </script>
+</body>
+
+</html>

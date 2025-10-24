@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 11:54:16 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 19:19:36 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/24 17:51:49 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -35,6 +35,10 @@ export class MenuSphere {
         this.patterns = ["ico", "fibonacci", "spiral", "noise", "latlon"];
 
         this.metadata = MetaParser.fromNavbar(this.geom);
+        // --- inside constructor after this.metadata = MetaParser.fromNavbar(this.geom);
+        this.metadata.forEach(meta => {
+            this.physics.droplets.ensure(meta.idx, { color: meta.color });
+        });
         this.activeName = null;
 
         // react to hover events
@@ -47,11 +51,39 @@ export class MenuSphere {
             });
             meta.element.addEventListener("mouseleave", () => {
                 this.activeName = null;
-                this.physics.setHoverAnchor(null);
+                // this.physics.setHoverAnchor(null);
                 this.updateMetadataVisuals();
             });
         });
+
+        // === Sidebar visibility hook ===
+        const sidebarToggle = document.getElementById("app-sidebar-toggle-btn");
+        const appLayout = document.getElementById("app-layout");
+        if (sidebarToggle && appLayout) {
+            const observer = new MutationObserver(() => {
+                const state = appLayout.getAttribute("data-state");
+                const isOpen = state === "open";
+                this.toggleDroplets(isOpen);
+            });
+            observer.observe(appLayout, { attributes: true, attributeFilter: ["data-state"] });
+        }
     }
+
+    toggleDroplets(show) {
+        const { droplets } = this.physics;
+
+        if (show) {
+            // Re-ensure all droplets exist
+            this.metadata.forEach(meta => {
+                this.physics.droplets.ensure(meta.idx, { color: meta.color });
+            });
+        }
+
+        for (const [idx, d] of droplets.droplets) {
+            d.target = show ? 1 : 0; // fade in/out smoothly
+        }
+    }
+
 
     handleKey(key) {
         const idx = parseInt(key) - 1;

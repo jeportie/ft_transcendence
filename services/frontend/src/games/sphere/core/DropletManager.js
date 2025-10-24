@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 19:14:32 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 19:51:44 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/24 19:23:31 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -47,82 +47,95 @@ export class DropletManager {
 
 
     update(dt, getAnchorLocal, getAnchorNormal) {
+        const { scene } = this;
+        const camera = scene.activeCamera;
+        if (!camera) return;
+
+        // === Shared depth fade (match PhysicsEngine.updateDepthFade) ===
+        const rootWorld = this.root.getWorldMatrix();
+        const invRoot = rootWorld.clone().invert();
+        const DEPTH_OFFSET = 0.3;
+        const toCamDir = camera.position.subtract(camera.target).normalize();
+        const geomR = 1.5;
+        const depthOriginWorld = camera.target.add(toCamDir.scale(geomR + DEPTH_OFFSET));
+        const depthOrigin = BABYLON.Vector3.TransformCoordinates(depthOriginWorld, invRoot);
+
+        const minDist = 0.0, maxDist = 9.0;
+        const nearScale = 1.0, farScale = 0.9;
+        const nearColor = 1.0, farColor = 0.2;
+
+        // === Update all droplets ===
         for (const [idx, d] of this.droplets) {
-            // ease alpha to target
+            // smooth alpha toward target
             const k = 1 - Math.exp(-d.smooth * dt);
             d.alpha += (d.target - d.alpha) * k;
 
-            // kill when fully hidden
+            // delete when invisible
             if (d.alpha < 0.01 && d.target === 0) {
                 d.mesh.dispose();
                 this.droplets.delete(idx);
                 continue;
             }
 
-            // anchor basis
+            // anchor
             const a = getAnchorLocal(idx);
             if (!a) continue;
             const n = getAnchorNormal(idx) ?? a.normalizeToNew();
 
-            // make a stable tangent basis (u, v) around n
-            const any = Math.abs(n.y) < 0.9 ? new BABYLON.Vector3(0, 1, 0) : new BABYLON.Vector3(1, 0, 0);
-            const u = BABYLON.Vector3.Cross(n, any).normalize();
-            const v = BABYLON.Vector3.Cross(n, u).normalize();
+            // === Depth fade (apply to droplet as a whole) ===
+            const dx = a.x - depthOrigin.x;
+            const dy = a.y - depthOrigin.y;
+            const dz = a.z - depthOrigin.z;
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            const t = Math.min(Math.max((dist - minDist) / (maxDist - minDist), 0), 1);
+            const fade = Math.pow(1.0 - t, 2.8);
+            const colorScale = farColor + (nearColor - farColor) * fade;
+            const sizeScale = farScale + (nearScale - farScale) * fade;
 
-            // animated params
+            // === Animate droplet ===
             d.t += dt;
-            const grow = d.alpha;                      // 0..1
-            // optional: organic breathing effect
+            const grow = d.alpha;
             const wobble = 1 + 0.05 * Math.sin(d.t * 6 + idx);
-            const R = d.maxRadius * grow * wobble;
-            // const R = d.maxRadius * grow;              // droplet radius
-            const off = d.maxOffset * Math.pow(grow, 0.8); // outward offset along normal
+            const R = d.maxRadius * grow * wobble * sizeScale;
+            d.centerLocal.copyFrom(a);
 
-            // follow the anchor
-            d.centerLocal.copyFrom(a).addInPlace(n.scale(off));
-
-
-
-
-            // write particle positions for a sphere around center
+            // dynamic count fade
+            const visibleCount = Math.max(3, Math.floor(d.count * (0.4 + 0.6 * fade)));
             const pos = d.positions;
-            const count = d.count;
-            // --- rotation on itself ---
+
             d.spin += d.spinSpeed * dt;
             const rotMat = BABYLON.Matrix.RotationAxis(d.rotationAxis, d.spin);
 
-            // --- write particle positions for the rotated seed cloud ---
-            for (let i = 0; i < count; i++) {
-                const base = i * 3;
+            const tmp = new BABYLON.Vector3();
+            let base = 0;
+            for (let i = 0; i < visibleCount; i++) {
                 const s = d.seeds[i];
                 const rotated = BABYLON.Vector3.TransformCoordinates(s, rotMat);
-                pos[base] = d.centerLocal.x + rotated.x * R;
-                pos[base + 1] = d.centerLocal.y + rotated.y * R;
-                pos[base + 2] = d.centerLocal.z + rotated.z * R;
+                tmp.copyFrom(d.centerLocal).addInPlace(rotated.scale(R));
+
+                pos[base++] = tmp.x;
+                pos[base++] = tmp.y;
+                pos[base++] = tmp.z;
             }
+
+            // 🧊 make sure remaining positions don’t keep old data
+            for (let i = visibleCount * 3; i < d.count * 3; i++) pos[i] = NaN;
 
             d.mesh.updateVerticesData(BABYLON.VertexBuffer.PositionKind, pos, false);
 
-            // 🎨 smooth emissive fade from white to the droplet's color
-            if (d.baseColor) {
-                const blendedColor = BABYLON.Color3.Lerp(
-                    new BABYLON.Color3(1, 1, 1),
-                    d.baseColor,
-                    d.alpha
-                );
-                d.mat.emissiveColor = blendedColor;
-            }
-
-            // subtle pulse in point size
-            const pulse = 1 + 0.1 * Math.sin(d.t * 5);
-            d.mat.pointSize = d.pointSize * (0.7 + 0.3 * grow) * pulse;
-            d.mat.alpha = 0.8 * grow;
+            // === Material & appearance ===
+            base = d.baseColor || new BABYLON.Color3(1, 1, 1);
+            const dark = new BABYLON.Color3(0.1, 0.1, 0.1);
+            const faded = BABYLON.Color3.Lerp(dark, base, colorScale);
+            d.mat.emissiveColor = faded;
+            d.mat.pointSize = d.pointSize * (0.7 + 0.3 * grow) * sizeScale;
+            d.mat.alpha = 0.65 * grow * fade;
         }
     }
 
     _createDroplet(idx, {
-        count = 40,
-        maxRadius = 0.010,
+        count = 400,
+        maxRadius = 0.018,
         maxOffset = 0.1,
         pointSize = 1.5,
         orbitRadius = 0.00,

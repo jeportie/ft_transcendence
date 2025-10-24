@@ -1,0 +1,42 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- SurfaceEquationSelector.example.html               :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/10/24 12:16:43 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/24 12:21:29 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Surface Selector Demo</title>
+    <link rel="stylesheet" href="./buttons.css" />
+    <link rel="stylesheet" href="./surfaceEquationSelector.css" />
+</head>
+
+<body
+    style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#0f172a;color:white;">
+    <div id="ui"></div>
+
+    <script type="module">
+        import {MotionValue} from "./motion.js";
+        import {createSurfaceEquationSelector} from "./surfaceEquationSelector.js";
+
+        const surface = new MotionValue("convex_circle");
+
+        const selector = createSurfaceEquationSelector({
+            surface,
+            onSurfaceChange: (s) => console.log("Surface changed →", s),
+        });
+
+        document.getElementById("ui").appendChild(selector);
+    </script>
+</body>
+
+</html>

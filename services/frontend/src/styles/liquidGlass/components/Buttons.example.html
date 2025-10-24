@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Vanilla Motion Buttons</title>
+    <link rel="stylesheet" href="./buttons.css" />
+</head>
+
+<body style="display:flex; gap:1.5rem; align-items:center; justify-content:center; height:100vh; background:#0f172a;">
+    <div id="controls"></div>
+
+    <script type="module">
+        import {
+            ConvexCircleButton,
+            ConvexSquircleButton,
+            ConcaveButton,
+            LipButton,
+            createReplayButton,
+        } from "./buttons.js";
+
+        const controls = document.getElementById("controls");
+
+        controls.append(
+            createReplayButton(() => {
+                console.log("Replay animation start");
+                // your animation or generator logic here
+            }),
+            ConvexCircleButton(),
+            ConvexSquircleButton(),
+            ConcaveButton(),
+            LipButton()
+        );
+    </script>
+</body>
+
+</html>

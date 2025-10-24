@@ -6,33 +6,35 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/09/23 13:20:06 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/23 23:40:43 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/24 18:12:52 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<div id="app-layout" class="ui-app-layout app-theme" data-state="open">
-    <canvas id="app-menu-canvas" class="ui-hero-canvas"></canvas>
-    <canvas id="app-overlay-canvas" class="ui-overlay-canvas"></canvas>
+<div id="app-layout" class="app-layout app-theme" data-state="closed">
+    <canvas id="app-menu-canvas" class="app-hero-canvas"></canvas>
+    <canvas id="app-overlay-canvas" class="app-overlay-canvas"></canvas>
 
-    <div class="ui-app-wrapper">
+    <div class="app-wrapper">
         <!-- ✨ Floating glass sidebar -->
-        <aside id="app-sidebar" class="ui-sidebar">
-            <nav class="ui-sidebar-nav">
-                <h2 class="ui-title mb-6"> Menu</h2>
-                <a href="/dashboard" data-link class="ui-sidebar-link ui-text">Dashboard</a>
-                <a href="/settings" data-link class="ui-sidebar-link ui-text">Settings</a>
-                <a href="/pong" data-link class="ui-sidebar-link ui-text">Pong</a>
-                <button id="app-logout-btn" class="ui-sidebar-link ui-text">Logout</button>
+        <aside id="app-sidebar" class="app-sidebar">
+            <nav class="app-sidebar-nav">
+                <h2 class="app-title mb-6">Menu</h2>
+                <a href="/dashboard" data-link class="app-sidebar-link app-text">Dashboard</a>
+                <a href="/settings" data-link class="app-sidebar-link app-text">Settings</a>
+                <a href="/pong" data-link class="app-sidebar-link app-text">Pong</a>
+                <button id="app-logout-btn" class="app-sidebar-link app-text">Logout</button>
             </nav>
         </aside>
 
-        <main class="ui-main">
-            <div data-router-outlet class="ui-main-slot"><!-- router-slot --></div>
+        <main class="app-main">
+            <div data-router-outlet class="app-main-slot">
+                <!-- router-slot -->
+            </div>
         </main>
     </div>
 
-    <footer class="ui-footer">
-        <button id="app-sidebar-toggle-btn" class="ui-footer-btn" aria-controls="app-sidebar" aria-expanded="true">
+    <footer class="app-footer">
+        <button id="app-sidebar-toggle-btn" class="app-footer-btn" aria-controls="app-sidebar" aria-expanded="true">
             Hide sidebar
         </button>
     </footer>

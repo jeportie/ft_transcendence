@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:11:48 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 22:34:13 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/24 13:50:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -31,7 +31,7 @@ export default class AppLayout extends AbstractLayout {
         link2.rel = "stylesheet";
         link2.href =
             "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Michroma&display=swap";
-        document.head.appendChild(link);
+        document.head.appendChild(link2);
         this.#keepCanvas = true;
         await super.mount();
 

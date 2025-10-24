@@ -1,105 +1,196 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   App.css                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/24 16:27:48 by jeportie          #+#    #+#             */
+/*   Updated: 2025/10/24 18:19:06 by jeportie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 @tailwind components;
 
 @layer components {
+  /* ==========================================================================
+     🌌 THEME WRAPPER
+     ========================================================================== */
   .app-theme {
     @apply relative min-h-screen text-white;
     background: linear-gradient(180deg, #0b1020 0%, #0e152b 50%, #291313 100%);
-    color: rgba(255,255,255,0.84);
+    color: rgba(255, 255, 255, 0.84);
     font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
-  /* Canvas layers */
-  .app-theme .ui-hero-canvas   { @apply absolute inset-0 w-full h-full z-0; }
-  .app-theme .ui-overlay-canvas{ @apply absolute inset-0 w-full h-full z-10 pointer-events-none; }
+  /* ==========================================================================
+     🎥 CANVAS LAYERS
+     ========================================================================== */
+  .app-theme .app-hero-canvas {
+    @apply absolute inset-0 w-full h-full z-0;
+  }
 
-  /* Typography */
-  .app-theme .ui-title {
+
+.app-theme .app-overlay-canvas {
+  @apply absolute inset-0 w-full h-full z-20;
+  pointer-events: none; /* make sure it stays off */
+}
+
+
+  /* ==========================================================================
+     ✍️ TYPOGRAPHY
+     ========================================================================== */
+  .app-theme .app-title {
     font-family: 'Michroma', sans-serif;
     font-weight: 100;
     font-size: 2rem;
     letter-spacing: -0.01em;
     line-height: 1.2;
   }
-  .app-theme .ui-text {
+
+  .app-theme .app-text {
     font-family: 'Michroma', sans-serif;
     font-weight: 100;
     font-size: 1rem;
     line-height: 1.55;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
   }
 
-/* ==========================================================================
-   🧱 FLOATING SIDEBAR (centered, indented title, glass chip links)
-   ========================================================================== */
+  /* ==========================================================================
+     🧱 FLOATING SIDEBAR
+     ========================================================================== */
+  .app-theme .app-wrapper {
+    @apply relative;
+    z-index: 1; /* above Babylon canvas but below overlay */
+    pointer-events: auto; /* let Babylon interactions pass through */
+  }
 
-.app-theme .ui-sidebar {
+
+
+.app-theme .app-sidebar {
   @apply flex flex-col items-stretch w-64 rounded-2xl transition-all duration-500;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 2rem;
   transform: translateY(-50%);
   padding: 2rem 1.5rem;
+  z-index: 50; /* lifted */
+  pointer-events: auto;
+  isolation: isolate; /* 🔥 critical for overlay click issue */
 
   background: rgba(255,255,255,0.015);
   border: 1px solid rgba(255,255,255,0.06);
   backdrop-filter: blur(26px) saturate(180%);
-  -webkit-backdrop-filter: blur(26px) saturate(180%);
   box-shadow:
     inset 0 0 25px rgba(255,255,255,0.04),
     0 4px 40px rgba(0,0,0,0.3);
 }
 
-/* Stack the content */
-.app-theme .ui-sidebar-nav {
+.app-theme .app-sidebar-nav {
   @apply flex flex-col gap-3;
 }
 
-/* Title: subtle right indent to align visually with card padding */
-.app-theme .ui-sidebar .ui-title {
-  font-family: 'Michroma', sans-serif;
-  font-weight: 100;
-  font-size: 1.25rem;
-  letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.7);
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-  margin-left: 0.75rem; /* 👈 creates perfect optical alignment with inner link padding */
+.app-theme .app-sidebar-link {
+  @apply block rounded-md px-4 py-2 text-left transition;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(180%);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.03),
+    0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* Each link looks like a tiny floating glass card */
-.app-theme .ui-sidebar-link {
-  @apply block rounded-md px-4 py-2 text-left transition;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.82);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  box-shadow:
-    inset 0 0 10px rgba(255,255,255,0.03),
-    0 2px 6px rgba(0,0,0,0.25);
-}
-.app-theme .ui-sidebar-link:hover {
-  background: rgba(255,255,255,0.05);
-  border-color: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.95);
+.app-theme .app-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
   transform: translateX(2px);
 }
 
-/* Logout link spacing */
-.app-theme #app-logout-btn {
-  @apply mt-3;
+.app-theme .app-title {
+  margin-bottom: 1rem;
 }
 
-/* Subtle fade animation when sidebar toggled */
-.app-theme[data-state='closed'] .ui-sidebar {
+  /* Enable interactivity only on links/buttons */
+  .app-theme .app-sidebar-link,
+  .app-theme #app-logout-btn {
+    pointer-events: auto;
+  }
+
+  .app-theme .app-sidebar-link {
+    @apply block rounded-md px-4 py-2 text-left transition;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    box-shadow:
+      inset 0 0 10px rgba(255, 255, 255, 0.03),
+      0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  .app-theme .app-sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.95);
+    transform: translateX(2px);
+  }
+
+
+/* Move footer toggle to the bottom-left corner */
+.app-theme .app-footer {
+  @apply fixed left-6 bottom-6;
+  z-index: 60;
+  pointer-events: auto;
+}
+
+
+.app-theme .app-footer-btn {
+  @apply px-4 py-2 rounded-lg text-sm font-semibold;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(22px) saturate(160%);
+  transition: all 0.2s ease;
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,0.03),
+    0 2px 12px rgba(0,0,0,0.25);
+}
+
+.app-theme .app-footer-btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateX(2px);
+}
+
+
+/* ==========================================================================
+   🎬 SIDEBAR OPEN/CLOSE STATES
+   ========================================================================== */
+.app-layout[data-state="closed"] .app-sidebar {
   opacity: 0;
   transform: translate(-120%, -50%);
   pointer-events: none;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
-.app-theme[data-state='open'] .ui-sidebar {
+
+.app-layout[data-state="open"] .app-sidebar {
   opacity: 1;
   transform: translate(0, -50%);
+  pointer-events: auto;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
+  /* ==========================================================================
+     ⚙️ FIXED FULL HEIGHT CONTEXT
+     ========================================================================== */
+  html,
+  body,
+  #app-layout,
+  .app-layout,
+  .app-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+}

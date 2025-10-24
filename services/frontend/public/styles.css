@@ -14,7 +14,7 @@
 
 /*   Created: 2025/07/23 14:56:04 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/10/23 10:21:02 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/24 16:14:15 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -648,8 +648,6 @@ body {
 
 @tailwind utilities;
 
-@tailwind components;
-
 /* ************************************************************************** */
 
 /*                                                                            */
@@ -667,6 +665,30 @@ body {
 /*   Created: 2025/08/26 11:15:11 by jeportie          #+#    #+#             */
 
 /*   Updated: 2025/10/15 15:55:27 by jeportie         ###   ########.fr       */
+
+/*                                                                            */
+
+/* ************************************************************************** */
+
+@tailwind components;
+
+/* ************************************************************************** */
+
+/*                                                                            */
+
+/*                                                        :::      ::::::::   */
+
+/*   App.css                                            :+:      :+:    :+:   */
+
+/*                                                    +:+ +:+         +:+     */
+
+/*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
+
+/*                                                +#+#+#+#+#+   +#+           */
+
+/*   Created: 2025/10/24 16:27:48 by jeportie          #+#    #+#             */
+
+/*   Updated: 2025/10/24 18:19:06 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -728,162 +750,6 @@ body {
   .container {
     max-width: 1536px;
   }
-}
-
-.app-theme {
-  position: relative;
-  min-height: 100vh;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-  background: linear-gradient(180deg, #0b1020 0%, #0e152b 50%, #291313 100%);
-  color: rgba(255,255,255,0.84);
-  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-}
-
-/* Canvas layers */
-
-.app-theme .ui-hero-canvas {
-  position: absolute;
-  inset: 0px;
-  z-index: 0;
-  height: 100%;
-  width: 100%;
-}
-
-.app-theme .ui-overlay-canvas {
-  pointer-events: none;
-  position: absolute;
-  inset: 0px;
-  z-index: 10;
-  height: 100%;
-  width: 100%;
-}
-
-/* Typography */
-
-.app-theme .ui-title {
-  font-family: 'Michroma', sans-serif;
-  font-weight: 100;
-  font-size: 2rem;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-}
-
-.app-theme .ui-text {
-  font-family: 'Michroma', sans-serif;
-  font-weight: 100;
-  font-size: 1rem;
-  line-height: 1.55;
-  color: rgba(255,255,255,0.8);
-}
-
-/* ==========================================================================
-     🧱 FLOATING SIDEBAR (centered glass panel)
-     ========================================================================== */
-
-.app-theme .ui-app-wrapper {
-  position: relative;
-  display: flex;
-  min-height: 100vh;
-}
-
-.app-theme .ui-sidebar {
-  display: flex;
-  width: 16rem;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.5rem;
-  border-radius: 1rem;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 500ms;
-  position: absolute;
-  top: 50%;
-  left: 2rem;
-  transform: translateY(-50%);
-  padding: 2rem 1.5rem;
-  background: rgba(255,255,255,0.015);
-  border: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(26px) saturate(180%);
-  -webkit-backdrop-filter: blur(26px) saturate(180%);
-  box-shadow:
-      inset 0 0 25px rgba(255,255,255,0.04),
-      0 4px 40px rgba(0,0,0,0.3);
-}
-
-.app-theme .ui-sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.app-theme .ui-sidebar-link {
-  border-radius: 0.375rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  text-align: left;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-  color: rgba(255,255,255,0.82);
-}
-
-.app-theme .ui-sidebar-link:hover {
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.95);
-}
-
-/* open / closed animation */
-
-.app-theme[data-state='closed'] .ui-sidebar {
-  opacity: 0;
-  transform: translate(-120%, -50%);
-  pointer-events: none;
-}
-
-.app-theme[data-state='open'] .ui-sidebar {
-  opacity: 1;
-  transform: translate(0, -50%);
-}
-
-/* Main area shifted right */
-
-.app-theme .ui-main {
-  flex: 1 1 0%;
-  overflow-y: auto;
-  min-height: 100vh;
-  background: transparent;
-  padding: 3rem;
-  margin-left: 18rem;
-  /* offset for sidebar */
-  transition: margin-left 0.4s ease;
-}
-
-.app-theme[data-state='closed'] .ui-main {
-  margin-left: 0;
-}
-
-/* Footer */
-
-.app-theme .ui-footer {
-  width: 100%;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  text-align: center;
-  background: rgba(255,255,255,0.015);
-  border-top: 1px solid rgba(255,255,255,0.04);
-  backdrop-filter: blur(10px);
-}
-
-html, body, #app-layout {
-  height: 100vh;
-  overflow: hidden;
-}
-
-.app-theme .ui-main {
-  overflow-y: auto;
 }
 
 /* --- Global Landing look --- */
@@ -1217,112 +1083,6 @@ html, body, #app-layout {
 
 /* --- App Layout (Sidebar style update to match Landing) --- */
 
-.ui-app-layout {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.ui-app-wrapper {
-  display: flex;
-  flex: 1 1 0%;
-  align-items: flex-start;
-  gap: 1.5rem;
-  padding: 1.5rem;
-}
-
-.ui-sidebar {
-  width: 220px;
-  flex-shrink: 0;
-  overflow: hidden;
-  border-radius: 1rem;
-  border-width: 1px;
-  border-color: rgb(255 255 255 / 0.1);
-  background-color: rgb(255 255 255 / 0.05);
-  padding: 1rem;
-  --tw-backdrop-blur: blur(12px);
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-  transition-property: width,padding;
-  transition-duration: 200ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.ui-sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.ui-sidebar-link {
-  border-radius: 0.5rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  color: rgb(241 245 249 / 0.9);
-}
-
-.ui-sidebar-link:hover {
-  background-color: rgb(255 255 255 / 0.1);
-}
-
-.ui-main {
-  min-width: 0px;
-  flex: 1 1 0%;
-}
-
-.ui-main > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
-}
-
-.ui-footer {
-  display: flex;
-  border-top-width: 1px;
-  border-color: rgb(255 255 255 / 0.1);
-  padding: 0.75rem;
-}
-
-.ui-footer-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-weight: 500;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.ui-footer-btn:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: rgb(96 165 250 / 0.4);
-}
-
-.ui-footer-btn {
-  background-color: rgb(51 65 85 / 0.7);
-  color: rgb(255 255 255 / 0.9);
-}
-
-.ui-footer-btn:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(71 85 105 / var(--tw-bg-opacity, 1));
-}
-
-.ui-footer-btn {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
 /* --- Lists --- */
 
 .ui-list > :not([hidden]) ~ :not([hidden]) {
@@ -1530,6 +1290,239 @@ html, body, #app-layout {
   /* hides for webkit browsers */
 }
 
+/* ==========================================================================
+     🌌 THEME WRAPPER
+     ========================================================================== */
+
+.app-theme {
+  position: relative;
+  min-height: 100vh;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  background: linear-gradient(180deg, #0b1020 0%, #0e152b 50%, #291313 100%);
+  color: rgba(255, 255, 255, 0.84);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* ==========================================================================
+     🎥 CANVAS LAYERS
+     ========================================================================== */
+
+.app-theme .app-hero-canvas {
+  position: absolute;
+  inset: 0px;
+  z-index: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.app-theme .app-overlay-canvas {
+  position: absolute;
+  inset: 0px;
+  z-index: 20;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  /* make sure it stays off */
+}
+
+/* ==========================================================================
+     ✍️ TYPOGRAPHY
+     ========================================================================== */
+
+.app-theme .app-title {
+  font-family: 'Michroma', sans-serif;
+  font-weight: 100;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.app-theme .app-text {
+  font-family: 'Michroma', sans-serif;
+  font-weight: 100;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+     🧱 FLOATING SIDEBAR
+     ========================================================================== */
+
+.app-theme .app-wrapper {
+  position: relative;
+  z-index: 1;
+  /* above Babylon canvas but below overlay */
+  pointer-events: auto;
+  /* let Babylon interactions pass through */
+}
+
+.app-theme .app-sidebar {
+  display: flex;
+  width: 16rem;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 1rem;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+  position: fixed;
+  top: 50%;
+  left: 2rem;
+  transform: translateY(-50%);
+  padding: 2rem 1.5rem;
+  z-index: 50;
+  /* lifted */
+  pointer-events: auto;
+  isolation: isolate;
+  /* 🔥 critical for overlay click issue */
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(26px) saturate(180%);
+  box-shadow:
+    inset 0 0 25px rgba(255,255,255,0.04),
+    0 4px 40px rgba(0,0,0,0.3);
+}
+
+.app-theme .app-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.app-theme .app-sidebar-link {
+  display: block;
+  border-radius: 0.375rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  text-align: left;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(180%);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.03),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.app-theme .app-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+  transform: translateX(2px);
+}
+
+.app-theme .app-title {
+  margin-bottom: 1rem;
+}
+
+/* Enable interactivity only on links/buttons */
+
+.app-theme .app-sidebar-link,
+  .app-theme #app-logout-btn {
+  pointer-events: auto;
+}
+
+.app-theme .app-sidebar-link {
+  display: block;
+  border-radius: 0.375rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  text-align: left;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  box-shadow:
+      inset 0 0 10px rgba(255, 255, 255, 0.03),
+      0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.app-theme .app-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+  transform: translateX(2px);
+}
+
+/* Move footer toggle to the bottom-left corner */
+
+.app-theme .app-footer {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 60;
+  pointer-events: auto;
+}
+
+.app-theme .app-footer-btn {
+  border-radius: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(22px) saturate(160%);
+  transition: all 0.2s ease;
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,0.03),
+    0 2px 12px rgba(0,0,0,0.25);
+}
+
+.app-theme .app-footer-btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateX(2px);
+}
+
+/* ==========================================================================
+   🎬 SIDEBAR OPEN/CLOSE STATES
+   ========================================================================== */
+
+.app-layout[data-state="closed"] .app-sidebar {
+  opacity: 0;
+  transform: translate(-120%, -50%);
+  pointer-events: none;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.app-layout[data-state="open"] .app-sidebar {
+  opacity: 1;
+  transform: translate(0, -50%);
+  pointer-events: auto;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* ==========================================================================
+     ⚙️ FIXED FULL HEIGHT CONTEXT
+     ========================================================================== */
+
+html,
+  body,
+  #app-layout,
+  .app-layout,
+  .app-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 /* ************************************************************************** */
 
 /*                                                                            */
@@ -1553,6 +1546,10 @@ html, body, #app-layout {
 /* ************************************************************************** */
 
 /* src/styles/loaders.css */
+
+.pointer-events-none {
+  pointer-events: none;
+}
 
 .\!visible {
   visibility: visible !important;
@@ -1667,6 +1664,10 @@ html, body, #app-layout {
 
 .flex {
   display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
 }
 
 .table {
@@ -1836,6 +1837,14 @@ html, body, #app-layout {
   background-color: rgb(23 23 23 / var(--tw-bg-opacity, 1));
 }
 
+.bg-slate-500\/70 {
+  background-color: rgb(100 116 139 / 0.7);
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1909,6 +1918,10 @@ html, body, #app-layout {
   color: rgb(212 212 212 / var(--tw-text-opacity, 1));
 }
 
+.text-white\/80 {
+  color: rgb(255 255 255 / 0.8);
+}
+
 .text-yellow-400 {
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity, 1));
@@ -1928,6 +1941,41 @@ html, body, #app-layout {
 
 .opacity-90 {
   opacity: 0.9;
+}
+
+.ring {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.ring-2 {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.ring-blue-400\/70 {
+  --tw-ring-color: rgb(96 165 250 / 0.7);
+}
+
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.backdrop-filter {
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
 .transition-opacity {
@@ -2386,6 +2434,10 @@ html, body, #app-layout {
 
 /* ************************************************************************** */
 
+.hover\:bg-slate-600\/80:hover {
+  background-color: rgb(71 85 105 / 0.8);
+}
+
 .hover\:opacity-100:hover {
   opacity: 1;
 }
@@ -2398,6 +2450,10 @@ html, body, #app-layout {
 .focus\:ring-blue-500:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
+}
+
+.active\:bg-slate-700\/90:active {
+  background-color: rgb(51 65 85 / 0.9);
 }
 
 .disabled\:pointer-events-none:disabled {

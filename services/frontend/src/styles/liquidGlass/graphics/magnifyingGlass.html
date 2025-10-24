@@ -1,0 +1,49 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- magnifyingGlass.html                               :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/10/24 12:00:42 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/24 13:40:08 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<link rel="stylesheet" href="./magnifyingGlass.css" />
+
+
+<svg width="800" height="460" id="magnifier-root">
+    <defs id="filter-defs"></defs>
+
+    <g id="lens-group" filter="url(#magnifying-glass-filter)">
+        <image class="background"
+            href="https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?q=80&w=800&auto=format&fit=crop"
+            width="800" height="460" preserveAspectRatio="xMidYMid slice" />
+        <rect class="lens" x="200" y="150" width="210" height="150" rx="75" fill="rgba(255,255,255,0.15)"
+            stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
+    </g>
+
+</svg>
+
+<!-- Controls OUTSIDE the clipping container -->
+<div class="controls">
+    <label>
+        Specular Opacity
+        <input id="specularOpacity" type="range" min="0" max="1" step="0.01" value="0.5" />
+    </label>
+    <label>
+        Specular Saturation
+        <input id="specularSaturation" type="range" min="0" max="50" step="1" value="9" />
+    </label>
+    <label>
+        Refraction Level
+        <input id="refractionBase" type="range" min="0" max="1" step="0.01" value="1" />
+    </label>
+</div>
+
+
+<script type="module">
+    import {setupMagnifyingGlass} from "./bundle.js";
+    setupMagnifyingGlass(document.getElementById("magnifier-root"));
+</script>
