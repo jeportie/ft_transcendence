@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/24 11:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/24 12:59:53 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/25 11:56:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,47 +24,48 @@ export function calculateRefractionSpecular(
     const bufferWidth = Math.floor(objectWidth * devicePixelRatio);
     const bufferHeight = Math.floor(objectHeight * devicePixelRatio);
     const imageData = createImageDataBrowser(bufferWidth, bufferHeight);
+    const data = imageData.data;
+
+    // --- Center coordinates (💥 fix)
+    const cx = bufferWidth / 2;
+    const cy = bufferHeight / 2;
 
     const radius_ = radius * devicePixelRatio;
     const bezel_ = bezelWidth * devicePixelRatio;
-
-    const specularVec = [Math.cos(specularAngle), Math.sin(specularAngle)];
     const radiusSq = radius_ ** 2;
     const outerSq = (radius_ + devicePixelRatio) ** 2;
     const innerSq = (radius_ - bezel_) ** 2;
 
-    const widthBetween = bufferWidth - radius_ * 2;
-    const heightBetween = bufferHeight - radius_ * 2;
+    // Direction of the virtual light source
+    const specularVec = [Math.cos(specularAngle), Math.sin(specularAngle)];
 
-    const data = imageData.data;
+    for (let y = 0; y < bufferHeight; y++) {
+        for (let x = 0; x < bufferWidth; x++) {
+            const idx = (y * bufferWidth + x) * 4;
 
-    for (let y1 = 0; y1 < bufferHeight; y1++) {
-        for (let x1 = 0; x1 < bufferWidth; x1++) {
-            const idx = (y1 * bufferWidth + x1) * 4;
-
-            const isEdgeX = x1 < radius_ || x1 >= bufferWidth - radius_;
-            const isEdgeY = y1 < radius_ || y1 >= bufferHeight - radius_;
-            if (!(isEdgeX || isEdgeY)) continue;
-
-            const x = x1 < radius_ ? x1 - radius_ : x1 - (bufferWidth - radius_);
-            const y = y1 < radius_ ? y1 - radius_ : y1 - (bufferHeight - radius_);
-
-            const distSq = x * x + y * y;
+            // Centered coordinates
+            const dx = x - cx;
+            const dy = y - cy;
+            const distSq = dx * dx + dy * dy;
             if (distSq < innerSq || distSq > outerSq) continue;
 
             const dist = Math.sqrt(distSq);
-            const nx = x / dist;
-            const ny = -y / dist;
-            const dot = Math.abs(nx * specularVec[0] + ny * specularVec[1]);
-            const coef = dot * Math.sqrt(1 - (1 - (radius_ - dist) / bezel_) ** 2);
+            const nx = dx / dist;
+            const ny = dy / dist; // no inversion now
 
-            const color = Math.min(255, 255 * coef);
+            // Specular coefficient based on light direction
+            const dot = Math.max(0, nx * specularVec[0] + ny * specularVec[1]);
+            const edge = Math.max(0, 1 - (radius_ - dist) / bezel_);
+            const intensity = dot * Math.sqrt(1 - (1 - edge) ** 2);
+
+            const color = Math.min(255, intensity * 255);
             data[idx] = color;
             data[idx + 1] = color;
             data[idx + 2] = color;
-            data[idx + 3] = 255 * coef;
+            data[idx + 3] = Math.round(color);
         }
     }
+
     return imageData;
 }
 

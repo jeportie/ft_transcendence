@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/24 13:00:23 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/24 13:00:25 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/25 11:54:46 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -61,45 +61,37 @@ export function calculateDisplacementMap2(
     const bufferWidth = Math.floor(canvasWidth * devicePixelRatio);
     const bufferHeight = Math.floor(canvasHeight * devicePixelRatio);
     const imageData = createImageDataBrowser(bufferWidth, bufferHeight);
+    const data = imageData.data;
+
+    // --- Center coordinates (💥 fix)
+    const cx = bufferWidth / 2;
+    const cy = bufferHeight / 2;
 
     const radius_ = radius * devicePixelRatio;
     const bezel = bezelWidth * devicePixelRatio;
-    const radiusSq = radius_ ** 2;
-    const outerSq = (radius_ + 1) ** 2;
+    const outerSq = radius_ ** 2;
     const innerSq = (radius_ - bezel) ** 2;
 
-    const widthBetween = objectWidth * devicePixelRatio - radius_ * 2;
-    const heightBetween = objectHeight * devicePixelRatio - radius_ * 2;
-    const objectX = (bufferWidth - objectWidth * devicePixelRatio) / 2;
-    const objectY = (bufferHeight - objectHeight * devicePixelRatio) / 2;
+    for (let y = 0; y < bufferHeight; y++) {
+        for (let x = 0; x < bufferWidth; x++) {
+            const idx = (y * bufferWidth + x) * 4;
 
-    const data = imageData.data;
-
-    for (let y1 = 0; y1 < objectHeight * devicePixelRatio; y1++) {
-        for (let x1 = 0; x1 < objectWidth * devicePixelRatio; x1++) {
-            const idx = ((objectY + y1) * bufferWidth + objectX + x1) * 4;
-
-            const x = x1 < radius_
-                ? x1 - radius_
-                : x1 >= objectWidth * devicePixelRatio - radius_
-                    ? x1 - (objectWidth * devicePixelRatio - radius_)
-                    : 0;
-            const y = y1 < radius_
-                ? y1 - radius_
-                : y1 >= objectHeight * devicePixelRatio - radius_
-                    ? y1 - (objectHeight * devicePixelRatio - radius_)
-                    : 0;
-
-            const distSq = x * x + y * y;
+            // Centered coordinates
+            const dx = x - cx;
+            const dy = y - cy;
+            const distSq = dx * dx + dy * dy;
             if (distSq > outerSq || distSq < innerSq) continue;
 
             const dist = Math.sqrt(distSq);
             const distFromSide = radius_ - dist;
-            const cos = x / dist;
-            const sin = y / dist;
+            const cos = dx / dist;
+            const sin = dy / dist;
 
-            const bezelIndex = Math.floor((distFromSide / bezel) * precomputedDisplacementMap.length);
+            const bezelIndex = Math.floor(
+                (distFromSide / bezel) * precomputedDisplacementMap.length
+            );
             const distance = precomputedDisplacementMap[bezelIndex] ?? 0;
+
             const dX = (-cos * distance) / maximumDisplacement;
             const dY = (-sin * distance) / maximumDisplacement;
 

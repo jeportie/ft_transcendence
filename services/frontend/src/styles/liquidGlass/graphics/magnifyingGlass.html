@@ -5,28 +5,23 @@
 <!--                                                  +:+ +:+         +:+    -->
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
-<!-- Created: 2025/10/24 12:00:42 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/24 13:40:08 by jeportie         ###   ########.fr      -->
+<!-- Created: 2025/10/25 17:53:09 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/25 17:53:12 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<link rel="stylesheet" href="./magnifyingGlass.css" />
+<div id="magnifier-root" class="magnifier-container">
+    <img class="background"
+        src="https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?q=80&w=800&auto=format&fit=crop" width="800"
+        height="460" />
 
+    <div class="lens">
+        <img class="lens-image"
+            src="https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?q=80&w=800&auto=format&fit=crop" alt=""
+            draggable="false" />
+    </div>
+</div>
 
-<svg width="800" height="460" id="magnifier-root">
-    <defs id="filter-defs"></defs>
-
-    <g id="lens-group" filter="url(#magnifying-glass-filter)">
-        <image class="background"
-            href="https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?q=80&w=800&auto=format&fit=crop"
-            width="800" height="460" preserveAspectRatio="xMidYMid slice" />
-        <rect class="lens" x="200" y="150" width="210" height="150" rx="75" fill="rgba(255,255,255,0.15)"
-            stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
-    </g>
-
-</svg>
-
-<!-- Controls OUTSIDE the clipping container -->
 <div class="controls">
     <label>
         Specular Opacity
@@ -42,8 +37,62 @@
     </label>
 </div>
 
-
 <script type="module">
     import {setupMagnifyingGlass} from "./bundle.js";
     setupMagnifyingGlass(document.getElementById("magnifier-root"));
 </script>
+
+<style>
+    .magnifier-container {
+        position: relative;
+        width: 800px;
+        height: 460px;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #000;
+    }
+
+    .background {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .lens {
+        position: absolute;
+        top: 150px;
+        left: 200px;
+        width: 210px;
+        height: 150px;
+        border-radius: 75px;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+        cursor: grab;
+        transition: box-shadow 0.2s ease;
+        z-index: 1;
+    }
+
+    .lens-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 800px;
+        height: 460px;
+        object-fit: cover;
+        filter: url(#liquid);
+        pointer-events: none;
+    }
+
+    .controls {
+        margin-top: 12px;
+        font-family: sans-serif;
+        font-size: 13px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+</style>

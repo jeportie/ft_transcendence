@@ -5,120 +5,88 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/24 11:59:33 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/24 12:55:22 by jeportie         ###   ########.fr       //
+//   Created: 2025/10/25 16:23:19 by jeportie          #+#    #+#             //
+//   Updated: 2025/10/25 17:45:00 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { MotionValue, useSpring, useTransform } from "../lib/motion";
-import { createMagnifyingFilter } from "../lib/filterGenerator"; // ✅ add filter generator
+import { createRefractionFilter } from "../lib/refractionFilter";
 
 export function setupMagnifyingGlass(root: HTMLElement) {
-    // --- DOM
     const lens = root.querySelector<HTMLDivElement>(".lens");
-    const img = root.querySelector<HTMLImageElement>(".background");
+    const lensImage = lens?.querySelector<HTMLImageElement>(".lens-image");
+    if (!lens || !lensImage) return;
 
-    // Optional inputs (for demos)
-    const inputs = {
-        specularOpacity: root.querySelector<HTMLInputElement>("#specularOpacity"),
-        specularSaturation: root.querySelector<HTMLInputElement>("#specularSaturation"),
-        refractionBase: root.querySelector<HTMLInputElement>("#refractionBase"),
-    };
+    // --- Create filter
+    let current = createRefractionFilter({
+        id: "liquid",
+        magnify: true,
+        width: 210,
+        height: 150,
+        specularOpacity: 0.5,
+        specularSaturation: 9,
+        scaleRatio: 1,
+    });
+    requestAnimationFrame(() => {
+        lensImage.style.filter = `url(#${current.id})`;
+    });
 
-    // --- Early guards
-    if (!lens) {
-        console.warn("[LiquidGlass] No .lens element found");
-        return;
+    // --- Keep image offset synced with lens position
+    function syncInnerImageOffset() {
+        const containerRect = root.getBoundingClientRect();
+        const lensRect = lens.getBoundingClientRect();
+        const x = lensRect.left - containerRect.left;
+        const y = lensRect.top - containerRect.top;
+        lensImage.style.left = `${-x}px`;
+        lensImage.style.top = `${-y}px`;
     }
+    syncInnerImageOffset();
+    window.addEventListener("resize", syncInnerImageOffset);
 
-    // --- 🔹 Create the SVG filter dynamically
-    const filterUrl = createMagnifyingFilter("magnifying-glass-filter", 210, 150);
-    lens.style.backdropFilter = filterUrl;
-    lens.style.webkitBackdropFilter = filterUrl; // Safari support
+    // --- Sliders
+    const opacity = document.getElementById("specularOpacity") as HTMLInputElement;
+    const sat = document.getElementById("specularSaturation") as HTMLInputElement;
+    const refr = document.getElementById("refractionBase") as HTMLInputElement;
 
-    // --- Motion values
-    const isDragging = new MotionValue(false);
-    const velocityX = new MotionValue(0);
+    function rebuild() {
+        const old = document.getElementById("liquid");
+        if (old?.parentElement) old.parentElement.removeChild(old);
+        current = createRefractionFilter({
+            id: "liquid",
+            magnify: true,
+            width: 210,
+            height: 150,
+            specularOpacity: parseFloat(opacity.value),
+            specularSaturation: parseFloat(sat.value),
+            scaleRatio: parseFloat(refr.value),
+        });
+        lensImage.style.filter = `url(#${current.id})`;
+    }
+    [opacity, sat, refr].forEach((s) => s.addEventListener("input", rebuild));
 
-    const specularOpacity = new MotionValue(
-        inputs.specularOpacity ? parseFloat(inputs.specularOpacity.value) : 0.5
-    );
-    const specularSaturation = new MotionValue(
-        inputs.specularSaturation ? parseFloat(inputs.specularSaturation.value) : 9
-    );
-    const refractionBase = new MotionValue(
-        inputs.refractionBase ? parseFloat(inputs.refractionBase.value) : 1
-    );
-
-    // --- Springs and transforms
-    const dragMultiplier = useTransform(isDragging, d => (d ? 1 : 0.8));
-    const refractionLevel = useSpring(
-        useTransform(refractionBase, v => v * dragMultiplier.get()),
-        { stiffness: 250, damping: 14 }
-    );
-    const magnifyingScale = useSpring(
-        useTransform(isDragging, d => (d ? 48 : 24)),
-        { stiffness: 250, damping: 14 }
-    );
-    const objectScale = useSpring(
-        useTransform(isDragging, d => (d ? 1 : 0.8)),
-        { stiffness: 340, damping: 20 }
-    );
-    const shadowAlpha = useSpring(
-        useTransform(isDragging, d => (d ? 0.22 : 0.16)),
-        { stiffness: 220, damping: 24 }
-    );
-
-    // --- Interactions
-    let offsetX = 0, offsetY = 0;
-    let drag = false;
+    // --- Drag logic
+    let dragging = false;
+    let offsetX = 0,
+        offsetY = 0;
 
     lens.addEventListener("mousedown", (e) => {
-        drag = true;
-        isDragging.set(true);
+        dragging = true;
         offsetX = e.offsetX;
         offsetY = e.offsetY;
         lens.style.cursor = "grabbing";
     });
-
     window.addEventListener("mouseup", () => {
-        drag = false;
-        isDragging.set(false);
+        dragging = false;
         lens.style.cursor = "grab";
     });
-
     window.addEventListener("mousemove", (e) => {
-        if (!drag) return;
+        if (!dragging) return;
         const rect = root.getBoundingClientRect();
         const x = e.clientX - rect.left - offsetX;
         const y = e.clientY - rect.top - offsetY;
         lens.style.left = `${x}px`;
         lens.style.top = `${y}px`;
+        lensImage.style.left = `${-x}px`;
+        lensImage.style.top = `${-y}px`;
     });
-
-    // --- Reactive rendering loop
-    const render = () => {
-        lens.style.transform = `scale(${objectScale.get()})`;
-        lens.style.boxShadow = `0 4px 24px rgba(0,0,0,${shadowAlpha.get()})`;
-        requestAnimationFrame(render);
-    };
-    render();
-
-    // --- Input bindings
-    if (inputs.specularOpacity) {
-        inputs.specularOpacity.addEventListener("input", e =>
-            specularOpacity.set(parseFloat((e.target as HTMLInputElement).value))
-        );
-    }
-    if (inputs.specularSaturation) {
-        inputs.specularSaturation.addEventListener("input", e =>
-            specularSaturation.set(parseFloat((e.target as HTMLInputElement).value))
-        );
-    }
-    if (inputs.refractionBase) {
-        inputs.refractionBase.addEventListener("input", e =>
-            refractionBase.set(parseFloat((e.target as HTMLInputElement).value))
-        );
-    }
 }
-
