@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/25 10:44:52 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/25 17:45:00 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/25 18:30:10 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -34,7 +34,8 @@ export interface RefractionFilterParams {
 }
 
 /**
- * Build an SVG <filter> containing displacement, specular and optional magnify maps.
+ * Build an SVG <filter> suitable for use as a CSS backdrop-filter in Chrome.
+ * Important: we use userSpaceOnUse so pixel assets align with element bounds.
  */
 export function createRefractionFilter(options: RefractionFilterParams): SVGFilterElement {
     const {
@@ -46,15 +47,15 @@ export function createRefractionFilter(options: RefractionFilterParams): SVGFilt
         glassThickness = 120,
         refractiveIndex = 1.5,
         bezelType = "convex_squircle",
-        blur = 0.2,
+        blur = 0,
         scaleRatio = 1,
-        specularOpacity = 0.4,
-        specularSaturation = 4,
-        magnify = false,
-        magnifyingScale = 1,
+        specularOpacity = 0.5,
+        specularSaturation = 9,
+        magnify = true,
+        magnifyingScale = 24, // stronger default so zoom is obvious
     } = options;
 
-    // --- Surface profile
+    // pick surface profile
     let surfaceFn: (x: number) => number;
     switch (bezelType) {
         case "convex_circle":
@@ -70,17 +71,16 @@ export function createRefractionFilter(options: RefractionFilterParams): SVGFilt
             surfaceFn = CONVEX.fn;
     }
 
+    // 1D refraction profile + 2D maps
     const precomputed = calculateDisplacementMap(glassThickness, bezelWidth, surfaceFn, refractiveIndex);
-    const maxDisplacement = Math.max(...precomputed.map((v) => Math.abs(v))) || 1;
-
-    // --- Maps
     const disp = calculateDisplacementMap2(width, height, width, height, radius, bezelWidth, 100, precomputed, 1);
     const spec = calculateRefractionSpecular(width, height, radius, bezelWidth, undefined, 1);
+
     const dispUrl = imageDataToUrl(disp);
     const specUrl = imageDataToUrl(spec);
     const magnifyUrl = magnify ? imageDataToUrl(calculateMagnifyingDisplacementMap(width, height)) : null;
 
-    // --- Ensure single global SVG <defs>
+    // single hidden <svg><defs>
     const svgNS = "http://www.w3.org/2000/svg";
     let svg = document.querySelector<SVGSVGElement>("svg#liquid-glass-defs");
     let defs = svg?.querySelector("defs");
@@ -93,28 +93,37 @@ export function createRefractionFilter(options: RefractionFilterParams): SVGFilt
         document.body.appendChild(svg);
     }
 
-    // --- Remove existing filter with same id
+    // replace old filter with same id
     const old = document.getElementById(id);
     if (old?.parentElement) old.parentElement.removeChild(old);
 
-    // --- Build new filter
+    // filter — IMPORTANT: userSpaceOnUse and explicit bounds for backdrop-filter
     const f = document.createElementNS(svgNS, "filter");
     f.setAttribute("id", id);
     f.setAttribute("color-interpolation-filters", "sRGB");
+    f.setAttribute("filterUnits", "userSpaceOnUse");
+    f.setAttribute("primitiveUnits", "userSpaceOnUse");
+    f.setAttribute("x", "0");
+    f.setAttribute("y", "0");
+    f.setAttribute("width", String(width));
+    f.setAttribute("height", String(height));
 
-    // Optional magnifying pass
+    // optional magnifying pre-pass (moves pixels radially)
     if (magnify && magnifyUrl) {
         const feImgMag = document.createElementNS(svgNS, "feImage");
         feImgMag.setAttribute("href", magnifyUrl);
+        feImgMag.setAttribute("x", "0");
+        feImgMag.setAttribute("y", "0");
         feImgMag.setAttribute("width", String(width));
         feImgMag.setAttribute("height", String(height));
+        feImgMag.setAttribute("preserveAspectRatio", "none");
         feImgMag.setAttribute("result", "magnifying_displacement_map");
         f.appendChild(feImgMag);
 
         const feDispMag = document.createElementNS(svgNS, "feDisplacementMap");
         feDispMag.setAttribute("in", "SourceGraphic");
         feDispMag.setAttribute("in2", "magnifying_displacement_map");
-        feDispMag.setAttribute("scale", String(magnifyingScale));
+        feDispMag.setAttribute("scale", String(magnifyingScale)); // e.g. 24..48
         feDispMag.setAttribute("xChannelSelector", "R");
         feDispMag.setAttribute("yChannelSelector", "G");
         feDispMag.setAttribute("result", "magnified_source");
@@ -127,22 +136,27 @@ export function createRefractionFilter(options: RefractionFilterParams): SVGFilt
     feBlur.setAttribute("result", "blurred_source");
     f.appendChild(feBlur);
 
+    // refraction displacement
     const feImgDisp = document.createElementNS(svgNS, "feImage");
     feImgDisp.setAttribute("href", dispUrl);
+    feImgDisp.setAttribute("x", "0");
+    feImgDisp.setAttribute("y", "0");
     feImgDisp.setAttribute("width", String(width));
     feImgDisp.setAttribute("height", String(height));
+    feImgDisp.setAttribute("preserveAspectRatio", "none");
     feImgDisp.setAttribute("result", "displacement_map");
     f.appendChild(feImgDisp);
 
     const feDisp = document.createElementNS(svgNS, "feDisplacementMap");
     feDisp.setAttribute("in", "blurred_source");
     feDisp.setAttribute("in2", "displacement_map");
-    feDisp.setAttribute("scale", String(40 * scaleRatio));
+    feDisp.setAttribute("scale", String(40 * scaleRatio)); // base 40 feels nice
     feDisp.setAttribute("xChannelSelector", "R");
     feDisp.setAttribute("yChannelSelector", "G");
     feDisp.setAttribute("result", "displaced");
     f.appendChild(feDisp);
 
+    // (optional) color boost before specular
     const feSat = document.createElementNS(svgNS, "feColorMatrix");
     feSat.setAttribute("in", "displaced");
     feSat.setAttribute("type", "saturate");
@@ -150,85 +164,58 @@ export function createRefractionFilter(options: RefractionFilterParams): SVGFilt
     feSat.setAttribute("result", "displaced_saturated");
     f.appendChild(feSat);
 
+    // specular rim (now with bloom + screen blend)
     const feImgSpec = document.createElementNS(svgNS, "feImage");
     feImgSpec.setAttribute("href", specUrl);
+    feImgSpec.setAttribute("x", "0");
+    feImgSpec.setAttribute("y", "0");
     feImgSpec.setAttribute("width", String(width));
     feImgSpec.setAttribute("height", String(height));
+    feImgSpec.setAttribute("preserveAspectRatio", "none");
     feImgSpec.setAttribute("result", "specular_layer");
     f.appendChild(feImgSpec);
 
-    const feComp = document.createElementNS(svgNS, "feComposite");
-    feComp.setAttribute("in", "displaced_saturated");
-    feComp.setAttribute("in2", "specular_layer");
-    feComp.setAttribute("operator", "in");
-    feComp.setAttribute("result", "specular_saturated");
-    f.appendChild(feComp);
-
+    // fade specular alpha
     const feTrans = document.createElementNS(svgNS, "feComponentTransfer");
     feTrans.setAttribute("in", "specular_layer");
     feTrans.setAttribute("result", "specular_faded");
     const feFuncA = document.createElementNS(svgNS, "feFuncA");
     feFuncA.setAttribute("type", "linear");
-    feFuncA.setAttribute("slope", String(specularOpacity));
+    feFuncA.setAttribute("slope", String(specularOpacity)); // 0..1
     feTrans.appendChild(feFuncA);
     f.appendChild(feTrans);
 
-    const feBlend1 = document.createElementNS(svgNS, "feBlend");
-    feBlend1.setAttribute("in", "specular_saturated");
-    feBlend1.setAttribute("in2", "displaced");
-    feBlend1.setAttribute("mode", "normal");
-    feBlend1.setAttribute("result", "withSaturation");
-    f.appendChild(feBlend1);
+    // slight blur for bloom
+    const feSpecBlur = document.createElementNS(svgNS, "feGaussianBlur");
+    feSpecBlur.setAttribute("in", "specular_faded");
+    feSpecBlur.setAttribute("stdDeviation", "0.6");
+    feSpecBlur.setAttribute("result", "specular_bloom");
+    f.appendChild(feSpecBlur);
 
-    const feBlend2 = document.createElementNS(svgNS, "feBlend");
-    feBlend2.setAttribute("in", "specular_faded");
-    feBlend2.setAttribute("in2", "withSaturation");
-    feBlend2.setAttribute("mode", "normal");
-    f.appendChild(feBlend2);
+    // composite specular mask to ring only
+    const feComp = document.createElementNS(svgNS, "feComposite");
+    feComp.setAttribute("in", "displaced_saturated");
+    feComp.setAttribute("in2", "specular_bloom");
+    feComp.setAttribute("operator", "in");
+    feComp.setAttribute("result", "specular_masked");
+    f.appendChild(feComp);
+
+    // add specular to base using screen (gives highlight)
+    const feBlendScreen = document.createElementNS(svgNS, "feBlend");
+    feBlendScreen.setAttribute("in", "specular_masked");
+    feBlendScreen.setAttribute("in2", "displaced");
+    feBlendScreen.setAttribute("mode", "screen");
+    feBlendScreen.setAttribute("result", "withSpecular");
+    f.appendChild(feBlendScreen);
+
+    // final normal blend for saturation layer over base (preserve hue pop)
+    const feBlendFinal = document.createElementNS(svgNS, "feBlend");
+    feBlendFinal.setAttribute("in", "specular_faded");
+    feBlendFinal.setAttribute("in2", "withSpecular");
+    feBlendFinal.setAttribute("mode", "normal");
+    f.appendChild(feBlendFinal);
 
     defs.appendChild(f);
     return f;
-}
-
-export function debugShowImageData(imageData: ImageData, label = "debug") {
-    const canvas = document.createElement("canvas");
-    canvas.width = imageData.width;
-    canvas.height = imageData.height;
-    const ctx = canvas.getContext("2d")!;
-    ctx.putImageData(imageData, 0, 0);
-    ctx.strokeStyle = "lime";
-    ctx.beginPath();
-    ctx.moveTo(imageData.width / 2, 0);
-    ctx.lineTo(imageData.width / 2, imageData.height);
-    ctx.stroke();
-
-    ctx.strokeStyle = "red";
-    ctx.beginPath();
-    ctx.moveTo(0, imageData.height / 2);
-    ctx.lineTo(imageData.width, imageData.height / 2);
-    ctx.stroke();
-
-    const wrapper = document.createElement("div");
-    wrapper.style.cssText = `
-    position: fixed;
-    right: 0;
-    background: #000;
-    border: 1px solid #444;
-    margin-bottom: 8px;
-    z-index: 9999;
-    font: 10px monospace;
-    color: white;
-  `;
-    const caption = document.createElement("div");
-    caption.textContent = label;
-    caption.style.cssText = "padding:2px 4px;background:#111;color:#fff;";
-    wrapper.append(caption, canvas);
-
-    // stack vertically
-    const prev = document.querySelectorAll(".debug-image-wrapper").length;
-    wrapper.classList.add("debug-image-wrapper");
-    wrapper.style.top = `${8 + prev * (canvas.height + 20)}px`;
-
-    document.body.append(wrapper);
 }
 

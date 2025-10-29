@@ -1,121 +1,128 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   App.css                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/24 16:27:48 by jeportie          #+#    #+#             */
-/*   Updated: 2025/10/24 18:19:06 by jeportie         ###   ########.fr       */
+/*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
+/*   Updated: 2025/10/27 23:55:00 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 @tailwind components;
 
 @layer components {
+
   /* ==========================================================================
-     🌌 THEME WRAPPER
+     🌌 GLOBAL THEME
      ========================================================================== */
   .app-theme {
     @apply relative min-h-screen text-white;
     background: linear-gradient(180deg, #0b1020 0%, #0e152b 50%, #291313 100%);
-    color: rgba(255, 255, 255, 0.84);
+    color: rgba(255,255,255,0.84);
     font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
   /* ==========================================================================
-     🎥 CANVAS LAYERS
+     🎥 CANVAS LAYERS (Babylon sphere under UI)
      ========================================================================== */
   .app-theme .app-hero-canvas {
-    @apply absolute inset-0 w-full h-full z-0;
+    @apply absolute inset-0 w-full h-full;
+    z-index: 0; /* base */
   }
 
+  .app-theme .app-overlay-canvas {
+    @apply absolute inset-0 w-full h-full;
+    z-index: 10; /* below UI, above hero */
+    pointer-events: none;
+  }
 
-.app-theme .app-overlay-canvas {
-  @apply absolute inset-0 w-full h-full z-20;
-  pointer-events: none; /* make sure it stays off */
-}
+  /* ==========================================================================
+     🧱 APP STRUCTURE
+     ========================================================================== */
+  html,
+  body,
+  #app-layout,
+  .app-layout,
+  .app-wrapper {
+    @apply w-full h-full relative;
+  }
 
+  .app-theme .app-wrapper {
+    @apply relative w-full h-full;
+    z-index: 30; /* UI above canvases */
+    pointer-events: auto;
+  }
+
+  .app-theme .app-main {
+    @apply relative w-full h-full flex flex-col;
+    pointer-events: auto;
+    z-index: 40;
+  }
+
+  .app-theme .app-main-slot {
+    @apply flex-1 w-full h-full overflow-y-auto;
+    padding: clamp(1rem, 4vw, 3rem);
+  }
 
   /* ==========================================================================
      ✍️ TYPOGRAPHY
      ========================================================================== */
-  .app-theme .app-title {
+  .app-title {
     font-family: 'Michroma', sans-serif;
-    font-weight: 100;
-    font-size: 2rem;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
+    font-weight: 200;
+    font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+    letter-spacing: 0.01em;
   }
 
-  .app-theme .app-text {
+  .app-text {
+    @apply text-neutral-300;
     font-family: 'Michroma', sans-serif;
-    font-weight: 100;
+    font-weight: 300;
     font-size: 1rem;
     line-height: 1.55;
-    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .app-item-title {
+    font-family: 'Orbitron', 'Michroma', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .app-item-desc {
+    font-size: 0.875rem;
+    color: rgba(200,200,220,0.7);
+    line-height: 1.5;
   }
 
   /* ==========================================================================
-     🧱 FLOATING SIDEBAR
+     🧭 FLOATING SIDEBAR
      ========================================================================== */
-  .app-theme .app-wrapper {
-    @apply relative;
-    z-index: 1; /* above Babylon canvas but below overlay */
-    pointer-events: auto; /* let Babylon interactions pass through */
+  .app-theme .app-sidebar {
+    @apply flex flex-col items-stretch w-64 transition-all duration-500;
+    position: fixed;
+    top: 50%;
+    left: 2rem;
+    transform: translateY(-50%);
+    padding: 2rem 1.5rem;
+    z-index: 50;
+    pointer-events: auto;
+    isolation: isolate;
+    border-radius: 1rem;
+
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(26px) saturate(180%);
+    box-shadow:
+      inset 0 0 25px rgba(255,255,255,0.04),
+      0 4px 40px rgba(0,0,0,0.3);
   }
 
-
-
-.app-theme .app-sidebar {
-  @apply flex flex-col items-stretch w-64 rounded-2xl transition-all duration-500;
-  position: fixed;
-  top: 50%;
-  left: 2rem;
-  transform: translateY(-50%);
-  padding: 2rem 1.5rem;
-  z-index: 50; /* lifted */
-  pointer-events: auto;
-  isolation: isolate; /* 🔥 critical for overlay click issue */
-
-  background: rgba(255,255,255,0.015);
-  border: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(26px) saturate(180%);
-  box-shadow:
-    inset 0 0 25px rgba(255,255,255,0.04),
-    0 4px 40px rgba(0,0,0,0.3);
-}
-
-.app-theme .app-sidebar-nav {
-  @apply flex flex-col gap-3;
-}
-
-.app-theme .app-sidebar-link {
-  @apply block rounded-md px-4 py-2 text-left transition;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(18px) saturate(180%);
-  box-shadow:
-    inset 0 0 10px rgba(255, 255, 255, 0.03),
-    0 2px 6px rgba(0, 0, 0, 0.25);
-}
-
-.app-theme .app-sidebar-link:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.95);
-  transform: translateX(2px);
-}
-
-.app-theme .app-title {
-  margin-bottom: 1rem;
-}
-
-  /* Enable interactivity only on links/buttons */
-  .app-theme .app-sidebar-link,
-  .app-theme #app-logout-btn {
-    pointer-events: auto;
+  .app-theme .app-sidebar-nav {
+    @apply flex flex-col gap-3;
   }
 
   .app-theme .app-sidebar-link {
@@ -131,66 +138,271 @@
   }
 
   .app-theme .app-sidebar-link:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.95);
     transform: translateX(2px);
   }
 
+  .app-theme .app-title { margin-bottom: 1rem; }
 
-/* Move footer toggle to the bottom-left corner */
-.app-theme .app-footer {
-  @apply fixed left-6 bottom-6;
-  z-index: 60;
-  pointer-events: auto;
-}
+  .app-theme .app-sidebar-link,
+  .app-theme #app-logout-btn { pointer-events: auto; }
 
+  /* ==========================================================================
+     🎬 SIDEBAR TOGGLE
+     ========================================================================== */
+  .app-layout[data-state="closed"] .app-sidebar {
+    opacity: 0;
+    transform: translate(-120%, -50%);
+    pointer-events: none;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
 
-.app-theme .app-footer-btn {
-  @apply px-4 py-2 rounded-lg text-sm font-semibold;
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.9);
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(22px) saturate(160%);
-  transition: all 0.2s ease;
-  box-shadow:
-    inset 0 0 10px rgba(255,255,255,0.03),
-    0 2px 12px rgba(0,0,0,0.25);
-}
+  .app-layout[data-state="open"] .app-sidebar {
+    opacity: 1;
+    transform: translate(0, -50%);
+    pointer-events: auto;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
 
-.app-theme .app-footer-btn:hover {
-  background: rgba(255,255,255,0.12);
-  transform: translateX(2px);
+  /* ==========================================================================
+     🧭 FOOTER TOGGLE BUTTON
+     ========================================================================== */
+  .app-theme .app-footer {
+    @apply fixed left-6 bottom-6;
+    z-index: 60;
+    pointer-events: auto;
+  }
+
+  .app-theme .app-footer-btn {
+    @apply px-4 py-2 rounded-lg text-sm font-semibold;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(22px) saturate(160%);
+    transition: all 0.2s ease;
+    box-shadow:
+      inset 0 0 10px rgba(255,255,255,0.03),
+      0 2px 12px rgba(0,0,0,0.25);
+  }
+
+  .app-theme .app-footer-btn:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateX(2px);
+  }
+
+  /* ==========================================================================
+     🧩 PANELS / CARDS / INPUTS
+     ========================================================================== */
+  .app-card {
+    @apply p-6;
+    border-radius: 0.75rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(22px) saturate(160%);
+    box-shadow:
+      inset 0 0 20px rgba(255,255,255,0.03),
+      0 10px 40px rgba(0,0,0,0.35);
+  }
+
+  .app-card-title {
+    font-family: 'Orbitron', 'Michroma', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #f0f0ff 0%, #a7a7b7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .app-label {
+    @apply text-xs uppercase tracking-wider text-neutral-300/90;
+  }
+
+  .app-input {
+    @apply w-full rounded-md px-3 py-2 bg-neutral-950/40 text-neutral-100 border border-white/10 outline-none;
+    backdrop-filter: blur(12px) saturate(140%);
+  }
+
+  .app-field { @apply grid gap-1; }
+
+  /* ==========================================================================
+     🧮 BUTTONS
+     ========================================================================== */
+  .app-btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2 font-medium;
+    border-radius: 0.5rem;
+    background: linear-gradient(100deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+    color: rgba(255,255,255,0.95);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px) saturate(160%);
+    transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  }
+
+  .app-btn-primary:hover {
+    background: linear-gradient(100deg, rgba(255,255,255,0.25), rgba(255,255,255,0.12));
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-1px);
+  }
+
+  .app-btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2 font-medium text-neutral-200;
+    border-radius: 0.5rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  }
+
+  .app-btn-secondary:hover {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.16);
+    transform: translateY(-1px);
+  }
+
+  /* ==========================================================================
+     🧭 DOTLIST STRUCTURE (for Settings actions)
+     ========================================================================== */
+  .app-dotlist { @apply relative grid gap-8; }
+
+  .app-dotitem { @apply relative pl-8; }
+
+  .app-dotitem::before {
+    content: "";
+    position: absolute;
+    left: 0.9rem;
+    top: 0.5rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.2));
+    box-shadow: 0 0 20px rgba(255,255,255,0.25);
+  }
+
+  .app-dotitem::after {
+    content: "";
+    position: absolute;
+    left: 1.2rem;
+    top: 1.5rem;
+    bottom: -1.5rem;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.08), transparent 80%);
+  }
+
+  .app-dotitem:last-child::after { display: none; }
+
+  .app-dotitem-body {
+    @apply flex items-start justify-between gap-6 p-5;
+    border-radius: 0.75rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(18px) saturate(160%);
+  }
+
+  .app-actions { @apply shrink-0; }
+
+  /* ==========================================================================
+     🪟 MODAL LAYER (Settings popups)
+     ========================================================================== */
+  .app-modal-overlay {
+    @apply fixed inset-0 flex items-center justify-center;
+    z-index: 70;
+    background: rgba(10,10,20,0.65);
+    backdrop-filter: blur(12px) saturate(180%);
+    pointer-events: auto;
+    animation: fadeIn 0.25s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .app-modal-card {
+    @apply relative p-8 w-full max-w-lg;
+    border-radius: 0.5rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(24px) saturate(180%);
+    box-shadow:
+      inset 0 0 18px rgba(255,255,255,0.03),
+      0 10px 40px rgba(0,0,0,0.5);
+    animation: scaleIn 0.25s ease forwards;
+  }
+
+  @keyframes scaleIn {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .app-modal-close {
+    @apply absolute top-3 right-3 text-neutral-400 hover:text-white cursor-pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+/* ==========================================================================
+   🧭 SIDEBAR ↔ VIEW INTERACTION (Balanced push — never off-screen)
+   ========================================================================== */
+
+.app-view-zone {
+  @apply relative transition-all duration-500 ease-in-out;
+  transform: translateX(0);
+  padding: clamp(2rem, 6vw, 4rem);
+  max-width: min(100%, 90rem); /* keep safe reading width */
+  margin-inline: auto; /* centers horizontally */
+  box-sizing: border-box;
 }
 
 
 /* ==========================================================================
-   🎬 SIDEBAR OPEN/CLOSE STATES
+   🧭 SIDEBAR ↔ VIEW INTERACTION (Clean centered motion — no padding drift)
    ========================================================================== */
-.app-layout[data-state="closed"] .app-sidebar {
-  opacity: 0;
-  transform: translate(-120%, -50%);
-  pointer-events: none;
-  transition: transform 0.5s ease, opacity 0.5s ease;
+
+.app-view-zone {
+  @apply relative transition-all duration-500 ease-in-out;
+  transform: translateX(0);
+  padding: clamp(2rem, 6vw, 4rem);
+  max-width: min(100%, 90rem);
+  margin-inline: auto; /* keep centered */
+  box-sizing: border-box;
 }
 
-.app-layout[data-state="open"] .app-sidebar {
-  opacity: 1;
-  transform: translate(0, -50%);
-  pointer-events: auto;
-  transition: transform 0.5s ease, opacity 0.5s ease;
+/* Sidebar open → gentle nudge only (no padding change) */
+.app-layout[data-state="open"] .app-view-zone {
+  transform: translateX(clamp(0rem, 4vw, 0rem));
+  filter: brightness(1.05) saturate(1.05);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.3, 1),
+              filter 0.6s cubic-bezier(0.25, 1, 0.3, 1);
 }
 
-  /* ==========================================================================
-     ⚙️ FIXED FULL HEIGHT CONTEXT
-     ========================================================================== */
-  html,
-  body,
-  #app-layout,
-  .app-layout,
-  .app-wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
+/* Sidebar closed → reset */
+.app-layout[data-state="closed"] .app-view-zone {
+  transform: translateX(0);
+  filter: brightness(1) saturate(1);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.3, 1),
+              filter 0.6s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+/* Subtle parallax feel for sphere */
+.app-layout[data-state="open"] .app-hero-canvas {
+  transform: translateX(-1rem) scale(1.015);
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+.app-layout[data-state="closed"] .app-hero-canvas {
+  transform: translateX(0) scale(1);
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+/* Responsive: on small screens, sidebar overlays completely */
+@media (max-width: 900px) {
+  .app-layout[data-state="open"] .app-view-zone {
+    transform: none;
+    filter: brightness(1);
   }
+}
+
+
 }

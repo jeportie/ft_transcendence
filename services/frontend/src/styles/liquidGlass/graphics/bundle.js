@@ -93,39 +93,42 @@ function calculateDisplacementMap2(canvasWidth, canvasHeight, objectWidth, objec
 // lib/specular.ts
 function calculateRefractionSpecular(objectWidth, objectHeight, radius, bezelWidth, specularAngle = Math.PI / 3, dpr) {
   const devicePixelRatio = dpr ?? window.devicePixelRatio ?? 1;
-  const bufferWidth = Math.floor(objectWidth * devicePixelRatio);
-  const bufferHeight = Math.floor(objectHeight * devicePixelRatio);
-  const imageData = createImageDataBrowser(bufferWidth, bufferHeight);
-  const data = imageData.data;
-  const cx = bufferWidth / 2;
-  const cy = bufferHeight / 2;
-  const radius_ = radius * devicePixelRatio;
-  const bezel_ = bezelWidth * devicePixelRatio;
-  const radiusSq = radius_ ** 2;
-  const outerSq = (radius_ + devicePixelRatio) ** 2;
-  const innerSq = (radius_ - bezel_) ** 2;
-  const specularVec = [Math.cos(specularAngle), Math.sin(specularAngle)];
-  for (let y = 0; y < bufferHeight; y++) {
-    for (let x = 0; x < bufferWidth; x++) {
-      const idx = (y * bufferWidth + x) * 4;
+  const W = Math.floor(objectWidth * devicePixelRatio);
+  const H = Math.floor(objectHeight * devicePixelRatio);
+  const img = createImageDataBrowser(W, H);
+  const data = img.data;
+  const cx = W / 2;
+  const cy = H / 2;
+  const r = radius * devicePixelRatio;
+  const b = bezelWidth * devicePixelRatio;
+  const innerSq = Math.max(0, (r - b * 0.45) ** 2);
+  const outerSq = (r + 0.75 * devicePixelRatio) ** 2;
+  const lx = Math.cos(specularAngle);
+  const ly = Math.sin(specularAngle);
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
       const dx = x - cx;
       const dy = y - cy;
-      const distSq = dx * dx + dy * dy;
-      if (distSq < innerSq || distSq > outerSq) continue;
-      const dist = Math.sqrt(distSq);
-      const nx = dx / dist;
-      const ny = dy / dist;
-      const dot = Math.max(0, nx * specularVec[0] + ny * specularVec[1]);
-      const edge = Math.max(0, 1 - (radius_ - dist) / bezel_);
-      const intensity = dot * Math.sqrt(1 - (1 - edge) ** 2);
-      const color = Math.min(255, intensity * 255);
-      data[idx] = color;
-      data[idx + 1] = color;
-      data[idx + 2] = color;
-      data[idx + 3] = Math.round(color);
+      const d2 = dx * dx + dy * dy;
+      if (d2 < innerSq || d2 > outerSq) continue;
+      const d = Math.sqrt(d2);
+      const nx = dx / d;
+      const ny = dy / d;
+      const ndotl = Math.max(0, nx * lx + ny * ly);
+      const t = Math.min(1, Math.max(0, (d - (r - b * 0.45)) / (b * 0.45 + 0.75)));
+      const rim = Math.sqrt(1 - (1 - t) * (1 - t));
+      const intensity = ndotl * rim;
+      if (intensity <= 0) continue;
+      const c = Math.round(255 * intensity);
+      const a = Math.round(200 * intensity);
+      data[i] = c;
+      data[i + 1] = c;
+      data[i + 2] = c;
+      data[i + 3] = a;
     }
   }
-  return imageData;
+  return img;
 }
 
 // lib/surfaceEquations.ts
@@ -173,12 +176,13 @@ function createRefractionFilter(options) {
     glassThickness = 120,
     refractiveIndex = 1.5,
     bezelType = "convex_squircle",
-    blur = 0.2,
+    blur = 0,
     scaleRatio = 1,
-    specularOpacity = 0.4,
-    specularSaturation = 4,
-    magnify = false,
-    magnifyingScale = 1
+    specularOpacity = 0.5,
+    specularSaturation = 9,
+    magnify = true,
+    magnifyingScale = 24
+    // stronger default so zoom is obvious
   } = options;
   let surfaceFn;
   switch (bezelType) {
@@ -195,7 +199,6 @@ function createRefractionFilter(options) {
       surfaceFn = CONVEX.fn;
   }
   const precomputed = calculateDisplacementMap(glassThickness, bezelWidth, surfaceFn, refractiveIndex);
-  const maxDisplacement = Math.max(...precomputed.map((v) => Math.abs(v))) || 1;
   const disp = calculateDisplacementMap2(width, height, width, height, radius, bezelWidth, 100, precomputed, 1);
   const spec = calculateRefractionSpecular(width, height, radius, bezelWidth, void 0, 1);
   const dispUrl = imageDataToUrl(disp);
@@ -217,11 +220,20 @@ function createRefractionFilter(options) {
   const f = document.createElementNS(svgNS, "filter");
   f.setAttribute("id", id);
   f.setAttribute("color-interpolation-filters", "sRGB");
+  f.setAttribute("filterUnits", "userSpaceOnUse");
+  f.setAttribute("primitiveUnits", "userSpaceOnUse");
+  f.setAttribute("x", "0");
+  f.setAttribute("y", "0");
+  f.setAttribute("width", String(width));
+  f.setAttribute("height", String(height));
   if (magnify && magnifyUrl) {
     const feImgMag = document.createElementNS(svgNS, "feImage");
     feImgMag.setAttribute("href", magnifyUrl);
+    feImgMag.setAttribute("x", "0");
+    feImgMag.setAttribute("y", "0");
     feImgMag.setAttribute("width", String(width));
     feImgMag.setAttribute("height", String(height));
+    feImgMag.setAttribute("preserveAspectRatio", "none");
     feImgMag.setAttribute("result", "magnifying_displacement_map");
     f.appendChild(feImgMag);
     const feDispMag = document.createElementNS(svgNS, "feDisplacementMap");
@@ -240,8 +252,11 @@ function createRefractionFilter(options) {
   f.appendChild(feBlur);
   const feImgDisp = document.createElementNS(svgNS, "feImage");
   feImgDisp.setAttribute("href", dispUrl);
+  feImgDisp.setAttribute("x", "0");
+  feImgDisp.setAttribute("y", "0");
   feImgDisp.setAttribute("width", String(width));
   feImgDisp.setAttribute("height", String(height));
+  feImgDisp.setAttribute("preserveAspectRatio", "none");
   feImgDisp.setAttribute("result", "displacement_map");
   f.appendChild(feImgDisp);
   const feDisp = document.createElementNS(svgNS, "feDisplacementMap");
@@ -260,16 +275,13 @@ function createRefractionFilter(options) {
   f.appendChild(feSat);
   const feImgSpec = document.createElementNS(svgNS, "feImage");
   feImgSpec.setAttribute("href", specUrl);
+  feImgSpec.setAttribute("x", "0");
+  feImgSpec.setAttribute("y", "0");
   feImgSpec.setAttribute("width", String(width));
   feImgSpec.setAttribute("height", String(height));
+  feImgSpec.setAttribute("preserveAspectRatio", "none");
   feImgSpec.setAttribute("result", "specular_layer");
   f.appendChild(feImgSpec);
-  const feComp = document.createElementNS(svgNS, "feComposite");
-  feComp.setAttribute("in", "displaced_saturated");
-  feComp.setAttribute("in2", "specular_layer");
-  feComp.setAttribute("operator", "in");
-  feComp.setAttribute("result", "specular_saturated");
-  f.appendChild(feComp);
   const feTrans = document.createElementNS(svgNS, "feComponentTransfer");
   feTrans.setAttribute("in", "specular_layer");
   feTrans.setAttribute("result", "specular_faded");
@@ -278,17 +290,28 @@ function createRefractionFilter(options) {
   feFuncA.setAttribute("slope", String(specularOpacity));
   feTrans.appendChild(feFuncA);
   f.appendChild(feTrans);
-  const feBlend1 = document.createElementNS(svgNS, "feBlend");
-  feBlend1.setAttribute("in", "specular_saturated");
-  feBlend1.setAttribute("in2", "displaced");
-  feBlend1.setAttribute("mode", "normal");
-  feBlend1.setAttribute("result", "withSaturation");
-  f.appendChild(feBlend1);
-  const feBlend2 = document.createElementNS(svgNS, "feBlend");
-  feBlend2.setAttribute("in", "specular_faded");
-  feBlend2.setAttribute("in2", "withSaturation");
-  feBlend2.setAttribute("mode", "normal");
-  f.appendChild(feBlend2);
+  const feSpecBlur = document.createElementNS(svgNS, "feGaussianBlur");
+  feSpecBlur.setAttribute("in", "specular_faded");
+  feSpecBlur.setAttribute("stdDeviation", "0.6");
+  feSpecBlur.setAttribute("result", "specular_bloom");
+  f.appendChild(feSpecBlur);
+  const feComp = document.createElementNS(svgNS, "feComposite");
+  feComp.setAttribute("in", "displaced_saturated");
+  feComp.setAttribute("in2", "specular_bloom");
+  feComp.setAttribute("operator", "in");
+  feComp.setAttribute("result", "specular_masked");
+  f.appendChild(feComp);
+  const feBlendScreen = document.createElementNS(svgNS, "feBlend");
+  feBlendScreen.setAttribute("in", "specular_masked");
+  feBlendScreen.setAttribute("in2", "displaced");
+  feBlendScreen.setAttribute("mode", "screen");
+  feBlendScreen.setAttribute("result", "withSpecular");
+  f.appendChild(feBlendScreen);
+  const feBlendFinal = document.createElementNS(svgNS, "feBlend");
+  feBlendFinal.setAttribute("in", "specular_faded");
+  feBlendFinal.setAttribute("in2", "withSpecular");
+  feBlendFinal.setAttribute("mode", "normal");
+  f.appendChild(feBlendFinal);
   defs.appendChild(f);
   return f;
 }
@@ -296,8 +319,7 @@ function createRefractionFilter(options) {
 // graphics/magnifyingGlass.ts
 function setupMagnifyingGlass(root) {
   const lens = root.querySelector(".lens");
-  const lensImage = lens?.querySelector(".lens-image");
-  if (!lens || !lensImage) return;
+  if (!lens) return;
   let current = createRefractionFilter({
     id: "liquid",
     magnify: true,
@@ -305,24 +327,16 @@ function setupMagnifyingGlass(root) {
     height: 150,
     specularOpacity: 0.5,
     specularSaturation: 9,
-    scaleRatio: 1
+    scaleRatio: 1,
+    magnifyingScale: 24
   });
   requestAnimationFrame(() => {
-    lensImage.style.filter = `url(#${current.id})`;
+    lens.style.backdropFilter = `url(#${current.id})`;
   });
-  function syncInnerImageOffset() {
-    const containerRect = root.getBoundingClientRect();
-    const lensRect = lens.getBoundingClientRect();
-    const x = lensRect.left - containerRect.left;
-    const y = lensRect.top - containerRect.top;
-    lensImage.style.left = `${-x}px`;
-    lensImage.style.top = `${-y}px`;
-  }
-  syncInnerImageOffset();
-  window.addEventListener("resize", syncInnerImageOffset);
   const opacity = document.getElementById("specularOpacity");
   const sat = document.getElementById("specularSaturation");
   const refr = document.getElementById("refractionBase");
+  const mag = document.getElementById("magnifyScale");
   function rebuild() {
     const old = document.getElementById("liquid");
     if (old?.parentElement) old.parentElement.removeChild(old);
@@ -333,17 +347,18 @@ function setupMagnifyingGlass(root) {
       height: 150,
       specularOpacity: parseFloat(opacity.value),
       specularSaturation: parseFloat(sat.value),
-      scaleRatio: parseFloat(refr.value)
+      scaleRatio: parseFloat(refr.value),
+      magnifyingScale: parseFloat(mag.value)
     });
-    lensImage.style.filter = `url(#${current.id})`;
+    lens.style.backdropFilter = `url(#${current.id})`;
   }
-  [opacity, sat, refr].forEach((s) => s.addEventListener("input", rebuild));
+  [opacity, sat, refr, mag].forEach((s) => s.addEventListener("input", rebuild));
   let dragging = false;
-  let offsetX = 0, offsetY = 0;
+  let offX = 0, offY = 0;
   lens.addEventListener("mousedown", (e) => {
     dragging = true;
-    offsetX = e.offsetX;
-    offsetY = e.offsetY;
+    offX = e.offsetX;
+    offY = e.offsetY;
     lens.style.cursor = "grabbing";
   });
   window.addEventListener("mouseup", () => {
@@ -353,12 +368,10 @@ function setupMagnifyingGlass(root) {
   window.addEventListener("mousemove", (e) => {
     if (!dragging) return;
     const rect = root.getBoundingClientRect();
-    const x = e.clientX - rect.left - offsetX;
-    const y = e.clientY - rect.top - offsetY;
+    const x = e.clientX - rect.left - offX;
+    const y = e.clientY - rect.top - offY;
     lens.style.left = `${x}px`;
     lens.style.top = `${y}px`;
-    lensImage.style.left = `${-x}px`;
-    lensImage.style.top = `${-y}px`;
   });
 }
 export {

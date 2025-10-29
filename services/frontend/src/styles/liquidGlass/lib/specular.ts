@@ -1,3 +1,4 @@
+
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
@@ -6,12 +7,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/24 11:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/25 11:56:03 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/25 18:40:00 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { createImageDataBrowser } from "./magnifyingDisplacement";
 
+/**
+ * Generates a thin specular ring *around the lens edge*, centered and symmetric.
+ * The highlight direction is controlled by `specularAngle`.
+ */
 export function calculateRefractionSpecular(
     objectWidth: number,
     objectHeight: number,
@@ -21,51 +26,57 @@ export function calculateRefractionSpecular(
     dpr?: number
 ): ImageData {
     const devicePixelRatio = dpr ?? window.devicePixelRatio ?? 1;
-    const bufferWidth = Math.floor(objectWidth * devicePixelRatio);
-    const bufferHeight = Math.floor(objectHeight * devicePixelRatio);
-    const imageData = createImageDataBrowser(bufferWidth, bufferHeight);
-    const data = imageData.data;
+    const W = Math.floor(objectWidth * devicePixelRatio);
+    const H = Math.floor(objectHeight * devicePixelRatio);
+    const img = createImageDataBrowser(W, H);
+    const data = img.data;
 
-    // --- Center coordinates (💥 fix)
-    const cx = bufferWidth / 2;
-    const cy = bufferHeight / 2;
+    const cx = W / 2;
+    const cy = H / 2;
 
-    const radius_ = radius * devicePixelRatio;
-    const bezel_ = bezelWidth * devicePixelRatio;
-    const radiusSq = radius_ ** 2;
-    const outerSq = (radius_ + devicePixelRatio) ** 2;
-    const innerSq = (radius_ - bezel_) ** 2;
+    const r = radius * devicePixelRatio;
+    const b = bezelWidth * devicePixelRatio;
 
-    // Direction of the virtual light source
-    const specularVec = [Math.cos(specularAngle), Math.sin(specularAngle)];
+    // Ring confines (slightly outside and inside the geometric edge)
+    const innerSq = Math.max(0, (r - b * 0.45) ** 2);
+    const outerSq = (r + 0.75 * devicePixelRatio) ** 2;
 
-    for (let y = 0; y < bufferHeight; y++) {
-        for (let x = 0; x < bufferWidth; x++) {
-            const idx = (y * bufferWidth + x) * 4;
+    const lx = Math.cos(specularAngle);
+    const ly = Math.sin(specularAngle);
 
-            // Centered coordinates
+    for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+            const i = (y * W + x) * 4;
+
             const dx = x - cx;
             const dy = y - cy;
-            const distSq = dx * dx + dy * dy;
-            if (distSq < innerSq || distSq > outerSq) continue;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < innerSq || d2 > outerSq) continue;
 
-            const dist = Math.sqrt(distSq);
-            const nx = dx / dist;
-            const ny = dy / dist; // no inversion now
+            const d = Math.sqrt(d2);
+            const nx = dx / d;      // outward normal
+            const ny = dy / d;
 
-            // Specular coefficient based on light direction
-            const dot = Math.max(0, nx * specularVec[0] + ny * specularVec[1]);
-            const edge = Math.max(0, 1 - (radius_ - dist) / bezel_);
-            const intensity = dot * Math.sqrt(1 - (1 - edge) ** 2);
+            // light alignment
+            const ndotl = Math.max(0, nx * lx + ny * ly);
 
-            const color = Math.min(255, intensity * 255);
-            data[idx] = color;
-            data[idx + 1] = color;
-            data[idx + 2] = color;
-            data[idx + 3] = Math.round(color);
+            // distance into ring [0..1] (1 at outer rim)
+            const t = Math.min(1, Math.max(0, (d - (r - b * 0.45)) / (b * 0.45 + 0.75)));
+            // gentle rim falloff
+            const rim = Math.sqrt(1 - (1 - t) * (1 - t)); // smooth-ish
+
+            const intensity = ndotl * rim;
+            if (intensity <= 0) continue;
+
+            const c = Math.round(255 * intensity);
+            const a = Math.round(200 * intensity); // softer alpha than color
+
+            data[i] = c;
+            data[i + 1] = c;
+            data[i + 2] = c;
+            data[i + 3] = a;
         }
     }
-
-    return imageData;
+    return img;
 }
 

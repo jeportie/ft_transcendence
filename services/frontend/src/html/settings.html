@@ -5,67 +5,157 @@
 <!--                                                  +:+ +:+         +:+    -->
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
-<!-- Created: 2025/09/23 13:44:47 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/09/23 13:51:58 by jeportie         ###   ########.fr      -->
+<!-- Created: 2025/10/27 22:40:51 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/27 22:51:25 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<h1 class="ui-title">Settings</h1>
-<div class="ui-card">
-    <!-- 2FA Section -->
-    <div>
-        <label class="ui-label">Two-Factor Authentication</label>
-        <div class="flex items-center gap-2">
-            <input type="checkbox" id="f2a-toggle" />
-            <span class="ui-text-muted">2FA</span>
-        </div>
-    </div>
 
-    <!-- QR code area (hidden until enabling) -->
-    <div id="f2a-qr-section" class="hidden mt-4">
-        <p class="ui-text-small mb-2">Scan this QR code with your authenticator app:</p>
-        <img id="f2a-qr" class="ui-qr" />
-        <input id="f2a-code" type="text" class="ui-input mt-2" placeholder="Enter 6-digit code to confirm" />
-        <button id="f2a-verify-btn" class="ui-btn-primary mt-2">Verify</button>
-    </div>
-
-    <!-- Backup codes section -->
-    <div id="f2a-backup-section" class="hidden mt-6">
-        <p class="ui-text-small mb-2 font-semibold text-yellow-400">
-            ⚠️ Save these backup codes in a safe place — they will not be shown again!
+<section id="settings-view" class="app-view-zone">
+    <header class="mb-8">
+        <h1 class="app-title">Settings</h1>
+        <p class="app-text mt-1">
+            Security & sessions — manage two-factor authentication, passwords, and connected devices.
         </p>
-        <table class="ui-table w-full border border-neutral-700 rounded-md text-center">
-            <thead>
-                <tr class="bg-neutral-800 text-neutral-300">
-                    <th>#</th>
-                    <th>Backup Code</th>
-                </tr>
-            </thead>
-            <tbody id="f2a-backup-table" class="bg-neutral-900 text-neutral-100">
-                <!-- dynamically filled -->
-            </tbody>
-        </table>
-        <button id="f2a-backup-download" class="ui-btn-primary mt-3 w-full">
-            <span>⬇️ Download Backup Codes</span>
-        </button>
-    </div>
+    </header>
 
-    <!-- Password section -->
-    <div class="mt-6">
-        <label id="pwd-option-label" class="ui-label">Modify Password</label>
-        <div class="flex items-center gap-2">
-            <input type="checkbox" id="pwd-modify-toggle" />
-            <span id="pwd-status" class="ui-text-muted">PWD</span>
+    <ol class="app-dotlist">
+        <!-- Two-Factor Authentication -->
+        <li class="app-dotitem">
+            <div class="app-dotitem-body">
+                <div>
+                    <h3 class="app-item-title">Two-Factor Authentication (2FA)</h3>
+                    <p class="app-item-desc">
+                        Add an extra layer of security using an authenticator app.
+                    </p>
+                </div>
+                <div class="app-actions">
+                    <button id="btn-2fa-toggle" class="app-btn-primary">Enable</button>
+                </div>
+            </div>
+        </li>
+
+        <!-- Change Password -->
+        <li class="app-dotitem">
+            <div class="app-dotitem-body">
+                <div>
+                    <h3 class="app-item-title">Change Password</h3>
+                    <p class="app-item-desc">
+                        Update your account password to keep your account secure.
+                    </p>
+                </div>
+                <div class="app-actions">
+                    <button id="btn-open-pwd" class="app-btn-primary">Change</button>
+                </div>
+            </div>
+        </li>
+
+        <!-- Active Sessions -->
+        <li class="app-dotitem">
+            <div class="app-dotitem-body">
+                <div>
+                    <h3 class="app-item-title">Active Sessions</h3>
+                    <p class="app-item-desc">
+                        See where you’re logged in and revoke any unfamiliar sessions.
+                    </p>
+                </div>
+                <div class="overflow-hidden rounded-md border border-neutral-700/70 mt-3 w-full">
+                    <table class="w-full text-left">
+                        <thead class="bg-neutral-800/60 text-neutral-300 text-xs uppercase">
+                            <tr>
+                                <th class="px-3 py-2">Device</th>
+                                <th class="px-3 py-2">IP / Location</th>
+                                <th class="px-3 py-2">Last Active</th>
+                                <th class="px-3 py-2 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sessions-table-body" class="bg-neutral-900/50 text-neutral-100 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </li>
+    </ol>
+
+    <!-- Where modals will be mounted dynamically -->
+    <div id="settings-cards"></div>
+
+    <template id="tpl-2fa-card">
+        <div class="app-modal-card">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="app-card-title">Two-Factor Authentication</h3>
+                <span id="f2a-status-tag"
+                    class="inline-flex items-center gap-2 px-2 py-1 rounded-full text-xs bg-red-500/15 text-red-300 border border-red-400/20">Disabled</span>
+            </div>
+
+            <div class="flex gap-3 mb-4">
+                <button id="f2a-enable-btn" class="app-btn-primary w-full">
+                    Enable
+                </button>
+                <button id="f2a-disable-btn" class="app-btn-secondary w-full">
+                    Disable
+                </button>
+            </div>
+
+            <!-- QR + OTP -->
+            <div id="f2a-qr-wrap" class="hidden mt-6">
+                <p class="app-text mb-4">
+                    Scan this QR code with your authenticator app, then enter the code below.
+                </p>
+                <div class="flex flex-col items-center gap-4">
+                    <img id="f2a-qr" class="ui-qr w-40 h-40 rounded-md border border-white/10" />
+                    <otp-input id="f2a-code" digits="6" class="mt-2"></otp-input>
+                </div>
+            </div>
+
+            <!-- Backup Codes -->
+            <div id="f2a-backup-wrap" class="hidden mt-6">
+                <p class="text-sm font-semibold text-yellow-300/90 mb-2">
+                    ⚠️ Save these backup codes — they will not be shown again.
+                </p>
+                <div class="overflow-hidden rounded-md border border-neutral-700/70 mb-3">
+                    <table class="w-full text-left">
+                        <thead class="bg-neutral-800/60 text-neutral-300">
+                            <tr>
+                                <th class="px-3 py-2">#</th>
+                                <th class="px-3 py-2">Backup Code</th>
+                            </tr>
+                        </thead>
+                        <tbody id="f2a-backup-table" class="bg-neutral-900/50 text-neutral-100"></tbody>
+                    </table>
+                </div>
+                <button id="f2a-backup-download" class="app-btn-primary w-full">
+                    ⬇️ Download Backup Codes
+                </button>
+            </div>
         </div>
-    </div>
+    </template>
 
-    <form id="pwd-form" class="hidden ui-form">
-        <input id="hidden-user" class="hidden ui-input" type="text" autocomplete="username" />
-        <input id="old-pwd" class="ui-input" type="password" autocomplete="current-password"
-            placeholder="Old Password" />
-        <input id="new-pwd" class="ui-input" type="password" autocomplete="new-password" placeholder="New Password" />
-        <input id="confirm-pwd" class="ui-input" type="password" autocomplete="new-password"
-            placeholder="Confirm Password" />
-        <button id="login-btn" class="ui-btn-primary w-full mt-1">Save</button>
-    </form>
-</div>
+    <template id="tpl-pwd-card">
+        <div class="app-modal-card">
+
+            <h3 class="app-card-title mb-4">Change Password</h3>
+            <p id="pwd-hint" class="app-text mb-4">
+                Use a long passphrase you don’t reuse elsewhere.
+            </p>
+
+            <form id="pwd-form" class="grid gap-3">
+                <div class="app-field">
+                    <label class="app-label">Current Password</label>
+                    <input id="old-pwd" class="app-input" type="password" autocomplete="current-password"
+                        placeholder="Current password" />
+                </div>
+                <div class="app-field">
+                    <label class="app-label">New Password</label>
+                    <input id="new-pwd" class="app-input" type="password" autocomplete="new-password"
+                        placeholder="New password" />
+                </div>
+                <div class="app-field">
+                    <label class="app-label">Confirm New Password</label>
+                    <input id="confirm-pwd" class="app-input" type="password" autocomplete="new-password"
+                        placeholder="Confirm new password" />
+                </div>
+                <button class="app-btn-primary mt-2 w-full">Save Password</button>
+            </form>
+        </div>
+    </template>
+</section>
