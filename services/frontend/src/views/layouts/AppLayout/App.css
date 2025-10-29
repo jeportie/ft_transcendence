@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
-/*   Updated: 2025/10/29 13:37:00 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:55:26 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,7 @@
   
   .app-view-zone {
     @apply relative;
-    z-index: 30;
+    z-index: 50;
     padding: clamp(2rem, 6vw, 4rem);
     max-width: min(100%, 90rem); /* safe reading width */
     margin-left: clamp(18rem, 22vw, 24rem); /* keeps sidebar space free */
@@ -279,6 +279,7 @@
     box-sizing: border-box;
     transform: none;
     filter: brightness(1) saturate(1);
+    pointer-events: auto 
   }
 
   /* Add once */
@@ -294,6 +295,40 @@
     padding: .25rem .5rem;
     white-space: nowrap;
     pointer-events: none;
+  }
+
+
+  /* ==========================================================================
+     🪟 MODALS
+     ========================================================================== */
+  .app-modal-overlay {
+    @apply fixed inset-0 flex items-center justify-center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px) saturate(140%);
+    z-index: 100; /* must be above sidebar (50) and wrapper (30) */
+  }
+
+  .app-modal-card {
+    @apply relative w-full max-w-md p-6 rounded-xl;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow:
+      0 10px 40px rgba(0,0,0,0.5),
+      inset 0 0 30px rgba(255,255,255,0.05);
+    backdrop-filter: blur(22px) saturate(160%);
+    z-index: 110;
+    pointer-events: auto;
+  }
+
+  .app-modal-close {
+    @apply absolute top-3 right-3 text-neutral-300 text-lg;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .app-modal-close:hover {
+    color: white;
   }
 
 }

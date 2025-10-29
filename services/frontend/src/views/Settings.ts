@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 19:19:28 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/27 20:41:00 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/29 15:52:09 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,6 +27,7 @@ export default class Settings extends AbstractView {
     }
 
     async mount() {
+        await new Promise((r) => setTimeout(r, 0)); // let DOM attach
         // Buttons in the action list
         const btn2faToggle = document.querySelector("#btn-2fa-toggle") as HTMLButtonElement | null;
         const btnPwd = document.querySelector("#btn-open-pwd") as HTMLButtonElement | null;
@@ -88,6 +89,7 @@ export default class Settings extends AbstractView {
         // --- 2FA Toggle (Enable/Disable) --------------------------------------
         btn2faToggle?.addEventListener("click", async () => {
             // Open modal
+            console.log("Enabled Clicked!");
             const frag = tpl2fa.content.cloneNode(true) as DocumentFragment;
             const { remove: closeModal } = openModal(frag);
 
@@ -176,6 +178,8 @@ export default class Settings extends AbstractView {
 
         // --- Password Modal ----------------------------------------------------
         btnPwd?.addEventListener("click", () => {
+
+            console.log("Change Clicked!");
             const frag = tplPwd.content.cloneNode(true) as DocumentFragment;
             const { remove: closeModal } = openModal(frag);
 
@@ -296,6 +300,10 @@ export default class Settings extends AbstractView {
       ${s.lastActiveAt ? new Date(s.lastActiveAt).toLocaleString() : "—"}
     </td>
 
+    <td class="px-3 py-3 whitespace-nowrap text-neutral-300">
+      ${s.expiresAt ? new Date(s.expiresAt).toLocaleString() : "—"}
+    </td>
+
     <td class="px-3 py-3 whitespace-nowrap text-right">
       ${s.current
                             ? `<span class="text-xs px-2 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-400/20">Current</span>`
@@ -310,6 +318,7 @@ export default class Settings extends AbstractView {
                 tbody.querySelectorAll<HTMLButtonElement>("button[data-session]").forEach((btn) => {
                     btn.addEventListener("click", async () => {
                         const id = btn.dataset.session!;
+                        console.log(id);
                         const res = await API.Post("/auth/sessions/revoke", { sessionId: id });
                         if (res.error) {
                             alert("Failed to revoke session.");

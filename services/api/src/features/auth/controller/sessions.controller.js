@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/29 10:29:08 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/29 10:38:27 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/29 15:05:25 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -25,7 +25,7 @@ export async function getSession(request, reply) {
     }
 }
 
-export async function ressionSession(request, reply) {
+export async function revokeSession(request, reply) {
     try {
         const data = await sessionService.revokeSession(request.server, request, reply);
         return ok(reply, data);

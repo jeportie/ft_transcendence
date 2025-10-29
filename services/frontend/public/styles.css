@@ -688,7 +688,7 @@ body {
 
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/10/29 13:37:00 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:55:26 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -1635,7 +1635,7 @@ html,
 
 .app-view-zone {
   position: relative;
-  z-index: 30;
+  z-index: 50;
   padding: clamp(2rem, 6vw, 4rem);
   max-width: min(100%, 90rem);
   /* safe reading width */
@@ -1645,6 +1645,7 @@ html,
   box-sizing: border-box;
   transform: none;
   filter: brightness(1) saturate(1);
+  pointer-events: auto;
 }
 
 /* Add once */
@@ -1662,6 +1663,55 @@ html,
   padding: .25rem .5rem;
   white-space: nowrap;
   pointer-events: none;
+}
+
+/* ==========================================================================
+     🪟 MODALS
+     ========================================================================== */
+
+.app-modal-overlay {
+  position: fixed;
+  inset: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px) saturate(140%);
+  z-index: 100;
+  /* must be above sidebar (50) and wrapper (30) */
+}
+
+.app-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow:
+      0 10px 40px rgba(0,0,0,0.5),
+      inset 0 0 30px rgba(255,255,255,0.05);
+  backdrop-filter: blur(22px) saturate(160%);
+  z-index: 110;
+  pointer-events: auto;
+}
+
+.app-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  --tw-text-opacity: 1;
+  color: rgb(212 212 212 / var(--tw-text-opacity, 1));
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.app-modal-close:hover {
+  color: white;
 }
 
 /* ************************************************************************** */
@@ -1727,10 +1777,6 @@ html,
 
 .right-3 {
   right: 0.75rem;
-}
-
-.z-10 {
-  z-index: 10;
 }
 
 .-mx-1 {
@@ -1981,16 +2027,8 @@ html,
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
 
-.overflow-hidden {
-  overflow: hidden;
-}
-
 .overflow-visible {
   overflow: visible;
-}
-
-.text-ellipsis {
-  text-overflow: ellipsis;
 }
 
 .whitespace-normal {
@@ -1999,10 +2037,6 @@ html,
 
 .whitespace-nowrap {
   white-space: nowrap;
-}
-
-.rounded {
-  border-radius: 0.25rem;
 }
 
 .rounded-full {
