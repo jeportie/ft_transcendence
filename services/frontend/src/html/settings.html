@@ -50,19 +50,23 @@
             </div>
         </li>
 
+
         <!-- Active Sessions -->
         <li class="app-dotitem">
-            <div class="app-dotitem-body">
+            <div class="app-dotitem-body flex flex-col">
                 <div>
                     <h3 class="app-item-title">Active Sessions</h3>
                     <p class="app-item-desc">
                         See where you’re logged in and revoke any unfamiliar sessions.
                     </p>
                 </div>
-                <div class="overflow-hidden rounded-md border border-neutral-700/70 mt-3 w-full">
+
+                <!-- Table directly below paragraph -->
+                <div class="overflow-visible rounded-md border border-neutral-700/70 mt-4 w-full">
                     <table class="w-full text-left">
                         <thead class="bg-neutral-800/60 text-neutral-300 text-xs uppercase">
                             <tr>
+                                <th class="px-3 py-2 w-6">Status</th>
                                 <th class="px-3 py-2">Device</th>
                                 <th class="px-3 py-2">IP / Location</th>
                                 <th class="px-3 py-2">Last Active</th>
@@ -74,6 +78,7 @@
                 </div>
             </div>
         </li>
+
     </ol>
 
     <!-- Where modals will be mounted dynamically -->
@@ -112,7 +117,7 @@
                 <p class="text-sm font-semibold text-yellow-300/90 mb-2">
                     ⚠️ Save these backup codes — they will not be shown again.
                 </p>
-                <div class="overflow-hidden rounded-md border border-neutral-700/70 mb-3">
+                <div class="overflow-visible rounded-md border border-neutral-700/70 mb-3">
                     <table class="w-full text-left">
                         <thead class="bg-neutral-800/60 text-neutral-300">
                             <tr>

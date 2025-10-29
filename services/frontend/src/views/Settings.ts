@@ -208,55 +208,122 @@ export default class Settings extends AbstractView {
             });
         });
 
-        // --- Sessions Modal ----------------------------------------------------
-        btnSessions?.addEventListener("click", async () => {
-            const frag = tplSessions.content.cloneNode(true) as DocumentFragment;
-            openModal(frag);
+        // --- Sessions Auto-Load ----------------------------------------------------
+        const tbody = document.querySelector("#sessions-table-body") as HTMLElement;
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="5" class="px-3 py-4 text-center text-neutral-400 text-sm">Loading sessions...</td></tr>`;
 
-            const tbody = document.querySelector("#sessions-table-body") as HTMLElement;
             const res = await API.Get("/auth/sessions");
-            if (res.error) { console.error(res.error.message); alert("Unable to load sessions."); return; }
+            if (res.error) {
+                console.error(res.error.message);
+                tbody.innerHTML = `<tr><td colspan="5" class="px-3 py-4 text-center text-red-400 text-sm">Failed to load sessions.</td></tr>`;
+            } else {
+                const sessions = res.data.sessions || [];
+                console.log("[Sessions]", sessions);
+                tbody.innerHTML = "";
 
-            const sessions: Array<{
-                id: string; device: string; ip: string; location?: string;
-                current?: boolean; createdAt?: string; lastActiveAt?: string;
-            }> = res.data?.sessions || [];
+                if (!sessions.length) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-3 py-4 text-center text-neutral-400 text-sm">No active sessions.</td></tr>`;
+                    return;
+                }
 
-            tbody.innerHTML = "";
-            sessions.forEach((s) => {
-                const tr = document.createElement("tr");
-                tr.className = "border-b border-neutral-800/60";
-                tr.innerHTML = `
-          <td class="px-3 py-3 whitespace-nowrap">
-            <div class="text-neutral-100">${s.device || "Unknown device"}</div>
-            <div class="text-xs text-neutral-400">${s.createdAt ? new Date(s.createdAt).toLocaleString() : ""}</div>
-          </td>
-          <td class="px-3 py-3 whitespace-nowrap">
-            <div class="text-neutral-200">${s.ip}</div>
-            <div class="text-xs text-neutral-400">${s.location || ""}</div>
-          </td>
-          <td class="px-3 py-3 whitespace-nowrap text-neutral-300">
-            ${s.lastActiveAt ? new Date(s.lastActiveAt).toLocaleString() : "—"}
-          </td>
-          <td class="px-3 py-3 whitespace-nowrap text-right">
-            ${s.current
-                        ? `<span class="text-xs px-2 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-400/20">Current</span>`
-                        : `<button data-session="${s.id}" class="app-btn-secondary">Revoke</button>`
-                    }
-          </td>
-        `;
-                tbody.appendChild(tr);
-            });
 
-            tbody.querySelectorAll<HTMLButtonElement>("button[data-session]").forEach((btn) => {
-                btn.addEventListener("click", async () => {
-                    const sessionId = btn.dataset.session!;
-                    const { error } = await API.Post("/auth/sessions/revoke", { sessionId });
-                    if (error) { console.error(error.message); alert("Failed to revoke session."); return; }
-                    btn.closest("tr")?.remove();
+                // Helpers ------------------------------------------------------------
+                const now = new Date();
+
+                const getStatus = (s: any) => {
+                    if (s.revokedAt) return { color: "bg-red-500", label: "Revoked" };
+                    const exp = new Date(s.expiresAt);
+                    const diff = (exp.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+                    if (diff < 0) return { color: "bg-red-500", label: "Expired" };
+                    if (diff < 2) return { color: "bg-orange-400", label: "Expiring soon" };
+                    return { color: "bg-green-500", label: "Active" };
+                };
+
+                const getDeviceIcon = (device: string) => {
+                    if (/mobile|android|iphone/i.test(device))
+                        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+        class="inline w-5 h-5 align-middle text-neutral-300"><rect width="256" height="256" fill="none"/><rect x="64" y="24" width="128" height="208" rx="16"
+        fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="64" y1="56" x2="192" y2="56" fill="none"
+        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="64" y1="200" x2="192" y2="200" fill="none"
+        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>`;
+                    if (/mac|windows/i.test(device))
+                        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+        class="inline w-5 h-5 align-middle text-neutral-300"><rect width="256" height="256" fill="none"/><rect x="32" y="48" width="192" height="144" rx="16"
+        transform="translate(256 240) rotate(180)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="160"
+        y1="224" x2="96" y2="224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="32" y1="152"
+        x2="224" y2="152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="192"
+        x2="128" y2="224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>`;
+                    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+      class="inline w-5 h-5 align-middle text-neutral-300"><rect width="256" height="256" fill="none"/><path d="M40,176V72A16,16,0,0,1,56,56H200a16,16,0,0,1,16,16V176"
+      fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M24,176H232v16a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16Z"
+      fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="144" y1="88" x2="112" y2="88"
+      fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>`;
+                };
+
+                // ---------------------------------------------------------------------
+                sessions.forEach((s: any) => {
+                    const { color, label } = getStatus(s);
+                    const tr = document.createElement("tr");
+                    tr.className =
+                        "border-b border-neutral-800/60 hover:bg-neutral-800/30 transition-colors";
+
+                    tr.innerHTML = `
+    <td class="px-3 py-3 text-center">
+      <span class="relative group">
+        <span class="inline-block w-2.5 h-2.5 rounded-full ${color}"></span>
+        <span class="app-tooltip hidden group-hover:block text-xs text-neutral-200">
+          ${label}
+        </span>
+      </span>
+    </td>
+
+    <td class="px-3 py-3 whitespace-nowrap">
+      <div class="flex items-center gap-2">
+        <span class="relative group">
+          ${getDeviceIcon(s.device)}
+          <span class="app-tooltip hidden group-hover:block text-xs text-neutral-200 max-w-[280px] whitespace-normal">
+            ${s.agent.replace(/</g, "&lt;")}
+          </span>
+        </span>
+        <span class="text-neutral-100">${s.device}</span>
+      </div>
+    </td>
+
+    <td class="px-3 py-3 whitespace-nowrap text-neutral-200">${s.ip}</td>
+
+    <td class="px-3 py-3 whitespace-nowrap text-neutral-300">
+      ${s.lastActiveAt ? new Date(s.lastActiveAt).toLocaleString() : "—"}
+    </td>
+
+    <td class="px-3 py-3 whitespace-nowrap text-right">
+      ${s.current
+                            ? `<span class="text-xs px-2 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-400/20">Current</span>`
+                            : `<button data-session="${s.id}" class="app-btn-secondary text-xs">Revoke</button>`
+                        }
+    </td>`;
+
+                    tbody.appendChild(tr);
                 });
-            });
-        });
+
+                // Revoke logic (unchanged)
+                tbody.querySelectorAll<HTMLButtonElement>("button[data-session]").forEach((btn) => {
+                    btn.addEventListener("click", async () => {
+                        const id = btn.dataset.session!;
+                        const res = await API.Post("/auth/sessions/revoke", { sessionId: id });
+                        if (res.error) {
+                            alert("Failed to revoke session.");
+                            return;
+                        }
+
+                        const row = btn.closest("tr");
+                        if (row) {
+                            row.classList.add("opacity-50", "pointer-events-none");
+                            setTimeout(() => row.remove(), 300);
+                        }
+                    });
+                });
+            }
+        }
     }
 }
-

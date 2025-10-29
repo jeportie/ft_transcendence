@@ -680,13 +680,15 @@ body {
 
 /*   App.css                                            :+:      :+:    :+:   */
 
+/*                                                    +:+ +:+         +:+     */
+
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 
 /*                                                +#+#+#+#+#+   +#+           */
 
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/10/27 23:55:00 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/29 13:37:00 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -1312,7 +1314,6 @@ body {
   height: 100%;
   width: 100%;
   z-index: 0;
-  /* base */
 }
 
 .app-theme .app-overlay-canvas {
@@ -1321,7 +1322,6 @@ body {
   height: 100%;
   width: 100%;
   z-index: 10;
-  /* below UI, above hero */
   pointer-events: none;
 }
 
@@ -1344,7 +1344,6 @@ html,
   height: 100%;
   width: 100%;
   z-index: 30;
-  /* UI above canvases */
   pointer-events: auto;
 }
 
@@ -1409,9 +1408,6 @@ html,
   width: 16rem;
   flex-direction: column;
   align-items: stretch;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 500ms;
   position: fixed;
   top: 50%;
   left: 2rem;
@@ -1443,9 +1439,6 @@ html,
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   text-align: left;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.82);
@@ -1460,7 +1453,6 @@ html,
   background: rgba(255,255,255,0.05);
   border-color: rgba(255,255,255,0.08);
   color: rgba(255,255,255,0.95);
-  transform: translateX(2px);
 }
 
 .app-theme .app-title {
@@ -1473,7 +1465,7 @@ html,
 }
 
 /* ==========================================================================
-     🎬 SIDEBAR TOGGLE
+     🎬 SIDEBAR TOGGLE (only animation kept)
      ========================================================================== */
 
 .app-layout[data-state="closed"] .app-sidebar {
@@ -1491,7 +1483,7 @@ html,
 }
 
 /* ==========================================================================
-     🧭 FOOTER TOGGLE BUTTON
+     🧭 FOOTER BUTTON
      ========================================================================== */
 
 .app-theme .app-footer {
@@ -1515,31 +1507,11 @@ html,
   color: rgba(255,255,255,0.9);
   border: 1px solid rgba(255,255,255,0.1);
   backdrop-filter: blur(22px) saturate(160%);
-  transition: all 0.2s ease;
-  box-shadow:
-      inset 0 0 10px rgba(255,255,255,0.03),
-      0 2px 12px rgba(0,0,0,0.25);
-}
-
-.app-theme .app-footer-btn:hover {
-  background: rgba(255,255,255,0.12);
-  transform: translateX(2px);
 }
 
 /* ==========================================================================
-     🧩 PANELS / CARDS / INPUTS
+     🧩 PANELS / INPUTS
      ========================================================================== */
-
-.app-card-title {
-  font-family: 'Orbitron', 'Michroma', sans-serif;
-  font-weight: 300;
-  letter-spacing: 0.04em;
-  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-  text-transform: uppercase;
-  background: linear-gradient(90deg, #f0f0ff 0%, #a7a7b7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 .app-label {
   font-size: 0.75rem;
@@ -1572,10 +1544,11 @@ html,
 }
 
 /* ==========================================================================
-     🧮 BUTTONS
+     🧮 BUTTONS (no transitions)
      ========================================================================== */
 
-.app-btn-primary {
+.app-btn-primary,
+  .app-btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1585,44 +1558,22 @@ html,
   padding-bottom: 0.5rem;
   font-weight: 500;
   border-radius: 0.5rem;
+}
+
+.app-btn-primary {
   background: linear-gradient(100deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
   color: rgba(255,255,255,0.95);
   border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(18px) saturate(160%);
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
-}
-
-.app-btn-primary:hover {
-  background: linear-gradient(100deg, rgba(255,255,255,0.25), rgba(255,255,255,0.12));
-  border-color: rgba(255,255,255,0.18);
-  transform: translateY(-1px);
 }
 
 .app-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-weight: 500;
-  --tw-text-opacity: 1;
-  color: rgb(229 229 229 / var(--tw-text-opacity, 1));
-  border-radius: 0.5rem;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
-}
-
-.app-btn-secondary:hover {
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(255,255,255,0.16);
-  transform: translateY(-1px);
+  color: rgba(255,255,255,0.9);
 }
 
 /* ==========================================================================
-     🧭 DOTLIST STRUCTURE (for Settings actions)
+     🧭 DOTLIST
      ========================================================================== */
 
 .app-dotlist {
@@ -1679,150 +1630,38 @@ html,
 }
 
 /* ==========================================================================
-     🪟 MODAL LAYER (Settings popups)
+     🧭 SIDEBAR ↔ VIEW INTERACTION (Balanced push — centered with sidebar margin)
      ========================================================================== */
 
-.app-modal-overlay {
-  position: fixed;
-  inset: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 70;
-  background: rgba(10,10,20,0.65);
-  backdrop-filter: blur(12px) saturate(180%);
-  pointer-events: auto;
-  animation: fadeIn 0.25s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.app-modal-card {
-  position: relative;
-  width: 100%;
-  max-width: 32rem;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(24px) saturate(180%);
-  box-shadow:
-      inset 0 0 18px rgba(255,255,255,0.03),
-      0 10px 40px rgba(0,0,0,0.5);
-  animation: scaleIn 0.25s ease forwards;
-}
-
-@keyframes scaleIn {
-  from {
-    transform: scale(0.96);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.app-modal-close {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  cursor: pointer;
-  --tw-text-opacity: 1;
-  color: rgb(163 163 163 / var(--tw-text-opacity, 1));
-}
-
-.app-modal-close:hover {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
-.app-modal-close {
-  font-size: 1.25rem;
-  line-height: 1;
-}
-
-/* ==========================================================================
-   🧭 SIDEBAR ↔ VIEW INTERACTION (Balanced push — never off-screen)
-   ========================================================================== */
-
 .app-view-zone {
   position: relative;
-  transition-property: all;
-  transition-duration: 500ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(0);
+  z-index: 30;
   padding: clamp(2rem, 6vw, 4rem);
   max-width: min(100%, 90rem);
-  /* keep safe reading width */
-  margin-inline: auto;
-  /* centers horizontally */
+  /* safe reading width */
+  margin-left: clamp(18rem, 22vw, 24rem);
+  /* keeps sidebar space free */
+  margin-right: auto;
   box-sizing: border-box;
-}
-
-/* ==========================================================================
-   🧭 SIDEBAR ↔ VIEW INTERACTION (Clean centered motion — no padding drift)
-   ========================================================================== */
-
-.app-view-zone {
-  position: relative;
-  transition-property: all;
-  transition-duration: 500ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(0);
-  padding: clamp(2rem, 6vw, 4rem);
-  max-width: min(100%, 90rem);
-  margin-inline: auto;
-  /* keep centered */
-  box-sizing: border-box;
-}
-
-/* Sidebar open → gentle nudge only (no padding change) */
-
-.app-layout[data-state="open"] .app-view-zone {
-  transform: translateX(clamp(0rem, 4vw, 0rem));
-  filter: brightness(1.05) saturate(1.05);
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.3, 1),
-              filter 0.6s cubic-bezier(0.25, 1, 0.3, 1);
-}
-
-/* Sidebar closed → reset */
-
-.app-layout[data-state="closed"] .app-view-zone {
-  transform: translateX(0);
+  transform: none;
   filter: brightness(1) saturate(1);
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.3, 1),
-              filter 0.6s cubic-bezier(0.25, 1, 0.3, 1);
 }
 
-/* Subtle parallax feel for sphere */
+/* Add once */
 
-.app-layout[data-state="open"] .app-hero-canvas {
-  transform: translateX(-1rem) scale(1.015);
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.3, 1);
-}
-
-.app-layout[data-state="closed"] .app-hero-canvas {
-  transform: translateX(0) scale(1);
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.3, 1);
-}
-
-/* Responsive: on small screens, sidebar overlays completely */
-
-@media (max-width: 900px) {
-  .app-layout[data-state="open"] .app-view-zone {
-    transform: none;
-    filter: brightness(1);
-  }
+.app-tooltip {
+  position: absolute;
+  z-index: 80;
+  /* above .app-wrapper (30) and canvases (0/10) */
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: .5rem;
+  background: rgba(20,20,28,.95);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: .375rem;
+  padding: .25rem .5rem;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 /* ************************************************************************** */
@@ -1861,32 +1700,12 @@ html,
   visibility: visible;
 }
 
-.invisible {
-  visibility: hidden;
-}
-
-.collapse {
-  visibility: collapse;
-}
-
-.static {
-  position: static;
-}
-
-.fixed {
-  position: fixed;
-}
-
 .absolute {
   position: absolute;
 }
 
 .relative {
   position: relative;
-}
-
-.sticky {
-  position: sticky;
 }
 
 .inset-0 {
@@ -1910,8 +1729,8 @@ html,
   right: 0.75rem;
 }
 
-.isolate {
-  isolation: isolate;
+.z-10 {
+  z-index: 10;
 }
 
 .-mx-1 {
@@ -1992,6 +1811,10 @@ html,
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .inline {
   display: inline;
 }
@@ -2012,10 +1835,6 @@ html,
   display: grid;
 }
 
-.contents {
-  display: contents;
-}
-
 .hidden {
   display: none;
 }
@@ -2026,6 +1845,10 @@ html,
 
 .h-2 {
   height: 0.5rem;
+}
+
+.h-2\.5 {
+  height: 0.625rem;
 }
 
 .h-40 {
@@ -2052,12 +1875,20 @@ html,
   width: 2.5rem;
 }
 
+.w-2\.5 {
+  width: 0.625rem;
+}
+
 .w-40 {
   width: 10rem;
 }
 
 .w-5 {
   width: 1.25rem;
+}
+
+.w-6 {
+  width: 1.5rem;
 }
 
 .w-\[120px\] {
@@ -2070,6 +1901,10 @@ html,
 
 .w-full {
   width: 100%;
+}
+
+.max-w-\[280px\] {
+  max-width: 280px;
 }
 
 .max-w-md {
@@ -2088,14 +1923,6 @@ html,
   flex: 1 1 auto;
 }
 
-.shrink {
-  flex-shrink: 1;
-}
-
-.grow {
-  flex-grow: 1;
-}
-
 .-translate-x-1\/2 {
   --tw-translate-x: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -2109,10 +1936,6 @@ html,
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-}
-
-.resize {
-  resize: both;
 }
 
 .flex-col {
@@ -2162,10 +1985,16 @@ html,
   overflow: hidden;
 }
 
-.truncate {
-  overflow: hidden;
+.overflow-visible {
+  overflow: visible;
+}
+
+.text-ellipsis {
   text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+.whitespace-normal {
+  white-space: normal;
 }
 
 .whitespace-nowrap {
@@ -2235,6 +2064,11 @@ html,
   background-color: rgb(59 130 246 / 0.15);
 }
 
+.bg-green-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
+}
+
 .bg-green-500\/15 {
   background-color: rgb(34 197 94 / 0.15);
 }
@@ -2257,16 +2091,18 @@ html,
   background-color: rgb(23 23 23 / 0.5);
 }
 
+.bg-orange-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 146 60 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
+}
+
 .bg-red-500\/15 {
   background-color: rgb(239 68 68 / 0.15);
-}
-
-.bg-slate-500\/70 {
-  background-color: rgb(100 116 139 / 0.7);
-}
-
-.p-3 {
-  padding: 0.75rem;
 }
 
 .px-2 {
@@ -2304,6 +2140,11 @@ html,
   padding-bottom: 0.75rem;
 }
 
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -2314,6 +2155,10 @@ html,
 
 .text-right {
   text-align: right;
+}
+
+.align-middle {
+  vertical-align: middle;
 }
 
 .font-mono {
@@ -2349,15 +2194,6 @@ html,
 
 .lowercase {
   text-transform: lowercase;
-}
-
-.italic {
-  font-style: italic;
-}
-
-.ordinal {
-  --tw-ordinal: ordinal;
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 
 .tracking-wide {
@@ -2409,8 +2245,9 @@ html,
   color: rgb(252 165 165 / var(--tw-text-opacity, 1));
 }
 
-.text-white\/80 {
-  color: rgb(255 255 255 / 0.8);
+.text-red-400 {
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity, 1));
 }
 
 .text-yellow-300\/90 {
@@ -2420,14 +2257,6 @@ html,
 .text-yellow-400 {
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity, 1));
-}
-
-.underline {
-  text-decoration-line: underline;
-}
-
-.overline {
-  text-decoration-line: overline;
 }
 
 .opacity-0 {
@@ -2444,66 +2273,6 @@ html,
 
 .opacity-90 {
   opacity: 0.9;
-}
-
-.shadow {
-  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
-.outline {
-  outline-style: solid;
-}
-
-.ring {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-}
-
-.ring-2 {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-}
-
-.ring-blue-400\/70 {
-  --tw-ring-color: rgb(96 165 250 / 0.7);
-}
-
-.blur {
-  --tw-blur: blur(8px);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.grayscale {
-  --tw-grayscale: grayscale(100%);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.invert {
-  --tw-invert: invert(100%);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.sepia {
-  --tw-sepia: sepia(100%);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.filter {
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.backdrop-filter {
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-}
-
-.transition {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 }
 
 .transition-colors {
@@ -2968,8 +2737,8 @@ html,
 
 /* ************************************************************************** */
 
-.hover\:bg-slate-600\/80:hover {
-  background-color: rgb(71 85 105 / 0.8);
+.hover\:bg-neutral-800\/30:hover {
+  background-color: rgb(38 38 38 / 0.3);
 }
 
 .hover\:opacity-100:hover {
@@ -2986,16 +2755,16 @@ html,
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
 }
 
-.active\:bg-slate-700\/90:active {
-  background-color: rgb(51 65 85 / 0.9);
-}
-
 .disabled\:pointer-events-none:disabled {
   pointer-events: none;
 }
 
 .disabled\:opacity-50:disabled {
   opacity: 0.5;
+}
+
+.group:hover .group-hover\:block {
+  display: block;
 }
 
 @media (min-width: 640px) {
