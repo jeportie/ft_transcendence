@@ -15,6 +15,7 @@ import rateLimit from "@fastify/rate-limit";
 import { localRoutes } from "./handler/local.handler.js";
 import { oauthRoutes } from "./handler/oauth.handler.js";
 import { f2aRoutes } from "./handler/f2a.handler.js";
+import { sessionsRoutes } from "./handler/sessions.handler.js";
 
 export default fp(async function authPlugin(fastify) {
     // Scoped instance just for /api/auth/*
@@ -32,5 +33,6 @@ export default fp(async function authPlugin(fastify) {
         await authScoped.register(localRoutes);
         await authScoped.register(oauthRoutes);
         await authScoped.register(f2aRoutes);
+        await authScoped.register(sessionsRoutes);
     }, { prefix: "/api/auth" });
 });
