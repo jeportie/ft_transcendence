@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 09:16:58 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/29 22:05:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -34,7 +34,7 @@ const Reset = () => import("../views/auth/Reset/ResetPwd.js");
 const AppLayout = () => import("../views/layouts/AppLayout/AppLayout.js");
 // |--> User
 const Dashboard = () => import("../views/user/Dashboard/Dashboard.js");
-const Settings = () => import("../views/Settings.js");
+const Settings = () => import("../views/user/Settings/Settings.js");
 // |--> Game
 const Game = () => import("../views/pong/Match/Pong.js");
 // |--> Other

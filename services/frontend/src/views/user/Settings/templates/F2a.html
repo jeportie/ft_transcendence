@@ -1,0 +1,62 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- F2a.html                                           :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/10/29 21:13:13 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/29 21:13:23 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template id="tpl-2fa-card">
+    <div class="app-modal-card">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="app-card-title">Two-Factor Authentication</h3>
+            <span id="f2a-status-tag"
+                class="inline-flex items-center gap-2 px-2 py-1 rounded-full text-xs bg-red-500/15 text-red-300 border border-red-400/20">Disabled</span>
+        </div>
+
+        <div class="flex gap-3 mb-4">
+            <button id="f2a-enable-btn" class="app-btn-primary w-full">
+                Enable
+            </button>
+            <button id="f2a-disable-btn" class="app-btn-secondary w-full">
+                Disable
+            </button>
+        </div>
+
+        <!-- QR + OTP -->
+        <div id="f2a-qr-wrap" class="hidden mt-6">
+            <p class="app-text mb-4">
+                Scan this QR code with your authenticator app, then enter the code below.
+            </p>
+            <div class="flex flex-col items-center gap-4">
+                <img id="f2a-qr" class="ui-qr w-40 h-40 rounded-md border border-white/10" />
+                <otp-input id="f2a-code" digits="6" class="mt-2"></otp-input>
+            </div>
+        </div>
+
+        <!-- Backup Codes -->
+        <div id="f2a-backup-wrap" class="hidden mt-6">
+            <p class="text-sm font-semibold text-yellow-300/90 mb-2">
+                ⚠️ Save these backup codes — they will not be shown again.
+            </p>
+            <div class="overflow-visible rounded-md border border-neutral-700/70 mb-3">
+                <table class="w-full text-left">
+                    <thead class="bg-neutral-800/60 text-neutral-300">
+                        <tr>
+                            <th class="px-3 py-2">#</th>
+                            <th class="px-3 py-2">Backup Code</th>
+                        </tr>
+                    </thead>
+                    <tbody id="f2a-backup-table" class="bg-neutral-900/50 text-neutral-100"></tbody>
+                </table>
+            </div>
+            <button id="f2a-backup-download" class="app-btn-primary w-full">
+                ⬇️ Download Backup Codes
+            </button>
+        </div>
+    </div>
+</template>

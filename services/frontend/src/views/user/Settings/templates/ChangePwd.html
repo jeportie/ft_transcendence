@@ -1,0 +1,40 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- ChangePwd.html                                     :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/10/29 21:12:52 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/10/29 21:13:04 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template id="tpl-pwd-card">
+    <div class="app-modal-card">
+
+        <h3 class="app-card-title mb-4">Change Password</h3>
+        <p id="pwd-hint" class="app-text mb-4">
+            Use a long passphrase you don’t reuse elsewhere.
+        </p>
+
+        <form id="pwd-form" class="grid gap-3">
+            <div class="app-field">
+                <label class="app-label">Current Password</label>
+                <input id="old-pwd" class="app-input" type="password" autocomplete="current-password"
+                    placeholder="Current password" />
+            </div>
+            <div class="app-field">
+                <label class="app-label">New Password</label>
+                <input id="new-pwd" class="app-input" type="password" autocomplete="new-password"
+                    placeholder="New password" />
+            </div>
+            <div class="app-field">
+                <label class="app-label">Confirm New Password</label>
+                <input id="confirm-pwd" class="app-input" type="password" autocomplete="new-password"
+                    placeholder="Confirm new password" />
+            </div>
+            <button class="app-btn-primary mt-2 w-full">Save Password</button>
+        </form>
+    </div>
+</template>
