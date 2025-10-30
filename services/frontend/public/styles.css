@@ -688,7 +688,7 @@ body {
 
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/10/30 13:09:59 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:40:39 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -1362,7 +1362,7 @@ html,
 
 .app-title {
   font-family: 'Michroma', sans-serif;
-  font-weight: 200;
+  font-weight: 100;
   font-size: clamp(1.6rem, 2.2vw, 2.2rem);
   letter-spacing: 0.01em;
 }
@@ -1371,7 +1371,7 @@ html,
   --tw-text-opacity: 1;
   color: rgb(212 212 212 / var(--tw-text-opacity, 1));
   font-family: 'Michroma', sans-serif;
-  font-weight: 300;
+  font-weight: 100;
   font-size: 1rem;
   line-height: 1.55;
 }
@@ -1503,6 +1503,13 @@ html,
 /* ==========================================================================
      🧩 PANELS / INPUTS
      ========================================================================== */
+
+.app-card-title {
+  font-family: 'Michroma', sans-serif;
+  font-weight: 100;
+  font-size: 1.5;
+  letter-spacing: 0.01em;
+}
 
 .app-label {
   font-size: 0.75rem;
@@ -1695,12 +1702,12 @@ html,
 
 .app-modal-close {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0px;
+  right: 0.5rem;
   font-size: 1.125rem;
   line-height: 1.75rem;
   --tw-text-opacity: 1;
-  color: rgb(212 212 212 / var(--tw-text-opacity, 1));
+  color: rgb(229 229 229 / var(--tw-text-opacity, 1));
   cursor: pointer;
   background: none;
   border: none;
@@ -1858,6 +1865,10 @@ strong-password input {
 
 .inline-block {
   display: inline-block;
+}
+
+.inline {
+  display: inline;
 }
 
 .flex {

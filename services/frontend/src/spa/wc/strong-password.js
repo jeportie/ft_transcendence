@@ -118,7 +118,7 @@ export class StrongPassword extends HTMLElement {
 
         const svgShow = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-     width="23" height="23" fill="none" stroke="#ffffff" stroke-width="32"
+     width="19.5" height="19.5" fill="none" stroke="#ffffff" stroke-width="32"
      stroke-linecap="round" stroke-linejoin="round"
      style="
        opacity: 0.8;
@@ -131,7 +131,7 @@ export class StrongPassword extends HTMLElement {
 
         const svgHide = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-     width="23" height="23" fill="none" stroke="#ffffff" stroke-width="32"
+     width="19.5" height="19.5" fill="none" stroke="#ffffff" stroke-width="32"
      stroke-linecap="round" stroke-linejoin="round"
      style="
        opacity: 0.8;

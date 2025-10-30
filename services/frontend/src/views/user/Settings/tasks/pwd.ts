@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/29 22:00:47 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/30 13:22:09 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/30 15:15:43 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,12 +14,11 @@
 import { API } from "../../../../spa/api.js";
 import pwdCardHTML from "../templates/ChangePwd.html";
 import { openModalWith } from "../../../../spa/utils/modal.js";
-import { togglePassword } from "../../../shared/togglePassword.js";
+import { togglePasswordSvg } from "../../../shared/togglePasswordSvg.js";
 
 let off: Array<() => void> = [];
 
-export function setupPwd(ctx: any) {
-    const { ASSETS } = ctx; // ✅ get icons from mount context
+export function setupPwd({ ASSETS }) {
     const btn = document.querySelector<HTMLButtonElement>("#btn-open-pwd");
     if (!btn) return;
 
@@ -37,8 +36,8 @@ export function setupPwd(ctx: any) {
 
         const { remove } = openModalWith(frag);
 
-        togglePassword({ ASSETS, input: oldPwd });
-        togglePassword({ ASSETS, input: confirm });
+        togglePasswordSvg({ ASSETS, input: oldPwd });
+        togglePasswordSvg({ ASSETS, input: confirm });
 
         const me = await API.Get("/user/me");
         const user = me?.data?.me;

@@ -1,5 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none" stroke="#fff" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M256 112C118 112 24 256 24 256s94 144 232 144 232-144 232-144S394 112 256 112Z"/>
-  <circle cx="256" cy="256" r="64"/>
-  <path d="M96 416L416 96"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+     width="23" height="23" fill="none" stroke="#ffffff" stroke-width="32"
+     stroke-linecap="round" stroke-linejoin="round"
+     style="
+       opacity: 0.8;
+       transition: opacity 0.25s ease, stroke 0.25s ease;
+     ">
+  <path d="M256 128C136 128 48 256 48 256s88 128 208 128 208-128 208-128S376 128 256 128Z"/>
+  <circle cx="256" cy="256" r="65"/>
+  <path d="M416 96L96 416"/>
 </svg>

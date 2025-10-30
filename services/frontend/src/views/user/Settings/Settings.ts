@@ -17,8 +17,8 @@ import settingsHTML from "./settings.html";
 import desktop from "../../../assets/icons/desktop.svg";
 import laptop from "../../../assets/icons/laptop.svg";
 import phone from "../../../assets/icons/phone.svg";
-import hideIcon from "../../../assets/hide.png";
-import showIcon from "../../../assets/show.png";
+import hideIcon from "../../../assets/icons/hide.svg";
+import showIcon from "../../../assets/icons/show.svg";
 
 export const ASSETS = { desktop, laptop, phone, hideIcon, showIcon };
 
