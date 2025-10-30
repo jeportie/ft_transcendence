@@ -6,11 +6,11 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/10/27 22:40:51 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/30 14:39:32 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/30 23:10:48 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<section id="settings-view" class="app-view-zone">
+<section id="settings-section" class="app-view-zone app-card">
     <header class="mb-8">
         <h1 class="app-title">Settings</h1>
         <p class="app-text mt-1">
@@ -29,7 +29,7 @@
                     </p>
                 </div>
                 <div class="app-actions">
-                    <button id="btn-2fa-toggle" class="app-btn-primary">Enable</button>
+                    <button id="settings-2fa-btn" class="app-btn-primary">Enable</button>
                 </div>
             </div>
         </li>
@@ -44,7 +44,7 @@
                     </p>
                 </div>
                 <div class="app-actions">
-                    <button id="btn-open-pwd" class="app-btn-primary">Change</button>
+                    <button id="settings-pwd-btn" class="app-btn-primary"></button>
                 </div>
             </div>
         </li>
@@ -70,7 +70,7 @@
                                 <th class="px-3 py-2 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="sessions-table-body" class="bg-neutral-900/50 text-neutral-100 text-sm"></tbody>
+                        <tbody id="settings-sessions-table" class="bg-neutral-900/50 text-neutral-100 text-sm"></tbody>
                     </table>
                 </div>
             </div>
@@ -85,11 +85,11 @@
                     </p>
                 </div>
                 <div class="app-actions">
-                    <button id="btn-delete" class="app-btn-primary">Delete</button>
+                    <button id="settings-delete-btn" class="app-btn-primary">Delete</button>
                 </div>
             </div>
         </li>
         <li></li>
     </ol>
-    <div id="settings-cards"></div>
+    <div id="settings-cards-div"></div>
 </section>

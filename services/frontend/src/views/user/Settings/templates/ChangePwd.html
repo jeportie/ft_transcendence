@@ -6,13 +6,23 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/10/29 21:12:52 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/30 11:30:47 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/30 23:02:15 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
 <template id="tpl-pwd-card">
-    <div>
-
+    <!-- Disable Flow -->
+    <div id="pwd-disable-wrap" class="hidden">
+        <h3 class="app-card-title mb-4">Verify 2FA</h3>
+        <p class="app-text mb-4">
+            Enter your current authenticator code to change your password.
+        </p>
+        <form id="pwd-otp-form" class="flex flex-col items-center gap-4">
+            <otp-input id="pwd-disable-code" digits="6" class="mt-2"></otp-input>
+            <button id="pwd-confirm-disable" class="app-btn-primary w-full mt-4">Submit</button>
+        </form>
+    </div>
+    <div id="pwd-normal-div" class="hidden">
         <h3 class="app-card-title mb-4">Change Password</h3>
         <p id="pwd-hint" class="app-text mb-4">
             Use a long passphrase you don’t reuse elsewhere.
@@ -35,5 +45,6 @@
             </div>
             <button class="app-btn-primary mt-2 w-full">Save Password</button>
         </form>
+
     </div>
 </template>

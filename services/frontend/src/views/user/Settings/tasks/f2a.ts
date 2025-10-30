@@ -6,10 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/30 14:28:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/30 14:28:51 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/30 19:59:14 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 import twoFactorHTML from "../templates/F2a.html";
 import { openModalWith } from "../../../../spa/utils/modal.js";
@@ -17,7 +18,7 @@ import { openModalWith } from "../../../../spa/utils/modal.js";
 let listeners: Array<() => void> = [];
 
 export function setupF2a() {
-    const btn = document.querySelector<HTMLButtonElement>("#btn-2fa-toggle");
+    const btn = DOM.settings2faBtn;
     if (!btn) return;
 
     // Reflect current state

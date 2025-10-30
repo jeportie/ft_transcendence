@@ -6,16 +6,18 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/29 22:01:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/29 22:49:44 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/30 23:28:33 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
 let off: Array<() => void> = [];
 
+// @ts-expect-error
 export function setupSessions({ ASSETS }) {
-    const tbody = document.querySelector<HTMLElement>("#sessions-table-body");
+    const tbody = DOM.settingsSessionsTable;
     if (!tbody) return;
 
     tbody.innerHTML = `<tr><td colspan="6" class="px-3 py-4 text-center text-neutral-400 text-sm">Loading sessions...</td></tr>`;
@@ -77,7 +79,7 @@ export function setupSessions({ ASSETS }) {
         <td class="px-3 py-3 whitespace-nowrap text-neutral-300">${s.expiresAt ? new Date(s.expiresAt).toLocaleString() : "—"}</td>
         <td class="px-3 py-3 whitespace-nowrap text-right">
           ${s.current ? `<span class="text-xs px-2 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-400/20">Current</span>`
-                    : `<button data-session="${s.id}" class="app-btn-secondary text-xs">Revoke</button>`}
+                    : `<button data-session="${s.id}" class="app-btn-third text-xs">Revoke</button>`}
         </td>`;
             tbody.appendChild(tr);
         });
