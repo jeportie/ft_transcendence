@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:39:01 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 14:55:49 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/30 14:01:10 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -47,11 +47,16 @@ export async function refreshToken(fastify, request, reply) {
     const hashNew = hashToken(rawNew);
     const expiresAt = addDaysUTC(fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
+    const clientIp =
+        request.headers['x-client-ip'] ||
+        request.headers['x-forwarded-for']?.split(',')[0].trim() ||
+        request.ip;
+
     await db.run(refreshTokenSql, {
         ":user_id": rt.user_id,
         ":token_hash": hashNew,
         ":user_agent": request.headers["user-agent"] || null,
-        ":ip": request.ip || null,
+        ":ip": clientIp,
         ":expires_at": expiresAt,
     });
 

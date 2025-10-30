@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/14 19:19:28 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/29 22:39:38 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/30 11:24:34 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,8 +17,10 @@ import settingsHTML from "./settings.html";
 import desktop from "../../../assets/icons/desktop.svg";
 import laptop from "../../../assets/icons/laptop.svg";
 import phone from "../../../assets/icons/phone.svg";
+import hideIcon from "../../../assets/hide.png";
+import showIcon from "../../../assets/show.png";
 
-export const ASSETS = { desktop, laptop, phone };
+export const ASSETS = { desktop, laptop, phone, hideIcon, showIcon };
 
 export default class Settings extends AbstractView {
     constructor(ctx: any) {

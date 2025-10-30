@@ -63,7 +63,12 @@ export function setupSessions({ ASSETS }) {
         </td>
         <td class="px-3 py-3 whitespace-nowrap">
           <div class="flex items-center gap-2">
-            ${icon(s.device)}
+            <span class="relative group inline-flex items-center">
+              ${icon(s.device)}
+              <span class="app-tooltip hidden group-hover:block text-xs text-neutral-200 absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-neutral-800/90 border border-neutral-700/60 px-2 py-1 rounded-md shadow-md">
+                ${s.agent || s.userAgent || "Unknown agent"}
+              </span>
+            </span>
             <span class="text-neutral-100">${s.device}</span>
           </div>
         </td>

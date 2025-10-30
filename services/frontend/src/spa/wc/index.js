@@ -6,8 +6,9 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/15 13:04:28 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/15 13:06:16 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/30 10:23:50 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import "./otp-inputs.js";
+import "./strong-password.js";

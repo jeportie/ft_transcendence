@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
-/*   Updated: 2025/10/29 15:55:26 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/10/30 13:09:59 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,11 @@
     backdrop-filter: blur(12px) saturate(140%);
   }
 
+  .app-input:focus {
+    border-color: rgba(255,255,255,0.3);
+    background-color: rgba(20,20,30,0.45);
+  }
+
   .app-field { @apply grid gap-1; }
 
   /* ==========================================================================
@@ -329,6 +334,23 @@
 
   .app-modal-close:hover {
     color: white;
+  }
+
+  strong-password {
+    display: block;
+    width: 100%;
+    position: relative;
+    /* Keep normal pointer events so host still boxes content */
+    pointer-events: auto;
+  }
+  
+  strong-password > * {
+    pointer-events: auto; /* ensure input and bar are interactive */
+  }
+  
+  strong-password input {
+    width: 100%;
+    display: block;
   }
 
 }

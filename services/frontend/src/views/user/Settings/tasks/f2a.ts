@@ -29,21 +29,23 @@ export function setupF2a() {
         // Build modal content from template file
         const tpl = document.createElement("template");
         tpl.innerHTML = twoFactorHTML.trim();
-        const frag = tpl.content.cloneNode(true) as DocumentFragment;
+        // const frag = tpl.content.cloneNode(true) as DocumentFragment;
+        const innerTpl = tpl.content.querySelector("template") as HTMLTemplateElement;
+        const frag = innerTpl.content.cloneNode(true) as DocumentFragment;
+
+        // Query inside modal
+        const statusTag = frag.querySelector("#f2a-status-tag") as HTMLElement;
+        const enableBtn = frag.querySelector("#f2a-enable-btn") as HTMLButtonElement;
+        const disableBtn = frag.querySelector("#f2a-disable-btn") as HTMLButtonElement;
+        const qrWrap = frag.querySelector("#f2a-qr-wrap") as HTMLElement;
+        const qrImg = frag.querySelector("#f2a-qr") as HTMLImageElement;
+        const otp = frag.querySelector("#f2a-code") as any;
+        const backupWrap = frag.querySelector("#f2a-backup-wrap") as HTMLElement;
+        const backupTbody = frag.querySelector("#f2a-backup-table") as HTMLElement;
+        const dlBtn = frag.querySelector("#f2a-backup-download") as HTMLButtonElement;
 
         // Mount modal
         const { remove } = openModalWith(frag);
-
-        // Query inside modal
-        const statusTag = document.querySelector("#f2a-status-tag") as HTMLElement;
-        const enableBtn = document.querySelector("#f2a-enable-btn") as HTMLButtonElement;
-        const disableBtn = document.querySelector("#f2a-disable-btn") as HTMLButtonElement;
-        const qrWrap = document.querySelector("#f2a-qr-wrap") as HTMLElement;
-        const qrImg = document.querySelector("#f2a-qr") as HTMLImageElement;
-        const otp = document.querySelector("#f2a-code") as any;
-        const backupWrap = document.querySelector("#f2a-backup-wrap") as HTMLElement;
-        const backupTbody = document.querySelector("#f2a-backup-table") as HTMLElement;
-        const dlBtn = document.querySelector("#f2a-backup-download") as HTMLButtonElement;
 
         const setUI = (enabled: boolean) => {
             statusTag.textContent = enabled ? "Enabled" : "Disabled";
