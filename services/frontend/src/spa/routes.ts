@@ -16,12 +16,10 @@ import PersistentAnimationHook from "../styles/transitions/hooks/PersistentAnima
 import { guards } from "./guards.js";
 
 // Landing layout
-const LandingLayout = () => import("../views/layouts/LandingLayout/LandingLayout.js");
-// |--> Landing
+const LandingLayout = () => import("../layouts/LandingLayout/LandingLayout.js");
 const Landing = () => import("../views/landing/Landing/Landing.js");
 const ServiceTerms = () => import("../views/landing/Terms/ServiceTerms.js");
 const PrivacyPolity = () => import("../views/landing/Policy/PrivacyPolicy.js");
-// |--> Auth
 const Login = () => import("../views/auth/Login/Login.js");
 const Signup = () => import("../views/auth/Signup/Signup.js");
 const Forgot = () => import("../views/auth/ForgotPwd/ForgotPwd.js");
@@ -31,13 +29,10 @@ const Activate = () => import("../views/auth/Activate/Activate.js");
 const Reset = () => import("../views/auth/Reset/ResetPwd.js");
 
 // App layout
-const AppLayout = () => import("../views/layouts/AppLayout/AppLayout.js");
-// |--> User
+const AppLayout = () => import("../layouts/AppLayout/AppLayout.js");
 const Dashboard = () => import("../views/user/Dashboard/Dashboard.js");
 const Settings = () => import("../views/user/Settings/Settings.js");
-// |--> Game
 const Game = () => import("../views/pong/Match/Pong.js");
-// |--> Other
 const NotFound = () => import("../views/404/NotFound.js");
 
 const appHook = new PersistentAnimationHook();
