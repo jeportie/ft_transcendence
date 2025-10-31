@@ -6,45 +6,52 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/10/29 21:12:52 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/30 23:02:15 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/10/31 14:05:43 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
 <template id="tpl-pwd-card">
-    <!-- Disable Flow -->
-    <div id="pwd-disable-wrap" class="hidden">
-        <h3 class="app-card-title mb-4">Verify 2FA</h3>
-        <p class="app-text mb-4">
-            Enter your current authenticator code to change your password.
-        </p>
-        <form id="pwd-otp-form" class="flex flex-col items-center gap-4">
-            <otp-input id="pwd-disable-code" digits="6" class="mt-2"></otp-input>
-            <button id="pwd-confirm-disable" class="app-btn-primary w-full mt-4">Submit</button>
-        </form>
-    </div>
-    <div id="pwd-normal-div" class="hidden">
-        <h3 class="app-card-title mb-4">Change Password</h3>
-        <p id="pwd-hint" class="app-text mb-4">
-            Use a long passphrase you don’t reuse elsewhere.
-        </p>
+    <div>
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="app-card-title mb-4">Change Password</h1>
+        </div>
 
-        <form id="pwd-form" class="grid gap-3">
-            <div class="app-field">
-                <label class="app-label">Current Password</label>
-                <input id="old-pwd" class="app-input" type="password" autocomplete="current-password"
-                    placeholder="Current password" />
-            </div>
-            <div class="app-field">
-                <label class="app-label">New Password</label>
-                <strong-password id="new-pwd" mode="full" placeholder="New password"></strong-password>
-            </div>
-            <div class="app-field">
-                <label class="app-label">Confirm New Password</label>
-                <input id="confirm-pwd" class="app-input" type="password" autocomplete="new-password"
-                    placeholder="Confirm new password" />
-            </div>
-            <button class="app-btn-primary mt-2 w-full">Save Password</button>
-        </form>
+        <div id="pwd-normal-div" class="hidden">
+            <p id="pwd-hint" class="app-text mb-4">
+                Use a long passphrase you don’t reuse elsewhere.
+            </p>
+            <form id="pwd-form" class="grid gap-3">
+                <div class="app-field">
+                    <label class="app-label">Current Password</label>
+                    <input id="old-pwd" class="app-input" type="password" autocomplete="current-password"
+                        placeholder="Current password" />
+                </div>
+                <div class="app-field">
+                    <label class="app-label">New Password</label>
+                    <strong-password id="new-pwd" mode="full" placeholder="New password"></strong-password>
+                </div>
+                <div class="app-field">
+                    <label class="app-label">Confirm New Password</label>
+                    <input id="confirm-pwd" class="app-input" type="password" autocomplete="new-password"
+                        placeholder="Confirm new password" />
+                </div>
+                <button class="app-btn-primary mt-2 w-full">Save Password</button>
+            </form>
+        </div>
+
+        <!-- Disable Flow -->
+        <div id="pwd-disable-wrap" class="hidden">
+            <p class="app-text mb-4">
+                Enter your current authenticator code to change your password.
+            </p>
+            <form id="pwd-otp-form" class="flex flex-col items-center gap-4">
+                <otp-input id="pwd-disable-code" digits="6" class="mt-2"></otp-input>
+                <button id="pwd-confirm-disable" class="app-btn-primary w-full mt-4">Submit</button>
+            </form>
+            <button id="pwd-backup-code" class="app-btn-primary w-full mt-4">
+                Use another Authentication methode
+            </button>
+        </div>
 
     </div>
 </template>

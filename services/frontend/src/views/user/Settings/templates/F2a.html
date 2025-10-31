@@ -1,15 +1,3 @@
-<!-- *********************************************************************** -->
-<!--                                                                         -->
-<!--                                                      :::      ::::::::  -->
-<!-- F2a.html                                           :+:      :+:    :+:  -->
-<!--                                                  +:+ +:+         +:+    -->
-<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
-<!--                                              +#+#+#+#+#+   +#+          -->
-<!-- Created: 2025/10/29 21:13:13 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/10/30 14:39:30 by jeportie         ###   ########.fr      -->
-<!--                                                                         -->
-<!-- *********************************************************************** -->
-
 <template id="tpl-2fa-card">
     <div>
         <div class="flex items-center justify-between mb-4">
@@ -60,6 +48,9 @@
                 <otp-input id="f2a-disable-code" digits="6" class="mt-2"></otp-input>
                 <button id="f2a-confirm-disable" class="app-btn-primary w-full mt-4">Disable 2FA</button>
             </div>
+            <button id="f2a-backup-code" class="app-btn-primary w-full mt-4">
+                Use another Authentication methode
+            </button>
         </div>
     </div>
 </template>
