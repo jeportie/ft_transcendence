@@ -18,6 +18,7 @@ import { togglePasswordSvg } from "../../../shared/togglePasswordSvg.js";
 
 let off: Array<() => void> = [];
 
+// @ts-expect-error
 export function setupPwd({ ASSETS }) {
     const btn = DOM.settingsPwdBtn;
     if (!btn) return;
@@ -27,41 +28,36 @@ export function setupPwd({ ASSETS }) {
         const user = me?.data?.me;
 
         function changePwd() {
-            const tpl = document.createElement("template");
-            tpl.innerHTML = pwdCardHTML.trim();
-            const innerTpl = tpl.content.querySelector("template") as HTMLTemplateElement;
-            const frag = innerTpl.content.cloneNode(true) as DocumentFragment;
+            DOM.createChangePwdFrag();
+            const frag = DOM.fragChangePwd as any;
+            const form = DOM.pwdForm;
+            const oldPwd = DOM.oldPwd;
+            const newPwd = DOM.newPwd as any;
+            const confirm = DOM.confirmPwd;
+            const hint = DOM.pwdHint;
+            const normal = DOM.pwdNormalDiv;
 
-            const form = frag.querySelector<HTMLFormElement>("#pwd-form")!;
-            const oldPwd = frag.querySelector<HTMLInputElement>("#old-pwd")!;
-            const newPwd = frag.querySelector("#new-pwd")! as any;
-            const confirm = frag.querySelector<HTMLInputElement>("#confirm-pwd")!;
-            const hint = frag.querySelector<HTMLElement>("#pwd-hint")!;
-            const normal = frag.querySelector("#pwd-normal-div") as HTMLElement;
             normal.classList.remove("hidden");
-
             const { remove } = openModalWith(frag);
 
             togglePasswordSvg({ ASSETS, input: oldPwd });
             togglePasswordSvg({ ASSETS, input: confirm });
 
-            if (user?.oauth) {
+            if (user.oauth) {
                 oldPwd.closest(".app-field")?.classList.add("hidden");
-                hint.textContent =
-                    "This account was created with OAuth. You can set a local password below.";
+                hint.textContent = "This account was created with OAuth. You can set a local password below.";
                 btn.innerText = "Create";
             }
 
             const onSubmit = async (e: Event) => {
                 e.preventDefault();
-                const newPwdEl = form.querySelector("#new-pwd") as any;
-                if (!newPwdEl.value || confirm.value !== newPwdEl.value) {
-                    newPwdEl.markInvalid();
+                if (!newPwd.value || confirm?.value !== newPwd.value) {
+                    newPwd.markInvalid();
                     return alert("Please enter a valid password and confirmation.");
                 }
                 const { data, error } = await API.Post("/user/modify-pwd", {
                     username: user.username,
-                    oauth: !!user.oauth,
+                    oauth: user.oauth,
                     oldPwd: oldPwd.value,
                     newPwd: newPwd.value,
                 });
@@ -78,18 +74,40 @@ export function setupPwd({ ASSETS }) {
 
         }
 
+        function verifyBackupCodes() {
+            DOM.createChangePwdFrag();
+            DOM.pwdBackupWrap.classList.remove("hidden");
+            const { remove } = openModalWith(DOM.fragChangePwd);
+
+            DOM.pwdBackOtpForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const code = DOM.pwdBackupCode.value;
+                const { data, error } = await API.Post("/auth/verify-backup", { code });
+                if (error || !data.success)
+                    return alert("Invalid code, cannot disable.");
+                remove();
+                changePwd();
+            })
+
+        }
+
         if (user.f2a_enabled) {
-            const tpl = document.createElement("template");
-            tpl.innerHTML = pwdCardHTML.trim();
-            const innerTpl = tpl.content.querySelector("template") as HTMLTemplateElement;
-            const frag = innerTpl.content.cloneNode(true) as DocumentFragment;
+            DOM.createChangePwdFrag();
+            const frag = DOM.fragChangePwd;
+            const otpForm = DOM.pwdOtpForm;
+            const disableCode = DOM.pwdDisableCode;
+            const disableWrap = DOM.pwdDisableWrap;
+            const toBackup = DOM.pwdBackupBtn;
 
-            const otpForm = frag.querySelector<HTMLFormElement>("#pwd-otp-form")!;
-            const disableCode = frag.querySelector("#pwd-disable-code") as HTMLInputElement;
-            const disableWrap = frag.querySelector("#pwd-disable-wrap") as HTMLElement;
             disableWrap.classList.remove("hidden");
-
             const { remove } = openModalWith(frag);
+
+            toBackup.addEventListener("click", () => {
+                console.log("Clicked");
+                remove();
+                verifyBackupCodes();
+            })
 
             otpForm.addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -101,6 +119,7 @@ export function setupPwd({ ASSETS }) {
                 remove();
                 changePwd();
             })
+
         } else {
             changePwd();
         }

@@ -10,7 +10,7 @@
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<template id="tpl-pwd-card">
+<template>
     <div>
         <div class="flex items-center justify-between mb-4">
             <h1 class="app-card-title mb-4">Change Password</h1>
@@ -39,18 +39,29 @@
             </form>
         </div>
 
-        <!-- Disable Flow -->
+        <!-- 2fa Flow -->
         <div id="pwd-disable-wrap" class="hidden">
             <p class="app-text mb-4">
                 Enter your current authenticator code to change your password.
             </p>
             <form id="pwd-otp-form" class="flex flex-col items-center gap-4">
-                <otp-input id="pwd-disable-code" digits="6" class="mt-2"></otp-input>
+                <otp-input id="pwd-disable-code" length="6" position="3" class="mt-2"></otp-input>
                 <button id="pwd-confirm-disable" class="app-btn-primary w-full mt-4">Submit</button>
             </form>
-            <button id="pwd-backup-code" class="app-btn-primary w-full mt-4">
+            <button id="pwd-backup-btn" type="button" class="app-btn-primary w-full mt-4">
                 Use another Authentication methode
             </button>
+        </div>
+
+        <!-- backup code Flow -->
+        <div id="pwd-backup-wrap" class="hidden">
+            <p class="app-text mb-4">
+                Enter your current backup code to change your password.
+            </p>
+            <form id="pwd-back-otp-form" class="flex flex-col items-center gap-4">
+                <otp-input id="pwd-backup-code" length="8" position="4" class="mt-2"></otp-input>
+                <button id="pwd-confirm-backup" class="app-btn-primary w-full mt-4">Submit</button>
+            </form>
         </div>
 
     </div>
