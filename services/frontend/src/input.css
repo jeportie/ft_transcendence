@@ -14,8 +14,8 @@
 /* --- Global style stack --- */
 @import "./styles/base.css";
 @import "./styles/utilities.css";
-@import "./views/layouts/LandingLayout/Landing.css";
-@import "./views/layouts/AppLayout/App.css";
+@import "./layouts/LandingLayout/Landing.css";
+@import "./layouts/AppLayout/App.css";
 @import "./styles/loaders.css";
 
 /* --- Transitions --- */

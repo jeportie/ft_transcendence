@@ -12,7 +12,7 @@
 
 import { DOM } from "../dom.generated.js";
 import { Rect } from "@jeportie/lib2d";
-import PongGame from "../../../../games/pong/PongGame.js";
+import PongGame from "../../../../graphics/pong/PongGame.js";
 
 export async function setupPong() {
     const canvas = DOM.pongCanvas;
