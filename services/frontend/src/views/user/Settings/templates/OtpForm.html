@@ -1,0 +1,26 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- OtpForm.html                                       :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/01 13:12:40 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/01 17:42:02 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <div id="pwd-disable-wrap">
+        <p class="app-text mb-4">
+            Enter your current authenticator code to change your password.
+        </p>
+        <form id="pwd-otp-form" class="flex flex-col items-center gap-4">
+            <otp-input id="pwd-disable-code" length="6" position="3" class="mt-2"></otp-input>
+            <button id="pwd-confirm-disable" class="app-btn-primary w-full mt-4">Submit</button>
+        </form>
+        <button id="pwd-backup-btn" type="button" class="app-btn-primary w-full mt-4">
+            Use another Authentication methode
+        </button>
+    </div>
+</template>

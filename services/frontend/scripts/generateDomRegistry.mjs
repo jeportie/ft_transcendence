@@ -133,7 +133,7 @@ function generateForTarget(targetPath) {
         const assigns = entries
             .map(
                 ({ id, camel, type }) => `    {
-      const el = target.querySelector<${type}>("#${id}");
+      const el = frag.querySelector<${type}>("#${id}");
       if (!el) throw new Error("Missing element #${id} in template ${base}");
       this.${camel} = el;
     }`
@@ -144,7 +144,7 @@ function generateForTarget(targetPath) {
   ${methodName}() {
     this.${fragName} = cloneTemplate(${importName});
     const frag = this.${fragName}!;
-${assigns.replaceAll("target.", "frag.")}
+${assigns}
     return this;
   }`;
 
@@ -166,7 +166,6 @@ ${assigns.replaceAll("target.", "frag.")}
         )
         .join("\n");
 
-
     const folderName = pascalCase(path.basename(folder));
     const className = `${folderName}DOM`;
     const outFile = path.join(folder, "dom.generated.ts");
@@ -180,8 +179,10 @@ ${templateBlocks.map((t) => t.importLine).join("\n")}
 function cloneTemplate(html: string): DocumentFragment {
   const tpl = document.createElement("template");
   tpl.innerHTML = html.trim();
-  const innerTpl = tpl.content.querySelector("template") as HTMLTemplateElement;
-  return innerTpl.content.cloneNode(true) as DocumentFragment;
+  const firstTpl = tpl.content.firstElementChild as HTMLTemplateElement;
+  if (firstTpl && firstTpl.tagName === "TEMPLATE")
+      return firstTpl.content.cloneNode(true) as DocumentFragment;
+  return tpl.content.cloneNode(true) as DocumentFragment;
 }
 
 /**

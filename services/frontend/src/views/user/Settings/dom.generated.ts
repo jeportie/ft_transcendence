@@ -2,14 +2,18 @@
 // Generated from src/views/user/Settings
 // Created by scripts/generateDomRegistry.mjs
 
+import BackupFormHTML from "./templates/BackupForm.html";
 import ChangePwdHTML from "./templates/ChangePwd.html";
 import F2aHTML from "./templates/F2a.html";
+import OtpFormHTML from "./templates/OtpForm.html";
 
 function cloneTemplate(html: string): DocumentFragment {
   const tpl = document.createElement("template");
   tpl.innerHTML = html.trim();
-  const innerTpl = tpl.content.querySelector("template") as HTMLTemplateElement;
-  return innerTpl.content.cloneNode(true) as DocumentFragment;
+  const firstTpl = tpl.content.firstElementChild as HTMLTemplateElement;
+  if (firstTpl && firstTpl.tagName === "TEMPLATE")
+      return firstTpl.content.cloneNode(true) as DocumentFragment;
+  return tpl.content.cloneNode(true) as DocumentFragment;
 }
 
 /**
@@ -47,6 +51,12 @@ export class SettingsDOM {
     return el as HTMLDivElement;
   }
 
+  fragBackupForm!: DocumentFragment;
+  pwdBackupWrap!: HTMLInputElement;
+  pwdBackOtpForm!: HTMLFormElement;
+  pwdBackupCode!: HTMLInputElement;
+  pwdConfirmBackup!: HTMLInputElement;
+
   fragChangePwd!: DocumentFragment;
   pwdNormalDiv!: HTMLInputElement;
   pwdHint!: HTMLInputElement;
@@ -54,15 +64,6 @@ export class SettingsDOM {
   oldPwd!: HTMLInputElement;
   newPwd!: HTMLInputElement;
   confirmPwd!: HTMLInputElement;
-  pwdDisableWrap!: HTMLInputElement;
-  pwdOtpForm!: HTMLFormElement;
-  pwdDisableCode!: HTMLInputElement;
-  pwdConfirmDisable!: HTMLInputElement;
-  pwdBackupBtn!: HTMLButtonElement;
-  pwdBackupWrap!: HTMLInputElement;
-  pwdBackOtpForm!: HTMLFormElement;
-  pwdBackupCode!: HTMLInputElement;
-  pwdConfirmBackup!: HTMLInputElement;
 
   fragF2a!: DocumentFragment;
   tpl2faCard!: HTMLDivElement;
@@ -77,6 +78,39 @@ export class SettingsDOM {
   f2aDisableCode!: HTMLElement;
   f2aConfirmDisable!: HTMLElement;
   f2aBackupCode!: HTMLElement;
+
+  fragOtpForm!: DocumentFragment;
+  pwdDisableWrap!: HTMLInputElement;
+  pwdOtpForm!: HTMLFormElement;
+  pwdDisableCode!: HTMLInputElement;
+  pwdConfirmDisable!: HTMLInputElement;
+  pwdBackupBtn!: HTMLButtonElement;
+
+  createBackupFormFrag() {
+    this.fragBackupForm = cloneTemplate(BackupFormHTML);
+    const frag = this.fragBackupForm!;
+    {
+      const el = frag.querySelector<HTMLInputElement>("#pwd-backup-wrap");
+      if (!el) throw new Error("Missing element #pwd-backup-wrap in template BackupForm");
+      this.pwdBackupWrap = el;
+    }
+    {
+      const el = frag.querySelector<HTMLFormElement>("#pwd-back-otp-form");
+      if (!el) throw new Error("Missing element #pwd-back-otp-form in template BackupForm");
+      this.pwdBackOtpForm = el;
+    }
+    {
+      const el = frag.querySelector<HTMLInputElement>("#pwd-backup-code");
+      if (!el) throw new Error("Missing element #pwd-backup-code in template BackupForm");
+      this.pwdBackupCode = el;
+    }
+    {
+      const el = frag.querySelector<HTMLInputElement>("#pwd-confirm-backup");
+      if (!el) throw new Error("Missing element #pwd-confirm-backup in template BackupForm");
+      this.pwdConfirmBackup = el;
+    }
+    return this;
+  }
 
   createChangePwdFrag() {
     this.fragChangePwd = cloneTemplate(ChangePwdHTML);
@@ -110,51 +144,6 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLInputElement>("#confirm-pwd");
       if (!el) throw new Error("Missing element #confirm-pwd in template ChangePwd");
       this.confirmPwd = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-disable-wrap");
-      if (!el) throw new Error("Missing element #pwd-disable-wrap in template ChangePwd");
-      this.pwdDisableWrap = el;
-    }
-    {
-      const el = frag.querySelector<HTMLFormElement>("#pwd-otp-form");
-      if (!el) throw new Error("Missing element #pwd-otp-form in template ChangePwd");
-      this.pwdOtpForm = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-disable-code");
-      if (!el) throw new Error("Missing element #pwd-disable-code in template ChangePwd");
-      this.pwdDisableCode = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-confirm-disable");
-      if (!el) throw new Error("Missing element #pwd-confirm-disable in template ChangePwd");
-      this.pwdConfirmDisable = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#pwd-backup-btn");
-      if (!el) throw new Error("Missing element #pwd-backup-btn in template ChangePwd");
-      this.pwdBackupBtn = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-backup-wrap");
-      if (!el) throw new Error("Missing element #pwd-backup-wrap in template ChangePwd");
-      this.pwdBackupWrap = el;
-    }
-    {
-      const el = frag.querySelector<HTMLFormElement>("#pwd-back-otp-form");
-      if (!el) throw new Error("Missing element #pwd-back-otp-form in template ChangePwd");
-      this.pwdBackOtpForm = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-backup-code");
-      if (!el) throw new Error("Missing element #pwd-backup-code in template ChangePwd");
-      this.pwdBackupCode = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-confirm-backup");
-      if (!el) throw new Error("Missing element #pwd-confirm-backup in template ChangePwd");
-      this.pwdConfirmBackup = el;
     }
     return this;
   }
@@ -221,6 +210,37 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLElement>("#f2a-backup-code");
       if (!el) throw new Error("Missing element #f2a-backup-code in template F2a");
       this.f2aBackupCode = el;
+    }
+    return this;
+  }
+
+  createOtpFormFrag() {
+    this.fragOtpForm = cloneTemplate(OtpFormHTML);
+    const frag = this.fragOtpForm!;
+    {
+      const el = frag.querySelector<HTMLInputElement>("#pwd-disable-wrap");
+      if (!el) throw new Error("Missing element #pwd-disable-wrap in template OtpForm");
+      this.pwdDisableWrap = el;
+    }
+    {
+      const el = frag.querySelector<HTMLFormElement>("#pwd-otp-form");
+      if (!el) throw new Error("Missing element #pwd-otp-form in template OtpForm");
+      this.pwdOtpForm = el;
+    }
+    {
+      const el = frag.querySelector<HTMLInputElement>("#pwd-disable-code");
+      if (!el) throw new Error("Missing element #pwd-disable-code in template OtpForm");
+      this.pwdDisableCode = el;
+    }
+    {
+      const el = frag.querySelector<HTMLInputElement>("#pwd-confirm-disable");
+      if (!el) throw new Error("Missing element #pwd-confirm-disable in template OtpForm");
+      this.pwdConfirmDisable = el;
+    }
+    {
+      const el = frag.querySelector<HTMLButtonElement>("#pwd-backup-btn");
+      if (!el) throw new Error("Missing element #pwd-backup-btn in template OtpForm");
+      this.pwdBackupBtn = el;
     }
     return this;
   }

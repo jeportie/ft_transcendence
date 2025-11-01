@@ -1,0 +1,23 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- BackupForm.html                                    :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/01 13:14:03 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/01 17:42:09 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <div id="pwd-backup-wrap">
+        <p class="app-text mb-4">
+            Enter your current backup code to change your password.
+        </p>
+        <form id="pwd-back-otp-form" class="flex flex-col items-center gap-4">
+            <otp-input id="pwd-backup-code" length="8" position="4" class="mt-2"></otp-input>
+            <button id="pwd-confirm-backup" class="app-btn-primary w-full mt-4">Submit</button>
+        </form>
+    </div>
+</template>
