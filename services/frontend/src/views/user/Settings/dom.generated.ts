@@ -2,10 +2,10 @@
 // Generated from src/views/user/Settings
 // Created by scripts/generateDomRegistry.mjs
 
-import BackupFormHTML from "./templates/BackupForm.html";
 import ChangePwdHTML from "./templates/ChangePwd.html";
 import F2aHTML from "./templates/F2a.html";
-import OtpFormHTML from "./templates/OtpForm.html";
+import check2FAHTML from "./templates/check2FA.html";
+import checkBackupHTML from "./templates/checkBackup.html";
 
 function cloneTemplate(html: string): DocumentFragment {
   const tpl = document.createElement("template");
@@ -51,12 +51,6 @@ export class SettingsDOM {
     return el as HTMLDivElement;
   }
 
-  fragBackupForm!: DocumentFragment;
-  pwdBackupWrap!: HTMLInputElement;
-  pwdBackOtpForm!: HTMLFormElement;
-  pwdBackupCode!: HTMLInputElement;
-  pwdConfirmBackup!: HTMLInputElement;
-
   fragChangePwd!: DocumentFragment;
   pwdNormalDiv!: HTMLInputElement;
   pwdHint!: HTMLInputElement;
@@ -79,38 +73,17 @@ export class SettingsDOM {
   f2aConfirmDisable!: HTMLElement;
   f2aBackupCode!: HTMLElement;
 
-  fragOtpForm!: DocumentFragment;
-  pwdDisableWrap!: HTMLInputElement;
-  pwdOtpForm!: HTMLFormElement;
-  pwdDisableCode!: HTMLInputElement;
-  pwdConfirmDisable!: HTMLInputElement;
-  pwdBackupBtn!: HTMLButtonElement;
+  fragCheck2FA!: DocumentFragment;
+  check2faForm!: HTMLFormElement;
+  check2faOtpInput!: HTMLInputElement;
+  check2faFormBtn!: HTMLButtonElement;
+  check2faGotoBackupBtn!: HTMLButtonElement;
 
-  createBackupFormFrag() {
-    this.fragBackupForm = cloneTemplate(BackupFormHTML);
-    const frag = this.fragBackupForm!;
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-backup-wrap");
-      if (!el) throw new Error("Missing element #pwd-backup-wrap in template BackupForm");
-      this.pwdBackupWrap = el;
-    }
-    {
-      const el = frag.querySelector<HTMLFormElement>("#pwd-back-otp-form");
-      if (!el) throw new Error("Missing element #pwd-back-otp-form in template BackupForm");
-      this.pwdBackOtpForm = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-backup-code");
-      if (!el) throw new Error("Missing element #pwd-backup-code in template BackupForm");
-      this.pwdBackupCode = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-confirm-backup");
-      if (!el) throw new Error("Missing element #pwd-confirm-backup in template BackupForm");
-      this.pwdConfirmBackup = el;
-    }
-    return this;
-  }
+  fragCheckBackup!: DocumentFragment;
+  checkBackupForm!: HTMLFormElement;
+  checkBackupOtpInput!: HTMLInputElement;
+  checkBackupFormBtn!: HTMLButtonElement;
+  checkBackupGoto2faBtn!: HTMLButtonElement;
 
   createChangePwdFrag() {
     this.fragChangePwd = cloneTemplate(ChangePwdHTML);
@@ -214,33 +187,54 @@ export class SettingsDOM {
     return this;
   }
 
-  createOtpFormFrag() {
-    this.fragOtpForm = cloneTemplate(OtpFormHTML);
-    const frag = this.fragOtpForm!;
+  createCheck2FAFrag() {
+    this.fragCheck2FA = cloneTemplate(check2FAHTML);
+    const frag = this.fragCheck2FA!;
     {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-disable-wrap");
-      if (!el) throw new Error("Missing element #pwd-disable-wrap in template OtpForm");
-      this.pwdDisableWrap = el;
+      const el = frag.querySelector<HTMLFormElement>("#check-2fa-form");
+      if (!el) throw new Error("Missing element #check-2fa-form in template check2FA");
+      this.check2faForm = el;
     }
     {
-      const el = frag.querySelector<HTMLFormElement>("#pwd-otp-form");
-      if (!el) throw new Error("Missing element #pwd-otp-form in template OtpForm");
-      this.pwdOtpForm = el;
+      const el = frag.querySelector<HTMLInputElement>("#check-2fa-otp-input");
+      if (!el) throw new Error("Missing element #check-2fa-otp-input in template check2FA");
+      this.check2faOtpInput = el;
     }
     {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-disable-code");
-      if (!el) throw new Error("Missing element #pwd-disable-code in template OtpForm");
-      this.pwdDisableCode = el;
+      const el = frag.querySelector<HTMLButtonElement>("#check-2fa-form-btn");
+      if (!el) throw new Error("Missing element #check-2fa-form-btn in template check2FA");
+      this.check2faFormBtn = el;
     }
     {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-confirm-disable");
-      if (!el) throw new Error("Missing element #pwd-confirm-disable in template OtpForm");
-      this.pwdConfirmDisable = el;
+      const el = frag.querySelector<HTMLButtonElement>("#check-2fa-goto-backup-btn");
+      if (!el) throw new Error("Missing element #check-2fa-goto-backup-btn in template check2FA");
+      this.check2faGotoBackupBtn = el;
+    }
+    return this;
+  }
+
+  createCheckBackupFrag() {
+    this.fragCheckBackup = cloneTemplate(checkBackupHTML);
+    const frag = this.fragCheckBackup!;
+    {
+      const el = frag.querySelector<HTMLFormElement>("#check-backup-form");
+      if (!el) throw new Error("Missing element #check-backup-form in template checkBackup");
+      this.checkBackupForm = el;
     }
     {
-      const el = frag.querySelector<HTMLButtonElement>("#pwd-backup-btn");
-      if (!el) throw new Error("Missing element #pwd-backup-btn in template OtpForm");
-      this.pwdBackupBtn = el;
+      const el = frag.querySelector<HTMLInputElement>("#check-backup-otp-input");
+      if (!el) throw new Error("Missing element #check-backup-otp-input in template checkBackup");
+      this.checkBackupOtpInput = el;
+    }
+    {
+      const el = frag.querySelector<HTMLButtonElement>("#check-backup-form-btn");
+      if (!el) throw new Error("Missing element #check-backup-form-btn in template checkBackup");
+      this.checkBackupFormBtn = el;
+    }
+    {
+      const el = frag.querySelector<HTMLButtonElement>("#check-backup-goto-2fa-btn");
+      if (!el) throw new Error("Missing element #check-backup-goto-2fa-btn in template checkBackup");
+      this.checkBackupGoto2faBtn = el;
     }
     return this;
   }

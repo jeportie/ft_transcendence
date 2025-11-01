@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/01 17:15:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/01 17:46:20 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/01 18:08:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -25,9 +25,6 @@ export async function setupPwd({ ASSETS }) {
     const me = await API.Get("/user/me");
     const user = me?.data?.me;
 
-    // -------------------------------------------------------------
-    // 1. Change password modal
-    // -------------------------------------------------------------
     function openChangePwd() {
         DOM.createChangePwdFrag();
         const frag = DOM.fragChangePwd;
@@ -68,26 +65,18 @@ export async function setupPwd({ ASSETS }) {
         });
     }
 
-    // -------------------------------------------------------------
-    // 2. Verify TOTP modal
-    // -------------------------------------------------------------
     function openOtpForm() {
-        DOM.createOtpFormFrag();
-        const frag = DOM.fragOtpForm;
-        const otpForm = DOM.pwdOtpForm;
-        const disableCode = DOM.pwdDisableCode;
-        const toBackup = DOM.pwdBackupBtn;
+        DOM.createCheck2FAFrag();
+        const { remove } = openModalWith(DOM.fragCheck2FA);
 
-        const { remove } = openModalWith(frag);
-
-        toBackup.addEventListener("click", () => {
+        DOM.check2faGotoBackupBtn.addEventListener("click", () => {
             remove();
             openBackupForm();
         });
 
-        otpForm.addEventListener("submit", async (e) => {
+        DOM.check2faForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const code = disableCode.value;
+            const code = DOM.check2faOtpInput.value;
             const { data, error } = await API.Post("/auth/verify-totp", { code });
             if (error || !data?.success) return alert("Invalid code, cannot disable.");
             remove();
@@ -95,20 +84,18 @@ export async function setupPwd({ ASSETS }) {
         });
     }
 
-    // -------------------------------------------------------------
-    // 3. Verify backup code modal
-    // -------------------------------------------------------------
     function openBackupForm() {
-        DOM.createBackupFormFrag();
-        const frag = DOM.fragBackupForm;
-        const form = DOM.pwdBackOtpForm;
-        const codeInput = DOM.pwdBackupCode;
+        DOM.createCheckBackupFrag();
+        const { remove } = openModalWith(DOM.fragCheckBackup);
 
-        const { remove } = openModalWith(frag);
+        DOM.checkBackupGoto2faBtn.addEventListener("click", () => {
+            remove();
+            openOtpForm();
+        });
 
-        form.addEventListener("submit", async (e) => {
+        DOM.checkBackupForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const code = codeInput.value;
+            const code = DOM.checkBackupOtpInput.value;
             const { data, error } = await API.Post("/auth/verify-backup", { code });
             if (error || !data.success) return alert("Invalid code, cannot disable.");
             remove();
@@ -116,9 +103,6 @@ export async function setupPwd({ ASSETS }) {
         });
     }
 
-    // -------------------------------------------------------------
-    // Entry point depending on 2FA status
-    // -------------------------------------------------------------
     const onClick = user.f2a_enabled ? openOtpForm : openChangePwd;
     btn.addEventListener("click", onClick);
     off.push(() => btn.removeEventListener("click", onClick));
@@ -128,4 +112,3 @@ export function teardownPwd() {
     off.forEach((fn) => fn());
     off = [];
 }
-
