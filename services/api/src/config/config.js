@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 14:26:18 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/05 21:45:52 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/02 23:07:34 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -33,7 +33,7 @@ const config = {
     CORS_ORIGIN: asString(process.env.CORS_ORIGIN, "http://localhost:8000"),
 
     // Tokens
-    ACCESS_TOKEN_TTL: asString(process.env.ACCESS_TOKEN_TTL, "1m"),
+    ACCESS_TOKEN_TTL: asString(process.env.ACCESS_TOKEN_TTL, "5m"),
     REFRESH_TOKEN_TTL_DAYS: asNumber(process.env.REFRESH_TOKEN_TTL_DAYS, 7),
 
     // Cookies

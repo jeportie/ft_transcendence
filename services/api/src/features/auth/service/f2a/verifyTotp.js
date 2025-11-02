@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 00:23:40 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/06 14:47:04 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/02 22:29:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -34,6 +34,9 @@ export async function verifyTotp(fastify, request, reply) {
     if (!valid)
         throw F2AErrors.Invalid2FACode();
 
+    // #TODO: add a option param in the body like a bool enable user and if false,
+    // do not run the line below (we dont want to rewrite this every time we check
+    // th user otp)
     await db.run(enableF2aSql, { ":user_id": userId });
     return { enabled: true };
 }

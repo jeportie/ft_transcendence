@@ -1,0 +1,34 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- DisplayBackupCodes.html                            :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/02 19:52:44 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/02 23:02:19 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <h1 class="app-card-title">Backup Codes</h1>
+    <span id="display-backup-status-tag-span" class="app-status-tag-disabled"></span>
+    <p class="text-sm font-semibold text-yellow-300/90 mb-2">
+        ⚠️ Save these backup codes — they will not be shown again.
+    </p>
+
+    <div class="overflow-visible rounded-md border border-neutral-700/70 mb-3">
+        <table class="w-full text-left">
+            <thead class="bg-neutral-800/60 text-neutral-300">
+                <tr>
+                    <th class="px-3 py-2">#</th>
+                    <th class="px-3 py-2">Backup Code</th>
+                </tr>
+            </thead>
+            <tbody id="display-backup-table-tbody" class="bg-neutral-900/50 text-neutral-100"></tbody>
+        </table>
+    </div>
+    <button id="display-backup-download-btn" class="app-btn-primary w-full">
+        ⬇️ Download Backup Codes
+    </button>
+</template>

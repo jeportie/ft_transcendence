@@ -6,37 +6,35 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/10/29 21:12:52 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/11/01 17:45:42 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/11/02 19:40:43 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
 <template>
-    <div>
-        <div class="flex items-center justify-between mb-4">
-            <h1 class="app-card-title mb-4">Change Password</h1>
-        </div>
+    <div class="flex items-center justify-between mb-4">
+        <h1 class="app-card-title mb-4">Change Password</h1>
+    </div>
 
-        <div id="pwd-normal-div">
-            <p id="pwd-hint" class="app-text mb-4">
-                Use a long passphrase you don’t reuse elsewhere.
-            </p>
-            <form id="pwd-form" class="grid gap-3">
-                <div class="app-field">
-                    <label class="app-label">Current Password</label>
-                    <input id="old-pwd" class="app-input" type="password" autocomplete="current-password"
-                        placeholder="Current password" />
-                </div>
-                <div class="app-field">
-                    <label class="app-label">New Password</label>
-                    <strong-password id="new-pwd" mode="full" placeholder="New password"></strong-password>
-                </div>
-                <div class="app-field">
-                    <label class="app-label">Confirm New Password</label>
-                    <input id="confirm-pwd" class="app-input" type="password" autocomplete="new-password"
-                        placeholder="Confirm new password" />
-                </div>
-                <button class="app-btn-primary mt-2 w-full">Save Password</button>
-            </form>
-        </div>
+    <div id="change-pwd-div">
+        <p class="app-text mb-4">
+            Use a long passphrase you don’t reuse elsewhere.
+        </p>
+        <form id="change-pwd-form" class="grid gap-3">
+            <div class="app-field">
+                <label class="app-label">Current Password</label>
+                <input id="change-pwd-old-input" class="app-input" type="password" autocomplete="current-password"
+                    placeholder="Current password" />
+            </div>
+            <div class="app-field">
+                <label class="app-label">New Password</label>
+                <strong-password id="change-pwd-new-input" mode="full" placeholder="New password"></strong-password>
+            </div>
+            <div class="app-field">
+                <label class="app-label">Confirm New Password</label>
+                <input id="change-pwd-confirm-input" class="app-input" type="password" autocomplete="new-password"
+                    placeholder="Confirm new password" />
+            </div>
+            <button class="app-btn-primary mt-2 w-full">Save Password</button>
+        </form>
     </div>
 </template>

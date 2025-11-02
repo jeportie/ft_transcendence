@@ -2,10 +2,11 @@
 // Generated from src/views/user/Settings
 // Created by scripts/generateDomRegistry.mjs
 
+import Activate2FAHTML from "./templates/Activate2FA.html";
 import ChangePwdHTML from "./templates/ChangePwd.html";
-import F2aHTML from "./templates/F2a.html";
-import check2FAHTML from "./templates/check2FA.html";
-import checkBackupHTML from "./templates/checkBackup.html";
+import Check2FAHTML from "./templates/Check2FA.html";
+import CheckBackupHTML from "./templates/CheckBackup.html";
+import DisplayBackupCodesHTML from "./templates/DisplayBackupCodes.html";
 
 function cloneTemplate(html: string): DocumentFragment {
   const tpl = document.createElement("template");
@@ -51,190 +52,180 @@ export class SettingsDOM {
     return el as HTMLDivElement;
   }
 
-  fragChangePwd!: DocumentFragment;
-  pwdNormalDiv!: HTMLInputElement;
-  pwdHint!: HTMLInputElement;
-  pwdForm!: HTMLFormElement;
-  oldPwd!: HTMLInputElement;
-  newPwd!: HTMLInputElement;
-  confirmPwd!: HTMLInputElement;
+  fragActivate2FA!: DocumentFragment;
+  activateF2aStatusTagSpan!: HTMLSpanElement;
+  activate2faForm!: HTMLFormElement;
+  activateF2aQrImg!: HTMLImageElement;
+  activateF2aOtpInput!: HTMLInputElement;
+  activate2faFormBtn!: HTMLButtonElement;
 
-  fragF2a!: DocumentFragment;
-  tpl2faCard!: HTMLDivElement;
-  f2aStatusTag!: HTMLElement;
-  f2aEnableWrap!: HTMLElement;
-  f2aQr!: HTMLElement;
-  f2aEnableCode!: HTMLElement;
-  f2aBackupWrap!: HTMLElement;
-  f2aBackupTable!: HTMLTableElement;
-  f2aBackupDownload!: HTMLElement;
-  f2aDisableWrap!: HTMLElement;
-  f2aDisableCode!: HTMLElement;
-  f2aConfirmDisable!: HTMLElement;
-  f2aBackupCode!: HTMLElement;
+  fragChangePwd!: DocumentFragment;
+  changePwdDiv!: HTMLInputElement;
+  changePwdForm!: HTMLFormElement;
+  changePwdOldInput!: HTMLInputElement;
+  changePwdNewInput!: HTMLInputElement;
+  changePwdConfirmInput!: HTMLInputElement;
 
   fragCheck2FA!: DocumentFragment;
+  check2faTitle!: HTMLElement;
   check2faForm!: HTMLFormElement;
   check2faOtpInput!: HTMLInputElement;
   check2faFormBtn!: HTMLButtonElement;
   check2faGotoBackupBtn!: HTMLButtonElement;
 
   fragCheckBackup!: DocumentFragment;
+  checkBackupTitle!: HTMLElement;
   checkBackupForm!: HTMLFormElement;
   checkBackupOtpInput!: HTMLInputElement;
   checkBackupFormBtn!: HTMLButtonElement;
   checkBackupGoto2faBtn!: HTMLButtonElement;
 
-  createChangePwdFrag() {
-    this.fragChangePwd = cloneTemplate(ChangePwdHTML);
-    const frag = this.fragChangePwd!;
+  fragDisplayBackupCodes!: DocumentFragment;
+  displayBackupStatusTagSpan!: HTMLSpanElement;
+  displayBackupTableTbody!: HTMLElement;
+  displayBackupDownloadBtn!: HTMLButtonElement;
+
+  createActivate2FAFrag() {
+    this.fragActivate2FA = cloneTemplate(Activate2FAHTML);
+    const frag = this.fragActivate2FA!;
     {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-normal-div");
-      if (!el) throw new Error("Missing element #pwd-normal-div in template ChangePwd");
-      this.pwdNormalDiv = el;
+      const el = frag.querySelector<HTMLSpanElement>("#activate-f2a-status-tag-span");
+      if (!el) throw new Error("Missing element #activate-f2a-status-tag-span in template Activate2FA");
+      this.activateF2aStatusTagSpan = el;
     }
     {
-      const el = frag.querySelector<HTMLInputElement>("#pwd-hint");
-      if (!el) throw new Error("Missing element #pwd-hint in template ChangePwd");
-      this.pwdHint = el;
+      const el = frag.querySelector<HTMLFormElement>("#activate-2fa-form");
+      if (!el) throw new Error("Missing element #activate-2fa-form in template Activate2FA");
+      this.activate2faForm = el;
     }
     {
-      const el = frag.querySelector<HTMLFormElement>("#pwd-form");
-      if (!el) throw new Error("Missing element #pwd-form in template ChangePwd");
-      this.pwdForm = el;
+      const el = frag.querySelector<HTMLImageElement>("#activate-f2a-qr-img");
+      if (!el) throw new Error("Missing element #activate-f2a-qr-img in template Activate2FA");
+      this.activateF2aQrImg = el;
     }
     {
-      const el = frag.querySelector<HTMLInputElement>("#old-pwd");
-      if (!el) throw new Error("Missing element #old-pwd in template ChangePwd");
-      this.oldPwd = el;
+      const el = frag.querySelector<HTMLInputElement>("#activate-f2a-otp-input");
+      if (!el) throw new Error("Missing element #activate-f2a-otp-input in template Activate2FA");
+      this.activateF2aOtpInput = el;
     }
     {
-      const el = frag.querySelector<HTMLInputElement>("#new-pwd");
-      if (!el) throw new Error("Missing element #new-pwd in template ChangePwd");
-      this.newPwd = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#confirm-pwd");
-      if (!el) throw new Error("Missing element #confirm-pwd in template ChangePwd");
-      this.confirmPwd = el;
+      const el = frag.querySelector<HTMLButtonElement>("#activate-2fa-form-btn");
+      if (!el) throw new Error("Missing element #activate-2fa-form-btn in template Activate2FA");
+      this.activate2faFormBtn = el;
     }
     return this;
   }
 
-  createF2aFrag() {
-    this.fragF2a = cloneTemplate(F2aHTML);
-    const frag = this.fragF2a!;
+  createChangePwdFrag() {
+    this.fragChangePwd = cloneTemplate(ChangePwdHTML);
+    const frag = this.fragChangePwd!;
     {
-      const el = frag.querySelector<HTMLDivElement>("#tpl-2fa-card");
-      if (!el) throw new Error("Missing element #tpl-2fa-card in template F2a");
-      this.tpl2faCard = el;
+      const el = frag.querySelector<HTMLInputElement>("#change-pwd-div");
+      if (!el) throw new Error("Missing element #change-pwd-div in template ChangePwd");
+      this.changePwdDiv = el;
     }
     {
-      const el = frag.querySelector<HTMLElement>("#f2a-status-tag");
-      if (!el) throw new Error("Missing element #f2a-status-tag in template F2a");
-      this.f2aStatusTag = el;
+      const el = frag.querySelector<HTMLFormElement>("#change-pwd-form");
+      if (!el) throw new Error("Missing element #change-pwd-form in template ChangePwd");
+      this.changePwdForm = el;
     }
     {
-      const el = frag.querySelector<HTMLElement>("#f2a-enable-wrap");
-      if (!el) throw new Error("Missing element #f2a-enable-wrap in template F2a");
-      this.f2aEnableWrap = el;
+      const el = frag.querySelector<HTMLInputElement>("#change-pwd-old-input");
+      if (!el) throw new Error("Missing element #change-pwd-old-input in template ChangePwd");
+      this.changePwdOldInput = el;
     }
     {
-      const el = frag.querySelector<HTMLElement>("#f2a-qr");
-      if (!el) throw new Error("Missing element #f2a-qr in template F2a");
-      this.f2aQr = el;
+      const el = frag.querySelector<HTMLInputElement>("#change-pwd-new-input");
+      if (!el) throw new Error("Missing element #change-pwd-new-input in template ChangePwd");
+      this.changePwdNewInput = el;
     }
     {
-      const el = frag.querySelector<HTMLElement>("#f2a-enable-code");
-      if (!el) throw new Error("Missing element #f2a-enable-code in template F2a");
-      this.f2aEnableCode = el;
-    }
-    {
-      const el = frag.querySelector<HTMLElement>("#f2a-backup-wrap");
-      if (!el) throw new Error("Missing element #f2a-backup-wrap in template F2a");
-      this.f2aBackupWrap = el;
-    }
-    {
-      const el = frag.querySelector<HTMLTableElement>("#f2a-backup-table");
-      if (!el) throw new Error("Missing element #f2a-backup-table in template F2a");
-      this.f2aBackupTable = el;
-    }
-    {
-      const el = frag.querySelector<HTMLElement>("#f2a-backup-download");
-      if (!el) throw new Error("Missing element #f2a-backup-download in template F2a");
-      this.f2aBackupDownload = el;
-    }
-    {
-      const el = frag.querySelector<HTMLElement>("#f2a-disable-wrap");
-      if (!el) throw new Error("Missing element #f2a-disable-wrap in template F2a");
-      this.f2aDisableWrap = el;
-    }
-    {
-      const el = frag.querySelector<HTMLElement>("#f2a-disable-code");
-      if (!el) throw new Error("Missing element #f2a-disable-code in template F2a");
-      this.f2aDisableCode = el;
-    }
-    {
-      const el = frag.querySelector<HTMLElement>("#f2a-confirm-disable");
-      if (!el) throw new Error("Missing element #f2a-confirm-disable in template F2a");
-      this.f2aConfirmDisable = el;
-    }
-    {
-      const el = frag.querySelector<HTMLElement>("#f2a-backup-code");
-      if (!el) throw new Error("Missing element #f2a-backup-code in template F2a");
-      this.f2aBackupCode = el;
+      const el = frag.querySelector<HTMLInputElement>("#change-pwd-confirm-input");
+      if (!el) throw new Error("Missing element #change-pwd-confirm-input in template ChangePwd");
+      this.changePwdConfirmInput = el;
     }
     return this;
   }
 
   createCheck2FAFrag() {
-    this.fragCheck2FA = cloneTemplate(check2FAHTML);
+    this.fragCheck2FA = cloneTemplate(Check2FAHTML);
     const frag = this.fragCheck2FA!;
     {
+      const el = frag.querySelector<HTMLElement>("#check-2fa-title");
+      if (!el) throw new Error("Missing element #check-2fa-title in template Check2FA");
+      this.check2faTitle = el;
+    }
+    {
       const el = frag.querySelector<HTMLFormElement>("#check-2fa-form");
-      if (!el) throw new Error("Missing element #check-2fa-form in template check2FA");
+      if (!el) throw new Error("Missing element #check-2fa-form in template Check2FA");
       this.check2faForm = el;
     }
     {
       const el = frag.querySelector<HTMLInputElement>("#check-2fa-otp-input");
-      if (!el) throw new Error("Missing element #check-2fa-otp-input in template check2FA");
+      if (!el) throw new Error("Missing element #check-2fa-otp-input in template Check2FA");
       this.check2faOtpInput = el;
     }
     {
       const el = frag.querySelector<HTMLButtonElement>("#check-2fa-form-btn");
-      if (!el) throw new Error("Missing element #check-2fa-form-btn in template check2FA");
+      if (!el) throw new Error("Missing element #check-2fa-form-btn in template Check2FA");
       this.check2faFormBtn = el;
     }
     {
       const el = frag.querySelector<HTMLButtonElement>("#check-2fa-goto-backup-btn");
-      if (!el) throw new Error("Missing element #check-2fa-goto-backup-btn in template check2FA");
+      if (!el) throw new Error("Missing element #check-2fa-goto-backup-btn in template Check2FA");
       this.check2faGotoBackupBtn = el;
     }
     return this;
   }
 
   createCheckBackupFrag() {
-    this.fragCheckBackup = cloneTemplate(checkBackupHTML);
+    this.fragCheckBackup = cloneTemplate(CheckBackupHTML);
     const frag = this.fragCheckBackup!;
     {
+      const el = frag.querySelector<HTMLElement>("#check-backup-title");
+      if (!el) throw new Error("Missing element #check-backup-title in template CheckBackup");
+      this.checkBackupTitle = el;
+    }
+    {
       const el = frag.querySelector<HTMLFormElement>("#check-backup-form");
-      if (!el) throw new Error("Missing element #check-backup-form in template checkBackup");
+      if (!el) throw new Error("Missing element #check-backup-form in template CheckBackup");
       this.checkBackupForm = el;
     }
     {
       const el = frag.querySelector<HTMLInputElement>("#check-backup-otp-input");
-      if (!el) throw new Error("Missing element #check-backup-otp-input in template checkBackup");
+      if (!el) throw new Error("Missing element #check-backup-otp-input in template CheckBackup");
       this.checkBackupOtpInput = el;
     }
     {
       const el = frag.querySelector<HTMLButtonElement>("#check-backup-form-btn");
-      if (!el) throw new Error("Missing element #check-backup-form-btn in template checkBackup");
+      if (!el) throw new Error("Missing element #check-backup-form-btn in template CheckBackup");
       this.checkBackupFormBtn = el;
     }
     {
       const el = frag.querySelector<HTMLButtonElement>("#check-backup-goto-2fa-btn");
-      if (!el) throw new Error("Missing element #check-backup-goto-2fa-btn in template checkBackup");
+      if (!el) throw new Error("Missing element #check-backup-goto-2fa-btn in template CheckBackup");
       this.checkBackupGoto2faBtn = el;
+    }
+    return this;
+  }
+
+  createDisplayBackupCodesFrag() {
+    this.fragDisplayBackupCodes = cloneTemplate(DisplayBackupCodesHTML);
+    const frag = this.fragDisplayBackupCodes!;
+    {
+      const el = frag.querySelector<HTMLSpanElement>("#display-backup-status-tag-span");
+      if (!el) throw new Error("Missing element #display-backup-status-tag-span in template DisplayBackupCodes");
+      this.displayBackupStatusTagSpan = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#display-backup-table-tbody");
+      if (!el) throw new Error("Missing element #display-backup-table-tbody in template DisplayBackupCodes");
+      this.displayBackupTableTbody = el;
+    }
+    {
+      const el = frag.querySelector<HTMLButtonElement>("#display-backup-download-btn");
+      if (!el) throw new Error("Missing element #display-backup-download-btn in template DisplayBackupCodes");
+      this.displayBackupDownloadBtn = el;
     }
     return this;
   }

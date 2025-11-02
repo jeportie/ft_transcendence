@@ -1,0 +1,25 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- Activate2FA.html                                   :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/02 18:59:48 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/02 22:47:17 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <h1 class="app-card-title">Two-Factor Authentication</h1>
+    <span id="activate-f2a-status-tag-span" class="app-status-tag-disabled"></span>
+    <p class="app-text mb-4">
+        Scan this QR code with your authenticator app, then enter the 6-digit code below.
+    </p>
+
+    <form id="activate-2fa-form" class="flex flex-col items-center gap-4">
+        <img id="activate-f2a-qr-img" class="ui-qr w-40 h-40 rounded-md border border-white/10" />
+        <otp-input id="activate-f2a-otp-input" digits="6" position="3" class="mt-2"></otp-input>
+        <button id="activate-2fa-form-btn" class="app-btn-primary w-full mt-4">Submit</button>
+    </form>
+</template>

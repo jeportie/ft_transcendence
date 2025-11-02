@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/01 17:15:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/01 18:08:21 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/02 18:58:39 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,21 +27,18 @@ export async function setupPwd({ ASSETS }) {
 
     function openChangePwd() {
         DOM.createChangePwdFrag();
-        const frag = DOM.fragChangePwd;
-        const form = DOM.pwdForm;
-        const oldPwd = DOM.oldPwd;
-        const newPwd = DOM.newPwd as any;
-        const confirm = DOM.confirmPwd;
-        const hint = DOM.pwdHint;
+        const form = DOM.changePwdForm;
+        const oldPwd = DOM.changePwdOldInput;
+        const newPwd = DOM.changePwdNewInput as any;
+        const confirm = DOM.changePwdConfirmInput;
 
-        const { remove } = openModalWith(frag);
+        const { remove } = openModalWith(DOM.fragChangePwd);
 
         togglePasswordSvg({ ASSETS, input: oldPwd });
         togglePasswordSvg({ ASSETS, input: confirm });
 
         if (user.oauth) {
             oldPwd.closest(".app-field")?.classList.add("hidden");
-            hint.textContent = "This account was created with OAuth. You can set a local password below.";
             btn.innerText = "Create";
         }
 
@@ -68,6 +65,8 @@ export async function setupPwd({ ASSETS }) {
     function openOtpForm() {
         DOM.createCheck2FAFrag();
         const { remove } = openModalWith(DOM.fragCheck2FA);
+        DOM.check2faTitle.innerText = "Enter your current authenticator \
+            code to change your password."
 
         DOM.check2faGotoBackupBtn.addEventListener("click", () => {
             remove();
@@ -87,6 +86,8 @@ export async function setupPwd({ ASSETS }) {
     function openBackupForm() {
         DOM.createCheckBackupFrag();
         const { remove } = openModalWith(DOM.fragCheckBackup);
+        DOM.checkBackupTitle.innerText = "Enter your current backup \
+            code to change your password."
 
         DOM.checkBackupGoto2faBtn.addEventListener("click", () => {
             remove();
