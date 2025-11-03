@@ -1390,6 +1390,37 @@ html,
   line-height: 1.5;
 }
 
+/* --- Separator --- */
+
+.app-separator {
+  position: relative;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(148 163 184 / 0.8);
+}
+
+.app-separator::before,
+  .app-separator::after {
+  content: '';
+  flex: 1 1 0%;
+  border-top-width: 1px;
+  border-color: rgb(255 255 255 / 0.1);
+}
+
+.app-separator span {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+  color: rgb(148 163 184 / 0.7);
+}
+
 /* ==========================================================================
      🧭 FLOATING SIDEBAR
      ========================================================================== */
@@ -1580,6 +1611,12 @@ html,
   border: 1px solid rgba(255,255,255,0.12);
 }
 
+.app-btn-secondary {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.9);
+}
+
 .app-btn-third {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
@@ -1633,6 +1670,13 @@ html,
   color: white;
   border-color: rgba(255,255,255,0.2);
   box-shadow: 0 0 8px rgba(255,255,255,0.25);
+}
+
+.app-btn-secondary:hover,
+  .app-btn-secondary:focus {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.15);
+  color: white;
 }
 
 .app-btn-third:hover,
@@ -1973,6 +2017,22 @@ strong-password input {
   margin-top: 1.5rem;
 }
 
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -1995,6 +2055,11 @@ strong-password input {
 
 .hidden {
   display: none;
+}
+
+.size-0\.5 {
+  width: 0.125rem;
+  height: 0.125rem;
 }
 
 .h-10 {

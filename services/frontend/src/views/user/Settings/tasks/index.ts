@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { ASSETS } from "../Settings.js";
+// import { ASSETS } from "../Settings.js";
 import { setupF2a, teardownF2a } from "./f2a.js";
 import { setupPwd, teardownPwd } from "./pwd.js";
 import { setupSessions, teardownSessions } from "./sessions.js";
@@ -22,7 +22,7 @@ export const tasks = {
         (ctx: any) => setupSessions({ ASSETS: ctx.ASSETS }),
     ],
     ready: [
-        (ctx: any) => setupF2a(),
+        (ctx: any) => setupF2a({ ASSETS: ctx.ASSETS }),
         (ctx: any) => setupPwd({ ASSETS: ctx.ASSETS }), // ✅ pass context down
     ],
     teardown: [teardownSessions, teardownF2a, teardownPwd],

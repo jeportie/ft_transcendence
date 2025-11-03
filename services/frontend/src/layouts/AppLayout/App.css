@@ -98,6 +98,21 @@
     line-height: 1.5;
   }
 
+  /* --- Separator --- */
+  .app-separator {
+    @apply relative flex items-center justify-center text-slate-400/80 text-sm my-4 select-none;
+  }
+  
+  .app-separator::before,
+  .app-separator::after {
+    content: '';
+    @apply flex-1 border-t border-white/10;
+  }
+
+  .app-separator span {
+    @apply mx-3 text-slate-400/70;
+  }
+
   /* ==========================================================================
      🧭 FLOATING SIDEBAR
      ========================================================================== */

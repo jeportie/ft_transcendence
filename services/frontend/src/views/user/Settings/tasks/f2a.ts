@@ -13,6 +13,7 @@
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 import { openModalWith } from "../../../../spa/utils/modal.js";
+import { ASSETS } from "../Settings.js";
 
 let listeners: Array<() => void> = [];
 
@@ -26,7 +27,7 @@ function setStatus(el: HTMLElement, isEnabled: boolean) {
     }
 };
 
-export async function setupF2a() {
+export async function setupF2a({ ASSETS }) {
     const btn = DOM.settings2faBtn;
     if (!btn) return;
 
@@ -45,13 +46,25 @@ export async function setupF2a() {
         const otpInput = DOM.activateF2aOtpInput;
 
         const { remove } = openModalWith(DOM.fragActivate2FA);
-
         setStatus(statusTag, false);
+
         const { data, error } = await API.Post("/auth/enable");
         if (error)
             return alert("Failed to start 2FA setup");
         qrImg.src = data.qr;
+        DOM.activate2faIconSpan.innerHTML = `${ASSETS.copyIcon}`;
         otpInput.focus();
+
+        DOM.activate2faCopyBtn.onclick = async () => {
+            const text = data.otpauth;
+            try {
+                await navigator.clipboard.writeText(text);
+                DOM.activate2faCopyBtn.textContent = "Copied!";
+
+            } catch (err) {
+                DOM.activate2faCopyBtn.textContent = "Failed to copy";
+            }
+        };
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -162,9 +175,7 @@ export async function setupF2a() {
     listeners.push(() => btn.removeEventListener("click", onClick));
 }
 
-
 export function teardownF2a() {
     listeners.forEach((off) => off());
     listeners = [];
 }
-

@@ -56,6 +56,8 @@ export class SettingsDOM {
   activateF2aStatusTagSpan!: HTMLSpanElement;
   activate2faForm!: HTMLFormElement;
   activateF2aQrImg!: HTMLImageElement;
+  activate2faCopyBtn!: HTMLButtonElement;
+  activate2faIconSpan!: HTMLImageElement;
   activateF2aOtpInput!: HTMLInputElement;
   activate2faFormBtn!: HTMLButtonElement;
 
@@ -102,6 +104,16 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLImageElement>("#activate-f2a-qr-img");
       if (!el) throw new Error("Missing element #activate-f2a-qr-img in template Activate2FA");
       this.activateF2aQrImg = el;
+    }
+    {
+      const el = frag.querySelector<HTMLButtonElement>("#activate-2fa-copy-btn");
+      if (!el) throw new Error("Missing element #activate-2fa-copy-btn in template Activate2FA");
+      this.activate2faCopyBtn = el;
+    }
+    {
+      const el = frag.querySelector<HTMLImageElement>("#activate-2fa-icon-span");
+      if (!el) throw new Error("Missing element #activate-2fa-icon-span in template Activate2FA");
+      this.activate2faIconSpan = el;
     }
     {
       const el = frag.querySelector<HTMLInputElement>("#activate-f2a-otp-input");

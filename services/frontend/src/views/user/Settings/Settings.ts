@@ -19,8 +19,9 @@ import laptop from "../../../assets/icons/laptop.svg";
 import phone from "../../../assets/icons/phone.svg";
 import hideIcon from "../../../assets/icons/hide.svg";
 import showIcon from "../../../assets/icons/show.svg";
+import copyIcon from "../../../assets/icons/copy.svg";
 
-export const ASSETS = { desktop, laptop, phone, hideIcon, showIcon };
+export const ASSETS = { desktop, laptop, phone, hideIcon, showIcon, copyIcon };
 
 export default class Settings extends AbstractView {
     constructor(ctx: any) {
