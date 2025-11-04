@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/15 23:18:37 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/30 19:51:08 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 10:30:42 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,14 +17,8 @@ import { setupSessions, teardownSessions } from "./sessions.js";
 import { init } from "./init.js";
 
 export const tasks = {
-    init: [
-        init,
-        (ctx: any) => setupSessions({ ASSETS: ctx.ASSETS }),
-    ],
-    ready: [
-        (ctx: any) => setupF2a({ ASSETS: ctx.ASSETS }),
-        (ctx: any) => setupPwd({ ASSETS: ctx.ASSETS }), // ✅ pass context down
-    ],
+    init: [init, setupSessions],
+    ready: [setupF2a, setupPwd],
     teardown: [teardownSessions, teardownF2a, teardownPwd],
 };
 

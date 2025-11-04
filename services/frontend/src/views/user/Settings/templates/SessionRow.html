@@ -1,0 +1,39 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- SessionRow.html                                    :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/03 16:57:37 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/04 08:39:31 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <tr id="session-row" class="app-session-row">
+        <td class="app-session-status">
+            <span class="relative group">
+                <span id="session-status-dot" class="inline-block w-2.5 h-2.5 rounded-full"></span>
+                <span id="session-status-label" class="app-tooltip hidden group-hover:block"></span>
+            </span>
+        </td>
+
+        <td class="app-session-device">
+            <div class="flex items-center gap-2">
+                <span class="relative group inline-flex items-center">
+                    <span id="session-device-icon"></span>
+                    <span id="session-device-agent" class="app-tooltip hidden group-hover:block"></span>
+                </span>
+                <span id="session-device-name"></span>
+            </div>
+        </td>
+
+        <td id="session-ip" class="app-session-ip"></td>
+        <td id="session-last-active" class="app-session-last-active"></td>
+        <td id="session-expiry" class="app-session-expiry"></td>
+
+        <td id="session-action" class="app-session-action text-right"></td>
+    </tr>
+
+</template>

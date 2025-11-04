@@ -7,6 +7,7 @@ import ChangePwdHTML from "./templates/ChangePwd.html";
 import Check2FAHTML from "./templates/Check2FA.html";
 import CheckBackupHTML from "./templates/CheckBackup.html";
 import DisplayBackupCodesHTML from "./templates/DisplayBackupCodes.html";
+import SessionRowHTML from "./templates/SessionRow.html";
 
 function cloneTemplate(html: string): DocumentFragment {
   const tpl = document.createElement("template");
@@ -86,6 +87,18 @@ export class SettingsDOM {
   displayBackupStatusTagSpan!: HTMLSpanElement;
   displayBackupTableTbody!: HTMLElement;
   displayBackupDownloadBtn!: HTMLButtonElement;
+
+  fragSessionRow!: DocumentFragment;
+  sessionRow!: HTMLElement;
+  sessionStatusDot!: HTMLElement;
+  sessionStatusLabel!: HTMLLabelElement;
+  sessionDeviceIcon!: HTMLImageElement;
+  sessionDeviceAgent!: HTMLElement;
+  sessionDeviceName!: HTMLElement;
+  sessionIp!: HTMLElement;
+  sessionLastActive!: HTMLElement;
+  sessionExpiry!: HTMLElement;
+  sessionAction!: HTMLElement;
 
   createActivate2FAFrag() {
     this.fragActivate2FA = cloneTemplate(Activate2FAHTML);
@@ -238,6 +251,62 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLButtonElement>("#display-backup-download-btn");
       if (!el) throw new Error("Missing element #display-backup-download-btn in template DisplayBackupCodes");
       this.displayBackupDownloadBtn = el;
+    }
+    return this;
+  }
+
+  createSessionRowFrag() {
+    this.fragSessionRow = cloneTemplate(SessionRowHTML);
+    const frag = this.fragSessionRow!;
+    {
+      const el = frag.querySelector<HTMLElement>("#session-row");
+      if (!el) throw new Error("Missing element #session-row in template SessionRow");
+      this.sessionRow = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-status-dot");
+      if (!el) throw new Error("Missing element #session-status-dot in template SessionRow");
+      this.sessionStatusDot = el;
+    }
+    {
+      const el = frag.querySelector<HTMLLabelElement>("#session-status-label");
+      if (!el) throw new Error("Missing element #session-status-label in template SessionRow");
+      this.sessionStatusLabel = el;
+    }
+    {
+      const el = frag.querySelector<HTMLImageElement>("#session-device-icon");
+      if (!el) throw new Error("Missing element #session-device-icon in template SessionRow");
+      this.sessionDeviceIcon = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-device-agent");
+      if (!el) throw new Error("Missing element #session-device-agent in template SessionRow");
+      this.sessionDeviceAgent = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-device-name");
+      if (!el) throw new Error("Missing element #session-device-name in template SessionRow");
+      this.sessionDeviceName = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-ip");
+      if (!el) throw new Error("Missing element #session-ip in template SessionRow");
+      this.sessionIp = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-last-active");
+      if (!el) throw new Error("Missing element #session-last-active in template SessionRow");
+      this.sessionLastActive = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-expiry");
+      if (!el) throw new Error("Missing element #session-expiry in template SessionRow");
+      this.sessionExpiry = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-action");
+      if (!el) throw new Error("Missing element #session-action in template SessionRow");
+      this.sessionAction = el;
     }
     return this;
   }

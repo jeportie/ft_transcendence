@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
-/*   Updated: 2025/11/02 19:29:21 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:44:08 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,5 +434,41 @@
     @apply inline-flex items-center gap-2 px-2 py-1 rounded-full text-xs 
       bg-red-500/15 text-red-300 border border-red-400/20; 
   }
+
+  /* --- Session table rows --- */
+  .app-session-row {
+    @apply border-b border-neutral-800/60 hover:bg-neutral-800/30 transition-colors;
+  }
+  
+  .app-session-status {
+    @apply px-3 py-3 text-center;
+  }
+
+  .app-session-tbody {
+    @apply px-3 py-4 text-center text-red-400 text-sm
+  }
+  
+  .app-session-device {
+    @apply px-3 py-3 whitespace-nowrap;
+  }
+  
+  .app-session-ip,
+  .app-session-last-active,
+  .app-session-expiry {
+    @apply px-3 py-3 whitespace-nowrap text-neutral-300;
+  }
+  
+  .app-session-action {
+    @apply px-3 py-3 whitespace-nowrap;
+  }
+
+  .app-session-action-current {
+    @apply text-xs px-2 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-400/20;
+  }
+  
+  .app-tooltip {
+    @apply text-xs text-neutral-200 absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-neutral-800/90 border border-neutral-700/60 px-2 py-1 rounded-md shadow-md;
+  }
+    
 }
 

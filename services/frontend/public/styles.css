@@ -688,7 +688,7 @@ body {
 
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/11/02 19:29:21 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:44:08 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -1889,6 +1889,80 @@ strong-password input {
   color: rgb(252 165 165 / var(--tw-text-opacity, 1));
 }
 
+/* --- Session table rows --- */
+
+.app-session-row {
+  border-bottom-width: 1px;
+  border-color: rgb(38 38 38 / 0.6);
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.app-session-row:hover {
+  background-color: rgb(38 38 38 / 0.3);
+}
+
+.app-session-status {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  text-align: center;
+}
+
+.app-session-device {
+  white-space: nowrap;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.app-session-ip,
+  .app-session-last-active,
+  .app-session-expiry {
+  white-space: nowrap;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  --tw-text-opacity: 1;
+  color: rgb(212 212 212 / var(--tw-text-opacity, 1));
+}
+
+.app-session-action {
+  white-space: nowrap;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.app-tooltip {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 50%;
+  --tw-translate-x: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  white-space: nowrap;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: rgb(64 64 64 / 0.6);
+  background-color: rgb(38 38 38 / 0.9);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  --tw-text-opacity: 1;
+  color: rgb(229 229 229 / var(--tw-text-opacity, 1));
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 /* ************************************************************************** */
 
 /*                                                                            */
@@ -1942,10 +2016,6 @@ strong-password input {
   bottom: 0px;
 }
 
-.-bottom-6 {
-  bottom: -1.5rem;
-}
-
 .left-1\/2 {
   left: 50%;
 }
@@ -1993,6 +2063,10 @@ strong-password input {
   margin-bottom: 2rem;
 }
 
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -2017,22 +2091,6 @@ strong-password input {
   margin-top: 1.5rem;
 }
 
-.ml-1 {
-  margin-left: 0.25rem;
-}
-
-.mr-1 {
-  margin-right: 0.25rem;
-}
-
-.ml-3 {
-  margin-left: 0.75rem;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
-}
-
 .inline-block {
   display: inline-block;
 }
@@ -2055,11 +2113,6 @@ strong-password input {
 
 .hidden {
   display: none;
-}
-
-.size-0\.5 {
-  width: 0.125rem;
-  height: 0.125rem;
 }
 
 .h-10 {
@@ -2177,10 +2230,6 @@ strong-password input {
   overflow: visible;
 }
 
-.whitespace-nowrap {
-  white-space: nowrap;
-}
-
 .rounded-full {
   border-radius: 9999px;
 }
@@ -2199,10 +2248,6 @@ strong-password input {
 
 .border-blue-400\/20 {
   border-color: rgb(96 165 250 / 0.2);
-}
-
-.border-neutral-700\/60 {
-  border-color: rgb(64 64 64 / 0.6);
 }
 
 .border-neutral-700\/70 {
@@ -2228,10 +2273,6 @@ strong-password input {
 
 .bg-neutral-800\/60 {
   background-color: rgb(38 38 38 / 0.6);
-}
-
-.bg-neutral-800\/90 {
-  background-color: rgb(38 38 38 / 0.9);
 }
 
 .bg-neutral-900\/50 {
@@ -2266,11 +2307,6 @@ strong-password input {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
 }
 
 .py-4 {
@@ -2335,11 +2371,6 @@ strong-password input {
   color: rgb(245 245 245 / var(--tw-text-opacity, 1));
 }
 
-.text-neutral-200 {
-  --tw-text-opacity: 1;
-  color: rgb(229 229 229 / var(--tw-text-opacity, 1));
-}
-
 .text-neutral-300 {
   --tw-text-opacity: 1;
   color: rgb(212 212 212 / var(--tw-text-opacity, 1));
@@ -2348,6 +2379,11 @@ strong-password input {
 .text-neutral-400 {
   --tw-text-opacity: 1;
   color: rgb(163 163 163 / var(--tw-text-opacity, 1));
+}
+
+.text-neutral-500 {
+  --tw-text-opacity: 1;
+  color: rgb(115 115 115 / var(--tw-text-opacity, 1));
 }
 
 .text-red-400 {
@@ -2373,18 +2409,6 @@ strong-password input {
 
 .opacity-90 {
   opacity: 0.9;
-}
-
-.shadow-md {
-  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
-.transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 }
 
 .transition-opacity {
@@ -2842,10 +2866,6 @@ strong-password input {
 /*                                                                            */
 
 /* ************************************************************************** */
-
-.hover\:bg-neutral-800\/30:hover {
-  background-color: rgb(38 38 38 / 0.3);
-}
 
 .hover\:opacity-100:hover {
   opacity: 1;
