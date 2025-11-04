@@ -6,16 +6,18 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/01 17:15:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/02 18:58:39 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 12:23:50 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
-import { openModalWith } from "../../../../spa/utils/modal.js";
+import { Modal } from "../../../../spa/abstract/Modal.js";
+import * as STYLES from "../../../../spa/themes/index.js";
 import { togglePasswordSvg } from "../../../shared/togglePasswordSvg.js";
 
 let off: Array<() => void> = [];
+const styles = STYLES.liquidGlass;
 
 // @ts-expect-error
 export async function setupPwd({ ASSETS }) {
@@ -32,7 +34,8 @@ export async function setupPwd({ ASSETS }) {
         const newPwd = DOM.changePwdNewInput as any;
         const confirm = DOM.changePwdConfirmInput;
 
-        const { remove } = openModalWith(DOM.fragChangePwd);
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragChangePwd);
 
         togglePasswordSvg({ ASSETS, input: oldPwd });
         togglePasswordSvg({ ASSETS, input: confirm });
@@ -57,19 +60,21 @@ export async function setupPwd({ ASSETS }) {
             if (data?.success) {
                 alert("Password updated successfully.");
                 form.reset();
-                remove();
+                modal.remove();
             } else alert(data?.message || "Password update failed.");
         });
     }
 
     function openOtpForm() {
+        const modal = new Modal({ styles });
+
         DOM.createCheck2FAFrag();
-        const { remove } = openModalWith(DOM.fragCheck2FA);
+        modal.render(DOM.fragCheck2FA);
         DOM.check2faTitle.innerText = "Enter your current authenticator \
             code to change your password."
 
         DOM.check2faGotoBackupBtn.addEventListener("click", () => {
-            remove();
+            modal.remove();
             openBackupForm();
         });
 
@@ -78,19 +83,21 @@ export async function setupPwd({ ASSETS }) {
             const code = DOM.check2faOtpInput.value;
             const { data, error } = await API.Post("/auth/verify-totp", { code });
             if (error || !data?.success) return alert("Invalid code, cannot disable.");
-            remove();
+            modal.remove();
             openChangePwd();
         });
     }
 
     function openBackupForm() {
+        const modal = new Modal({ styles });
+
         DOM.createCheckBackupFrag();
-        const { remove } = openModalWith(DOM.fragCheckBackup);
+        modal.render(DOM.fragCheckBackup);
         DOM.checkBackupTitle.innerText = "Enter your current backup \
             code to change your password."
 
         DOM.checkBackupGoto2faBtn.addEventListener("click", () => {
-            remove();
+            modal.remove();
             openOtpForm();
         });
 
@@ -99,7 +106,7 @@ export async function setupPwd({ ASSETS }) {
             const code = DOM.checkBackupOtpInput.value;
             const { data, error } = await API.Post("/auth/verify-backup", { code });
             if (error || !data.success) return alert("Invalid code, cannot disable.");
-            remove();
+            modal.remove();
             openChangePwd();
         });
     }

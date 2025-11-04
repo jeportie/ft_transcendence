@@ -6,16 +6,17 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/30 14:28:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/02 22:59:13 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 12:20:53 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
-import { openModalWith } from "../../../../spa/utils/modal.js";
-import { ASSETS } from "../Settings.js";
+import { Modal } from "../../../../spa/abstract/Modal.js";
+import * as STYLES from "../../../../spa/themes/index.js";
 
-let listeners: Array<() => void> = [];
+let off: Array<() => void> = [];
+const styles = STYLES.liquidGlass;
 
 function setStatus(el: HTMLElement, isEnabled: boolean) {
     if (isEnabled) {
@@ -38,14 +39,14 @@ export async function setupF2a({ ASSETS }) {
         btn.textContent = user.f2a_enabled ? "Disable" : "Enable";
 
     async function activate2FA() {
-
         DOM.createActivate2FAFrag()
         const form = DOM.activate2faForm;
         const statusTag = DOM.activateF2aStatusTagSpan;
         const qrImg = DOM.activateF2aQrImg;
         const otpInput = DOM.activateF2aOtpInput;
 
-        const { remove } = openModalWith(DOM.fragActivate2FA);
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragActivate2FA);
         setStatus(statusTag, false);
 
         const { data, error } = await API.Post("/auth/enable");
@@ -81,7 +82,7 @@ export async function setupF2a({ ASSETS }) {
 
             setStatus(statusTag, true);
             btn.textContent = "Disable";
-            remove();
+            modal.remove();
             diplayBackupCodes();
         });
     }
@@ -90,7 +91,8 @@ export async function setupF2a({ ASSETS }) {
         DOM.createDisplayBackupCodesFrag();
         const backupTbody = DOM.displayBackupTableTbody;
 
-        const { remove } = openModalWith(DOM.fragDisplayBackupCodes);
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragDisplayBackupCodes);
         setStatus(DOM.displayBackupStatusTagSpan, true);
 
         // Fetch backup codes
@@ -125,18 +127,19 @@ export async function setupF2a({ ASSETS }) {
             });
             a.click();
             URL.revokeObjectURL(url);
-            remove();
+            modal.remove();
         };
 
     }
 
     function openOtpForm() {
         DOM.createCheck2FAFrag();
-        const { remove } = openModalWith(DOM.fragCheck2FA);
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragCheck2FA);
         DOM.check2faTitle.innerText = "Enter your current authenticator code to disable two-factor authentication."
 
         DOM.check2faGotoBackupBtn.addEventListener("click", () => {
-            remove();
+            modal.remove();
             openBackupForm();
         });
 
@@ -145,18 +148,19 @@ export async function setupF2a({ ASSETS }) {
             const code = DOM.check2faOtpInput.value;
             const { data, error } = await API.Post("/auth/verify-totp", { code });
             if (error || !data?.success) return alert("Invalid code, cannot disable.");
-            remove();
+            modal.remove();
             activate2FA();
         });
     }
 
     function openBackupForm() {
         DOM.createCheckBackupFrag();
-        const { remove } = openModalWith(DOM.fragCheckBackup);
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragCheckBackup);
         DOM.checkBackupTitle.innerText = "Enter your current backup code to disable two-factor authentication."
 
         DOM.checkBackupGoto2faBtn.addEventListener("click", () => {
-            remove();
+            modal.remove();
             openOtpForm();
         });
 
@@ -165,17 +169,17 @@ export async function setupF2a({ ASSETS }) {
             const code = DOM.checkBackupOtpInput.value;
             const { data, error } = await API.Post("/auth/verify-backup", { code });
             if (error || !data.success) return alert("Invalid code, cannot disable.");
-            remove();
+            modal.remove();
             activate2FA();
         });
     }
 
     const onClick = user.f2a_enabled ? openOtpForm : activate2FA;
     btn.addEventListener("click", onClick);
-    listeners.push(() => btn.removeEventListener("click", onClick));
+    off.push(() => btn.removeEventListener("click", onClick));
 }
 
 export function teardownF2a() {
-    listeners.forEach((off) => off());
-    listeners = [];
+    off.forEach((off) => off());
+    off = [];
 }

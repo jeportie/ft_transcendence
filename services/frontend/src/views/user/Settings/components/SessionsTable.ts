@@ -6,11 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 09:33:56 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/04 10:23:59 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 11:16:47 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractTableView } from "../../../../spa/abstractViewClasses/AbstractTableView.js";
+import { AbstractTableView } from "../../../../spa/abstract/AbstractTableView.js";
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
