@@ -688,7 +688,7 @@ body {
 
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
 
-/*   Updated: 2025/11/03 17:44:08 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/11/04 17:11:31 by jeportie         ###   ########.fr       */
 
 /*                                                                            */
 
@@ -1356,6 +1356,12 @@ html,
   padding: clamp(1rem, 4vw, 3rem);
 }
 
+#settings-section .app-dotlist {
+  scroll-behavior: smooth;
+  mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+}
+
 /* ==========================================================================
      ✍️ TYPOGRAPHY
      ========================================================================== */
@@ -1767,6 +1773,63 @@ html,
   pointer-events: auto;
 }
 
+/* ==========================================================================
+     ⚙️ SETTINGS VIEW (fixed height + internal scroll)
+     ========================================================================== */
+
+#settings-section.app-view-zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - clamp(4rem, 8vh, 6rem));
+  overflow: hidden;
+}
+
+#settings-section header {
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+#settings-section .app-dotlist {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: none;
+}
+
+#settings-section .app-dotlist::-webkit-scrollbar {
+  display: none;
+}
+
+/* Optional: smooth fade mask */
+
+/* #settings-section .app-dotlist { */
+
+/*   scroll-behavior: smooth; */
+
+/*   mask-image: linear-gradient(to bottom, black 90%, transparent 100%); */
+
+/*   -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%); */
+
+/* } */
+
+#settings-section .app-dotlist {
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 95%, rgba(0,0,0,0.4) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 95%, rgba(0,0,0,0.4) 100%);
+  flex: 1 1 0%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5rem;
+}
+
+/* Lock parent scroll to prevent canvas distortion */
+
+.app-theme .app-main,
+  .app-theme .app-main-slot {
+  overflow: hidden;
+  height: 100%;
+}
+
 /* Add once */
 
 .app-tooltip {
@@ -2032,20 +2095,12 @@ strong-password input {
   left: 1rem;
 }
 
-.right-3 {
-  right: 0.75rem;
-}
-
-.right-4 {
-  right: 1rem;
-}
-
-.top-3 {
-  top: 0.75rem;
-}
-
 .right-2 {
   right: 0.5rem;
+}
+
+.right-3 {
+  right: 0.75rem;
 }
 
 .top-0 {
@@ -2203,21 +2258,12 @@ strong-password input {
   width: 100%;
 }
 
-.w-\[90\%\] {
-  width: 90%;
-}
-
 .max-w-md {
   max-width: 28rem;
 }
 
 .-translate-x-1\/2 {
   --tw-translate-x: -50%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.translate-y-4 {
-  --tw-translate-y: 1rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -2275,10 +2321,6 @@ strong-password input {
   border-radius: 0.375rem;
 }
 
-.rounded-2xl {
-  border-radius: 1rem;
-}
-
 .rounded-xl {
   border-radius: 0.75rem;
 }
@@ -2307,6 +2349,10 @@ strong-password input {
   border-color: rgb(255 255 255 / 0.1);
 }
 
+.bg-black\/60 {
+  background-color: rgb(0 0 0 / 0.6);
+}
+
 .bg-blue-500\/15 {
   background-color: rgb(59 130 246 / 0.15);
 }
@@ -2332,14 +2378,6 @@ strong-password input {
 .bg-red-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
-}
-
-.bg-black\/60 {
-  background-color: rgb(0 0 0 / 0.6);
-}
-
-.bg-neutral-900\/90 {
-  background-color: rgb(23 23 23 / 0.9);
 }
 
 .p-6 {
@@ -2402,11 +2440,6 @@ strong-password input {
   line-height: 1rem;
 }
 
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
-
 .font-medium {
   font-weight: 500;
 }
@@ -2433,6 +2466,11 @@ strong-password input {
   color: rgb(245 245 245 / var(--tw-text-opacity, 1));
 }
 
+.text-neutral-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 229 229 / var(--tw-text-opacity, 1));
+}
+
 .text-neutral-300 {
   --tw-text-opacity: 1;
   color: rgb(212 212 212 / var(--tw-text-opacity, 1));
@@ -2457,11 +2495,6 @@ strong-password input {
   color: rgb(253 224 71 / 0.9);
 }
 
-.text-neutral-200 {
-  --tw-text-opacity: 1;
-  color: rgb(229 229 229 / var(--tw-text-opacity, 1));
-}
-
 .opacity-0 {
   opacity: 0;
 }
@@ -2478,12 +2511,6 @@ strong-password input {
   opacity: 0.9;
 }
 
-.shadow-2xl {
-  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
 .backdrop-blur-md {
   --tw-backdrop-blur: blur(12px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
@@ -2495,28 +2522,12 @@ strong-password input {
   transition-duration: 150ms;
 }
 
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
 .duration-300 {
   transition-duration: 300ms;
 }
 
 .duration-500 {
   transition-duration: 500ms;
-}
-
-.duration-200 {
-  transition-duration: 200ms;
 }
 
 @keyframes spin-synced {
@@ -2960,11 +2971,6 @@ strong-password input {
 /*                                                                            */
 
 /* ************************************************************************** */
-
-.hover\:text-white:hover {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
 
 .hover\:opacity-100:hover {
   opacity: 1;

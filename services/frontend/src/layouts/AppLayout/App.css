@@ -6,7 +6,7 @@
 /*   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 23:55:00 by jeportie          #+#    #+#             */
-/*   Updated: 2025/11/03 17:44:08 by jeportie         ###   ########.fr       */
+/*   Updated: 2025/11/04 17:11:31 by jeportie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@
     @apply flex-1 w-full h-full overflow-y-auto;
     padding: clamp(1rem, 4vw, 3rem);
   }
+
+  #settings-section .app-dotlist {
+    scroll-behavior: smooth;
+    mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+  }
+
 
   /* ==========================================================================
      ✍️ TYPOGRAPHY
@@ -356,6 +363,53 @@
     transform: none;
     filter: brightness(1) saturate(1);
     pointer-events: auto 
+  }
+
+
+  /* ==========================================================================
+     ⚙️ SETTINGS VIEW (fixed height + internal scroll)
+     ========================================================================== */
+
+  #settings-section.app-view-zone {
+    @apply relative flex flex-col;
+    height: calc(100vh - clamp(4rem, 8vh, 6rem));
+    overflow: hidden;
+  }
+ 
+  #settings-section header {
+    @apply shrink-0 mb-6;
+  }
+ 
+  #settings-section .app-dotlist {
+    @apply flex-1 overflow-y-auto pr-2;
+    scrollbar-width: none;
+  }
+ 
+  #settings-section .app-dotlist::-webkit-scrollbar {
+    display: none;
+  }
+ 
+  /* Optional: smooth fade mask */
+  /* #settings-section .app-dotlist { */
+  /*   scroll-behavior: smooth; */
+  /*   mask-image: linear-gradient(to bottom, black 90%, transparent 100%); */
+  /*   -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%); */
+  /* } */
+
+  #settings-section .app-dotlist {
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 95%, rgba(0,0,0,0.4) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 95%, rgba(0,0,0,0.4) 100%);
+  }
+
+  #settings-section .app-dotlist {
+    @apply flex-1 overflow-y-auto overflow-x-hidden pr-2;
+  }
+ 
+  /* Lock parent scroll to prevent canvas distortion */
+  .app-theme .app-main,
+  .app-theme .app-main-slot {
+    @apply overflow-hidden;
+    height: 100%;
   }
 
   /* Add once */

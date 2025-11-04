@@ -6,22 +6,26 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/15 16:14:20 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/30 13:59:05 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 18:44:19 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { logger } from "./logger.ts";
+import { logger } from "./logger.js";
+import { getDeviceFingerprint } from "./utils/getDeviceFingerprint.js";
 
 export async function refreshToken() {
     try {
         const clientIpRes = await fetch("https://api.ipify.org?format=json");
         const { ip } = await clientIpRes.json();
+        const fingerprint = getDeviceFingerprint();
+        console.log(fingerprint);
 
         const res = await fetch("/api/auth/refresh", {
             method: "POST",
             credentials: "include",
             headers: {
                 "x-client-ip": ip,
+                "x-device-id": fingerprint,
             },
         });
         if (res.status === 401) {

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 09:33:56 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/04 11:16:47 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 18:41:14 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -52,7 +52,25 @@ export class SessionsTable extends AbstractTableView<any> {
     async fetch() {
         const res = await API.Get("/auth/sessions");
         if (res.error) throw new Error("API Error");
-        return res.data?.sessions ?? [];
+
+        const sessions = res.data?.sessions ?? [];
+
+        // --- 🧠 Deduplicate sessions by fingerprint/device ---
+        const uniqueSessions = Object.values(
+            sessions.reduce((acc: Record<string, any>, s: any) => {
+                const key = s.device_fingerprint || s.device;
+                // Keep the most recent active record for each device
+                if (
+                    !acc[key] ||
+                    new Date(s.lastActiveAt || 0) > new Date(acc[key].lastActiveAt || 0)
+                ) {
+                    acc[key] = s;
+                }
+                return acc;
+            }, {})
+        );
+
+        return uniqueSessions;
     }
 
     renderRow(s: any): DocumentFragment {

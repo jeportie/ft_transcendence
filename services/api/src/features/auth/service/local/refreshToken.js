@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 14:39:01 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/30 14:01:10 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 18:36:44 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,6 +17,7 @@ import { AuthErrors } from "../../errors.js";
 const PATH = import.meta.url;
 
 export async function refreshToken(fastify, request, reply) {
+    const deleteByDeviceSql = fastify.loadSql(PATH, "../sql/deleteRefreshTokenByDevice.sql");
     const deleteRefreshTokenSql = fastify.loadSql(PATH, "../sql/deleteRefreshTokenByID.sql");
     const findRefreshTokenSql = fastify.loadSql(PATH, "../sql/findRefreshTokenWithUserByHash.sql");
     const refreshTokenSql = fastify.loadSql(PATH, "../sql/insertRefreshToken.sql");
@@ -52,11 +53,21 @@ export async function refreshToken(fastify, request, reply) {
         request.headers['x-forwarded-for']?.split(',')[0].trim() ||
         request.ip;
 
+    const deviceId = request.headers["x-device-id"] || null;
+
+    if (deviceId) {
+        await db.run(deleteByDeviceSql, {
+            ":user_id": rt.user_id,
+            ":device_fingerprint": deviceId,
+        });
+    }
+
     await db.run(refreshTokenSql, {
         ":user_id": rt.user_id,
         ":token_hash": hashNew,
         ":user_agent": request.headers["user-agent"] || null,
         ":ip": clientIp,
+        ":device_fingerprint": deviceId,
         ":expires_at": expiresAt,
     });
 
