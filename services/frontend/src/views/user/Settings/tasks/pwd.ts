@@ -6,26 +6,28 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/01 17:15:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/04 12:23:50 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 16:50:14 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
+
+import * as STYLES from "../../../../spa/themes/index.js";
+
+import { togglePasswordSvg } from "../../../shared/togglePasswordSvg.js";
 
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 import { Modal } from "../../../../spa/abstract/Modal.js";
-import * as STYLES from "../../../../spa/themes/index.js";
-import { togglePasswordSvg } from "../../../shared/togglePasswordSvg.js";
+import { UserState } from "../../../../spa/UserState.js";
 
 let off: Array<() => void> = [];
 const styles = STYLES.liquidGlass;
 
 // @ts-expect-error
 export async function setupPwd({ ASSETS }) {
+    let user = await UserState.get();
+
     const btn = DOM.settingsPwdBtn;
     if (!btn) return;
-
-    const me = await API.Get("/user/me");
-    const user = me?.data?.me;
 
     function openChangePwd() {
         DOM.createChangePwdFrag();
@@ -111,7 +113,17 @@ export async function setupPwd({ ASSETS }) {
         });
     }
 
-    const onClick = user.f2a_enabled ? openOtpForm : openChangePwd;
+    const onClick = async () => {
+        const user = await UserState.get(true);
+        if (!user)
+            return alert("Failed to fetch user info.");
+        if (user.f2a_enabled) {
+            openOtpForm();
+        } else {
+            openChangePwd();
+        }
+    };
+
     btn.addEventListener("click", onClick);
     off.push(() => btn.removeEventListener("click", onClick));
 }

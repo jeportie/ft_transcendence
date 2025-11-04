@@ -6,14 +6,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/30 14:28:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/04 12:20:53 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 16:53:52 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
+
+import * as STYLES from "../../../../spa/themes/index.js";
 
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 import { Modal } from "../../../../spa/abstract/Modal.js";
-import * as STYLES from "../../../../spa/themes/index.js";
+import { UserState } from "../../../../spa/UserState.js";
 
 let off: Array<() => void> = [];
 const styles = STYLES.liquidGlass;
@@ -32,8 +34,7 @@ export async function setupF2a({ ASSETS }) {
     const btn = DOM.settings2faBtn;
     if (!btn) return;
 
-    const me = await API.Get("/user/me");
-    const user = me?.data?.me;
+    let user = await UserState.get();
 
     if (user)
         btn.textContent = user.f2a_enabled ? "Disable" : "Enable";
@@ -88,6 +89,9 @@ export async function setupF2a({ ASSETS }) {
     }
 
     async function diplayBackupCodes() {
+        await UserState.refresh();
+        user = await UserState.get();
+        console.log('[in display codes]:', user);
         DOM.createDisplayBackupCodesFrag();
         const backupTbody = DOM.displayBackupTableTbody;
 
@@ -174,7 +178,17 @@ export async function setupF2a({ ASSETS }) {
         });
     }
 
-    const onClick = user.f2a_enabled ? openOtpForm : activate2FA;
+    const onClick = async () => {
+        const user = await UserState.get(true);
+        if (!user)
+            return alert("Failed to fetch user info.");
+        if (user.f2a_enabled) {
+            openOtpForm();
+        } else {
+            activate2FA();
+        }
+    };
+
     btn.addEventListener("click", onClick);
     off.push(() => btn.removeEventListener("click", onClick));
 }
