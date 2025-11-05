@@ -55,6 +55,8 @@ export async function refreshToken(fastify, request, reply) {
 
     const deviceId = request.headers["x-device-id"] || null;
 
+    console.log(clientIp, deviceId);
+
     if (deviceId) {
         await db.run(deleteByDeviceSql, {
             ":user_id": rt.user_id,

@@ -35,14 +35,26 @@ export async function issueSession(fastify, request, reply, userRow) {
     const hash = hashToken(raw);
     const expiresAt = addDaysUTC(fastify.config.REFRESH_TOKEN_TTL_DAYS);
 
+
+    const clientIp =
+        request.headers['x-client-ip'] ||
+        request.headers['x-forwarded-for']?.split(',')[0].trim() ||
+        request.ip;
+
+    const deviceId = request.headers["x-device-id"] || null;
+
+    console.log(clientIp, deviceId);
+
     const db = await fastify.getDb();
     await db.run(refreshTokenSql, {
         ":user_id": userRow.id,
         ":token_hash": hash,
         ":user_agent": request.headers["user-agent"] || null,
-        ":ip": request.ip || null,
+        ":ip": clientIp,
+        ":device_fingerprint": deviceId,
         ":expires_at": expiresAt,
     });
+
 
     clearRefreshCookie(fastify, reply);
     setRefreshCookie(fastify, reply, raw, fastify.config.REFRESH_TOKEN_TTL_DAYS);

@@ -10,6 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
+import { Fetch } from "@jeportie/mini-fetch";
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
@@ -17,6 +18,7 @@ import { auth } from "../../../../spa/auth.js";
 import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
 import notActiveHtml from "../notActive.html";
+import { getDeviceFingerprint } from "../../../../spa/utils/getDeviceFingerprint.js";
 
 /**
  * Handles login form submission and feedback display.
@@ -35,10 +37,22 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         event.preventDefault();
         clearBox(errorBox);
 
-        const { data, error } = await API.Post("/auth/login", {
-            user: userInput.value,
-            pwd: pwdInput.value,
-        });
+        const external = new Fetch("");
+        const ipify = await external.get("https://api.ipify.org?format=json", { credentials: "omit" });
+
+        const { data, error } = await API.Post(
+            "/auth/login",
+            { // Body
+                user: userInput.value,
+                pwd: pwdInput.value,
+            },
+            { // Opts
+                headers: {
+                    "x-client-ip": ipify.ip,
+                    "x-device-id": getDeviceFingerprint(),
+                }
+            }
+        );
 
         if (error) {
             pwdInput.value = "";

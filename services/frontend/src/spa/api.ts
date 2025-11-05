@@ -33,8 +33,16 @@ const fetcher = new Fetch("/api", {
 
 export const API = {
     ...fetcher,
-    Get: <T>(url: string): Promise<SafeResult<T>> => safeGet<T>(fetcher, url, logger),
-    Post: <T>(url: string, body?: object): Promise<SafeResult<T>> => safePost<T>(fetcher, url, body, logger),
-    Put: <T>(url: string, body?: object): Promise<SafeResult<T>> => safePut<T>(fetcher, url, body, logger),
-    Delete: <T>(url: string, body?: object): Promise<SafeResult<T>> => safeDelete<T>(fetcher, url, body, logger),
+    Get: <T>(url: string, opts?: RequestInit): Promise<SafeResult<T>> =>
+        safeGet<T>(fetcher, url, opts, logger),
+
+    Post: <T>(url: string, body?: object, opts?: RequestInit): Promise<SafeResult<T>> =>
+        safePost<T>(fetcher, url, body, opts, logger),
+
+    Put: <T>(url: string, body?: object, opts?: RequestInit): Promise<SafeResult<T>> =>
+        safePut<T>(fetcher, url, body, opts, logger),
+
+    Delete: <T>(url: string, body?: object, opts?: RequestInit): Promise<SafeResult<T>> =>
+        safeDelete<T>(fetcher, url, body, opts, logger),
 };
+
