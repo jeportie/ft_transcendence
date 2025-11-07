@@ -13,6 +13,7 @@
 import cron from "node-cron";
 import { archiveInactiveUsers } from "./tasks/archiveInactiveUsers.js";
 import { purgeExpiredTokens } from "./tasks/purgeExpiredTokens.js";
+import { purgeExpiredRefreshTokens } from "./tasks/purgeExpiredRefreshTokens.js";
 import { logDbSnapshot } from "./tasks/debugDatabase.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -26,6 +27,7 @@ async function runAllTasks() {
     // await logDbSnapshot();
     await archiveInactiveUsers();
     await purgeExpiredTokens();
+    await purgeExpiredRefreshTokens();
     console.log("[Automation] Maintenance completed ✅");
 }
 

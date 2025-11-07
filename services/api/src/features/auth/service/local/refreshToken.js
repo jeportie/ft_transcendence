@@ -46,7 +46,11 @@ export async function refreshToken(fastify, request, reply) {
 
     const rawNew = generateRefreshToken();
     const hashNew = hashToken(rawNew);
-    const expiresAt = addDaysUTC(fastify.config.REFRESH_TOKEN_TTL_DAYS);
+    const expiresAt = new Date(Date.now() + fastify.config.REFRESH_TOKEN_TTL_DAYS * 24 * 3600 * 1000)
+        .toISOString()
+        .replace('T', ' ')
+        .replace('Z', '')
+        .slice(0, 19); // -> "YYYY-MM-DD HH:MM:SS"
 
     const clientIp =
         request.headers['x-client-ip'] ||
