@@ -15,7 +15,7 @@ import { loadSql } from "../../shared/utils/sqlLoader.js";
 
 const PATH = import.meta.url;
 
-export async function purgeExpiredTokens() {
+export async function purgeExpiredActivationTokens() {
     const db = await getDb();
     const purgeExpiredTokensSql = loadSql(PATH, "./sql/purgeExpiredTokens.sql");
 

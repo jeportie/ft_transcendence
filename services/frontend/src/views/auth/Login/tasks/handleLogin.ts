@@ -62,7 +62,6 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         }
 
         logo?.fadeAndReplaceWithLottie();
-        console.log(data);
         setTimeout(() => {
             if (data.activation_required) {
                 view.swapContent(notActiveHtml).then(() => {
