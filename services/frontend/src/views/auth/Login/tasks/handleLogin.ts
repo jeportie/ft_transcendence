@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:33:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/16 10:04:31 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 10:47:22 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,10 +15,10 @@ import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
 import { auth } from "../../../../spa/auth.js";
-import { showBox, clearBox } from "../../../../spa/utils/errors.js";
+import { showBox, clearBox } from "@jeportie/mini-js/utils";
 
 import notActiveHtml from "../notActive.html";
-import { getDeviceFingerprint } from "../../../../spa/utils/getDeviceFingerprint.js";
+import { getDeviceFingerprint } from "@jeportie/mini-js/utils";
 
 /**
  * Handles login form submission and feedback display.

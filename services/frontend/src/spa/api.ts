@@ -1,12 +1,12 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   api.js                                             :+:      :+:    :+:   //
+//   api.ts                                             :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/15 16:11:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/15 16:18:09 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 10:35:57 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,7 +15,7 @@ import { type FetchOptions, type SafeResult } from "@jeportie/mini-js";
 import { auth } from "./auth.js";
 import { logger } from "./logger.js";
 import { refreshToken } from "./refreshToken.js";
-import { getDeviceFingerprint } from "../spa/utils/getDeviceFingerprint.js";
+import { getDeviceFingerprint } from "@jeportie/mini-js/utils";
 
 export async function withCommonHeaders(init: RequestInit) {
     const clientIpRes = await fetch("https://api.ipify.org?format=json");

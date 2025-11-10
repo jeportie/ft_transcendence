@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/15 15:21:19 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/15 15:32:36 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 10:37:17 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,7 +14,7 @@ import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
 import { auth } from "../../../../spa/auth.js";
-import { clearBox, showBox } from "../../../../spa/utils/errors.js";
+import { clearBox, showBox } from "@jeportie/mini-js/utils";
 
 export async function handleBackup({ addCleanup }) {
     const form = DOM.backupForm;

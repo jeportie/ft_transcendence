@@ -6,12 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/13 16:39:05 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 00:06:00 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 10:44:15 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { create } from "../../spa/utils/dom.js";
-import { resolveElement } from "../../spa/utils/resolveElement.js";
+import { create } from "@jeportie/mini-js/utils";
+import { resolveElement } from "@jeportie/mini-js/utils";
 
 interface GoogleButtonParams {
     ASSETS: { googleIcon: string };

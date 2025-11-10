@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/13 19:30:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 11:28:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 10:39:34 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,7 +15,7 @@ import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "../../../shared/setupLogoAnimation.js";
 import { togglePassword } from "../../../shared/togglePassword.js";
 import { handleGoogleButton } from "../../../shared/handleGoogleButton.js";
-import { destroyRecaptcha } from "../../../../spa/utils/recaptcha.js";
+import { destroyRecaptcha } from "@jeportie/mini-js/utils";
 
 import { handleSignup } from "./handleSignup.js";
 
