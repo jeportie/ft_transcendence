@@ -7,6 +7,36 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
+        "baseUrl": "src",
+        "paths": {
+            "@system": [
+                "system/index.ts"
+            ],
+            "@system/*": [
+                "system/*"
+            ],
+            "@system/app/*": [
+                "system/app/*"
+            ],
+            "@system/config/*": [
+                "system/config/*"
+            ],
+            "@system/core/*": [
+                "system/core/*"
+            ],
+            "@views/*": [
+                "views/*"
+            ],
+            "@components/*": [
+                "components/*"
+            ],
+            "@styles/*": [
+                "styles/*"
+            ],
+            "@assets/*": [
+                "assets/*"
+            ]
+        },
         "typeRoots": [
             "./src/types",
             "./node_modules/@types"

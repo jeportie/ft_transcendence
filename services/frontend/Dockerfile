@@ -18,16 +18,16 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-COPY config/package.json /app/package.json
+COPY ./package.json /app/package.json
 # COPY LOCK ONLY WHEN IN PRODUCTION
-# COPY config/package-lock.json /app/package-lock.json
+# COPY ./package-lock.json /app/package-lock.json
 RUN npm install
 
 RUN npx tailwindcss init -p
-COPY config/tailwind.config.js /app/tailwind.config.js
+COPY ./tailwind.config.js /app/tailwind.config.js
 
 RUN npx tsc --init
-COPY config/tsconfig.json /app/tsconfig.json
+COPY ./tsconfig.json /app/tsconfig.json
 
 # 3) Copy your source files one by one
 COPY src /app/src
