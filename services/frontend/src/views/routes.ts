@@ -35,7 +35,7 @@ const Settings = () => import("./pages/user/Settings/Settings.js");
 const Game = () => import("./pages/pong/Match/Pong.js");
 const NotFound = () => import("./pages/404/NotFound.js");
 
-// const appHook = new PersistentAnimationHook();
+const appHook = new PersistentAnimationHook();
 const landingHook = new OverlayAnimationHook();
 
 export const routes = [

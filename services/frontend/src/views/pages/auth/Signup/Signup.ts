@@ -15,10 +15,10 @@ import { AbstractView } from "@jeportie/mini-spa";
 import { tasks } from "../Signup/tasks/index.js";
 import signupHTML from "./signup.html";
 
-import spaceShipSvg from "../../../assets/spaceship.svg";
-import googleIcon from "../../../assets/google.png";
-import hideIcon from "../../../assets/hide.png";
-import showIcon from "../../../assets/show.png";
+import spaceShipSvg from "../../../../assets/spaceship.svg";
+import googleIcon from "../../../../assets/google.png";
+import hideIcon from "../../../../assets/hide.png";
+import showIcon from "../../../../assets/show.png";
 
 export const ASSETS = { spaceShipSvg, googleIcon, hideIcon, showIcon };
 

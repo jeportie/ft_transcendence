@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // import { runMenuSphere } from "../../../../games/sphere/old-runMenuSphere.js";
-import { runMenuSphere } from "../../../graphics/sphere/controller/runMenuSphere.js";
+import { runMenuSphere } from "../../../../graphics/sphere/controller/runMenuSphere.js";
 
 let cleanupFn: (() => void) | null = null;
 
