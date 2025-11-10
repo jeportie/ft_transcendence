@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractAnimationHook } from "@jeportie/mini-js";
+import { AbstractAnimationHook } from "@jeportie/mini-spa";
 
 /**
  * Keeps the current layout (Babylon canvas, navbar, etc.) alive

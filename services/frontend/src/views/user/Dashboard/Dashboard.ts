@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractView } from "@jeportie/mini-js";
+import { AbstractView } from "@jeportie/mini-spa";
 import { tasks } from "./tasks/index.js";
 import dashboardHTML from "./dashboard.html";
 

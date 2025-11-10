@@ -6,12 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:24:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 10:46:08 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/30 15:14:42 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { create } from "@jeportie/mini-js/utils";
-import { resolveElement } from "@jeportie/mini-js/utils";
+import { create } from "../../spa/utils/dom.js";
+import { resolveElement } from "../../spa/utils/resolveElement.js";
 
 interface TogglePasswordParams {
     ASSETS: { showIcon: string; hideIcon: string };

@@ -6,11 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:34:19 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 10:44:54 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 00:10:53 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { resolveElement } from "@jeportie/mini-js/utils";
+import { resolveElement } from "../../spa/utils/resolveElement.js";
 
 interface logoAnimationParams {
     ASSETS: { spaceShipSvg: string };

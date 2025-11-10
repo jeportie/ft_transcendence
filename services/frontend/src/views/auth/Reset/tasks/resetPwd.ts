@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/17 13:37:58 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 10:38:11 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/17 14:02:12 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { API } from "../../../../spa/api.js";
 import { DOM } from "../dom.generated.js";
-import { clearBox, showBox } from "@jeportie/mini-js/utils";
+import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
 export async function resetPwd() {
     const resetForm = DOM.resetForm;

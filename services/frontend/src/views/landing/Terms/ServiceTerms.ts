@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // @ts-expect-error
-import { AbstractView } from "@jeportie/mini-js";
+import { AbstractView } from "@jeportie/mini-spa";
 import serviceTermsHTML from "./serviceTerms.html";
 import { tasks } from "./tasks/index.js";
 

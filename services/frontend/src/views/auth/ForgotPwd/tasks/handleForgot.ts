@@ -6,15 +6,15 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/14 18:17:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 10:43:08 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/14 19:03:13 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
-import { initRecaptcha, getRecaptchaToken } from "@jeportie/mini-js/utils";
-import { showBox, clearBox } from "@jeportie/mini-js/utils";
+import { initRecaptcha, getRecaptchaToken } from "../../../../spa/utils/recaptcha.js";
+import { showBox, clearBox } from "../../../../spa/utils/errors.js";
 
 const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
 

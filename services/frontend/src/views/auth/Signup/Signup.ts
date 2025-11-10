@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // @ts-expect-error
-import { AbstractView } from "@jeportie/mini-js";
+import { AbstractView } from "@jeportie/mini-spa";
 import { tasks } from "../Signup/tasks/index.js";
 import signupHTML from "./signup.html";
 

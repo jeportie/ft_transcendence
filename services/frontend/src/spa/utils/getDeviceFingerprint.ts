@@ -1,27 +1,21 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   index.ts                                           :+:      :+:    :+:   //
+//   getDeviceFingerprint.ts                            :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/10/14 18:11:41 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 19:01:57 by jeportie         ###   ########.fr       //
+//   Created: 2025/11/04 18:28:09 by jeportie          #+#    #+#             //
+//   Updated: 2025/11/04 18:43:50 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { destroyRecaptcha } from "../../../../spa/utils/recaptcha.js";
-import { handleForgot } from "./handleForgot.js";
-
-export const tasks = {
-    init: [],
-
-    ready: [
-        handleForgot,
-    ],
-
-    teardown: [destroyRecaptcha],
-};
-
-
-
+export function getDeviceFingerprint(): string {
+    const key = "device_fingerprint";
+    let id = localStorage.getItem(key);
+    if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem(key, id);
+    }
+    return id;
+}

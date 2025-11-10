@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractAnimationHook } from "@jeportie/mini-js";
+import { AbstractAnimationHook } from "@jeportie/mini-spa";
 
 export default class OverlayAnimationHook extends AbstractAnimationHook {
     async mount({ helpers }) {
