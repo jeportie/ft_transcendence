@@ -6,14 +6,14 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/10 16:38:36 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 17:22:05 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:51:27 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import Fetch from "@jeportie/mini-fetch";
-import { auth } from "../auth/auth.js";
-import { logger } from "../logger.js";
-import { withCommonHeaders } from "../../config/api/headers.js";
+import { withCommonHeaders } from "@system/config/api/headers.js";
+import { logger } from "@system";
+import { auth } from "@auth";
 
 export const http = new Fetch("/api", {
     getToken: () => auth.getToken(),

@@ -6,11 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/10 16:56:28 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 16:57:26 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:43:25 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { getDeviceFingerprint } from "../../core/user/getDeviceFingerprint";
+import { getDeviceFingerprint } from "@system/core/user/getDeviceFingerprint";
 
 export async function withCommonHeaders(init: RequestInit) {
     try {

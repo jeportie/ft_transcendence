@@ -6,15 +6,14 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/10 14:20:20 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 15:09:13 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:52:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { auth } from "../core/auth/auth.js";
-import { logger } from "../core/logger.js";
-import { showLoading, hideLoading } from "../views/pages/LoadingOverlay.js";
-
-import { API } from "../core/api/apiClient.js";
+import { showLoading, hideLoading } from "@views/loading";
+import { logger } from "@system";
+import { auth } from "@auth";
+import { API } from "@system";
 
 export async function bootstrap() {
     const restored = await auth.initFromStorage();

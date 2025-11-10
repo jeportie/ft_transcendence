@@ -6,12 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/15 16:14:20 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 17:24:27 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:55:51 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { logger } from "../logger.js";
-import { getDeviceFingerprint } from "../user/getDeviceFingerprint.js";
+import { logger } from "@system";
+import { getDeviceFingerprint } from "@system/core/user/getDeviceFingerprint";
 
 export async function refreshToken() {
     try {

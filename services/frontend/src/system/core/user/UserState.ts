@@ -6,11 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 16:26:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/04 16:30:52 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:56:21 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../api/apiClient.js";
+import { API } from "@system";
 
 export interface User {
     id: number;

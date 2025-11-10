@@ -6,12 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 09:11:06 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/24 16:50:35 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 19:01:35 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../spa/api.js";
-import { auth } from "../../../../core/auth.js";
+import { API } from "@system";
+import { auth } from "@auth";
 import { DOM } from "../dom.generated.js";
 
 let onLogout: ((e: Event) => void) | null = null;

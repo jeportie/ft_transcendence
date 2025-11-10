@@ -6,17 +6,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 15:09:37 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:38:03 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 // @ts-ignore
 import { defineMiniRouter, setupMiniRouter } from "@jeportie/mini-spa";
-import { routes } from "./views/routes.js";
-
-import { bootstrap } from "./app/bootstrap.js";
-import { hideLoading } from "./views/pages/LoadingOverlay.js";
-import { wireGlobals } from "./app/wireGlobals.js";
+import { routes } from "@views/routes";
+import { hideLoading } from "@views/loading";
+import { bootstrap } from "@system/app/bootstrap.js";
+import { wireGlobals } from "@system/app/wireGlobals.js";
 
 import "./components/wc/index.js";
 

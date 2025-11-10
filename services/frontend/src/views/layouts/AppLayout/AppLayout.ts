@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/22 14:11:48 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/24 13:50:47 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:57:51 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractLayout } from "@jeportie/mini-spa";
 import appLayoutHTML from "./appLayout.html";
-import { tasks } from "./tasks/index.ts";
+import { tasks } from "./tasks/index.js";
 
 
 export default class AppLayout extends AbstractLayout {

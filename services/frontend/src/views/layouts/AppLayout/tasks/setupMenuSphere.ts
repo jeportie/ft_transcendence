@@ -6,12 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/23 09:07:32 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/23 15:38:09 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 19:00:42 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-// import { runMenuSphere } from "../../../../games/sphere/old-runMenuSphere.js";
-import { runMenuSphere } from "../../../../graphics/sphere/controller/runMenuSphere.js";
+import { runMenuSphere } from "@graphics/sphere/controller/runMenuSphere.js";
 
 let cleanupFn: (() => void) | null = null;
 

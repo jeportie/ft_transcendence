@@ -6,15 +6,14 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/15 16:16:14 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 16:49:41 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:52:40 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { requireAuth } from "@jeportie/mini-auth";
-
-import { logger } from "../../core/logger.js";
-import { auth } from "../../core/auth/auth.js";
-import { API } from "../../core/api/apiClient.js";
+import { API } from "@system";
+import { logger } from "@system";
+import { auth } from "@auth";
 
 export const guards = {
     requireAuth: requireAuth(auth, {
