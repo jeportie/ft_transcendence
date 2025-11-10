@@ -7,9 +7,9 @@
     "scripts": {
         "dev": "concurrently \"npm run watch:css\" \"npm run watch:js\"",
         "watch:css": "tailwindcss -i src/input.css -o public/styles.css --watch",
-        "watch:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --public-path=/ --watch --log-level=info --loader:.png=file --loader:.svg=text --loader:.html=text --asset-names=assets/[name]",
         "build:css": "tailwindcss -i src/input.css -o public/styles.css",
-        "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --public-path=/ --log-level=info --loader:.png=file --loader:.svg=text --loader:.html=text --asset-names=assets/[name]"
+        "watch:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --public-path=/ --watch --log-level=info --loader:.png=file --loader:.svg=text --loader:.html=text --asset-names=assets/[name] --define:__NODE_ENV__=\\\"development\\\" --define:__API_BASE__=\\\"/api\\\" --define:__PUBLIC_URL__=\\\"/\\\"",
+        "build:js": "esbuild src/main.ts --bundle --sourcemap --outfile=public/bundle.js --public-path=/ --log-level=info --loader:.png=file --loader:.svg=text --loader:.html=text --asset-names=assets/[name] --define:__NODE_ENV__=\\\"production\\\" --define:__API_BASE__=\\\"/api\\\" --define:__PUBLIC_URL__=\\\"/\\\""
     },
     "keywords": [],
     "author": "",
