@@ -6,81 +6,33 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/07/14 17:49:45 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/15 13:11:45 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 15:09:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 // @ts-ignore
 import { defineMiniRouter } from "@jeportie/mini-spa";
-import { onBeforeNavigate } from "@jeportie/mini-auth";
-
-import { routes } from "./spa/routes.js";
-import { showLoading, hideLoading } from "./views/LoadingOverlay.js";
-import { auth } from "./spa/auth.js";
-import { API } from "./spa/api.js";
+import { routes } from "./views/routes.js";
 import { logger } from "./spa/logger.js";
+import { bootstrap } from "./app/bootstrap.js";
+import { hideLoading } from "./views/pages/LoadingOverlay.js";
+
 import "./spa/wc/index.js";
 
+defineMiniRouter();
 //DOM
 const app = document.querySelector("#app") as any;
-defineMiniRouter();
 
 app.routes = routes;
 app.linkSelector = "[data-link]";
-app.onBeforeNavigate = onBeforeNavigate;
 // app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
-
 app.beforeStart(async () => {
-    // throw new Error("💥 Boot failed");
-    const restored = await auth.initFromStorage();
-    if (restored) {
-        logger.info("[Boot] Auth session restored from cookie");
-    } else {
-        logger.info("[Boot] No session to restore");
-    }
-    const alreadyBooted = sessionStorage.getItem("appBooted");
-    if (!alreadyBooted) {
-        showLoading("Starting app...");
-
-        try {
-            // 2. Health check
-            const { data, error } = await API.Get("/system/health");
-            if (error)
-                throw new Error(error.message);
-            logger.info("[Health] ✅ OK:", data);
-            // 3. Simulated preload (e.g. assets/fonts)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            logger.info("[Boot] Preload done");
-            sessionStorage.setItem("appBooted", "1");
-
-        } catch (err: any) {
-            logger.error("[Boot] ❌ Startup failed:", err);
-            hideLoading();
-            throw err;
-        }
-    }
+    bootstrap();
 });
-
 app.afterStart(() => {
     hideLoading();
 })
-
-app.start().catch((err: any) => {
-    // Router.start() itself failed
-    logger.error("[App] Router failed to start:", err);
-
-    const container = document.querySelector("#app");
-    if (container) {
-        container.innerHTML = `
-            <div class="flex items-center justify-center min-h-screen">
-                <div class=" ui-card-error max-w-md text-center">
-                    <h2>⚠️ App failed to start</h2>
-                    <pre>${err?.message || "Unknown error"}</pre>
-                </div>
-            </div>
-        `;
-    }
-});
+app.start();
 
 window.addEventListener("auth:logout", () => {
     const next = encodeURIComponent(location.pathname + location.search + location.hash);

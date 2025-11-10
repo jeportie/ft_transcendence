@@ -13,29 +13,29 @@
 import TailwindAnimationHook from "../styles/transitions/hooks/TailwindAnimationHook.js";
 import OverlayAnimationHook from "../styles/transitions/hooks/OverlayAnimationHook.js";
 import PersistentAnimationHook from "../styles/transitions/hooks/PersistentAnimationHook.js";
-import { guards } from "./guards.js";
+import { guards } from "../spa/guards.js";
 
 // Landing layout
-const LandingLayout = () => import("../layouts/LandingLayout/LandingLayout.js");
-const Landing = () => import("../views/landing/Landing/Landing.js");
-const ServiceTerms = () => import("../views/landing/Terms/ServiceTerms.js");
-const PrivacyPolity = () => import("../views/landing/Policy/PrivacyPolicy.js");
-const Login = () => import("../views/auth/Login/Login.js");
-const Signup = () => import("../views/auth/Signup/Signup.js");
-const Forgot = () => import("../views/auth/ForgotPwd/ForgotPwd.js");
-const F2aLogin = () => import("../views/auth/F2A/F2aLogin.js");
-const BackupLogin = () => import("../views/auth/Backup/BackupLogin.js");
-const Activate = () => import("../views/auth/Activate/Activate.js");
-const Reset = () => import("../views/auth/Reset/ResetPwd.js");
+const LandingLayout = () => import("./layouts/LandingLayout/LandingLayout.js");
+const Landing = () => import("./pages/landing/Landing/Landing.js");
+const ServiceTerms = () => import("./pages/landing/Terms/ServiceTerms.js");
+const PrivacyPolity = () => import("./pages/landing/Policy/PrivacyPolicy.js");
+const Login = () => import("./pages/auth/Login/Login.js");
+const Signup = () => import("./pages/auth/Signup/Signup.js");
+const Forgot = () => import("./pages/auth/ForgotPwd/ForgotPwd.js");
+const F2aLogin = () => import("./pages/auth/F2A/F2aLogin.js");
+const BackupLogin = () => import("./pages/auth/Backup/BackupLogin.js");
+const Activate = () => import("./pages/auth/Activate/Activate.js");
+const Reset = () => import("./pages/auth/Reset/ResetPwd.js");
 
 // App layout
-const AppLayout = () => import("../layouts/AppLayout/AppLayout.js");
-const Dashboard = () => import("../views/user/Dashboard/Dashboard.js");
-const Settings = () => import("../views/user/Settings/Settings.js");
-const Game = () => import("../views/pong/Match/Pong.js");
-const NotFound = () => import("../views/404/NotFound.js");
+const AppLayout = () => import("./layouts/AppLayout/AppLayout.js");
+const Dashboard = () => import("./pages/user/Dashboard/Dashboard.js");
+const Settings = () => import("./pages/user/Settings/Settings.js");
+const Game = () => import("./pages/pong/Match/Pong.js");
+const NotFound = () => import("./pages/404/NotFound.js");
 
-const appHook = new PersistentAnimationHook();
+// const appHook = new PersistentAnimationHook();
 const landingHook = new OverlayAnimationHook();
 
 export const routes = [
