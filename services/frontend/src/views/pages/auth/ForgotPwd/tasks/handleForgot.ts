@@ -11,10 +11,10 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../spa/api.js";
+import { API } from "../../../../../spa/api.js";
 
-import { initRecaptcha, getRecaptchaToken } from "../../../../spa/utils/recaptcha.js";
-import { showBox, clearBox } from "../../../../spa/utils/errors.js";
+import { initRecaptcha, getRecaptchaToken } from "../../../../../spa/utils/recaptcha.js";
+import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
 
 const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
 

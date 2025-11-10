@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { create } from "../../spa/utils/dom.js";
-import { resolveElement } from "../../spa/utils/resolveElement.js";
+import { create } from "../../../spa/utils/dom.js";
+import { resolveElement } from "../../../spa/utils/resolveElement.js";
 
 interface GoogleButtonParams {
     ASSETS: { googleIcon: string };

@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../spa/api.js";
+import { API } from "../../../../../spa/api.js";
 
 export async function handleActivate() {
 

@@ -12,13 +12,13 @@
 
 import { Fetch } from "@jeportie/mini-fetch";
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../spa/api.js";
+import { API } from "../../../../../spa/api.js";
 
-import { auth } from "../../../../spa/auth.js";
-import { showBox, clearBox } from "../../../../spa/utils/errors.js";
+import { auth } from "../../../../../spa/auth.js";
+import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
 
 import notActiveHtml from "../notActive.html";
-import { getDeviceFingerprint } from "../../../../spa/utils/getDeviceFingerprint.js";
+import { getDeviceFingerprint } from "../../../../../spa/utils/getDeviceFingerprint.js";
 
 /**
  * Handles login form submission and feedback display.

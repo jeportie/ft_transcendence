@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../spa/api.js";
+import { API } from "../../../../../spa/api.js";
 import { DOM } from "../dom.generated.js";
 
 export async function dashboard() {

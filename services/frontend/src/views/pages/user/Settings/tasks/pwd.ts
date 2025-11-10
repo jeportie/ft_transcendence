@@ -10,14 +10,14 @@
 //                                                                            //
 // ************************************************************************** //
 
-import * as STYLES from "../../../../spa/themes/index.js";
+import * as STYLES from "../../../../../spa/themes/index.js";
 
 import { togglePasswordSvg } from "../../../shared/togglePasswordSvg.js";
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../spa/api.js";
-import { Modal } from "../../../../spa/abstract/Modal.js";
-import { UserState } from "../../../../spa/UserState.js";
+import { API } from "../../../../../spa/api.js";
+import { Modal } from "../../../../../spa/abstract/Modal.js";
+import { UserState } from "../../../../../spa/UserState.js";
 
 let off: Array<() => void> = [];
 const styles = STYLES.liquidGlass;

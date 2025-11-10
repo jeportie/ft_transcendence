@@ -10,9 +10,9 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractTableView } from "../../../../spa/abstract/AbstractTableView.js";
+import { AbstractTableView } from "../../../../../spa/abstract/AbstractTableView.js";
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../spa/api.js";
+import { API } from "../../../../../spa/api.js";
 
 export class SessionsTable extends AbstractTableView<any> {
     #ASSETS;

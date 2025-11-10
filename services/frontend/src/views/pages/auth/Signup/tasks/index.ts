@@ -15,7 +15,7 @@ import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "../../../shared/setupLogoAnimation.js";
 import { togglePassword } from "../../../shared/togglePassword.js";
 import { handleGoogleButton } from "../../../shared/handleGoogleButton.js";
-import { destroyRecaptcha } from "../../../../spa/utils/recaptcha.js";
+import { destroyRecaptcha } from "../../../../../spa/utils/recaptcha.js";
 
 import { handleSignup } from "./handleSignup.js";
 

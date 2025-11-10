@@ -11,8 +11,8 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../spa/api.js";
-import { UserState } from "../../../../spa/UserState.js";
+import { API } from "../../../../../spa/api.js";
+import { UserState } from "../../../../../spa/UserState.js";
 
 export async function init() {
     let user = await UserState.get();

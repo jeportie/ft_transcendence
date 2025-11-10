@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { resolveElement } from "../../spa/utils/resolveElement.js";
+import { resolveElement } from "../../../spa/utils/resolveElement.js";
 
 interface logoAnimationParams {
     ASSETS: { spaceShipSvg: string };

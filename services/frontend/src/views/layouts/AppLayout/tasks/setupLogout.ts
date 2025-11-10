@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../spa/api.js";
-import { auth } from "../../../spa/auth.js";
+import { API } from "../../../../spa/api.js";
+import { auth } from "../../../../spa/auth.js";
 import { DOM } from "../dom.generated.js";
 
 let onLogout: ((e: Event) => void) | null = null;

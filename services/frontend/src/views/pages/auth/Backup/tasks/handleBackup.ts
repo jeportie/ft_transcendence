@@ -11,10 +11,10 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../spa/api.js";
+import { API } from "../../../../../spa/api.js";
 
-import { auth } from "../../../../spa/auth.js";
-import { clearBox, showBox } from "../../../../spa/utils/errors.js";
+import { auth } from "../../../../../spa/auth.js";
+import { clearBox, showBox } from "../../../../../spa/utils/errors.js";
 
 export async function handleBackup({ addCleanup }) {
     const form = DOM.backupForm;

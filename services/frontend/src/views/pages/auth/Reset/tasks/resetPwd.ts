@@ -10,9 +10,9 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../spa/api.js";
+import { API } from "../../../../../spa/api.js";
 import { DOM } from "../dom.generated.js";
-import { showBox, clearBox } from "../../../../spa/utils/errors.js";
+import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
 
 export async function resetPwd() {
     const resetForm = DOM.resetForm;
