@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { auth } from "../spa/auth.js";
-import { logger } from "../spa/logger.js";
+import { auth } from "../core/auth.js";
+import { logger } from "../core/logger.js";
 import { showLoading, hideLoading } from "../views/pages/LoadingOverlay.js";
 
 import { API } from "../spa/api.js";

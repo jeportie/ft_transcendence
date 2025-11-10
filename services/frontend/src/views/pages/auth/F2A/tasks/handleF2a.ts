@@ -13,7 +13,7 @@
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../../spa/api.js";
 
-import { auth } from "../../../../../spa/auth.js";
+import { auth } from "../../../../../core/auth.js";
 import { clearBox, showBox } from "../../../../../spa/utils/errors.js";
 
 export async function handleF2a({ addCleanup }) {

@@ -33,7 +33,7 @@ const AppLayout = () => import("./layouts/AppLayout/AppLayout.js");
 const Dashboard = () => import("./pages/user/Dashboard/Dashboard.js");
 const Settings = () => import("./pages/user/Settings/Settings.js");
 const Game = () => import("./pages/pong/Match/Pong.js");
-const NotFound = () => import("./pages/404/NotFound.js");
+const NotFound = () => import("./pages/error/NotFound.js");
 
 const appHook = new PersistentAnimationHook();
 const landingHook = new OverlayAnimationHook();

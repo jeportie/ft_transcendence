@@ -12,7 +12,7 @@
 
 import { Fetch, safeGet, safePost, safePut, safeDelete } from "@jeportie/mini-fetch";
 import { type FetchOptions, type SafeResult } from "@jeportie/mini-fetch";
-import { auth } from "./auth.js";
+import { auth } from "../core/auth.js";
 import { logger } from "./logger.js";
 import { refreshToken } from "./refreshToken.js";
 import { getDeviceFingerprint } from "../spa/utils/getDeviceFingerprint.js";

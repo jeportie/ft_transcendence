@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { logger } from "./logger.js";
+import { logger } from "../core/logger.js";
 import { getDeviceFingerprint } from "./utils/getDeviceFingerprint.js";
 
 export async function refreshToken() {

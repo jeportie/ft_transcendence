@@ -12,7 +12,7 @@
 
 import { requireAuth } from "@jeportie/mini-auth";
 import { logger } from "./logger.js";
-import { auth } from "./auth.js";
+import { auth } from "../core/auth.js";
 import { API } from "./api.js";
 
 export const guards = {

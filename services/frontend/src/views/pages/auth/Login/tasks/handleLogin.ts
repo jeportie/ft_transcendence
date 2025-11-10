@@ -14,7 +14,7 @@ import { Fetch } from "@jeportie/mini-fetch";
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../../spa/api.js";
 
-import { auth } from "../../../../../spa/auth.js";
+import { auth } from "../../../../../core/auth.js";
 import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
 
 import notActiveHtml from "../notActive.html";
