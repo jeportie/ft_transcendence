@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "./api.js";
+import { API } from "../api/apiClient.js";
 
 export interface User {
     id: number;

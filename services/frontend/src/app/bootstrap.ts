@@ -10,11 +10,11 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { auth } from "../core/auth.js";
+import { auth } from "../core/auth/auth.js";
 import { logger } from "../core/logger.js";
 import { showLoading, hideLoading } from "../views/pages/LoadingOverlay.js";
 
-import { API } from "../spa/api.js";
+import { API } from "../core/api/apiClient.js";
 
 export async function bootstrap() {
     const restored = await auth.initFromStorage();
@@ -28,7 +28,7 @@ export async function bootstrap() {
         showLoading("Starting app...");
 
         try {
-            const { data, error } = await API.Get("/system/health");
+            const { data, error } = await API.Get(API.routes.system.health);
             if (error)
                 throw new Error(error.message);
             logger.info("[Health] ✅ OK:", data);

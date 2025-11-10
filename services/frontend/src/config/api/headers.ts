@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { getDeviceFingerprint } from "../../spa/utils/getDeviceFingerprint";
+import { getDeviceFingerprint } from "../../core/user/getDeviceFingerprint";
 
 export async function withCommonHeaders(init: RequestInit) {
     try {

@@ -11,9 +11,10 @@
 // ************************************************************************** //
 
 import { requireAuth } from "@jeportie/mini-auth";
-import { logger } from "./logger.js";
-import { auth } from "../core/auth.js";
-import { API } from "./api.js";
+
+import { logger } from "../../core/logger.js";
+import { auth } from "../../core/auth/auth.js";
+import { API } from "../../core/api/apiClient.js";
 
 export const guards = {
     requireAuth: requireAuth(auth, {

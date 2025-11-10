@@ -13,8 +13,8 @@
 import { safeGet, safePost, safePut, safeDelete } from "@jeportie/mini-fetch";
 
 import { http } from "./http.js";
-import { API_ROUTES } from "../config/api/endpoints.js";
-import { logger } from "./logger.js";
+import { API_ROUTES } from "../../config/api/endpoints.js";
+import { logger } from "../logger.js";
 
 export const API = {
     routes: API_ROUTES,

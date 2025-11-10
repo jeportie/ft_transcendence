@@ -18,7 +18,7 @@ import { bootstrap } from "./app/bootstrap.js";
 import { hideLoading } from "./views/pages/LoadingOverlay.js";
 import { wireGlobals } from "./app/wireGlobals.js";
 
-import "./spa/wc/index.js";
+import "./components/wc/index.js";
 
 const app = document.querySelector("#app") as any;
 

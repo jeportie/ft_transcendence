@@ -11,8 +11,8 @@
 // ************************************************************************** //
 
 import Fetch from "@jeportie/mini-fetch";
-import { auth } from "./auth.js";
-import { logger } from "./logger.js";
+import { auth } from "../auth/auth.js";
+import { logger } from "../logger.js";
 import { withCommonHeaders } from "../../config/api/headers.js";
 
 export const http = new Fetch("/api", {

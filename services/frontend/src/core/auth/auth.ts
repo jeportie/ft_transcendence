@@ -11,7 +11,8 @@
 // ************************************************************************** //
 
 import { AuthService } from "@jeportie/mini-auth";
-import { logger } from "./logger.js";
+
+import { logger } from "../../core/logger.js";
 import { refreshToken } from "./refreshToken.js";
 
 export const auth = new AuthService({
