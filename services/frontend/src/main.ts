@@ -12,7 +12,7 @@
 
 // @ts-ignore
 import { defineMiniRouter } from "@jeportie/mini-spa";
-import { onBeforeNavigate } from "@jeportie/mini-fetch";
+import { onBeforeNavigate } from "@jeportie/mini-auth";
 
 import { routes } from "./spa/routes.js";
 import { showLoading, hideLoading } from "./views/LoadingOverlay.js";

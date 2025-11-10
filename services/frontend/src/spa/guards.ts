@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { requireAuth } from "@jeportie/mini-fetch";
+import { requireAuth } from "@jeportie/mini-auth";
 import { logger } from "./logger.js";
 import { auth } from "./auth.js";
 import { API } from "./api.js";
