@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractView } from "@jeportie/mini-spa";
+import { AbstractView } from "@jeportie/mini-js";
 import notFoundHTML from "./notFound.html";
 
 export default class NotFound extends AbstractView {

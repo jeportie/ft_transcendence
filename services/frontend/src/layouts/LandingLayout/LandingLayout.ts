@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractLayout } from "@jeportie/mini-spa";
+import { AbstractLayout } from "@jeportie/mini-js";
 import landingLayoutHTML from "./landingLayout.html";
 import { tasks } from "./tasks/index.js";
 

@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractLayout } from "@jeportie/mini-spa";
+import { AbstractLayout } from "@jeportie/mini-js";
 import appLayoutHTML from "./appLayout.html";
 import { tasks } from "./tasks/index.ts";
 

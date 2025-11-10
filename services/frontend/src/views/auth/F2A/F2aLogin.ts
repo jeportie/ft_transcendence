@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // @ts-expect-error
-import { AbstractView } from "@jeportie/mini-spa";
+import { AbstractView } from "@jeportie/mini-js";
 import f2aLoginHTML from "./f2aLogin.html";
 import { tasks } from "./tasks/index.js";
 

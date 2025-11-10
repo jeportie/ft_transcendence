@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractView } from "@jeportie/mini-spa";
+import { AbstractView } from "@jeportie/mini-js";
 import pongHTML from "./pong.html";
 import { tasks } from "./tasks/index.js";
 

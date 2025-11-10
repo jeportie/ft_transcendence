@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // @ts-expect-error
-import { AbstractView } from "@jeportie/mini-spa";
+import { AbstractView } from "@jeportie/mini-js";
 import privacyPolicyHTML from "./privacyPolicy.html";
 import { tasks } from "./tasks/index.js";
 

@@ -11,8 +11,8 @@
 // ************************************************************************** //
 
 // @ts-ignore
-import { defineMiniRouter } from "@jeportie/mini-spa";
-import { onBeforeNavigate } from "@jeportie/mini-fetch";
+import { defineMiniRouter } from "@jeportie/mini-js";
+import { onBeforeNavigate } from "@jeportie/mini-js";
 
 import { routes } from "./spa/routes.js";
 import { showLoading, hideLoading } from "./views/LoadingOverlay.js";

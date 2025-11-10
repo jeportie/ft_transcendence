@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // @ts-ignore
-import { AbstractView } from "@jeportie/mini-spa";
+import { AbstractView } from "@jeportie/mini-js";
 import resetHTML from "./resetPwd.html";
 import { tasks } from "./tasks/index.js";
 

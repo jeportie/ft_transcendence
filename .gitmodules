@@ -4,3 +4,6 @@
 [submodule "miniLib/mini-router"]
 	path = miniLib/mini-router
 	url = git@github.com:jeportie/mini-router.git
+[submodule "miniJs"]
+	path = miniJs
+	url = git@github.com/jeportie/mini-js.git

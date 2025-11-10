@@ -18,6 +18,7 @@
         "@jeportie/lib2d": "github:jeportie/lib2d#main",
         "@jeportie/mini-fetch": "github:jeportie/mini-fetch#main",
         "@jeportie/mini-spa": "github:jeportie/mini-router#main",
+        "@jeportie/mini-js": "github:jeportie/mini-js#main",
         "autoprefixer": "^10.4.21",
         "babylonjs": "^8.32.2",
         "esbuild": "^0.25.8",
