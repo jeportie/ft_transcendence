@@ -11,33 +11,25 @@
 // ************************************************************************** //
 
 // @ts-ignore
-import { defineMiniRouter } from "@jeportie/mini-spa";
+import { defineMiniRouter, setupMiniRouter } from "@jeportie/mini-spa";
 import { routes } from "./views/routes.js";
-import { logger } from "./spa/logger.js";
+
 import { bootstrap } from "./app/bootstrap.js";
 import { hideLoading } from "./views/pages/LoadingOverlay.js";
+import { wireGlobals } from "./app/wireGlobals.js";
 
 import "./spa/wc/index.js";
 
-defineMiniRouter();
-//DOM
 const app = document.querySelector("#app") as any;
 
-app.routes = routes;
-app.linkSelector = "[data-link]";
-// app.animationHook = new TailwindAnimationHook({ variant: "slide-push" });
-app.beforeStart(async () => {
-    bootstrap();
+defineMiniRouter();
+setupMiniRouter(app, {
+    routes,
+    linkSelector: "[data-link]",
+    // animationHook: new TailwindAnimationHook({ variant: "slide-push" }),
+    beforeStart: [() => bootstrap()],
+    afterStart: [() => hideLoading()],
 });
-app.afterStart(() => {
-    hideLoading();
-})
+
+wireGlobals(app);
 app.start();
-
-window.addEventListener("auth:logout", () => {
-    const next = encodeURIComponent(location.pathname + location.search + location.hash);
-    // @ts-ignore
-    window.navigateTo(`/login?next=${next}`);
-});
-
-(window as any).navigateTo = (url: string) => app.navigateTo(url);

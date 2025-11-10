@@ -28,12 +28,11 @@ export async function bootstrap() {
         showLoading("Starting app...");
 
         try {
-            // 2. Health check
             const { data, error } = await API.Get("/system/health");
             if (error)
                 throw new Error(error.message);
             logger.info("[Health] ✅ OK:", data);
-            // 3. Simulated preload (e.g. assets/fonts)
+
             await new Promise(resolve => setTimeout(resolve, 2000));
             logger.info("[Boot] Preload done");
             sessionStorage.setItem("appBooted", "1");
