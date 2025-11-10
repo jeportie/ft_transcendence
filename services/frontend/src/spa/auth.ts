@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { AuthService } from "@jeportie/mini-fetch";
+import { AuthService } from "@jeportie/mini-js";
 import { logger } from "./logger.js";
 import { refreshToken } from "./refreshToken.js";
 

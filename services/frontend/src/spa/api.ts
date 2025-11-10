@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { Fetch, safeGet, safePost, safePut, safeDelete } from "@jeportie/mini-fetch";
-import { type FetchOptions, type SafeResult } from "@jeportie/mini-fetch";
+import { Fetch, safeGet, safePost, safePut, safeDelete } from "@jeportie/mini-js";
+import { type FetchOptions, type SafeResult } from "@jeportie/mini-js";
 import { auth } from "./auth.js";
 import { logger } from "./logger.js";
 import { refreshToken } from "./refreshToken.js";

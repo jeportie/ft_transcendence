@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { Fetch } from "@jeportie/mini-fetch";
+import { Fetch } from "@jeportie/mini-js";
 import { DOM } from "../dom.generated.js";
 import { API } from "../../../../spa/api.js";
 
