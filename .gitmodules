@@ -1,3 +1,6 @@
+[submodule "miniLib/mini-auth"]
+	path = miniLib/mini-auth
+	url = git@github.com:jeportie/mini-auth.git
 [submodule "miniLib/mini-fetch"]
 	path = miniLib/mini-fetch
 	url = git@github.com:jeportie/mini-fetch.git
