@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import Fetch from "@jeportie/mini-fetch";
+import { Fetch } from "@jeportie/mini-fetch";
 import { withCommonHeaders } from "@system/config/api/headers.js";
 import { logger } from "@system";
 import { auth } from "@auth";

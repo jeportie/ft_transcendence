@@ -18,9 +18,12 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends git ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./package.json /app/package.json
+COPY package.json /app/package.json
+
 # COPY LOCK ONLY WHEN IN PRODUCTION
 # COPY ./package-lock.json /app/package-lock.json
+
+COPY ./scripts/build.mjs /app/scripts/build.mjs
 RUN npm install
 
 RUN npx tailwindcss init -p

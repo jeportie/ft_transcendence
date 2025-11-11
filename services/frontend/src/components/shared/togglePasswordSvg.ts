@@ -10,8 +10,8 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { create } from "../../../spa/utils/dom.js";
-import { resolveElement } from "../../../spa/utils/resolveElement.js";
+import { create } from "@system/core/dom/dom.js";
+import { resolveElement } from "@system/core/dom/resolveElement.js";
 
 interface TogglePasswordParams {
     ASSETS: { showIcon: string; hideIcon: string }; // paths to SVG files

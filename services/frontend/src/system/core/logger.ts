@@ -11,6 +11,7 @@
 // ************************************************************************** //
 
 export const logger = {
+    ...console, // include all methods from the native console
     info: (...args: any[]) => console.log(...args),
     warn: (...args: any[]) => console.warn(...args),
     error: (...args: any[]) => console.error(...args),

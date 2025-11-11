@@ -18,7 +18,7 @@ import { refreshToken } from "./refreshToken.js";
 export const auth = new AuthService({
     storageKey: "hasSession",
     refreshFn: refreshToken,
-    logger,
+    logger: logger as Console,
 });
 
 export function markHasSession() {

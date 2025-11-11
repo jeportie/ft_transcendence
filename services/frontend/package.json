@@ -1,0 +1,35 @@
+{
+    "name": "frontend",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "concurrently \"npm run watch:css\" \"npm run watch:js\"",
+        "watch:css": "tailwindcss -i src/input.css -o public/styles.css --watch",
+        "build:css": "tailwindcss -i src/input.css -o public/styles.css",
+        "watch:js": "node scripts/build.mjs --watch",
+        "build:js": "NODE_ENV=production node scripts/build.mjs"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@jeportie/lib2d": "github:jeportie/lib2d#main",
+        "@jeportie/mini-auth": "github:jeportie/mini-auth#main",
+        "@jeportie/mini-fetch": "github:jeportie/mini-fetch#main",
+        "@jeportie/mini-spa": "github:jeportie/mini-router#main",
+        "autoprefixer": "^10.4.21",
+        "babylonjs": "^8.32.2",
+        "esbuild": "^0.25.8",
+        "postcss": "^8.5.6",
+        "tailwindcss": "^3.4.17",
+        "tweakpane": "^4.0.5",
+        "typescript": "^5.8.3"
+    },
+    "devDependencies": {
+        "@tweakpane/plugin-essentials": "^0.2.1",
+        "concurrently": "^9.2.1",
+        "dotenv": "^17.2.3"
+    }
+}
