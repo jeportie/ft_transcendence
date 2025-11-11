@@ -34,8 +34,9 @@ export class UserState {
     /** Fetch from API and update cache */
     static async refresh(): Promise<User | null> {
         try {
-            const res = await API.Get<{ me: any }>("/user/me");
-            if (res.error) throw new Error(res.error.message);
+            const res = await API.Get<{ me: any }>(API.routes.user.me);
+            if (res.error)
+                throw new Error(res.error.message);
             this.#user = res.data?.me || null;
             return this.#user;
         } catch (err) {
@@ -47,7 +48,8 @@ export class UserState {
 
     /** Manually update local cache (e.g., after toggle) */
     static update(patch: Partial<User>) {
-        if (!this.#user) return;
+        if (!this.#user)
+            return;
         this.#user = { ...this.#user, ...patch };
     }
 

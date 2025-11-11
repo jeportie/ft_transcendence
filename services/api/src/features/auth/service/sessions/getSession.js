@@ -26,6 +26,7 @@ export async function getSession(fastify, request, reply) {
     const res = rows.map((s) => ({
         id: s.id,
         device: parseDevice(s.user_agent),
+        browser: parseBrowser(s.user_agent),
         agent: s.user_agent,
         ip: s.ip || "Unknown",
         createdAt: s.created_at,
@@ -50,3 +51,17 @@ function parseDevice(ua = "") {
     return ua.split(" ")[0] || ua;
 }
 
+/** --- Browser name --- */
+function parseBrowser(ua = "") {
+    if (!ua) return "Unknown";
+    ua = ua.toLowerCase();
+
+    if (ua.includes("edg/")) return "Microsoft Edge";
+    if (ua.includes("chrome/")) return "Google Chrome";
+    if (ua.includes("firefox/")) return "Mozilla Firefox";
+    if (ua.includes("safari/") && !ua.includes("chrome/")) return "Safari";
+    if (ua.includes("opera") || ua.includes("opr/")) return "Opera";
+    if (ua.includes("vivaldi")) return "Vivaldi";
+    if (ua.includes("brave")) return "Brave";
+    return "Unknown";
+}

@@ -16,7 +16,7 @@ const PATH = import.meta.url;
 
 export async function revokeSession(fastify, request, reply) {
     const db = await fastify.getDb();
-    const sql = fastify.loadSql(PATH, "../sql/revokeSession.sql");
+    const revokeSessionSql = fastify.loadSql(PATH, "../sql/revokeSession.sql");
 
     const sessionId = request.body?.sessionId ?? request.params?.id;
     const userId = request.user?.sub;
@@ -24,7 +24,7 @@ export async function revokeSession(fastify, request, reply) {
     if (!userId) throw AuthErrors.UserNotFound();
     if (!sessionId) throw AuthErrors.NoRefreshCookie;
 
-    const res = await db.run(sql, {
+    const res = await db.run(revokeSessionSql, {
         ":id": sessionId,
         ":user_id": userId,
     });

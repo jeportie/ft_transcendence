@@ -46,8 +46,6 @@ clean: down
 	rm -f services/frontend/public/bundle* 
 	rm -rf services/api/node_modules
 	rm -rf services/api/package.json
-	rm -rf services/frontend/node_modules
-	rm -rf services/frontend/package.json
 	$(DC) --env-file $(ENVFILE) down $(DOWN_FLAGS)
 
 dev:

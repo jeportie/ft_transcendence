@@ -53,7 +53,7 @@ export class SessionsTable extends AbstractTableView<any> {
     }
 
     async fetch() {
-        const res = await API.Get(_sessions);
+        const res = await API.Get<{ sessions: any }>(_sessions);
         if (res.error) throw new Error("API Error");
 
         const sessions = res.data?.sessions ?? [];
@@ -61,8 +61,8 @@ export class SessionsTable extends AbstractTableView<any> {
         // --- 🧠 Deduplicate sessions by fingerprint/device ---
         const uniqueSessions = Object.values(
             sessions.reduce((acc: Record<string, any>, s: any) => {
-                const key = s.device_fingerprint || s.device;
-                // Keep the most recent active record for each device
+                // 👇 include user_agent to separate browsers on same device
+                const key = `${s.device_fingerprint || "none"}-${s.agent}`;
                 if (
                     !acc[key] ||
                     new Date(s.lastActiveAt || 0) > new Date(acc[key].lastActiveAt || 0)
@@ -72,6 +72,8 @@ export class SessionsTable extends AbstractTableView<any> {
                 return acc;
             }, {})
         );
+        return uniqueSessions;
+
 
         return uniqueSessions;
     }
@@ -107,6 +109,7 @@ export class SessionsTable extends AbstractTableView<any> {
         DOM.sessionDeviceIcon.innerHTML = icon(s.device);
         DOM.sessionDeviceAgent.textContent = s.agent || s.userAgent || "Unknown agent";
         DOM.sessionDeviceName.textContent = s.device;
+        DOM.sessionBrowser.textContent = s.browser || "Unknown browser";
         DOM.sessionIp.textContent = s.ip;
         DOM.sessionLastActive.textContent = s.lastActiveAt
             ? new Date(s.lastActiveAt).toLocaleString()

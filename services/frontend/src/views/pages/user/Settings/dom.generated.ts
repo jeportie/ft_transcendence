@@ -1,5 +1,5 @@
 // AUTO-GENERATED FILE — DO NOT EDIT
-// Generated from src/views/user/Settings
+// Generated from src/views/pages/user/Settings
 // Created by scripts/generateDomRegistry.mjs
 
 import Activate2FAHTML from "./templates/Activate2FA.html";
@@ -95,6 +95,7 @@ export class SettingsDOM {
   sessionDeviceIcon!: HTMLImageElement;
   sessionDeviceAgent!: HTMLElement;
   sessionDeviceName!: HTMLElement;
+  sessionBrowser!: HTMLElement;
   sessionIp!: HTMLElement;
   sessionLastActive!: HTMLElement;
   sessionExpiry!: HTMLElement;
@@ -287,6 +288,11 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLElement>("#session-device-name");
       if (!el) throw new Error("Missing element #session-device-name in template SessionRow");
       this.sessionDeviceName = el;
+    }
+    {
+      const el = frag.querySelector<HTMLElement>("#session-browser");
+      if (!el) throw new Error("Missing element #session-browser in template SessionRow");
+      this.sessionBrowser = el;
     }
     {
       const el = frag.querySelector<HTMLElement>("#session-ip");

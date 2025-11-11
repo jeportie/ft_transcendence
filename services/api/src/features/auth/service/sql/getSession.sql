@@ -22,17 +22,6 @@ FROM
     refresh_tokens t
 WHERE
     t.user_id = :user_id
-  AND
-    t.id = (
-    SELECT
-        id
-    FROM
-        refresh_tokens sub
-    WHERE
-        sub.user_id = t.user_id AND
-        sub.ip = t.ip
-    ORDER BY 
-        sub.created_at DESC
-    LIMIT 1
-  )
-ORDER BY t.created_at DESC;
+ORDER BY
+    t.created_at DESC;
+
