@@ -11,7 +11,7 @@
 // ************************************************************************** //
 
 // @ts-ignore
-import microchipSvg from "../../assets/microchip.svg";
+import microchipSvg from "@assets/microchip.svg";
 
 export function showLoading(message = "Loading...") {
     const overlay = document.createElement("div");

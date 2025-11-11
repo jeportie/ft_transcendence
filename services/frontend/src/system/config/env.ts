@@ -13,6 +13,7 @@
 declare const __NODE_ENV__: "development" | "production" | "test";
 declare const __API_BASE__: string;
 declare const __PUBLIC_URL__: string;
+declare const __RECAPTCHA_SITE_KEY__: string;
 
 type Mode = "development" | "production" | "test";
 type RuntimeConfig = Partial<{
@@ -35,6 +36,7 @@ export const ENV = Object.freeze({
     API_BASE: RUNTIME.API_BASE ?? BUILD.API_BASE,
     PUBLIC_URL: RUNTIME.PUBLIC_URL ?? BUILD.PUBLIC_URL,
     FEATURE_FLAGS: Object.freeze({ ...(RUNTIME.FEATURE_FLAGS || {}) }),
+    RECAPTCHA_SITE_KEY: __RECAPTCHA_SITE_KEY__,
 });
 
 export const isDev = ENV.MODE === "development";

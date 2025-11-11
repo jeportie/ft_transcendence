@@ -6,25 +6,30 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:33:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/16 10:04:31 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 11:43:58 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { Fetch } from "@jeportie/mini-fetch";
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../../spa/api.js";
-
-import { auth } from "../../../../../core/auth.js";
-import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
-
+import { API } from "@system";
+import { auth } from "@auth";
+import { showBox, clearBox } from "@system/core/dom/errors.js";
 import notActiveHtml from "../notActive.html";
-import { getDeviceFingerprint } from "../../../../../spa/utils/getDeviceFingerprint.js";
 
-/**
- * Handles login form submission and feedback display.
- * Registers cleanup logic for event listeners.
- */
-export function handleLogin({ ASSETS, logo, addCleanup, view }) {
+interface LoginResponse {
+    token?: string;
+    activation_required?: boolean;
+    f2a_required?: boolean;
+    user_id?: string;
+    username?: string;
+}
+
+// API routes
+const login = API.routes.auth.local.login;
+const resendLink = API.routes.auth.local.resendLink;
+
+// @ts-expect-error
+export function handleLogin({ logo, addCleanup, view }) {
     const form = DOM.loginForm;
     const userInput = DOM.loginUserInput;
     const pwdInput = DOM.loginPwdInput;
@@ -37,22 +42,10 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         event.preventDefault();
         clearBox(errorBox);
 
-        const external = new Fetch("");
-        const ipify = await external.get("https://api.ipify.org?format=json", { credentials: "omit" });
-
-        const { data, error } = await API.Post(
-            "/auth/login",
-            { // Body
-                user: userInput.value,
-                pwd: pwdInput.value,
-            },
-            { // Opts
-                headers: {
-                    "x-client-ip": ipify.ip,
-                    "x-device-id": getDeviceFingerprint(),
-                }
-            }
-        );
+        const { data, error } = await API.Post<LoginResponse>(login, {
+            user: userInput.value,
+            pwd: pwdInput.value,
+        });
 
         if (error) {
             pwdInput.value = "";
@@ -62,39 +55,36 @@ export function handleLogin({ ASSETS, logo, addCleanup, view }) {
         }
 
         logo?.fadeAndReplaceWithLottie();
+
         setTimeout(() => {
-            if (data.activation_required) {
+            if (data?.activation_required) {
                 view.swapContent(notActiveHtml).then(() => {
                     // @ts-expect-error
                     DOM.inactiveP.innerHTML = `
-                        Sorry <strong>${data.username}</strong>, your account is not active yet.
+                        Sorry <strong>${data?.username}</strong>, your account is not active yet.
                         Please validate your account with the validation link we sent 
                         you by email.
                     `;
                     DOM.inactiveRetryBtn?.addEventListener("click", async () => {
-                        const { data: data2, error: error2 } = await API.Post("/auth/resend-link", {
+                        const res = await API.Post<{ success: boolean }>(resendLink, {
                             user_id: data.user_id,
                         });
-                        if (error2) {
-                            showBox(DOM.inactiveBoxDiv, error2.message);
+                        if (res.error) {
+                            showBox(DOM.inactiveBoxDiv, res.error.message);
                             return;
                         }
-                        if (data2.success) {
-                            // @ts-expect-error
+                        if (res.data?.success) {
                             window.navigateTo("/login");
                         }
                     })
                     DOM.inactiveBackBtn?.addEventListener("click", () => {
-                        // @ts-expect-error
                         window.navigateTo("/login");
                     });
                 });
-            } else if (data.f2a_required) {
-                // @ts-expect-error
-                window.navigateTo(`/f2a-login?userId=${data.user_id}`);
+            } else if (data?.f2a_required) {
+                window.navigateTo(`/f2a-login?userId=${data?.user_id}`);
             } else {
-                auth.setToken(data.token || "dev-token");
-                // @ts-expect-error
+                auth.setToken(data?.token || "dev-token");
                 window.navigateTo("/dashboard");
             }
         }, 2000);

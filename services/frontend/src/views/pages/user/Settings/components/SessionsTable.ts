@@ -6,13 +6,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 09:33:56 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/04 18:41:14 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 13:42:20 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { AbstractTableView } from "../../../../../spa/abstract/AbstractTableView.js";
+import { AbstractTableView } from "@components/abstract/AbstractTableView.js";
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
+
+// API routes
+const _sessions = API.routes.auth.sessions.get;
 
 export class SessionsTable extends AbstractTableView<any> {
     #ASSETS;
@@ -50,7 +53,7 @@ export class SessionsTable extends AbstractTableView<any> {
     }
 
     async fetch() {
-        const res = await API.Get("/auth/sessions");
+        const res = await API.Get(_sessions);
         if (res.error) throw new Error("API Error");
 
         const sessions = res.data?.sessions ?? [];
@@ -80,14 +83,18 @@ export class SessionsTable extends AbstractTableView<any> {
             if (s.revokedAt) return { color: "bg-red-500", label: "Revoked" };
             const exp = new Date(s.expiresAt);
             const diff = (exp.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
-            if (diff < 0) return { color: "bg-red-500", label: "Expired" };
-            if (diff < 2) return { color: "bg-orange-400", label: "Expiring soon" };
+            if (diff < 0)
+                return { color: "bg-red-500", label: "Expired" };
+            if (diff < 2)
+                return { color: "bg-orange-400", label: "Expiring soon" };
             return { color: "bg-green-500", label: "Active" };
         })();
 
         const icon = (device: string) => {
-            if (/mobile|android|iphone/i.test(device)) return this.#ASSETS.phone;
-            if (/mac|windows/i.test(device)) return this.#ASSETS.laptop;
+            if (/mobile|android|iphone/i.test(device))
+                return this.#ASSETS.phone;
+            if (/mac|windows/i.test(device))
+                return this.#ASSETS.laptop;
             return this.#ASSETS.desktop;
         };
 

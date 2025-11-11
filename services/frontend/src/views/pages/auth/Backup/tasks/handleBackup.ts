@@ -11,11 +11,14 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
+import { auth } from "@auth";
+import { clearBox, showBox } from "@system/core/dom/errors.js";
 
-import { auth } from "../../../../../core/auth.js";
-import { clearBox, showBox } from "../../../../../spa/utils/errors.js";
+// API routes
+const verifyBackup = API.routes.auth.f2a.verifyBackup;
 
+// @ts-expect-error Need to put the spa lib in TS
 export async function handleBackup({ addCleanup }) {
     const form = DOM.backupForm;
     const otpInput = DOM.backupOtp as HTMLInputElement;
@@ -27,7 +30,6 @@ export async function handleBackup({ addCleanup }) {
     const next = params.get("next") || "/dashboard";
 
     const onClick = () => {
-        // @ts-expect-error
         window.navigateTo(`/f2a-login?userId=${id}&next=${next}`);
     }
 
@@ -35,7 +37,7 @@ export async function handleBackup({ addCleanup }) {
         event.preventDefault();
         clearBox(errorBox);
 
-        const { data, error } = await API.Post("/auth/verify-backup", { code: otpInput.value, userId: id });
+        const { data, error } = await API.Post(verifyBackup, { code: otpInput.value, userId: id });
 
         if (error) {
             otpInput.value = "";
@@ -45,7 +47,6 @@ export async function handleBackup({ addCleanup }) {
         }
         if (data.success) {
             auth.setToken(data.token || "dev-token");
-            // @ts-expect-error
             setTimeout(() => window.navigateTo(next), 0);
         }
     }

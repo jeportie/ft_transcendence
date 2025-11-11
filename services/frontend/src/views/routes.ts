@@ -10,10 +10,10 @@
 //                                                                            //
 // ************************************************************************** //
 
-import TailwindAnimationHook from "../styles/transitions/hooks/TailwindAnimationHook.js";
-import OverlayAnimationHook from "../styles/transitions/hooks/OverlayAnimationHook.js";
-import PersistentAnimationHook from "../styles/transitions/hooks/PersistentAnimationHook.js";
-import { guards } from "../spa/guards.js";
+import TailwindAnimationHook from "@styles/transitions/hooks/TailwindAnimationHook.js";
+import OverlayAnimationHook from "@styles/transitions/hooks/OverlayAnimationHook.js";
+import PersistentAnimationHook from "@styles/transitions/hooks/PersistentAnimationHook.js";
+import { guards } from "@system/config/routes/guards.js";
 
 // Landing layout
 const LandingLayout = () => import("./layouts/LandingLayout/LandingLayout.js");

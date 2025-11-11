@@ -26,8 +26,8 @@ export default class LandingLayout extends AbstractLayout {
         await super.mount();
 
         // Run lifecycle tasks manually
-        for (const fn of tasks.init || []) await fn({ layout: this });
-        for (const fn of tasks.ready || []) await fn({ layout: this });
+        for (const fn of tasks.init || []) await (fn as any)({ layout: this });
+        for (const fn of tasks.ready || []) await (fn as any)({ layout: this });
     }
 
     /** Allow child views to request full teardown next exit */

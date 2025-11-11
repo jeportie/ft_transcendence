@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 16:26:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/10 18:56:21 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 14:14:43 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -34,8 +34,8 @@ export class UserState {
     /** Fetch from API and update cache */
     static async refresh(): Promise<User | null> {
         try {
-            const res = await API.Get("/user/me");
-            if (res.error) throw new Error(res.error);
+            const res = await API.Get<{ me: any }>("/user/me");
+            if (res.error) throw new Error(res.error.message);
             this.#user = res.data?.me || null;
             return this.#user;
         } catch (err) {

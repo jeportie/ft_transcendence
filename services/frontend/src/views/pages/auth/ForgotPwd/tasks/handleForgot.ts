@@ -11,13 +11,18 @@
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
+import { ENV } from "@env";
 
-import { initRecaptcha, getRecaptchaToken } from "../../../../../spa/utils/recaptcha.js";
-import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
+import { initRecaptcha, getRecaptchaToken } from "@system/core/utils/recaptcha.js";
+import { showBox, clearBox } from "@system/core/dom/errors.js";
 
-const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
+const siteKey = ENV.RECAPTCHA_SITE_KEY;
 
+// API Routes
+const forgotPwd = API.routes.auth.local.forgotPwd;
+
+// @ts-expect-error Need to put SPA in TS
 export async function handleForgot({ addCleanup }) {
     const form = DOM.forgotPwdForm;
     const emailInput = DOM.forgotPwdEmailInput;
@@ -44,7 +49,7 @@ export async function handleForgot({ addCleanup }) {
             return;
         }
 
-        const { data, error } = await API.Post("/auth/forgot-pwd", {
+        const { data, error } = await API.Post(forgotPwd, {
             email: emailInput.value,
             captcha: captchaToken
         })

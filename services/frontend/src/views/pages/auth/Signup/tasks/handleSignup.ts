@@ -6,28 +6,31 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/14 11:24:59 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/15 17:14:05 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 13:21:19 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
+import { ENV } from "@env";
 
-import { initRecaptcha, getRecaptchaToken } from "../../../../../spa/utils/recaptcha.js";
-import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
-
+import { initRecaptcha, getRecaptchaToken } from "@system/core/utils/recaptcha.js";
+import { showBox, clearBox } from "@system/core/dom/errors.js";
 import finalizeHTML from "../validateSignup.html";
 
-const siteKey = "6LftBt8rAAAAAIBkUgHnNTBvRWYO7fKTnNfWC3DW"; // hardcode or load from env
+const siteKey = ENV.RECAPTCHA_SITE_KEY;
 
-export async function handleSignup({ ASSETS, logo, addCleanup, view }) {
+// API routes
+const register = API.routes.auth.local.register;
+
+// @ts-expect-error
+export async function handleSignup({ logo, addCleanup, view }) {
     const form = DOM.signupForm;
     const userInput = DOM.signupUserInput;
     const emailInput = DOM.signupEmailInput;
     const pwdInput = DOM.signupPwdInput;
     const confirmInput = DOM.signupConfirmInput;
     const errorBox = DOM.signupErrorDiv;
-    const captchaContainer = DOM.signupRecaptchaContainer;
 
     if (!form)
         return;
@@ -49,7 +52,7 @@ export async function handleSignup({ ASSETS, logo, addCleanup, view }) {
             return;
         }
 
-        const { data, error } = await API.Post("/auth/register", {
+        const { data, error } = await API.Post<{ success: boolean }>(register, {
             username: userInput.value,
             email: emailInput.value,
             pwd: pwdInput.value,
@@ -63,7 +66,7 @@ export async function handleSignup({ ASSETS, logo, addCleanup, view }) {
             return;
         }
 
-        if (data.success) {
+        if (data?.success) {
             logo?.fadeAndReplaceWithLottie();
             setTimeout(() => {
                 view.swapContent(finalizeHTML);
@@ -75,7 +78,7 @@ export async function handleSignup({ ASSETS, logo, addCleanup, view }) {
         clearBox(errorBox);
     };
 
-    await initRecaptcha(siteKey, captchaContainer);
+    await initRecaptcha(siteKey, DOM.signupRecaptchaContainer);
     form?.addEventListener("submit", onSubmit);
     pwdInput?.addEventListener("focus", onFocus);
 

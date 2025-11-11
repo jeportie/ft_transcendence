@@ -12,22 +12,23 @@
 
 import { DOM } from "../dom.generated.js";
 
+// @ts-expect-error
 export function showActivationMessages({ addCleanup }) {
     const params = new URLSearchParams(location.search);
     const activated = params.get("activated");
     const error = params.get("activation_failed");
     const error_message = params.get("error_message");
-    const card = DOM.loginCard;
-    if (!card) return;
-
     const timeouts: number[] = [];
     const messages: HTMLElement[] = [];
+
+    if (!DOM.loginCard)
+        return;
 
     function show(text: string, className: string) {
         const msg = document.createElement("div");
         msg.textContent = text;
         msg.className = className;
-        card.prepend(msg);
+        DOM.loginCard?.prepend(msg);
         messages.push(msg);
         timeouts.push(window.setTimeout(() => msg.remove(), 4000));
     }

@@ -6,16 +6,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/13 19:30:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/14 11:28:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 13:14:56 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
 
-import { setupLogoAnimation } from "../../../shared/setupLogoAnimation.js";
-import { togglePassword } from "../../../shared/togglePassword.js";
-import { handleGoogleButton } from "../../../shared/handleGoogleButton.js";
-import { destroyRecaptcha } from "../../../../../spa/utils/recaptcha.js";
+import { setupLogoAnimation } from "@components/shared/setupLogoAnimation.js";
+import { togglePassword } from "@components/shared/togglePassword.js";
+import { handleGoogleButton } from "@components/shared/handleGoogleButton.js";
+import { destroyRecaptcha } from "@system/core/utils/recaptcha.js";
 
 import { handleSignup } from "./handleSignup.js";
 

@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { runParticle } from "../../../../graphics/particles/particleAnimation.js";
+import { runParticle } from "@graphics/particles/particleAnimation.js";
 
 let cleanupFn: (() => void) | null = null;
 

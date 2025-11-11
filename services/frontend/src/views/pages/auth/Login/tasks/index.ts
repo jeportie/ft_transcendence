@@ -12,9 +12,9 @@
 
 import { DOM } from "../dom.generated.js";
 
-import { setupLogoAnimation } from "../../../shared/setupLogoAnimation.js";
-import { togglePassword } from "../../../shared/togglePassword.js";
-import { handleGoogleButton } from "../../../shared/handleGoogleButton.js";
+import { setupLogoAnimation } from "@components/shared/setupLogoAnimation.js";
+import { togglePassword } from "@components/shared/togglePassword.js";
+import { handleGoogleButton } from "@components/shared/handleGoogleButton.js";
 
 import { handleLogin } from "./handleLogin.js";
 import { showActivationMessages } from "./showActivationMessages.js";

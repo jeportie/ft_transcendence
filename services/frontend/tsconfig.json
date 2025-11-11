@@ -47,6 +47,9 @@
             ],
             "@graphics/*": [
                 "graphics/*"
+            ],
+            "@env": [
+                "system/config/env.ts"
             ]
         },
         "typeRoots": [

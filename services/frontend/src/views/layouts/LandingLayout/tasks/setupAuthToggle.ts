@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { DOM } from "../dom.generated.ts";
+import { DOM } from "../dom.generated.js";
 
 let obs: MutationObserver | null = null;
 let onPop: (() => void) | null = null;

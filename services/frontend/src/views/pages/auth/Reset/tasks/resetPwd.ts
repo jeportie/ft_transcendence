@@ -6,13 +6,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/17 13:37:58 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/17 14:02:12 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 13:10:11 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
 import { DOM } from "../dom.generated.js";
-import { showBox, clearBox } from "../../../../../spa/utils/errors.js";
+import { showBox, clearBox } from "@system/core/dom/errors.js";
+
+// API routes
+const reset_pwd = API.routes.auth.local.resetPwd;
 
 export async function resetPwd() {
     const resetForm = DOM.resetForm;
@@ -28,7 +31,7 @@ export async function resetPwd() {
         clearBox(errorBox);
     })
 
-    resetForm?.addEventListener("submit", event => {
+    resetForm?.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         if (!resetPwd?.value) {
@@ -40,7 +43,7 @@ export async function resetPwd() {
             return;
         }
 
-        const { data, error } = API.post("/auth/reset-pwd", {
+        const { data, error } = await API.Post<{ success: boolean, message: string }>(reset_pwd, {
             token,
             pwd: resetPwd.value,
         });
@@ -50,8 +53,8 @@ export async function resetPwd() {
             return;
         }
 
-        if (data.success) {
-            showBox(infoBox, data.message);
+        if (data?.success) {
+            showBox(infoBox, data?.message);
         }
     })
 }

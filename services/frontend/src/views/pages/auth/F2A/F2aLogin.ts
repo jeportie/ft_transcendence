@@ -15,7 +15,6 @@ import { AbstractView } from "@jeportie/mini-spa";
 import f2aLoginHTML from "./f2aLogin.html";
 import { tasks } from "./tasks/index.js";
 
-
 interface Layout {
     reloadOnExit?: () => void;
 }

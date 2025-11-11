@@ -6,19 +6,23 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/30 14:28:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/04 16:53:52 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 14:12:28 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import * as STYLES from "../../../../../spa/themes/index.js";
-
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../../spa/api.js";
-import { Modal } from "../../../../../spa/abstract/Modal.js";
-import { UserState } from "../../../../../spa/UserState.js";
+import { API } from "@system";
+import { UserState } from "@system/core/user/UserState.js";
+import { Modal } from "@components/abstract/Modal.js";
+import * as STYLES from "@components/themes/index.js";
 
 let off: Array<() => void> = [];
 const styles = STYLES.liquidGlass;
+
+// API routes
+const enable = API.routes.auth.f2a.enable;
+const verifTotp = API.routes.auth.f2a.verifyTotp;
+const verifBackup = API.routes.auth.f2a.verifyBackup;
 
 function setStatus(el: HTMLElement, isEnabled: boolean) {
     if (isEnabled) {
@@ -30,6 +34,7 @@ function setStatus(el: HTMLElement, isEnabled: boolean) {
     }
 };
 
+// @ts-expect-error
 export async function setupF2a({ ASSETS }) {
     const btn = DOM.settings2faBtn;
     if (!btn) return;
@@ -50,19 +55,18 @@ export async function setupF2a({ ASSETS }) {
         modal.render(DOM.fragActivate2FA);
         setStatus(statusTag, false);
 
-        const { data, error } = await API.Post("/auth/enable");
+        const { data, error } = await API.Post<{ qr: any, otpauth: any }>(enable);
         if (error)
             return alert("Failed to start 2FA setup");
-        qrImg.src = data.qr;
+        qrImg.src = data?.qr;
         DOM.activate2faIconSpan.innerHTML = `${ASSETS.copyIcon}`;
         otpInput.focus();
 
         DOM.activate2faCopyBtn.onclick = async () => {
-            const text = data.otpauth;
+            const text = data?.otpauth;
             try {
                 await navigator.clipboard.writeText(text);
                 DOM.activate2faCopyBtn.textContent = "Copied!";
-
             } catch (err) {
                 DOM.activate2faCopyBtn.textContent = "Failed to copy";
             }
@@ -76,7 +80,7 @@ export async function setupF2a({ ASSETS }) {
             if (!code || code.length < 6)
                 return;
 
-            const { data, error } = await API.Post("/auth/verify-totp", { code });
+            const { data, error } = await API.Post<{ success: boolean }>(verifTotp, { code });
 
             if (error || !data?.success)
                 return alert("Invalid code.");
@@ -100,7 +104,7 @@ export async function setupF2a({ ASSETS }) {
         setStatus(DOM.displayBackupStatusTagSpan, true);
 
         // Fetch backup codes
-        const res = await API.Post("/auth/backup");
+        const res = await API.Post<{ codes: string[] }>(verifBackup);
         const codes: string[] = res.data?.codes ?? [];
         if (!codes.length)
             return;
@@ -150,7 +154,7 @@ export async function setupF2a({ ASSETS }) {
         DOM.check2faForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const code = DOM.check2faOtpInput.value;
-            const { data, error } = await API.Post("/auth/verify-totp", { code });
+            const { data, error } = await API.Post<{ success: boolean }>(verifTotp, { code });
             if (error || !data?.success) return alert("Invalid code, cannot disable.");
             modal.remove();
             activate2FA();
@@ -171,8 +175,8 @@ export async function setupF2a({ ASSETS }) {
         DOM.checkBackupForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const code = DOM.checkBackupOtpInput.value;
-            const { data, error } = await API.Post("/auth/verify-backup", { code });
-            if (error || !data.success) return alert("Invalid code, cannot disable.");
+            const { data, error } = await API.Post<{ success: boolean }>(verifBackup, { code });
+            if (error || !data?.success) return alert("Invalid code, cannot disable.");
             modal.remove();
             activate2FA();
         });

@@ -6,11 +6,11 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/17 11:48:54 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/17 11:57:00 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 13:36:12 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
 import { DOM } from "../dom.generated.js";
 
 export async function dashboard() {
@@ -18,7 +18,7 @@ export async function dashboard() {
     if (!userInfoEl)
         return;
 
-    const { data, error } = await API.Get("/user/me");
+    const { data, error } = await API.Get<{ success: boolean, me: any }>("/user/me");
 
     if (error) {
         console.error("[Dashboard] Failed to fetch /user/me:", error);
@@ -26,10 +26,8 @@ export async function dashboard() {
         return;
     }
 
-    console.log(data);
-
-    const user = data.me;
-    if (!data.success || !user) {
+    const user = data?.me;
+    if (!data?.success || !user) {
         userInfoEl!.innerHTML = `<p class="ui-error">Could not load user info.</p>`;
     } else {
         userInfoEl.innerHTML = `

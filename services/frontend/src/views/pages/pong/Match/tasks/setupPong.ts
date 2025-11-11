@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/17 15:16:32 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/17 15:33:24 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 13:26:04 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
 import { Rect } from "@jeportie/lib2d";
-import PongGame from "../../../../../graphics/pong/PongGame.js";
+import PongGame from "@graphics/pong/PongGame.js";
 
 export async function setupPong() {
     const canvas = DOM.pongCanvas;

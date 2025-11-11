@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
 
 export async function handleActivate() {
 
@@ -22,10 +22,10 @@ export async function handleActivate() {
         return window.navigateTo(`/login?activation_failed=1&error_message=${msg}`);
     }
 
-    const { data, error } = await API.Get(`/auth/activate/${token}`);
+    const res = await API.Get(API.routes.auth.local.activate(token));
 
-    if (error) {
-        const msg = encodeURIComponent(error.message || "Activation failed");
+    if (res.error) {
+        const msg = encodeURIComponent(res.error.message || "Activation failed");
         return window.navigateTo(`/login?activation_failed=1&error_message=${msg}`);
     }
 

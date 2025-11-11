@@ -6,20 +6,21 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/15 10:13:33 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/15 13:07:20 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/11 10:55:41 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { DOM } from "../dom.generated.js";
-import { API } from "../../../../../spa/api.js";
+import { API } from "@system";
+import { auth } from "@auth";
+import { clearBox, showBox } from "@system/core/dom/errors.js";
 
-import { auth } from "../../../../../core/auth.js";
-import { clearBox, showBox } from "../../../../../spa/utils/errors.js";
+// API routes
+const loginTotp = API.routes.auth.f2a.loginTotp;
 
+// @ts-expect-error Need to put the spa lib in TS
 export async function handleF2a({ addCleanup }) {
-    const form = DOM.f2aForm;
     const otpInput = DOM.f2aOtp as HTMLInputElement;
-    const backupBtn = DOM.f2aBackupBtn;
     const errorBox = DOM.f2aErrorDiv;
 
     const params = new URLSearchParams(location.search);
@@ -27,7 +28,6 @@ export async function handleF2a({ addCleanup }) {
     const next = params.get("next") || "/dashboard";
 
     const onClick = () => {
-        // @ts-expect-error
         window.navigateTo(`/backups?userId=${id}&next=${next}`);
     }
 
@@ -35,7 +35,7 @@ export async function handleF2a({ addCleanup }) {
         event.preventDefault();
         clearBox(errorBox);
 
-        const { data, error } = await API.Post("/auth/login-totp", { code: otpInput.value, userId: id });
+        const { data, error } = await API.Post(loginTotp, { code: otpInput.value, userId: id });
 
         if (error) {
             otpInput.value = "";
@@ -45,7 +45,6 @@ export async function handleF2a({ addCleanup }) {
         }
         if (data.success) {
             auth.setToken(data.token || "dev-token");
-            // @ts-expect-error
             setTimeout(() => window.navigateTo(next), 0);
         }
     }
@@ -54,13 +53,13 @@ export async function handleF2a({ addCleanup }) {
         clearBox(errorBox);
     };
 
-    backupBtn?.addEventListener("click", onClick);
-    form?.addEventListener("submit", onSubmit);
+    DOM.f2aBackupBtn?.addEventListener("click", onClick);
+    DOM.f2aForm?.addEventListener("submit", onSubmit);
     otpInput?.addEventListener("focus", onFocus);
 
     addCleanup(() => {
-        backupBtn?.removeEventListener("click", onClick);
-        form?.removeEventListener("submit", onSubmit);
+        DOM.f2aBackupBtn?.removeEventListener("click", onClick);
+        DOM.f2aForm?.removeEventListener("submit", onSubmit);
         otpInput?.removeEventListener("focus", onFocus);
     });
 

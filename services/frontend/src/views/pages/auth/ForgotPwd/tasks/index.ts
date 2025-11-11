@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { destroyRecaptcha } from "../../../../../spa/utils/recaptcha.js";
+import { destroyRecaptcha } from "@system/core/utils/recaptcha.js";
 import { handleForgot } from "./handleForgot.js";
 
 export const tasks = {
@@ -22,6 +22,3 @@ export const tasks = {
 
     teardown: [destroyRecaptcha],
 };
-
-
-
