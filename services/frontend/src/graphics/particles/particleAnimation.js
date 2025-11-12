@@ -14,9 +14,12 @@ import { ParticleEngine } from "./core/engine.js";
 import { toggleCinematicMode, setParticleMap, setSeed } from "./core/controls.js";
 import { createConfig, DPR, defaults } from "./core/config.js";
 import { createUIPanel } from "./core/uiPanel.js";
+import { logger } from "@system/core/logger.js";
+
+const log = logger.withPrefix("[ParticleFX]");
 
 import Mouse from "./class/Mouse.js";
-import Particle from "./class/Particle.js";
+// import Particle from "./class/Particle.js";
 
 const state = {
     config: createConfig(),
@@ -39,13 +42,13 @@ const state = {
 export function runParticle(selector, options = {}) {
     const canvas = document.querySelector(selector);
     if (!canvas) {
-        console.warn(`[ParticleFX] Canvas not found: ${selector}`);
+        log.warn(`Canvas not found: ${selector}`);
         return;
     }
 
     const ctx = canvas.getContext("2d");
     if (!ctx) {
-        console.warn(`[ParticleFX] Unable to get 2D context.`);
+        log.warn(`Unable to get 2D context.`);
         return;
     }
 

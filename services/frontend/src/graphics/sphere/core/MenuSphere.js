@@ -16,7 +16,9 @@ import { createGridGeometry } from "./GeometryFactory.js";
 import { createBrush } from "./Brush.js";
 import { PhysicsEngine } from "./PhysicsEngine.js";
 import { MetaParser } from "../controller/MetaParser.js";
+import { logger } from "@system/core/logger.js";
 
+const log = logger.withPrefix("[Pattern]");
 
 export class MenuSphere {
     constructor(engine, bus, opts = {}) {
@@ -91,7 +93,7 @@ export class MenuSphere {
             this.geom.mesh.dispose();
             const newGeom = createGridGeometry(this.scene, this.root, this.patterns[idx]);
             Object.assign(this.geom, newGeom);
-            console.log(`[Pattern] Switched to: ${this.patterns[idx]}`);
+            log.info(`Switched to: ${this.patterns[idx]}`);
         }
         if (key === " ") this.physics.triggerRipple();
     }

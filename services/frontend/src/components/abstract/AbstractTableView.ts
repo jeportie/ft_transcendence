@@ -10,6 +10,10 @@
 //                                                                            //
 // ************************************************************************** //
 
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[AbstractTableView] ");
+
 /**
  * AbstractTableView<T>
  * -----------------------------------------------------
@@ -63,7 +67,7 @@ export abstract class AbstractTableView<T> {
             }
             this.onRendered?.(data);
         } catch (err) {
-            console.error("[AbstractTableView] Load failed:", err);
+            log.error("❌ Load failed:", err);
             this.renderMessage("error");
         }
     }

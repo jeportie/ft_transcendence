@@ -11,6 +11,9 @@
 // ************************************************************************** //
 
 import { API } from "@system";
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[UserState]");
 
 export interface User {
     id: number;
@@ -40,7 +43,7 @@ export class UserState {
             this.#user = res.data?.me || null;
             return this.#user;
         } catch (err) {
-            console.error("[UserState] Failed to fetch /user/me", err);
+            log.error("Failed to fetch /user/me", err);
             this.#user = null;
             return null;
         }

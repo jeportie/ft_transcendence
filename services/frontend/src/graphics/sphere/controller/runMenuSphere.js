@@ -25,11 +25,14 @@ import { MenuSphere } from "../core/MenuSphere.js";
 import { OverlayBridge } from "../core/OverlayBridge.js";
 import { EventBus } from "./EventBus.js";
 import { InputController } from "./InputController.js";
+import { logger } from "@system/core/logger.js";
+
+const log = logger.withPrefix("[Babylon]");
 
 export function runMenuSphere(selector = "#menu-canvas") {
     const canvas = document.querySelector(selector);
     if (!canvas) {
-        console.warn(`[Babylon] Canvas not found: ${selector}`);
+        log.warn(`Canvas not found: ${selector}`);
         return;
     }
 

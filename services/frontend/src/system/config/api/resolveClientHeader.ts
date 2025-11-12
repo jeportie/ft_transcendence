@@ -12,12 +12,21 @@
 
 import { getDeviceFingerprint } from "@system/core/user/getDeviceFingerprint";
 
-let cachedIp: string = "";
+let cachedIp = "";
 
-/**
- * Returns common client headers (IP + fingerprint),
- * caching the IP for the session to avoid repeated lookups.
- */
+let _logger: any = null;
+let _loggerModule: any = null;
+
+async function getLog() {
+    if (_logger) return _logger;
+    if (!_loggerModule) {
+        // Dynamically import to break circular graph
+        _loggerModule = await import("@system/core/logger.js");
+    }
+    _logger = _loggerModule.logger.withPrefix("[Headers]");
+    return _logger;
+}
+
 export async function resolveClientHeaders(): Promise<Record<string, string>> {
     try {
         if (!cachedIp) {
@@ -33,7 +42,9 @@ export async function resolveClientHeaders(): Promise<Record<string, string>> {
             "x-device-id": fingerprint,
         };
     } catch (err) {
-        console.warn("[Headers] Failed to resolve client info:", err);
+        const log = await getLog();
+        log.warn("Failed to resolve client info:", err);
         return { "x-device-id": getDeviceFingerprint() };
     }
 }
+

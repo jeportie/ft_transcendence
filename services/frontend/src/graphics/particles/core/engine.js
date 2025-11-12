@@ -17,6 +17,9 @@ import { seededRand } from "./utils.js";
 import { drawBackground, drawLinks } from "./draw.js";
 import { loadMapJson, applyMapToParticles } from "./mapLoader.js";
 import { Events } from "./events.js";
+import { logger } from "@system/core/logger.js";
+
+const log = logger.withPrefix("[Particles]");
 
 export class ParticleEngine {
     constructor(ctx, state) {
@@ -48,7 +51,7 @@ export class ParticleEngine {
                 applyMapToParticles(state, json.points || [], N);
                 return;
             } catch (e) {
-                console.warn(`[Particles] Map "${mapName}" failed to load.`, e);
+                log.warn(`Map "${mapName}" failed to load.`, e);
             }
         }
         this._seededInit(N, seed);

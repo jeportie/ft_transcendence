@@ -11,6 +11,9 @@
 // ************************************************************************** //
 
 import { resolveElement } from "@system/core/dom/resolveElement.js";
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[SetupLogoAnim]");
 
 interface logoAnimationParams {
     ASSETS: { spaceShipSvg: string };
@@ -54,7 +57,7 @@ export function setupLogoAnimation({
     });
 
     if (!targetCard) {
-        console.warn("[setupLogoAnimation] No target card found");
+        log.warn("No target card found");
         return {};
     }
 

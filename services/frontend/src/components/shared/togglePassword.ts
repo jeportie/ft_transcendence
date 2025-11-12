@@ -12,6 +12,9 @@
 
 import { create } from "@system/core/dom/dom.js";
 import { resolveElement } from "@system/core/dom/resolveElement.js";
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[TooglePwd]");
 
 interface TogglePasswordParams {
     ASSETS: { showIcon: string; hideIcon: string };
@@ -31,7 +34,7 @@ export function togglePassword(params: TogglePasswordParams) {
     });
 
     if (!targetInput) {
-        console.warn("[togglePassword] No target input found");
+        log.warn("No target input found");
         return;
     }
 

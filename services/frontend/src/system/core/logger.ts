@@ -35,12 +35,12 @@ function makePrefixedLogger(prefix = "") {
 
         debug: (...args: any[]) => {
             if (shouldLog("debug"))
-                console.debug(`%c${prefix}`, "color: gray", ...args);
+                console.debug(`%c${prefix}`, "color: cyan", ...args);
         },
 
         info: (...args: any[]) => {
             if (shouldLog("info"))
-                console.info(`%c${prefix}`, "color: cyan", ...args);
+                console.info(`%c${prefix}`, "color: green", ...args);
         },
 
         warn: (...args: any[]) => {
@@ -58,8 +58,6 @@ function makePrefixedLogger(prefix = "") {
         },
     };
 }
-
-console.log("[Logger] Loaded logger module");
 
 // Export a base prefixed logger
 export const logger = makePrefixedLogger("");

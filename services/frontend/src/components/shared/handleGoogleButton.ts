@@ -12,6 +12,9 @@
 
 import { create } from "@system/core/dom/dom.js";
 import { resolveElement } from "@system/core/dom/resolveElement.js";
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[HandleGoogleBtn]");
 
 interface GoogleButtonParams {
     ASSETS: { googleIcon: string };
@@ -33,7 +36,7 @@ export function handleGoogleButton(params: GoogleButtonParams) {
     });
 
     if (!button) {
-        console.warn("[handleGoogleButton] No target button found");
+        log.warn("No target button found");
         return;
     }
 

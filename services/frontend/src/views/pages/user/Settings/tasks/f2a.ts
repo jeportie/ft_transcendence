@@ -15,6 +15,7 @@ import { API } from "@system";
 import { UserState } from "@system/core/user/UserState.js";
 import { Modal } from "@components/abstract/Modal.js";
 import * as STYLES from "@components/themes/index.js";
+import { logger } from "@system/core/logger.js";
 
 let off: Array<() => void> = [];
 const styles = STYLES.liquidGlass;
@@ -95,7 +96,7 @@ export async function setupF2a({ ASSETS }) {
     async function diplayBackupCodes() {
         await UserState.refresh();
         user = await UserState.get();
-        console.log('[in display codes]:', user);
+        logger.withPrefix("[DisplayCodes]: ").debug(user);
         DOM.createDisplayBackupCodesFrag();
         const backupTbody = DOM.displayBackupTableTbody;
 

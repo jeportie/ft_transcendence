@@ -12,6 +12,9 @@
 
 import { applyMotionPreset } from "./preset.js";
 import { ParticleEngine } from "./engine.js";
+import { logger } from "@system/core/logger.js";
+
+const log = logger.withPrefix("[ParticleFX]");
 
 /**
  * Toggle between cinematic and reactive motion presets.
@@ -27,7 +30,7 @@ export function toggleCinematicMode(state, enable = null) {
                 : "cinematic";
 
     applyMotionPreset(state, to);
-    console.log(`[ParticleFX] Switched to ${to.toUpperCase()} mode`);
+    log.info(`Switched to ${to.toUpperCase()} mode`);
 }
 
 /**

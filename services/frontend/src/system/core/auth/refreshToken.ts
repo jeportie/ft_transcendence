@@ -13,6 +13,8 @@
 import { logger } from "@system/core/logger";
 import { resolveClientHeaders } from "@system/config/api/resolveClientHeader.js";
 
+const log = logger.withPrefix("[Auth] ");
+
 export async function refreshToken() {
     try {
         const headers = await resolveClientHeaders();
@@ -24,22 +26,22 @@ export async function refreshToken() {
         });
 
         if (res.status === 401) {
-            logger.warn("[Auth] Refresh → 401 (not logged in)");
+            log.warn("[Auth] Refresh → 401 (not logged in)");
             return null;
         }
 
         if (!res.ok) {
-            logger.error("[Auth] Refresh failed:", res.status);
+            log.error("[Auth] Refresh failed:", res.status);
             return null;
         }
 
         const json = await res.json();
         if (json?.token) return json.token;
 
-        logger.warn("[Auth] Refresh missing token");
+        log.warn("[Auth] Refresh missing token");
         return null;
     } catch (err) {
-        logger.error("[Auth] Refresh exception:", err);
+        log.error("[Auth] Refresh exception:", err);
         return null;
     }
 }

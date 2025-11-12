@@ -14,6 +14,9 @@ import { AbstractTableView } from "@components/abstract/AbstractTableView.js";
 import { DOM } from "../dom.generated.js";
 import { API } from "@system";
 import { auth } from "@auth";
+import { logger } from "@system/core/logger.js";
+
+const log = logger.withPrefix("[SessionsTable]");
 
 // API routes
 const _sessions = API.routes.auth.sessions.get;
@@ -156,7 +159,7 @@ export class SessionsTable extends AbstractTableView<any> {
     }
 
     onRendered(rows: any[]) {
-        console.debug(`[SessionsTable] Rendered ${rows.length} rows`);
+        log.debug(`Rendered ${rows.length} rows`);
     }
 
     teardown() {

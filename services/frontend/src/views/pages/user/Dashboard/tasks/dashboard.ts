@@ -12,6 +12,9 @@
 
 import { API } from "@system";
 import { DOM } from "../dom.generated.js";
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[Dashboard] ");
 
 export async function dashboard() {
     const userInfoEl = DOM.dashboardInfoDiv;
@@ -21,7 +24,7 @@ export async function dashboard() {
     const { data, error } = await API.Get<{ success: boolean, me: any }>("/user/me");
 
     if (error) {
-        console.error("[Dashboard] Failed to fetch /user/me:", error);
+        log.error("Failed to fetch /user/me:", error);
         userInfoEl.innerHTML = `<p class="ui-error">Error loading user info.</p>`;
         return;
     }

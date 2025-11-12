@@ -11,6 +11,9 @@
 // ************************************************************************** //
 
 import { runMenuSphere } from "@graphics/sphere/controller/runMenuSphere.js";
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[MenuSphere]");
 
 let cleanupFn: (() => void) | null = null;
 
@@ -21,7 +24,7 @@ let cleanupFn: (() => void) | null = null;
 export function setupMenuSphere() {
     // Prevent duplicate runs
     if (cleanupFn) {
-        console.warn("[MenuSphere] Already running — skipping reinit");
+        log.warn("Already running — skipping reinit");
         return;
     }
     cleanupFn = runMenuSphere('#app-menu-canvas');

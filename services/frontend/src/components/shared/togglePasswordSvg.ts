@@ -12,6 +12,9 @@
 
 import { create } from "@system/core/dom/dom.js";
 import { resolveElement } from "@system/core/dom/resolveElement.js";
+import { logger } from "@system/core/logger";
+
+const log = logger.withPrefix("[TooglePwdSvg]");
 
 interface TogglePasswordParams {
     ASSETS: { showIcon: string; hideIcon: string }; // paths to SVG files
@@ -31,7 +34,7 @@ export function togglePasswordSvg(params: TogglePasswordParams) {
     });
 
     if (!targetInput) {
-        console.warn("[togglePassword] No target input found");
+        log.warn("No target input found");
         return;
     }
 
@@ -72,7 +75,7 @@ export function togglePasswordSvg(params: TogglePasswordParams) {
                     svg.style.pointerEvents = "none";
                 }
             })
-            .catch(err => console.error("[togglePassword] Failed to load SVG:", svgOrPath, err));
+            .catch(err => log.error("Failed to load SVG:", svgOrPath, err));
     }
 
 

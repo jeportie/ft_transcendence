@@ -17,12 +17,16 @@ import { API } from "@system";
 
 const log = logger.withPrefix('[Boot]');
 
+window.recaptchaLoaded = () => {
+    logger.withPrefix("[reCAPTCHA]").info("✅ script loaded");
+};
+
 export async function bootstrap() {
     const restored = await auth.initFromStorage();
     if (restored) {
-        log.info("[Boot] Auth session restored from cookie");
+        log.info("Auth session restored from cookie");
     } else {
-        log.info("[Boot] No session to restore");
+        log.info("No session to restore");
     }
     const alreadyBooted = sessionStorage.getItem("appBooted");
     if (!alreadyBooted) {
@@ -32,14 +36,14 @@ export async function bootstrap() {
             const { data, error } = await API.Get(API.routes.system.health);
             if (error)
                 throw new Error(error.message);
-            log.info("[Health] ✅ OK:", data);
+            log.withPrefix("[Health] ").info("✅ OK:", data);
 
             await new Promise(resolve => setTimeout(resolve, 2000));
-            log.info("[Boot] Preload done");
+            log.info("Preload done");
             sessionStorage.setItem("appBooted", "1");
 
         } catch (err: any) {
-            log.error("[Boot] ❌ Startup failed:", err);
+            log.error("❌ Startup failed:", err);
             hideLoading();
             throw err;
         }

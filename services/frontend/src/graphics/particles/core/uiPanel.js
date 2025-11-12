@@ -13,6 +13,9 @@
 import { Pane } from "tweakpane";
 import { Events } from "./events.js";
 import { setSeed, setParticleMap, toggleCinematicMode } from "./controls.js";
+import { logger } from "@system/core/logger.js";
+
+const log = logger.withPrefix("[Ui]");
 
 export function createUIPanel(state) {
     const pane = new Pane({ container: document.body });
@@ -227,7 +230,7 @@ export function createUIPanel(state) {
     };
     document.body.appendChild(toggleBtn);
 
-    console.log("[UI] Panel created (Tweakpane v4.0.5)");
+    log.info("Panel created (Tweakpane v4.0.5)");
 
     // 👉 return a cleanup so callers can fully remove the UI when the layout exits
     return function destroyUIPanel() {

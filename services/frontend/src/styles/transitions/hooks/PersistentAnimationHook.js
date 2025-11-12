@@ -11,6 +11,9 @@
 // ************************************************************************** //
 
 import { AbstractAnimationHook } from "@jeportie/mini-spa";
+import { logger } from "@system/core/logger.js"
+
+const log = logger.withPrefix("[PersistentHook] ");
 
 /**
  * Keeps the current layout (Babylon canvas, navbar, etc.) alive
@@ -18,7 +21,7 @@ import { AbstractAnimationHook } from "@jeportie/mini-spa";
  */
 export default class PersistentAnimationHook extends AbstractAnimationHook {
     async mount({ mountEl, helpers }) {
-        console.log("[PersistentHook] mount → sameLayout?", helpers.sameLayout());
+        log.info("mount → sameLayout?", helpers.sameLayout());
 
         // If layout is reused
         if (helpers.sameLayout()) {
@@ -27,23 +30,23 @@ export default class PersistentAnimationHook extends AbstractAnimationHook {
             // Wait up to ~500 ms for the outlet to appear in DOM
             const outlet = await waitForOutlet(mountEl);
             if (!outlet) {
-                console.warn("[PersistentHook] ⚠️ Outlet never appeared — full commit fallback");
+                log.warn("⚠️ Outlet never appeared — full commit fallback");
                 helpers.teardown();
                 await helpers.commit();
                 return;
             }
 
-            console.log("[PersistentHook] Same layout detected → leaf-only swap");
+            log.info("Same layout detected → leaf-only swap");
             await helpers.commit({ targetEl: outlet, leafOnly: true });
-            console.log("[PersistentHook] ✅ Layout preserved");
+            log.info("✅ Layout preserved");
             return;
         }
 
         // Different layout
-        console.log("[PersistentHook] ⚠️ Different layout → full teardown");
+        log.info("⚠️ Different layout → full teardown");
         helpers.teardown();
         await helpers.commit();
-        console.log("[PersistentHook] ✅ Full commit done");
+        log.info("✅ Full commit done");
     }
 }
 
