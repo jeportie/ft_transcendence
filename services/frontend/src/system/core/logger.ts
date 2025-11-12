@@ -10,11 +10,18 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { isDev } from "@system/config/env";
-
 type LogLevel = "debug" | "info" | "warn" | "error" | "silent";
 
-let currentLevel: LogLevel = isDev ? "debug" : "warn";
+export interface Logger {
+    debug: (...args: any[]) => void;
+    info: (...args: any[]) => void;
+    warn: (...args: any[]) => void;
+    error: (...args: any[]) => void;
+    setLevel(level: LogLevel): void;
+    withPrefix(prefix: string): Logger;
+}
+
+let currentLevel: LogLevel = "debug";
 const LEVELS = { debug: 0, info: 1, warn: 2, error: 3, silent: 4 };
 
 function shouldLog(level: LogLevel) {
@@ -33,7 +40,7 @@ function makePrefixedLogger(prefix = "") {
 
         info: (...args: any[]) => {
             if (shouldLog("info"))
-                console.log(`%c${prefix}`, "color: cyan", ...args);
+                console.info(`%c${prefix}`, "color: cyan", ...args);
         },
 
         warn: (...args: any[]) => {
@@ -51,6 +58,8 @@ function makePrefixedLogger(prefix = "") {
         },
     };
 }
+
+console.log("[Logger] Loaded logger module");
 
 // Export a base prefixed logger
 export const logger = makePrefixedLogger("");

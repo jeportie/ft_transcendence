@@ -12,15 +12,13 @@
 
 import { Fetch } from "@jeportie/mini-fetch";
 import { withCommonHeaders } from "@system/config/api/headers.js";
-import { logger } from "@system";
+import { logger } from "@system/core/logger";
 import { auth } from "@auth";
-import { refreshToken } from "../auth/refreshToken";
 
 export const http = new Fetch("/api", {
     getToken: () => auth.getToken(),
     onToken: (t: any) => auth.setToken(t),
     refreshFn: async () => {
-        // const tok = await refreshToken();
         const tok = await auth.refresh();
         if (!tok) {
             auth.clear();

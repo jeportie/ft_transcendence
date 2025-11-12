@@ -16,11 +16,11 @@ import { routes } from "@views/routes";
 import { hideLoading } from "@views/loading";
 import { bootstrap } from "@system/app/bootstrap.js";
 import { wireGlobals } from "@system/app/wireGlobals.js";
-import { logger } from "@system";
+import { logger } from "@system/core/logger";
 
 import "./components/wc/index.js";
 
-logger.setLevel("silent");
+// logger.setLevel("silent");
 
 const app = document.querySelector("#app") as any;
 

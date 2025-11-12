@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { logger } from "@system";
+import { logger } from "@system/core/logger";
 import { resolveClientHeaders } from "@system/config/api/resolveClientHeader.js";
 
 export async function refreshToken() {

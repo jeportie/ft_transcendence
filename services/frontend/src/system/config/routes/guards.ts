@@ -11,10 +11,11 @@
 // ************************************************************************** //
 
 import { requireAuth } from "@jeportie/mini-auth";
-import { logger } from "@system";
+import { logger } from "@system/core/logger";
 import { auth } from "@auth";
 import { UserState } from "@system/core/user/UserState";
 
+const log = logger.withPrefix("[Guard]");
 /**
  * Global route guards.
  * Ensures the user session is valid using UserState caching instead of raw API calls.
@@ -26,13 +27,13 @@ export const guards = {
             try {
                 const user = await UserState.get(true); // force refresh
                 if (!user) {
-                    logger.warn("[Guard] No active user in UserState");
+                    log.warn("[Guard] No active user in UserState");
                     return false;
                 }
-                logger.info("[Guard] Session check OK for user:", user.username);
+                log.info("[Guard] Session check OK for user:", user.username);
                 return true;
             } catch (err) {
-                logger.error("[Guard] Session check failed:", err);
+                log.error("[Guard] Session check failed:", err);
                 return false;
             }
         },

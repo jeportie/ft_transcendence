@@ -11,16 +11,18 @@
 // ************************************************************************** //
 
 import { showLoading, hideLoading } from "@views/loading";
-import { logger } from "@system";
+import { logger } from "@system/core/logger";
 import { auth } from "@auth";
 import { API } from "@system";
+
+const log = logger.withPrefix('[Boot]');
 
 export async function bootstrap() {
     const restored = await auth.initFromStorage();
     if (restored) {
-        logger.info("[Boot] Auth session restored from cookie");
+        log.info("[Boot] Auth session restored from cookie");
     } else {
-        logger.info("[Boot] No session to restore");
+        log.info("[Boot] No session to restore");
     }
     const alreadyBooted = sessionStorage.getItem("appBooted");
     if (!alreadyBooted) {
@@ -30,14 +32,14 @@ export async function bootstrap() {
             const { data, error } = await API.Get(API.routes.system.health);
             if (error)
                 throw new Error(error.message);
-            logger.info("[Health] ✅ OK:", data);
+            log.info("[Health] ✅ OK:", data);
 
             await new Promise(resolve => setTimeout(resolve, 2000));
-            logger.info("[Boot] Preload done");
+            log.info("[Boot] Preload done");
             sessionStorage.setItem("appBooted", "1");
 
         } catch (err: any) {
-            logger.error("[Boot] ❌ Startup failed:", err);
+            log.error("[Boot] ❌ Startup failed:", err);
             hideLoading();
             throw err;
         }

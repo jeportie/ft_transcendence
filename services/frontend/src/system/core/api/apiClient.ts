@@ -13,7 +13,7 @@
 import { safeGet, safePost, safePut, safeDelete } from "@jeportie/mini-fetch";
 import { http } from "./http.js";
 import { API_ROUTES } from "@system";
-import { logger } from "@system";
+import { logger } from "@system/core/logger";
 
 export const API = {
     routes: API_ROUTES,
