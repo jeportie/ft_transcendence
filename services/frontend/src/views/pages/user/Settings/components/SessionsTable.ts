@@ -6,13 +6,14 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 09:33:56 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/11 13:42:20 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/12 11:40:51 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AbstractTableView } from "@components/abstract/AbstractTableView.js";
 import { DOM } from "../dom.generated.js";
 import { API } from "@system";
+import { auth } from "@auth";
 
 // API routes
 const _sessions = API.routes.auth.sessions.get;
@@ -73,9 +74,6 @@ export class SessionsTable extends AbstractTableView<any> {
             }, {})
         );
         return uniqueSessions;
-
-
-        return uniqueSessions;
     }
 
     renderRow(s: any): DocumentFragment {
@@ -131,7 +129,18 @@ export class SessionsTable extends AbstractTableView<any> {
 
             const onClick = async () => {
                 const res = await API.Post("/auth/sessions/revoke", { sessionId: s.id });
-                if (res.error) return alert("Failed to revoke session.");
+
+                if (res.error) {
+                    if (res.error.status === 401) {
+                        alert("Your session has expired. Logging out...");
+                        auth.clear();
+                        location.href = "/login";
+                        return;
+                    }
+                    alert("Failed to revoke session.");
+                    return;
+                }
+                // visually remove the revoked row
                 const row = btn.closest("tr")!;
                 row.classList.add("opacity-50", "pointer-events-none");
                 setTimeout(() => row.remove(), 300);
