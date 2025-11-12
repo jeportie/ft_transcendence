@@ -17,6 +17,10 @@ import { tasks } from "./tasks/index.js";
 export default class LandingLayout extends AbstractLayout {
     #keepCanvas = true;
 
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
+    }
+
     async getHTML() {
         return landingLayoutHTML;
     }

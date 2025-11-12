@@ -15,8 +15,8 @@ import { AbstractView } from "@jeportie/mini-spa";
 import notFoundHTML from "./notFound.html";
 
 export default class NotFound extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("NotFound");
     }

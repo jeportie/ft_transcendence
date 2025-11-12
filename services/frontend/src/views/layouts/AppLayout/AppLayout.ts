@@ -14,9 +14,12 @@ import { AbstractLayout } from "@jeportie/mini-spa";
 import appLayoutHTML from "./appLayout.html";
 import { tasks } from "./tasks/index.js";
 
-
 export default class AppLayout extends AbstractLayout {
     #keepCanvas = true;
+
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
+    }
 
     async getHTML() {
         return appLayoutHTML;

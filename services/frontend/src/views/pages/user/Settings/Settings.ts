@@ -25,8 +25,8 @@ import copyIcon from "@assets/icons/copy.svg";
 export const ASSETS = { desktop, laptop, phone, hideIcon, showIcon, copyIcon };
 
 export default class Settings extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("Settings");
     };

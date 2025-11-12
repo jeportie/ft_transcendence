@@ -23,8 +23,8 @@ import showIcon from "@assets/show.png";
 export const ASSETS = { spaceShipSvg, googleIcon, hideIcon, showIcon };
 
 export default class Signup extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("Signup");
     }

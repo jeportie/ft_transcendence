@@ -16,8 +16,8 @@ import resetHTML from "./resetPwd.html";
 import { tasks } from "./tasks/index.js";
 
 export default class ResetPwd extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-ignore
         this.setTitle("Reset Pwd");
     }

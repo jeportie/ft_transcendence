@@ -16,8 +16,8 @@ import { tasks } from "./tasks/index.js";
 import forgotHTML from "./forgotPwd.html";
 
 export default class Forgot extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("Forgot");
     }

@@ -16,8 +16,8 @@ import serviceTermsHTML from "./serviceTerms.html";
 import { tasks } from "./tasks/index.js";
 
 export default class ServiceTerms extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("Service Terms");
     }

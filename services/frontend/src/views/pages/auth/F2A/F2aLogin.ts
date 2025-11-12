@@ -22,8 +22,8 @@ interface Layout {
 export default class F2aLogin extends AbstractView {
     layout?: Layout;
 
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("F2aLogin");
     }

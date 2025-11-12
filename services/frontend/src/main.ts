@@ -16,8 +16,11 @@ import { routes } from "@views/routes";
 import { hideLoading } from "@views/loading";
 import { bootstrap } from "@system/app/bootstrap.js";
 import { wireGlobals } from "@system/app/wireGlobals.js";
+import { logger } from "@system";
 
 import "./components/wc/index.js";
+
+logger.setLevel("silent");
 
 const app = document.querySelector("#app") as any;
 
@@ -25,6 +28,7 @@ defineMiniRouter();
 setupMiniRouter(app, {
     routes,
     linkSelector: "[data-link]",
+    logger,
     // animationHook: new TailwindAnimationHook({ variant: "slide-push" }),
     beforeStart: [() => bootstrap()],
     afterStart: [() => hideLoading()],

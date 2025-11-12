@@ -16,8 +16,8 @@ import privacyPolicyHTML from "./privacyPolicy.html";
 import { tasks } from "./tasks/index.js";
 
 export default class privacyPolicy extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("Privacy Policy");
     }

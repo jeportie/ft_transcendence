@@ -16,8 +16,8 @@ import { tasks } from "./tasks/index.js";
 import dashboardHTML from "./dashboard.html";
 
 export default class Dashboard extends AbstractView {
-    constructor(ctx: any) {
-        super(ctx);
+    constructor(ctx: any, logger: any) {
+        super(ctx, logger);
         // @ts-expect-error
         this.setTitle("Dashboard");
     };
