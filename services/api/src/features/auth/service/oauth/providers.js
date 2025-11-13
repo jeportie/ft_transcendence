@@ -6,54 +6,12 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/16 16:51:12 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 15:02:01 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/13 11:36:12 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { OAuth2Client } from "google-auth-library";
 import { OAuthErrors } from "../../errors.js";
-
-function googleGetAuthUrl(client, state) {
-    const opts = {
-        scope: ["openid", "email", "profile"],
-        prompt: "select_account",
-    }
-    if (state)
-        opts.state = state;
-    return client.generateAuthUrl(opts);
-}
-
-async function googleExchangeCode(client, fastify, code) {
-    const { tokens } = await client.getToken(code);
-    const ticket = await client.verifyIdToken({
-        idToken: tokens.id_token,
-        audience: fastify.config.GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload() || {};
-    const {
-        sub,
-        email,
-        email_verified,
-        name,
-        picture,
-        hd,
-    } = payload;
-
-    return { sub, email, email_verified, name, picture, hd };
-}
-
-export function makeGoogleProvider(fastify) {
-    const client = new OAuth2Client({
-        clientId: fastify.config.GOOGLE_CLIENT_ID,
-        clientSecret: fastify.config.GOOGLE_CLIENT_SECRET,
-        redirectUri: fastify.config.GOOGLE_REDIRECT_URI,
-    });
-
-    return {
-        getAuthUrl: (state) => googleGetAuthUrl(client, state),
-        exchangeCode: (code) => googleExchangeCode(client, fastify, code),
-    };
-}
+import { makeGoogleProvider } from "./providers/google.js";
 
 const registry = {
     google: makeGoogleProvider,

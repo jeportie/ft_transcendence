@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:34:08 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 21:01:50 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/13 11:35:43 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -31,15 +31,24 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     if (!valid || !value || !state || state !== value)
         throw OAuthErrors.InvalidState();
 
-    // --- (2) Exchange code for user profile ---
+    // --- (2) PKCE: retrieve verifier from DB ---
+    const { consumePkceState } = await import("./oauthPkce.js");
+    const codeVerifier = await consumePkceState(fastify, state);
+
+    if (!codeVerifier)
+        throw OAuthErrors.InvalidState();
+
+    // Ask provider to turn code → profile using PKCE
     const p = getProvider(fastify, provider);
+
     let profile;
     try {
-        profile = await p.exchangeCode(code);
+        profile = await p.exchangeCodePKCE(code, codeVerifier);
     } catch (err) {
-        fastify.log.error(err, "[OAuth] Code exchange failed");
+        fastify.log.error(err, `[OAuth] Provider PKCE exchange failed for ${provider}`);
         throw OAuthErrors.ExchangeFailed();
     }
+
 
     // --- (3) Find or create user in DB ---
     const db = await fastify.getDb();
@@ -47,7 +56,7 @@ export async function handleOAuthCallback(fastify, provider, code, state, reques
     if (!user) {
         try {
             const r = await db.run(createUserSql, {
-                ":username": profile.name || `user_${profile.sub.slice(0, 8)}`,
+                ":username": profile.name || `user_${profile.id.slice(0, 8)}`,
                 ":email": profile.email || null,
                 ":password_hash": "<oauth>",
                 ":role": "player"
