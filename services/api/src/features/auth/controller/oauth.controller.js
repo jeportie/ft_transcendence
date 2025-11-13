@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 19:36:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/13 11:49:49 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/13 13:12:58 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -38,7 +38,6 @@ export async function handleOAuth(req, reply) {
 
         return reply.type("text/html").send(`
           <script>
-            localStorage.setItem("hasSession", "true");
             window.location.href = "${data.redirect}";
           </script>
         `);
@@ -46,3 +45,4 @@ export async function handleOAuth(req, reply) {
         return AppError.handle(err, req, reply, DOMAIN);
     }
 }
+

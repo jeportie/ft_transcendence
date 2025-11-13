@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/02 14:26:18 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/02 23:07:34 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/13 15:34:17 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -45,6 +45,16 @@ const config = {
     GOOGLE_CLIENT_ID: requireString(process.env.GOOGLE_CLIENT_ID, "GOOGLE_CLIENT_ID"),
     GOOGLE_CLIENT_SECRET: requireString(process.env.GOOGLE_CLIENT_SECRET, "GOOGLE_CLIENT_SECRET"),
     GOOGLE_REDIRECT_URI: requireString(process.env.GOOGLE_REDIRECT_URI, "GOOGLE_REDIRECT_URI"),
+
+    // Github OAuth
+    GITHUB_CLIENT_ID: requireString(process.env.GITHUB_CLIENT_ID, "GITHUB_CLIENT_ID"),
+    GITHUB_CLIENT_SECRET: requireString(process.env.GITHUB_CLIENT_SECRET, "GITHUB_CLIENT_SECRET"),
+    GITHUB_REDIRECT_URI: requireString(process.env.GITHUB_REDIRECT_URI, "GITHUB_REDIRECT_URI"),
+
+    // 42 OAuth
+    FORTYTWO_CLIENT_ID: requireString(process.env.FORTYTWO_CLIENT_ID, "FORTYTWO_CLIENT_ID"),
+    FORTYTWO_CLIENT_SECRET: requireString(process.env.FORTYTWO_CLIENT_SECRET, "FORTYTWO_CLIENT_SECRET"),
+    FORTYTWO_REDIRECT_URI: requireString(process.env.FORTYTWO_REDIRECT_URI, "FORTYTWO_REDIRECT_URI"),
 
     // ReCAPTCHA
     RECAPTCHA_SECRET: requireString(process.env.RECAPTCHA_SECRET, "RECAPTCHA_SECRET"),

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 23:31:25 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 23:31:28 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/13 15:08:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -22,7 +22,7 @@ export const startSchema = {
         properties: {
             provider: {
                 type: "string",
-                enum: ["google"], // extend later with github, 42, etc.
+                enum: ["google", "github", "42"],
                 description: "The OAuth provider to use",
             },
         },

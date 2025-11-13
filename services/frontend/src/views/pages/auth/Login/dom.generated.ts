@@ -1,40 +1,90 @@
 // AUTO-GENERATED FILE — DO NOT EDIT
-// Aggregated from 2 HTML file(s)
+// Generated from src/views/pages/auth/Login
 // Created by scripts/generateDomRegistry.mjs
 
-function $<T extends HTMLElement = HTMLElement>(id: string): T | null {
-  return document.getElementById(id) as T | null;
+
+
+function cloneTemplate(html: string): DocumentFragment {
+  const tpl = document.createElement("template");
+  tpl.innerHTML = html.trim();
+  const firstTpl = tpl.content.firstElementChild as HTMLTemplateElement;
+  if (firstTpl && firstTpl.tagName === "TEMPLATE")
+      return firstTpl.content.cloneNode(true) as DocumentFragment;
+  return tpl.content.cloneNode(true) as DocumentFragment;
 }
 
 /**
- * LoginDOM — Lazy DOM accessor for all elements in this folder.
+ * LoginDOM — Unified DOM accessor for views and templates
  */
 export class LoginDOM {
-  get loginCard() { return $<HTMLDivElement>("login-card"); }
-  get loginForm() { return $<HTMLFormElement>("login-form"); }
-  get loginUserInput() { return $<HTMLInputElement>("login-user-input"); }
-  get loginPwdInput() { return $<HTMLInputElement>("login-pwd-input"); }
-  get loginFormBtn() { return $<HTMLButtonElement>("login-form-btn"); }
-  get loginErrorDiv() { return $<HTMLDivElement>("login-error-div"); }
-  get loginGoogleBtn() { return $<HTMLButtonElement>("login-google-btn"); }
-  get inactiveP() { return $<HTMLElement>("inactive-p"); }
-  get inactiveRetryBtn() { return $<HTMLButtonElement>("inactive-retry-btn"); }
-  get inactiveBoxDiv() { return $<HTMLDivElement>("inactive-box-div"); }
-  get inactiveBackBtn() { return $<HTMLButtonElement>("inactive-back-btn"); }
-}
+  get loginCard(): HTMLDivElement {
+    const el = document.getElementById("login-card");
+    if (!el) throw new Error("Missing element #login-card in DOM");
+    return el as HTMLDivElement;
+  }
+  get loginForm(): HTMLFormElement {
+    const el = document.getElementById("login-form");
+    if (!el) throw new Error("Missing element #login-form in DOM");
+    return el as HTMLFormElement;
+  }
+  get loginUserInput(): HTMLInputElement {
+    const el = document.getElementById("login-user-input");
+    if (!el) throw new Error("Missing element #login-user-input in DOM");
+    return el as HTMLInputElement;
+  }
+  get loginPwdInput(): HTMLInputElement {
+    const el = document.getElementById("login-pwd-input");
+    if (!el) throw new Error("Missing element #login-pwd-input in DOM");
+    return el as HTMLInputElement;
+  }
+  get loginFormBtn(): HTMLButtonElement {
+    const el = document.getElementById("login-form-btn");
+    if (!el) throw new Error("Missing element #login-form-btn in DOM");
+    return el as HTMLButtonElement;
+  }
+  get loginErrorDiv(): HTMLDivElement {
+    const el = document.getElementById("login-error-div");
+    if (!el) throw new Error("Missing element #login-error-div in DOM");
+    return el as HTMLDivElement;
+  }
+  get loginGoogleBtn(): HTMLButtonElement {
+    const el = document.getElementById("login-google-btn");
+    if (!el) throw new Error("Missing element #login-google-btn in DOM");
+    return el as HTMLButtonElement;
+  }
+  get loginGithubBtn(): HTMLButtonElement {
+    const el = document.getElementById("login-github-btn");
+    if (!el) throw new Error("Missing element #login-github-btn in DOM");
+    return el as HTMLButtonElement;
+  }
+  get loginFortytwoBtn(): HTMLButtonElement {
+    const el = document.getElementById("login-fortytwo-btn");
+    if (!el) throw new Error("Missing element #login-fortytwo-btn in DOM");
+    return el as HTMLButtonElement;
+  }
+  get inactiveP(): HTMLElement {
+    const el = document.getElementById("inactive-p");
+    if (!el) throw new Error("Missing element #inactive-p in DOM");
+    return el as HTMLElement;
+  }
+  get inactiveRetryBtn(): HTMLButtonElement {
+    const el = document.getElementById("inactive-retry-btn");
+    if (!el) throw new Error("Missing element #inactive-retry-btn in DOM");
+    return el as HTMLButtonElement;
+  }
+  get inactiveBoxDiv(): HTMLDivElement {
+    const el = document.getElementById("inactive-box-div");
+    if (!el) throw new Error("Missing element #inactive-box-div in DOM");
+    return el as HTMLDivElement;
+  }
+  get inactiveBackBtn(): HTMLButtonElement {
+    const el = document.getElementById("inactive-back-btn");
+    if (!el) throw new Error("Missing element #inactive-back-btn in DOM");
+    return el as HTMLButtonElement;
+  }
 
-export interface LoginDomMap {
-  loginCard: HTMLDivElement | null;
-  loginForm: HTMLFormElement | null;
-  loginUserInput: HTMLInputElement | null;
-  loginPwdInput: HTMLInputElement | null;
-  loginFormBtn: HTMLButtonElement | null;
-  loginErrorDiv: HTMLDivElement | null;
-  loginGoogleBtn: HTMLButtonElement | null;
-  inactiveP: HTMLElement | null;
-  inactiveRetryBtn: HTMLButtonElement | null;
-  inactiveBoxDiv: HTMLDivElement | null;
-  inactiveBackBtn: HTMLButtonElement | null;
+
+
 }
 
 export const DOM = new LoginDOM();
