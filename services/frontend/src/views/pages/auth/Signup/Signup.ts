@@ -17,10 +17,12 @@ import signupHTML from "./signup.html";
 
 import spaceShipSvg from "@assets/spaceship.svg";
 import googleIcon from "@assets/google.png";
+import githubIcon from "@assets/github.png";
+import fortyTwoIcon from "@assets/42.png";
 import hideIcon from "@assets/hide.png";
 import showIcon from "@assets/show.png";
 
-export const ASSETS = { spaceShipSvg, googleIcon, hideIcon, showIcon };
+export const ASSETS = { spaceShipSvg, googleIcon, githubIcon, fortyTwoIcon, hideIcon, showIcon };
 
 export default class Signup extends AbstractView {
     constructor(ctx: any, logger: any) {

@@ -2095,6 +2095,10 @@ strong-password input {
   left: 1.25rem;
 }
 
+.left-6 {
+  left: 1.5rem;
+}
+
 .right-2 {
   right: 0.5rem;
 }
@@ -2105,14 +2109,6 @@ strong-password input {
 
 .top-0 {
   top: 0px;
-}
-
-.left-4 {
-  left: 1rem;
-}
-
-.left-6 {
-  left: 1.5rem;
 }
 
 .z-\[1000\] {
@@ -2230,8 +2226,8 @@ strong-password input {
   height: 1.5rem;
 }
 
-.h-8 {
-  height: 2rem;
+.h-7 {
+  height: 1.75rem;
 }
 
 .h-\[120px\] {
@@ -2240,14 +2236,6 @@ strong-password input {
 
 .h-full {
   height: 100%;
-}
-
-.h-9 {
-  height: 2.25rem;
-}
-
-.h-7 {
-  height: 1.75rem;
 }
 
 .w-10 {
@@ -2270,6 +2258,10 @@ strong-password input {
   width: 1.5rem;
 }
 
+.w-7 {
+  width: 1.75rem;
+}
+
 .w-8 {
   width: 2rem;
 }
@@ -2284,14 +2276,6 @@ strong-password input {
 
 .w-full {
   width: 100%;
-}
-
-.w-9 {
-  width: 2.25rem;
-}
-
-.w-7 {
-  width: 1.75rem;
 }
 
 .max-w-md {

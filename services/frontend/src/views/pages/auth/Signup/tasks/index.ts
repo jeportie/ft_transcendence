@@ -15,6 +15,8 @@ import { DOM } from "../dom.generated.js";
 import { setupLogoAnimation } from "@components/shared/setupLogoAnimation.js";
 import { togglePassword } from "@components/shared/togglePassword.js";
 import { handleGoogleButton } from "@components/shared/handleGoogleButton.js";
+import { handleGithubButton } from "@components/shared/handleGithubButton.js";
+import { handle42Button } from "@components/shared/handle42Button.js";
 import { destroyRecaptcha } from "@system/core/utils/recaptcha.js";
 
 import { handleSignup } from "./handleSignup.js";
@@ -47,6 +49,20 @@ export const tasks = {
                 ASSETS: ctx.ASSETS,
                 addCleanup: ctx.addCleanup,
                 btn: DOM.signupGoogleBtn,
+                logo: ctx.logo,
+            }),
+        (ctx: any) =>
+            handleGithubButton({
+                ASSETS: ctx.ASSETS,
+                addCleanup: ctx.addCleanup,
+                btn: DOM.signupGithubBtn,
+                logo: ctx.logo,
+            }),
+        (ctx: any) =>
+            handle42Button({
+                ASSETS: ctx.ASSETS,
+                addCleanup: ctx.addCleanup,
+                btn: DOM.signupFortytwoBtn,
                 logo: ctx.logo,
             }),
     ],
