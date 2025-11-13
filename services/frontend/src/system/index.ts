@@ -29,7 +29,7 @@ export { guards } from "./config/routes/guards.js";
 export { API } from "./core/api/apiClient.js";
 
 // ── Auth (high-level service)
-export { auth, markHasSession } from "./core/auth/auth.js";
+export { auth } from "./core/auth/auth.js";
 
 // ── DOM utilities
 export { create as createEl } from "./core/dom/dom.js";

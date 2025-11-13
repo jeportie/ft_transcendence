@@ -15,14 +15,9 @@ import { logger } from "@system/core/logger";
 import { refreshToken } from "./refreshToken.js";
 
 export const auth = new AuthService({
-    storageKey: "hasSession",
     refreshFn: async () => {
         const tok = await refreshToken();  // includes headers
         return tok ?? null;
     },
     logger,
 });
-
-export function markHasSession() {
-    localStorage.setItem("hasSession", "true");
-}

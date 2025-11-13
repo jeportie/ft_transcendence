@@ -39,7 +39,7 @@ if (isDev) {
 }
 
 export async function bootstrap() {
-    const restored = await auth.initFromStorage();
+    const restored = await auth.init();
     if (restored) {
         log.info("Auth session restored from cookie");
     } else {
