@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:34:08 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/13 13:14:59 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/14 22:32:52 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,10 +17,14 @@ import { OAuthErrors } from "../../errors.js";
 const PATH = import.meta.url;
 
 export async function handleOAuthCallback(fastify, providerName, code, state, request, reply) {
+    const findOAuthLinkByProviderSubSql = fastify.loadSql(PATH, "../sql/findOAuthLinkByProviderSub.sql");
+    const createOAuthLinkSql = fastify.loadSql(PATH, "../sql/createOAuthLink.sql");
     const findUserByEmailSql = fastify.loadSql(PATH, "../sql/findUserByEmail.sql");
     const createUserSql = fastify.loadSql(PATH, "../sql/createUser.sql");
     const findUserByIdSql = fastify.loadSql(PATH, "../sql/findUserById.sql");
     const activateUserSql = fastify.loadSql(PATH, "../sql/activateUser.sql");
+
+    const db = await fastify.getDb();
 
     // --- (1) Verify CSRF state cookie ---
     const cookieName = `oauth_state_${providerName}`;
@@ -34,57 +38,68 @@ export async function handleOAuthCallback(fastify, providerName, code, state, re
 
     // --- (2) Ask provider to turn code → profile (PKCE or classic) ---
     const provider = getProvider(fastify, providerName);
-
     let profile;
+    try {
+        profile = await provider.exchangeCode(code);
+    } catch (err) {
+        fastify.log.error(err, `[OAuth] Provider exchange failed for ${providerName}`);
+        throw OAuthErrors.ExchangeFailed();
+    }
+    profile.sub = String(profile.sub);
 
-    if (provider.pkce) {
-        // PKCE: retrieve verifier from DB
-        const { consumePkceState } = await import("./oauthPkce.js");
-        const codeVerifier = await consumePkceState(fastify, state);
+    // --- (3) Find or create user in DB ---
+    //  (a) Try: find user by (provider, provider_sub)
+    let user = await db.get(findOAuthLinkByProviderSubSql, {
+        ":provider": providerName,
+        ":provider_sub": profile.sub,
+    });
 
-        if (!codeVerifier)
-            throw OAuthErrors.InvalidState();
+    //  (b) Try: find by email, then LINK provider to that user
+    if (!user && profile.email) {
+        const existing = await db.get(findUserByEmailSql, {
+            ":email": profile.email,
+        });
 
-        try {
-            profile = await provider.exchangeCode(code, { codeVerifier });
-        } catch (err) {
-            fastify.log.error(err, `[OAuth] Provider PKCE exchange failed for ${providerName}`);
-            throw OAuthErrors.ExchangeFailed();
-        }
-    } else {
-        // Classic server-side OAuth (Google, GitHub, 42...)
-        try {
-            profile = await provider.exchangeCode(code);
-        } catch (err) {
-            fastify.log.error(err, `[OAuth] Provider exchange failed for ${providerName}`);
-            throw OAuthErrors.ExchangeFailed();
+        if (existing) {
+            user = existing;
+
+            await db.run(createOAuthLinkSql, {
+                ":user_id": user.id,
+                ":provider": providerName,
+                ":provider_sub": profile.sub,
+                ":email_at_login": profile.email || null,
+                ":profile_picture": profile.picture || null,
+            });
         }
     }
 
-    // --- (3) Find or create user in DB ---
-    const db = await fastify.getDb();
-    let user = await db.get(findUserByEmailSql, { ":email": profile.email });
-
+    //  (c) Still NO user → create user, then link provider
     if (!user) {
-        try {
-            const fallbackUsername =
-                profile.name ||
-                profile.email ||
-                `${profile.provider}_${String(profile.id).slice(0, 8)}`;
+        const username =
+            profile.name ||
+            `user_${profile.sub.slice(0, 6)}` ||
+            `oauth_${providerName}_${Date.now()}`;
 
-            const r = await db.run(createUserSql, {
-                ":username": fallbackUsername,
-                ":email": profile.email || null,
-                ":password_hash": "<oauth>",
-                ":role": "player",
-            });
+        const result = await db.run(createUserSql, {
+            ":username": username,
+            ":email": profile.email || null,
+            ":password_hash": "<oauth>",
+            ":role": "player",
+        });
 
-            user = await db.get(findUserByIdSql, { ":id": r.lastID });
-            await db.run(activateUserSql, { ":user_id": user.id });
-        } catch (err) {
-            fastify.log.error(err, "[OAuth] User creation failed");
-            throw OAuthErrors.UserCreateFailed();
-        }
+        const newId = result.lastID;
+
+        user = await db.get(findUserByIdSql, { ":id": newId });
+
+        await db.run(activateUserSql, { ":user_id": newId });
+
+        await db.run(createOAuthLinkSql, {
+            ":user_id": newId,
+            ":provider": providerName,
+            ":provider_sub": profile.sub,
+            ":email_at_login": profile.email || null,
+            ":profile_picture": profile.picture || null,
+        });
     }
 
     // --- (4) Attempt passwordless login ---

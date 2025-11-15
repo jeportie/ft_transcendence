@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/13 11:25:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/13 14:19:02 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/15 15:10:23 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -16,8 +16,6 @@ function googleGetAuthUrl(client, state) {
     const opts = {
         scope: ["openid", "email", "profile"],
         prompt: "select_account",
-        access_type: "offline",
-        include_granted_scopes: true,
         state,
     };
     return client.generateAuthUrl(opts);
@@ -35,19 +33,15 @@ async function googleExchangeCode(client, fastify, code) {
     const {
         sub,
         email,
-        email_verified,
         name,
         picture,
-        hd,
     } = payload;
 
     return {
-        id: sub,
+        sub: sub,
         email: email || null,
-        email_verified: !!email_verified,
         name: name || null,
         picture: picture || null,
-        domain: hd || null,
         provider: "google",
     };
 }
@@ -61,7 +55,6 @@ export function makeGoogleProvider(fastify) {
 
     return {
         name: "google",
-        pkce: false,
 
         getAuthUrl: (state /*, { codeChallenge } = {} */) =>
             googleGetAuthUrl(client, state),

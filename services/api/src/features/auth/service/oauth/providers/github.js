@@ -6,18 +6,17 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/13 13:31:49 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/13 13:31:57 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/15 15:20:23 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-function githubGetAuthUrl(state) {
+function githubGetAuthUrl(fastify, state) {
     const params = new URLSearchParams({
-        client_id: process.env.GITHUB_CLIENT_ID,
-        redirect_uri: process.env.GITHUB_REDIRECT_URI,
+        client_id: fastify.config.GITHUB_CLIENT_ID,
+        redirect_uri: fastify.config.GITHUB_REDIRECT_URI,
         scope: "read:user user:email",
         state,
     });
-
     return `https://github.com/login/oauth/authorize?${params.toString()}`;
 }
 
@@ -47,7 +46,8 @@ async function githubExchangeCode(fastify, code) {
     // 2. Get profile
     const userRes = await fetch("https://api.github.com/user", {
         headers: {
-            "Authorization": `token ${accessToken}`,
+            // "Authorization": `token ${accessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
             "User-Agent": "ft_transcendence",
         },
     });
@@ -59,7 +59,8 @@ async function githubExchangeCode(fastify, code) {
     if (!email) {
         const emailsRes = await fetch("https://api.github.com/user/emails", {
             headers: {
-                "Authorization": `token ${accessToken}`,
+                // "Authorization": `token ${accessToken}`,
+                "Authorization": `Bearer ${accessToken}`,
                 "User-Agent": "ft_transcendence",
             },
         });
@@ -71,7 +72,7 @@ async function githubExchangeCode(fastify, code) {
 
     // Normalize shape
     return {
-        id: profile.id,
+        sub: String(profile.id),
         email: email || null,
         name: profile.name || profile.login,
         picture: profile.avatar_url,
@@ -82,9 +83,8 @@ async function githubExchangeCode(fastify, code) {
 export function makeGitHubProvider(fastify) {
     return {
         name: "github",
-        pkce: false, // Classic server-side OAuth
 
-        getAuthUrl: (state) => githubGetAuthUrl(state),
+        getAuthUrl: (state) => githubGetAuthUrl(fastify, state),
 
         exchangeCode: (code) => githubExchangeCode(fastify, code),
     };

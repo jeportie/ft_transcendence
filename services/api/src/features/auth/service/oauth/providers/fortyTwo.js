@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/13 15:35:00 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/13 15:35:07 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/15 15:22:13 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -26,8 +26,10 @@ async function fortyTwoExchangeCode(fastify, code) {
     // 1. Exchange code → access_token
     const tokenRes = await fetch("https://api.intra.42.fr/oauth/token", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
+        // headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        // body: new URLSearchParams({
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
             grant_type: "authorization_code",
             client_id: fastify.config.FORTYTWO_CLIENT_ID,
             client_secret: fastify.config.FORTYTWO_CLIENT_SECRET,
@@ -55,7 +57,7 @@ async function fortyTwoExchangeCode(fastify, code) {
 
     // Normalize shape for callback
     return {
-        id: profile.id,
+        sub: String(profile.id),
         email: profile.email,
         name: profile.displayname || profile.login,
         picture: profile.image?.link || null,
@@ -66,7 +68,6 @@ async function fortyTwoExchangeCode(fastify, code) {
 export function makeFortyTwoProvider(fastify) {
     return {
         name: "42",
-        pkce: false, // Classic server-side OAuth
 
         getAuthUrl: (state) => fortyTwoGetAuthUrl(fastify, state),
 
