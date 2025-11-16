@@ -6,6 +6,7 @@ import Activate2FAHTML from "./templates/Activate2FA.html";
 import ChangePwdHTML from "./templates/ChangePwd.html";
 import Check2FAHTML from "./templates/Check2FA.html";
 import CheckBackupHTML from "./templates/CheckBackup.html";
+import DeleteAcountHTML from "./templates/DeleteAcount.html";
 import DisplayBackupCodesHTML from "./templates/DisplayBackupCodes.html";
 import SessionRowHTML from "./templates/SessionRow.html";
 
@@ -82,6 +83,11 @@ export class SettingsDOM {
   checkBackupOtpInput!: HTMLInputElement;
   checkBackupFormBtn!: HTMLButtonElement;
   checkBackupGoto2faBtn!: HTMLButtonElement;
+
+  fragDeleteAcount!: DocumentFragment;
+  deleteAcountDiv!: HTMLDivElement;
+  deleteAcountForm!: HTMLFormElement;
+  deleteAcountInput!: HTMLInputElement;
 
   fragDisplayBackupCodes!: DocumentFragment;
   displayBackupStatusTagSpan!: HTMLSpanElement;
@@ -231,6 +237,27 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLButtonElement>("#check-backup-goto-2fa-btn");
       if (!el) throw new Error("Missing element #check-backup-goto-2fa-btn in template CheckBackup");
       this.checkBackupGoto2faBtn = el;
+    }
+    return this;
+  }
+
+  createDeleteAcountFrag() {
+    this.fragDeleteAcount = cloneTemplate(DeleteAcountHTML);
+    const frag = this.fragDeleteAcount!;
+    {
+      const el = frag.querySelector<HTMLDivElement>("#delete-acount-div");
+      if (!el) throw new Error("Missing element #delete-acount-div in template DeleteAcount");
+      this.deleteAcountDiv = el;
+    }
+    {
+      const el = frag.querySelector<HTMLFormElement>("#delete-acount-form");
+      if (!el) throw new Error("Missing element #delete-acount-form in template DeleteAcount");
+      this.deleteAcountForm = el;
+    }
+    {
+      const el = frag.querySelector<HTMLInputElement>("#delete-acount-input");
+      if (!el) throw new Error("Missing element #delete-acount-input in template DeleteAcount");
+      this.deleteAcountInput = el;
     }
     return this;
   }

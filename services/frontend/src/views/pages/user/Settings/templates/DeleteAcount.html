@@ -1,0 +1,28 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- DeleteAcount.html                                  :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/15 18:12:32 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/15 18:42:51 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <div class="flex items-center justify-between mb-4">
+        <h1 class="app-card-title mb-4">Delete Acount</h1>
+    </div>
+
+    <div id="delete-acount-div">
+        <p class="app-text mb-4">
+            Deleting your account will remove all of your information from our database. \
+            This cannot be undone.
+        </p>
+        <form id="delete-acount-form" class="grid gap-3">
+            <input id="delete-acount-input" class="app-input" type="text" placeholder="To confirm this, type 'DELETE'">
+            <button class="app-btn-primary mt-2 w-full">Delete Acount</button>
+        </form>
+    </div>
+</template>
