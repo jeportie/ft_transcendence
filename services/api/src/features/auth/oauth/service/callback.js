@@ -14,15 +14,13 @@ import { getProvider } from "./providers.js";
 import { loginWithoutPwd } from "../../local/service/loginUser.js";
 import { OAuthErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function handleOAuthCallback(fastify, providerName, code, state, request, reply) {
-    const findOAuthLinkByProviderSubSql = fastify.loadSql(PATH, "../sql/findOAuthLinkByProviderSub.sql");
-    const createOAuthLinkSql = fastify.loadSql(PATH, "../sql/createOAuthLink.sql");
-    const findUserByEmailSql = fastify.loadSql(PATH, "../sql/findUserByEmail.sql");
-    const createUserSql = fastify.loadSql(PATH, "../sql/createUser.sql");
-    const findUserByIdSql = fastify.loadSql(PATH, "../sql/findUserById.sql");
-    const activateUserSql = fastify.loadSql(PATH, "../sql/activateUser.sql");
+    const findOAuthLinkByProviderSubSql = fastify.sql.oauth.findOAuthLinkByProviderSub;
+    const createOAuthLinkSql = fastify.sql.oauth.createOAuthLink;
+    const findUserByEmailSql = fastify.sql.oauth.findUserByEmail;
+    const createUserSql = fastify.sql.oauth.createUser;
+    const findUserByIdSql = fastify.sql.oauth.findUserById;
+    const activateUserSql = fastify.sql.oauth.activateUser;
 
     const db = await fastify.getDb();
 

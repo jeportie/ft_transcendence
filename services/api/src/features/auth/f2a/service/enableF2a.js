@@ -18,7 +18,7 @@ import { AuthErrors, F2AErrors } from "../../errors.js";
 authenticator.options = { crypto };
 
 export async function enableF2a(fastify, request, reply) {
-    const storeSecretSql = fastify.loadSql(import.meta.url, "../sql/storeF2aSecret.sql");
+    const storeSecretSql = fastify.sql.f2a.storeF2aSecret;
     const userId = request.user.sub;
 
     if (!userId)

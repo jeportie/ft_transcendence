@@ -14,13 +14,12 @@ import { generateRefreshToken, hashToken } from "../../utils/tokens.js";
 import { setRefreshCookie } from "../../utils/cookie.js";
 import { AuthErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function refreshToken(fastify, request, reply) {
-    const deleteByDeviceSql = fastify.loadSql(PATH, "../sql/deleteRefreshTokenByDevice.sql");
-    const deleteRefreshTokenSql = fastify.loadSql(PATH, "../sql/deleteRefreshTokenByID.sql");
-    const findRefreshTokenSql = fastify.loadSql(PATH, "../sql/findRefreshTokenWithUserByHash.sql");
-    const refreshTokenSql = fastify.loadSql(PATH, "../sql/insertRefreshToken.sql");
+    const deleteByDeviceSql = fastify.sql.local.deleteRefreshTokenByDevice;
+    const deleteRefreshTokenSql = fastify.sql.local.deleteRefreshTokenByID;
+    const findRefreshTokenSql = fastify.sql.local.findRefreshTokenWithUserByHash;
+    const refreshTokenSql = fastify.sql.local.insertRefreshToken;
+
     const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];
     if (!rawSigned)

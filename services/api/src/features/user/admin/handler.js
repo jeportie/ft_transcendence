@@ -1,20 +1,20 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   health.handler.js                                  :+:      :+:    :+:   //
+//   handler.js                                         :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/02 17:43:14 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/25 18:20:32 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/25 18:22:17 by jeportie          #+#    #+#             //
+//   Updated: 2025/11/17 16:52:25 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import * as controller from "../controller/health.controller.js";
-import { healthSchema } from "../schema/healthSchema.js";
+import * as controller from "./controller.js";
+import { usersSchema } from "./schema/usersSchema.js";
 
-export async function healthRoutes(fastify, options) {
+export async function adminRoutes(fastify, options) {
+    const authGuard = { preHandler: [fastify.authorize("admin")] };
 
-    fastify.get('/health', { schema: healthSchema }, controller.getHealth);
-
-};
+    fastify.get("/users", { ...authGuard, schema: usersSchema }, controller.getUsers);
+}

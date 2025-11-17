@@ -12,12 +12,10 @@
 
 import { AuthErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function activateUser(fastify, request, reply) {
-    const findTokenSql = fastify.loadSql(PATH, "../sql/findActivationToken.sql");
-    const markUsedSql = fastify.loadSql(PATH, "../sql/markActivationTokenUsed.sql");
-    const activateUserSql = fastify.loadSql(PATH, "../sql/activateUser.sql");
+    const findTokenSql = fastify.sql.local.findActivationToken;
+    const markUsedSql = fastify.sql.local.markActivationTokenUsed;
+    const activateUserSql = fastify.sql.local.activateUser;
 
     const token = request.params.token;
 

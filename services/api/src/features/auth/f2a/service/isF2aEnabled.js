@@ -12,15 +12,14 @@
 
 import { AuthErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function checkF2a(fastify, request, reply) {
+    const checkF2aSql = fastify.sql.f2a.checkF2a;
+    const checkF2aByMailSql = fastify.sql.f2a.checkF2aByMail;
     const user = request.body?.user;
+
     if (!user)
         throw AuthErrors.MissingCredentials();
     const db = await fastify.getDb();
-    const checkF2aSql = fastify.loadSql(PATH, "../sql/checkF2a.sql");
-    const checkF2aByMailSql = fastify.loadSql(PATH, "../sql/checkF2aByMail.sql");
 
     let row = await db.get(checkF2aSql, {
         ":username": user,

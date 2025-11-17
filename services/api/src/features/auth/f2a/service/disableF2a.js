@@ -12,11 +12,9 @@
 
 import { AuthErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function disableF2a(fastify, request, reply) {
-    const disableF2aSql = fastify.loadSql(PATH, "../sql/disableF2a.sql");
-    const deleteBackupCodeSql = fastify.loadSql(PATH, "../sql/deleteBackupCode.sql");
+    const disableF2aSql = fastify.sql.f2a.disableF2a;
+    const deleteBackupCodeSql = fastify.sql.f2a.deleteBackupCode;
     const userId = request.user.sub;
 
     if (!userId)

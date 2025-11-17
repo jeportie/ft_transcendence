@@ -17,11 +17,10 @@ import { verifyRecaptcha } from "../../utils/verifyRecaptcha.js";
 import { sendResetPwdEmail } from "../../utils/mailer.js";
 import { addHoursUTC } from "../../utils/tokens.js";
 
-const PATH = import.meta.url;
-
 export async function forgotPwd(fastify, request, reply) {
-    const findUserByEmailSql = fastify.loadSql(PATH, "../sql/findUserByEmail.sql");
-    const insertResetPwdSql = fastify.loadSql(PATH, "../sql/insertResetPasswordToken.sql");
+    const findUserByEmailSql = fastify.sql.local.findUserByEmailSql;
+    const insertResetPwdSql = fastify.sql.local.insertResetPasswordToken;
+
     const email = request.body.email;
     const captchaToken = request.body.captcha;
 

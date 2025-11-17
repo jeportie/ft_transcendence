@@ -15,11 +15,9 @@ import { randomBytes } from "crypto";
 import { addDaysUTC } from "../../utils/tokens.js";
 import { sendActivationEmail } from "../../utils/mailer.js";
 
-const PATH = import.meta.url;
-
 export async function sendActivateLink(fastify, request, reply) {
-    const insertActivationSql = fastify.loadSql(PATH, "../sql/insertActivationToken.sql");
-    const findActivationTokenByUserIdSql = fastify.loadSql(PATH, "../sql/findActivationTokenByUserId.sql")
+    const insertActivationSql = fastify.sql.local.insertActivationToken;
+    const findActivationTokenByUserIdSql = fastify.sql.local.findActivationTokenByUserId;
 
     const user_id = request.body.user_id;
 

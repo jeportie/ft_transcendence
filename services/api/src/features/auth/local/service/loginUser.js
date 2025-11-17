@@ -20,14 +20,13 @@ export async function loginUser(fastify, request, reply) {
     if (!user || !pwd)
         throw AuthErrors.MissingCredentials();
 
-    console.log("We are here");
     const userSql = fastify.sql.local.findUserByUsernameOrEmail;
+
     const db = await fastify.getDb();
     const row = await db.get(userSql, {
         ":username": user,
         ":email": user
     });
-    console.log("ROW:", row);
 
     if (!row)
         throw AuthErrors.UserNotFound(user);

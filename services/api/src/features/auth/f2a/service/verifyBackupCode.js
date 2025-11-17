@@ -10,16 +10,14 @@
 //                                                                            //
 // ************************************************************************** //
 
-const PATH = import.meta.url;
-
 export async function verifyBackupCode(fastify, userId, rawCode) {
     if (!userId || !rawCode)
         return ("INVALID");
 
-    const db = await fastify.getDb();
-    const getBackupCodesSql = fastify.loadSql(PATH, "../sql/getBackupCodes.sql");
-    const useBackupCodeSql = fastify.loadSql(PATH, "../sql/useBackupCode.sql");
+    const getBackupCodesSql = fastify.sql.f2a.getBackupCodes;
+    const useBackupCodeSql = fastify.sql.f2a.useBackupCode;
 
+    const db = await fastify.getDb();
     const codes = await db.all(getBackupCodesSql, { ":user_id": userId });
 
     for (const code of codes) {

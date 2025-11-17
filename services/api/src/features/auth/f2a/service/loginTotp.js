@@ -14,12 +14,9 @@ import { authenticator } from "otplib";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 import { issueSession } from "../../utils/issueSession.js";
 
-const PATH = import.meta.url;
-
 export async function loginTotp(fastify, request, reply) {
-    const getSecretSql = fastify.loadSql(PATH, "../sql/getF2aSecret.sql");
-    const findUserByIdSql = fastify.loadSql(PATH, "../sql/findUserById.sql");
-
+    const getSecretSql = fastify.sql.f2a.getF2aSecret;
+    const findUserByIdSql = fastify.sql.f2a.findUserById;
     const { code, userId } = request.body || {};
 
     if (!userId || !code)

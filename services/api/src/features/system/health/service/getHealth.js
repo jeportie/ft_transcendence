@@ -1,16 +1,16 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   health.service.js                                  :+:      :+:    :+:   //
+//   getHealth.js                                       :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:08:22 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/27 15:04:54 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/17 16:46:22 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { SystemErrors } from "../errors.js";
+import { SystemErrors } from "../../errors.js";
 
 export async function getHealth(fastify) {
     const db = await fastify.getDb();

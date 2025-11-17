@@ -15,7 +15,7 @@ import { clearRefreshCookie } from "../../utils/cookie.js";
 import { AuthErrors } from "../../errors.js";
 
 export async function logoutUser(fastify, request, reply) {
-    const deleteRefreshToken = fastify.loadSql(import.meta.url, "../sql/deleteRefreshTokenByHash.sql");
+    const deleteRefreshTokenSql = fastify.sql.local.deleteRefreshTokenByHash;
 
     const name = fastify.config.COOKIE_NAME_RT;
     const rawSigned = request.cookies?.[name];

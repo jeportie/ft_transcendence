@@ -12,16 +12,15 @@
 
 import { AuthErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function getSession(fastify, request, reply) {
-    const db = await fastify.getDb();
-    const sql = fastify.loadSql(PATH, "../sql/getSession.sql");
-
     const userId = request.user?.sub;
-    if (!userId) throw AuthErrors.MissingCredentials();
+    const getSessionSql = fastify.sql.sessions.getSession;
 
-    const rows = await db.all(sql, { ":user_id": userId });
+    if (!userId)
+        throw AuthErrors.MissingCredentials();
+
+    const db = await fastify.getDb();
+    const rows = await db.all(getSessionSql, { ":user_id": userId });
 
     const res = rows.map((s) => ({
         id: s.id,

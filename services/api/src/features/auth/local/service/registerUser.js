@@ -17,12 +17,10 @@ import { verifyRecaptcha } from "../../utils/verifyRecaptcha.js";
 import { sendActivationEmail } from "../../utils/mailer.js";
 import { addDaysUTC } from "../../utils/tokens.js";
 
-const PATH = import.meta.url;
-
 export async function registerUser(fastify, request, reply) {
-    const findUserSql = fastify.loadSql(PATH, "../sql/findUserByUsernameOrEmail.sql");
-    const createUserSql = fastify.loadSql(PATH, "../sql/createUser.sql");
-    const insertActivationSql = fastify.loadSql(PATH, "../sql/insertActivationToken.sql");
+    const findUserSql = fastify.sql.local.findUserByUsernameOrEmail;
+    const createUserSql = fastify.sql.local.createUser;
+    const insertActivationSql = fastify.sql.local.insertActivationToken;
 
     const username = request.body?.username;
     const email = request.body?.email;

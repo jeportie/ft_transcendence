@@ -12,12 +12,10 @@
 
 import { AuthErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function resetPwd(fastify, request, reply) {
-    const findResetTokenSql = fastify.loadSql(PATH, "../sql/findPwdResetToken.sql");
-    const markResetUsedSql = fastify.loadSql(PATH, "../sql/markPwdResetTokenUsed.sql");
-    const resetPwdSql = fastify.loadSql(PATH, "../sql/updatePassword.sql");
+    const findResetTokenSql = fastify.sql.local.findPwdResetToken;
+    const markResetUsedSql = fastify.sql.local.markPwdResetTokenUsed;
+    const resetPwdSql = fastify.sql.local.updatePassword;
 
     const token = request.body.token;
     const rawPwd = request.body.pwd;

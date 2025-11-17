@@ -13,11 +13,9 @@
 import { authenticator } from "otplib";
 import { AuthErrors, F2AErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
-
 export async function verifyTotp(fastify, request, reply) {
-    const getSecretSql = fastify.loadSql(PATH, "../sql/getF2aSecret.sql");
-    const enableF2aSql = fastify.loadSql(PATH, "../sql/enableF2a.sql");
+    const getSecretSql = fastify.sql.f2a.getF2aSecret;
+    const enableF2aSql = fastify.sql.f2a.enableF2a;
 
     const { code } = request.body || {};
     const userId = request.user?.sub;
