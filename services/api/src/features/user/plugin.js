@@ -1,20 +1,18 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   plugin.js                                          :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/25 14:31:49 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/17 16:50:58 by jeportie         ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
-
+// AUTO-GENERATED — YOU MAY EDIT
 import fp from "fastify-plugin";
-import { userRoutes } from "./user/handler.js";
+import { sql } from "./sqlRegistry.generated.js";
 import { adminRoutes } from "./admin/handler.js";
+import { userRoutes } from "./user/handler.js";
 
-export default fp(async function userPlugin(fastify) {
-    await fastify.register(userRoutes, { prefix: "/api/user" });
-    await fastify.register(adminRoutes, { prefix: "/api/admin" });
+export default fp(async function userPlugin(parent) {
+
+    await parent.register(async function(scoped) {
+        scoped.decorate("sql", sql);
+
+        // AUTO-REGISTER ROUTES START
+        await scoped.register(adminRoutes);
+        await scoped.register(userRoutes);
+        // AUTO-REGISTER ROUTES END
+
+    }, { prefix: "/api/user" });
 });

@@ -18,5 +18,4 @@ import fp from "fastify-plugin";
 export default fp(async function dbPlugin(fastify) {
     fastify.decorate("getDb", getDb);
     fastify.decorate("runMigrations", runMigrations);
-    fastify.decorate("sql", sql);
 });
