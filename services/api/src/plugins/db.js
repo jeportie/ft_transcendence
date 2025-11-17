@@ -12,7 +12,6 @@
 
 import { getDb } from "../../shared/db/connection.js";
 import { runMigrations } from "../../shared/db/migrations.js";
-import { sql } from "../utils/sqlRegistry.generated.js";
 import fp from "fastify-plugin";
 
 export default fp(async function dbPlugin(fastify) {

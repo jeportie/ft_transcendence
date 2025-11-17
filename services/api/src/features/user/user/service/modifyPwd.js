@@ -12,11 +12,10 @@
 
 import { UserErrors } from "../../errors.js";
 
-const PATH = import.meta.url;
 
 export async function modifyPwd(fastify, request, reply) {
-    const getMeSql = fastify.loadSql(PATH, "../sql/getMe.sql");
-    const updatePwdSql = fastify.loadSql(PATH, "../../../auth/service/sql/updatePassword.sql");
+    const getMeSql = fastify.sql.user.getMe;
+    const updatePwdSql = fastify.sql.updatePassword;
 
     const id = request.user.sub;
     const isOauth = request.body.oauth;

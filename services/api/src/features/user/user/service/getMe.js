@@ -14,7 +14,7 @@ import { UserErrors } from "../../errors.js";
 
 export async function getMe(fastify, request, reply) {
     const db = await fastify.getDb();
-    const getMeSql = fastify.loadSql(import.meta.url, "../sql/getMe.sql");
+    const getMeSql = fastify.sql.user.getMe;
 
     const jwtClaim = request.user;
     const row = await db.get(getMeSql, { ":id": jwtClaim.sub });

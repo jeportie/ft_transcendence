@@ -14,7 +14,7 @@ import { AdminErrors } from "../../errors.js";
 
 export async function getUsers(fastify) {
     const db = await fastify.getDb();
-    const getUsersSql = fastify.loadSql(import.meta.url, "../sql/getUsers.sql");
+    const getUsersSql = fastify.sql.admin.getUsers;
 
     const rows = await db.all(getUsersSql);
     if (!rows || rows.length === 0)
