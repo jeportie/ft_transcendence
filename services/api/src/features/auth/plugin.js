@@ -6,16 +6,16 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/25 14:31:49 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/28 14:48:30 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/17 13:38:58 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import fp from "fastify-plugin";
 import rateLimit from "@fastify/rate-limit";
-import { localRoutes } from "./handler/local.handler.js";
-import { oauthRoutes } from "./handler/oauth.handler.js";
-import { f2aRoutes } from "./handler/f2a.handler.js";
-import { sessionsRoutes } from "./handler/sessions.handler.js";
+import { localRoutes } from "./local/handler.js";
+import { oauthRoutes } from "./oauth/handler.js";
+import { f2aRoutes } from "./f2a/handler.js";
+import { sessionsRoutes } from "./sessions/handler.js";
 
 export default fp(async function authPlugin(fastify) {
     // Scoped instance just for /api/auth/*

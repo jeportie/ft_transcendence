@@ -1,3 +1,4 @@
+
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
@@ -5,26 +6,37 @@
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/09/26 12:12:29 by jeportie          #+#    #+#             //
-//   Updated: 2025/09/26 12:17:44 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/17                                  //
 //                                                                            //
 // ************************************************************************** //
 
-import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
+import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
 /**
- * Load a .sql file relative to the caller's module.
- *
- * @param {string} importMetaUrl - usually `import.meta.url` from caller
- * @param {string} relativePath - path to the .sql file, relative to caller
- * @returns {string} SQL query as string
+ * Base resolver: load an SQL file relative to a given module.
+ * Works inside Docker, host environment, any working directory.
+ */
+export function resolveSql(importMetaUrl, relativeDir, file) {
+    const __filename = fileURLToPath(importMetaUrl);
+    const __dirname = path.dirname(__filename);
+
+    const fullPath = path.join(__dirname, relativeDir, file);
+
+    return fs.readFileSync(fullPath, "utf8");
+}
+
+/**
+ * Alias to keep backward compatibility with automation tasks.
+ * Behaves exactly like resolveSql.
  */
 export function loadSql(importMetaUrl, relativePath) {
     const __filename = fileURLToPath(importMetaUrl);
     const __dirname = path.dirname(__filename);
-    const sqlPath = path.join(__dirname, relativePath);
 
-    return (readFileSync(sqlPath, "utf8"));
+    const fullPath = path.join(__dirname, relativePath);
+
+    return fs.readFileSync(fullPath, "utf8");
 }
+

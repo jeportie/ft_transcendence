@@ -1,22 +1,22 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   db.js                                              :+:      :+:    :+:   //
+//   handler.js                                         :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/08/19 14:33:46 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/17 15:06:46 by jeportie         ###   ########.fr       //
+//   Created: 2025/09/25 19:26:48 by jeportie          #+#    #+#             //
+//   Updated: 2025/11/17 13:23:14 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { getDb } from "../../shared/db/connection.js";
-import { runMigrations } from "../../shared/db/migrations.js";
-import { sql } from "../utils/sqlRegistry.generated.js";
-import fp from "fastify-plugin";
+import * as controller from "./controller.js";
+import { startSchema } from "./schema/startSchema.js";
+import { callbackSchema } from "./schema/callbackSchema.js";
 
-export default fp(async function dbPlugin(fastify) {
-    fastify.decorate("getDb", getDb);
-    fastify.decorate("runMigrations", runMigrations);
-    fastify.decorate("sql", sql);
-});
+export async function oauthRoutes(fastify, options) {
+
+    fastify.get("/:provider/start", { schema: startSchema }, controller.startOAuth);
+    fastify.get("/:provider/callback", { schema: callbackSchema }, controller.handleOAuth);
+
+}
