@@ -17,7 +17,8 @@ SELECT
     email,
     role,
     created_at,
-    f2a_enabled
+    f2a_enabled,
+    f2a_email_enabled
 FROM
     users
 WHERE

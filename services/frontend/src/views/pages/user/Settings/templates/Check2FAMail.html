@@ -1,0 +1,22 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- Check2FAMail.html                                  :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/01 13:12:40 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/18 18:33:28 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <p id="check-2fa-mail-title" class="app-text mb-4"></p>
+    <form id="check-2fa-mail-form" class="flex flex-col items-center gap-4">
+        <otp-input id="check-2fa-mail-otp-input" length="6" position="3" class="mt-2"></otp-input>
+        <button id="check-2fa-mail-form-btn" class="app-btn-primary w-full mt-4">Submit</button>
+    </form>
+    <button id="check-2fa-mail-goto-backup-btn" type="button" class="app-btn-primary w-full mt-4">
+        Use another Authentication methode
+    </button>
+</template>

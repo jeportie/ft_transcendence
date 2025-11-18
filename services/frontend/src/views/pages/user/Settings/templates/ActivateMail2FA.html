@@ -1,0 +1,50 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- ActivateMail2FA.html                               :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/18 15:30:50 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/18 16:39:09 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <h1 class="app-card-title mb-2">Email Verification</h1>
+    <span id="activate-mail-f2a-status-tag-span" class="app-status-tag-disabled mb-4"></span>
+    <!-- STEP 1 — EMAIL INPUT -->
+    <div id="activate-mail-2fa-step-email-div">
+        <p class="app-text mb-4">
+            Enter the email address where we should send your verification code.
+        </p>
+
+        <form id="activate-mail-2fa-form" class="flex flex-col gap-4 w-full">
+            <input id="activate-mail-2fa-input" type="email" placeholder="Your email address" class="app-input w-full"
+                autocomplete="email" />
+
+            <button id="activate-mail-2fa-send-btn" class="app-btn-primary w-full mt-2">
+                Send Code
+            </button>
+        </form>
+    </div>
+    <!-- STEP 2 — OTP INPUT (HIDDEN BY DEFAULT) -->
+    <div id="activate-mail-2fa-step-otp-div" class="hidden">
+        <p class="app-text mb-4">
+            Enter the 6-digit code we sent to your email.
+        </p>
+
+        <form id="activate-mail-2fa-otp-form" class="flex flex-col items-center gap-4 w-full">
+
+            <otp-input id="activate-mail-2fa-otp-input" digits="6" position="3" class="mt-2"></otp-input>
+
+            <button id="activate-mail-2fa-otp-submit-btn" class="app-btn-primary w-full mt-4">
+                Verify
+            </button>
+
+            <button id="activate-mail-2fa-resend-btn" type="button" class="app-btn-secondary w-full mt-2">
+                Resend Code
+            </button>
+        </form>
+    </div>
+</template>

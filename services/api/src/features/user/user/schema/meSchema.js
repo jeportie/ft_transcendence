@@ -38,6 +38,7 @@ export const meSchema = {
                             example: "2025-09-05T14:00:00.000Z"
                         },
                         f2a_enabled: { type: "boolean" },
+                        f2a_email_enabled: { type: "boolean" },
                         oauth: { type: "boolean" }
                     }
                 }

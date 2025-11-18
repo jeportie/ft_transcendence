@@ -84,17 +84,17 @@ export async function sendResetPwdEmail(to, link) {
  * @param {string} to - recipient email
  * @param {string} link - activation link
  */
-export async function send2FAEmail(to, link) {
+export async function send2FAEmail(to, code) {
     try {
         const { data, error } = await resend.emails.send({
             from: 'jeportie <onboarding@resend.dev>',
             to,
-            subject: "No-Reply - Reset Password",
+            subject: "No-Reply - 2FA code",
             html: `
                 <h2>Important !</h2>
-                <p>Please reset your password by clicking the link below:</p>
-                <p><a href="${link}">${link}</a></p>
-                <p>This link will expire in 1 hour.</p>
+                <p>Your Authentication code is:</p>
+                <p>${code}</p>
+                <p>This code will expire in 10 minutes.</p>
             `,
         });
 

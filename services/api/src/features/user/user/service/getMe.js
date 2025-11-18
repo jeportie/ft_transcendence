@@ -32,6 +32,7 @@ export async function getMe(fastify, request, reply) {
         role: row.role,
         created_at: row.created_at,
         f2a_enabled: row.f2a_enabled,
+        f2a_email_enabled: row.f2a_email_enabled,
         oauth,
     };
     return { me };

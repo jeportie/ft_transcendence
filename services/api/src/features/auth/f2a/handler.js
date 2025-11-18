@@ -23,6 +23,6 @@ export async function f2aRoutes(fastify) {
     fastify.post("/disable", { ...authGuard, schema: schema.disableSchema }, controller.disableF2a);
     fastify.post("/backup", { ...authGuard, schema: schema.backupSchema }, controller.generateBackupCodes);
     fastify.post("/check-2fa", { schema: schema.checkF2aSchema }, controller.checkF2a);
-    fastify.post("/email/enable", { schema: null }, controller.enableEmail);
-    fastify.post("/email/verify", { schema: null }, controller.verifyEmail);
+    fastify.post("/email/enable", { ...authGuard, schema: null }, controller.enableEmail);
+    fastify.post("/email/verify", { ...authGuard, schema: null }, controller.verifyEmail);
 }

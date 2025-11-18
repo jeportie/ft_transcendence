@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 16:26:34 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/11 14:14:43 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/18 18:46:02 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,6 +20,7 @@ export interface User {
     username: string;
     email: string;
     f2a_enabled: boolean;
+    f2a_email_enabled: boolean;
     oauth: boolean;
     [key: string]: any;
 }

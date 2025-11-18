@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/30 14:28:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/11 14:12:28 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/18 18:47:17 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,7 +24,9 @@ const styles = STYLES.liquidGlass;
 const enable = API.routes.auth.f2a.enable;
 const verifTotp = API.routes.auth.f2a.verifyTotp;
 const verifBackup = API.routes.auth.f2a.verifyBackup;
-const generateBackup = API.routes.auth.f2a.backup;   // <— NEW
+const generateBackup = API.routes.auth.f2a.backup;
+const enableEmail = API.routes.auth.f2a.enableEmail;
+const verifyEmail = API.routes.auth.f2a.verifyEmail;
 
 function setStatus(el: HTMLElement, isEnabled: boolean) {
     if (isEnabled) {
@@ -43,8 +45,83 @@ export async function setupF2a({ ASSETS }) {
 
     let user = await UserState.get();
 
-    if (user)
-        btn.textContent = user.f2a_enabled ? "Disable" : "Enable";
+    console.log(user);
+    if (user) {
+        btn.textContent = user.f2a_enabled || user.f2a_email_enabled ? "Disable" : "Enable";
+    }
+
+    async function openF2aMethode() {
+        DOM.createMethode2FAFrag();
+        const form = DOM.methode2faForm;
+        const status = DOM.methodeF2aStatusTagSpan;
+
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragMethode2FA);
+        setStatus(status, false);
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const data = new FormData(form);
+            const method = data.get("auth-method");
+
+            if (method === "app")
+                activate2FA();
+            if (method === "mail")
+                activateMail2FA();
+            modal.remove();
+        })
+    }
+
+    async function activateMail2FA() {
+        DOM.createActivateMail2FAFrag();
+        const status = DOM.activateMailF2aStatusTagSpan;
+        const emailDiv = DOM.activateMail2faStepEmailDiv;
+        const otpDiv = DOM.activateMail2faStepOtpDiv;
+        const emailForm = DOM.activateMail2faForm;
+        const emailInput = DOM.activateMail2faInput;
+        const otpForm = DOM.activateMail2faOtpForm;
+        const otpInput = DOM.activateMail2faOtpInput;
+
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragActivateMail2FA);
+        setStatus(status, false);
+
+        emailForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value;
+            if (!email) {
+                alert("Please enter your email adresse.");
+                return;
+            }
+            const { data, error } = await API.Post(enableEmail, { email });
+
+            if (error || !data?.success)
+                return alert(error.message);
+
+            emailDiv.classList.add("hidden");
+            otpDiv.classList.remove("hidden");
+
+            otpForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const code = otpInput.value;
+                if (!code) {
+                    alert("Please enter your authentication code.");
+                    return;
+                }
+
+                const { data, error } = await API.Post(verifyEmail, { code });
+                if (error || !data?.success)
+                    return alert(error.message);
+
+                setStatus(status, true);
+                btn.textContent = "Disable";
+                modal.remove();
+            });
+        });
+    }
 
     async function activate2FA() {
         DOM.createActivate2FAFrag()
@@ -178,7 +255,30 @@ export async function setupF2a({ ASSETS }) {
             e.preventDefault();
             const code = DOM.checkBackupOtpInput.value;
             const { data, error } = await API.Post<{ success: boolean }>(verifBackup, { code });
-            if (error || !data?.success) return alert("Invalid code, cannot disable.");
+            if (error || !data?.success)
+                return alert("Invalid code, cannot disable.");
+            modal.remove();
+            activate2FA();
+        });
+    }
+
+    function openOtpMailForm() {
+        DOM.createCheck2FAMailFrag();
+        const modal = new Modal({ styles });
+        modal.render(DOM.fragCheck2FAMail);
+        DOM.check2faMailTitle.innerText = "Enter your current email code to disable two-factor authentication."
+
+        DOM.check2faMailGotoBackupBtn.addEventListener("click", () => {
+            modal.remove();
+            // Need to find a way to link all 2fa together
+        });
+
+        DOM.check2faMailForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const code = DOM.check2faMailOtpInput.value;
+            const { data, error } = await API.Post(verifyEmail, { code });
+            if (error || !data?.success)
+                return alert("Invalid code, cannot disable.");
             modal.remove();
             activate2FA();
         });
@@ -190,8 +290,10 @@ export async function setupF2a({ ASSETS }) {
             return alert("Failed to fetch user info.");
         if (user.f2a_enabled) {
             openOtpForm();
+        } else if (user.f2a_email_enabled) {
+            openOtpMailForm();
         } else {
-            activate2FA();
+            openF2aMethode();
         }
     };
 
