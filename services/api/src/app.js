@@ -13,8 +13,6 @@
 import Fastify from 'fastify';
 import statics from '@fastify/static';
 import cookie from '@fastify/cookie';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import config from './config/config.js';
 
 // Fastify Plugins
@@ -32,8 +30,6 @@ import systemPlugin from "./features/system/plugin.js";
 import userPlugin from "./features/user/plugin.js";
 // AUTO-GENERATED FEATURES END
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export async function buildApp() {
 
@@ -52,17 +48,20 @@ export async function buildApp() {
             return new Error(`body/${message}`);
         },
     });
-
     fastify.decorate("config", config);
 
+    const jwtObj = {
+        secret: fastify.config.JWT_SECRET,
+        hook: 'onRequest'
+    };
+
+    // OPEN API
     await fastify.register(docs);
     await fastify.register(keepSwaggerResponses);
 
+    // PLUGINS 
     await fastify.register(security);
-    await fastify.register(cookie, {
-        secret: fastify.config.JWT_SECRET,
-        hook: 'onRequest'
-    });
+    await fastify.register(cookie, jwtObj);
     await fastify.register(jwtPlugin);
     await fastify.register(dbPlugin);
     await fastify.register(metricsPlugin);

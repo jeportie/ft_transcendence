@@ -24,6 +24,7 @@ const styles = STYLES.liquidGlass;
 const enable = API.routes.auth.f2a.enable;
 const verifTotp = API.routes.auth.f2a.verifyTotp;
 const verifBackup = API.routes.auth.f2a.verifyBackup;
+const generateBackup = API.routes.auth.f2a.backup;   // <— NEW
 
 function setStatus(el: HTMLElement, isEnabled: boolean) {
     if (isEnabled) {
@@ -105,7 +106,7 @@ export async function setupF2a({ ASSETS }) {
         setStatus(DOM.displayBackupStatusTagSpan, true);
 
         // Fetch backup codes
-        const res = await API.Post<{ codes: string[] }>(verifBackup);
+        const res = await API.Post<{ codes: string[] }>(generateBackup);
         const codes: string[] = res.data?.codes ?? [];
         if (!codes.length)
             return;

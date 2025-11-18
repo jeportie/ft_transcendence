@@ -1,20 +1,23 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   getBackupCodes.sql                                 :+:      :+:    :+:   --
+--   findEmailToken.sql                                 :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/28 15:59:02 by jeportie          #+#    #+#             --
---   Updated: 2025/10/04 21:19:06 by jeportie         ###   ########.fr       --
+--   Created: 2025/11/18 12:15:26 by jeportie          #+#    #+#             --
+--   Updated: 2025/11/18 12:18:32 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
 SELECT
     id,
-    code_hash,
-    used_at
+    user_id,
+    token_hash,
+    created_at,
+    expires_at
 FROM
-    backup_codes
+    email_tokens
 WHERE
     user_id = :user_id
+LIMIT 1

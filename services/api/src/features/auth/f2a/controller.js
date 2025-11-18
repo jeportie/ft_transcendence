@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 14:36:24 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/17 13:30:43 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/18 12:00:59 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -73,6 +73,24 @@ export async function generateBackupCodes(request, reply) {
 export async function checkF2a(request, reply) {
     try {
         const data = await f2aService.checkF2a(request.server, request, reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, request, reply, DOMAIN);
+    }
+}
+
+export async function enableEmail(request, reply) {
+    try {
+        const data = await f2aService.enableEmail(request.server, request, reply);
+        return ok(reply, data);
+    } catch (err) {
+        return AppError.handle(err, request, reply, DOMAIN);
+    }
+}
+
+export async function verifyEmail(request, reply) {
+    try {
+        const data = await f2aService.verifyEmail(request.server, request, reply);
         return ok(reply, data);
     } catch (err) {
         return AppError.handle(err, request, reply, DOMAIN);

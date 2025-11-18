@@ -1,20 +1,14 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   getBackupCodes.sql                                 :+:      :+:    :+:   --
+--   insertEmailToken.sql                               :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/28 15:59:02 by jeportie          #+#    #+#             --
---   Updated: 2025/10/04 21:19:06 by jeportie         ###   ########.fr       --
+--   Created: 2025/11/18 12:14:23 by jeportie          #+#    #+#             --
+--   Updated: 2025/11/18 12:14:28 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-SELECT
-    id,
-    code_hash,
-    used_at
-FROM
-    backup_codes
-WHERE
-    user_id = :user_id
+INSERT INTO email_tokens (user_id, token_hash, expires_at)
+VALUES (:user_id, :token_hash, :expires_at);

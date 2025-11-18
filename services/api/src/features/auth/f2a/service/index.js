@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/28 12:30:57 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/03 22:16:26 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/18 12:00:23 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -17,3 +17,5 @@ export { verifyTotp } from "./verifyTotp.js";
 export { loginTotp } from "./loginTotp.js";
 export { verifyBackup } from "./verifyBackup.js";
 export { checkF2a } from "./isF2aEnabled.js"
+export { enableEmail } from "./enableEmail.js";
+export { verifyEmail } from "./verifyEmail.js";
