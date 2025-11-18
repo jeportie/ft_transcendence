@@ -28,7 +28,7 @@ export async function logoutUser(fastify, request, reply) {
 
     const hash = hashToken(raw);
     const db = await fastify.getDb();
-    await db.run(deleteRefreshToken, { ":token_hash": hash });
+    await db.run(deleteRefreshTokenSql, { ":token_hash": hash });
 
     clearRefreshCookie(fastify, reply);
 }
