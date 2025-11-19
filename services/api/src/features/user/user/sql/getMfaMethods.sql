@@ -1,19 +1,19 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   disableF2a.sql                                     :+:      :+:    :+:   --
+--   getMfaMethods.sql                                  :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/28 12:03:34 by jeportie          #+#    #+#             --
---   Updated: 2025/09/28 12:05:38 by jeportie         ###   ########.fr       --
+--   Created: 2025/11/19 12:40:04 by jeportie          #+#    #+#             --
+--   Updated: 2025/11/19 12:40:12 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-UPDATE
-    users
-SET
-    f2a_secret = NULL,
-    f2a_enabled = 0
+SELECT
+    type,
+    enabled
+FROM
+    mfa_methods
 WHERE
-    id = :user_id;
+    user_id = :user_id;

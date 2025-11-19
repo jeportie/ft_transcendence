@@ -1,20 +1,15 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   getF2aSecret.sql                                   :+:      :+:    :+:   --
+--   013_drop_legacy_2fa_columns.sql                    :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/28 00:20:11 by jeportie          #+#    #+#             --
---   Updated: 2025/09/28 00:21:46 by jeportie         ###   ########.fr       --
+--   Created: 2025/11/19 12:55:46 by jeportie          #+#    #+#             --
+--   Updated: 2025/11/19 12:56:49 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-SELECT
-    f2a_secret
-FROM
-    users
-WHERE
-    id = :user_id
-LIMIT
-    1;
+ALTER TABLE users DROP COLUMN f2a_secret;
+ALTER TABLE users DROP COLUMN f2a_enabled;
+ALTER TABLE users DROP COLUMN f2a_email_enabled;

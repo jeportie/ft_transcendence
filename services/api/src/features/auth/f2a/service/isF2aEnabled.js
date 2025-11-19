@@ -6,30 +6,31 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/03 22:02:29 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/04 10:10:17 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/19 12:29:38 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 import { AuthErrors } from "../../errors.js";
 
 export async function checkF2a(fastify, request, reply) {
-    const checkF2aSql = fastify.sql.f2a.checkF2a;
-    const checkF2aByMailSql = fastify.sql.f2a.checkF2aByMail;
     const user = request.body?.user;
-
     if (!user)
         throw AuthErrors.MissingCredentials();
+
     const db = await fastify.getDb();
 
-    let row = await db.get(checkF2aSql, {
-        ":username": user,
-    })
-    if (!row) {
-        row = await db.get(checkF2aByMailSql, {
-            ":email": user,
-        })
-    }
+    const getUser = fastify.sql.local.findUserByUsernameOrEmail;
+    const row = await db.get(getUser, { ":username": user, ":email": user });
+
     if (!row)
         throw AuthErrors.UserNotFound(user);
-    return { f2a_enabled: row.f2a_enabled };
+
+    const mfa = await db.all(
+        fastify.sql.f2a.findMfaMethods,
+        { ":user_id": row.id }
+    );
+
+    const enabled = mfa.some(method => method.enabled === 1);
+
+    return { f2a_enabled: enabled };
 }

@@ -19,9 +19,15 @@ export interface User {
     id: number;
     username: string;
     email: string;
-    f2a_enabled: boolean;
-    f2a_email_enabled: boolean;
+    role?: string;
+    created_at?: string;
     oauth: boolean;
+    mfa: {
+        totp: boolean;
+        email: boolean;
+        sms: boolean;
+        backup: boolean;
+    };
     [key: string]: any;
 }
 

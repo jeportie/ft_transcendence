@@ -1,19 +1,18 @@
 // AUTO-GENERATED — DO NOT EDIT
 export const sql = {
   "f2a": {
-    "checkF2a": "SELECT f2a_enabled FROM users WHERE username = :username;",
-    "checkF2aByMail": "SELECT f2a_enabled FROM users WHERE email = :email",
     "deleteBackupCode": "DELETE FROM backup_codes WHERE user_id = :user_id;",
     "deleteEmailToken": "DELETE FROM email_tokens WHERE user_id = :user_id;",
-    "disableF2a": "UPDATE users SET f2a_secret = NULL, f2a_enabled = 0 WHERE id = :user_id;",
-    "enableF2a": "UPDATE users SET f2a_enabled = 1 WHERE id = :user_id;",
+    "disableMfaMethod": "UPDATE mfa_methods SET enabled = 0, updated_at = datetime('now') WHERE user_id = :user_id AND type = :type",
     "findEmailToken": "SELECT id, user_id, token_hash, created_at, expires_at FROM email_tokens WHERE user_id = :user_id LIMIT 1",
+    "findMfaMethodByType": "SELECT * FROM mfa_methods WHERE user_id = :user_id AND type = :type",
+    "findMfaMethods": "SELECT id, user_id, type, secret, enabled, is_primary, created_at, updated_at, last_used_at FROM mfa_methods WHERE user_id = :user_id",
     "findUserById": "SELECT id, username, email, password_hash, role FROM users WHERE id = :id LIMIT 1;",
     "getBackupCodes": "SELECT id, code_hash, used_at FROM backup_codes WHERE user_id = :user_id",
-    "getF2aSecret": "SELECT f2a_secret FROM users WHERE id = :user_id LIMIT 1;",
     "insertBackupCodes": "INSERT INTO backup_codes (user_id, code_hash) VALUES (:user_id, :code_hash);",
     "insertEmailToken": "INSERT INTO email_tokens (user_id, token_hash, expires_at) VALUES (:user_id, :token_hash, :expires_at);",
-    "storeF2aSecret": "UPDATE users SET f2a_secret = :secret, f2a_enabled = 0 WHERE id = :user_id;",
+    "insertMfaMethod": "INSERT INTO mfa_methods (user_id, type, secret, enabled, is_primary) VALUES (:user_id, :type, :secret, :enabled, :is_primary)",
+    "updateMfaMethod": "UPDATE mfa_methods SET enabled = :enabled, secret = :secret, updated_at = datetime('now') WHERE id = :id",
     "useBackupCode": "UPDATE backup_codes SET used_at = datetime('now') WHERE user_id = :user_id AND id = :id AND used_at IS NULL;"
   },
   "local": {
@@ -27,7 +26,7 @@ export const sql = {
     "findPwdResetToken": "SELECT * FROM password_reset_tokens WHERE token_hash = :token;",
     "findRefreshTokenWithUserByHash": "SELECT rt.id, rt.user_id, rt.token_hash, rt.user_agent, rt.ip, rt.expires_at, rt.revoked_at, rt.last_used_at, u.username, u.role FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = :token_hash;",
     "findUserByEmail": "SELECT id, username, email, password_hash, role FROM users WHERE email = :email LIMIT 1;",
-    "findUserByUsernameOrEmail": "SELECT id, username, email, password_hash, role, f2a_enabled, is_active FROM users WHERE username = :username OR email = :email LIMIT 1;",
+    "findUserByUsernameOrEmail": "SELECT id, username, email, password_hash, role, is_active FROM users WHERE username = :username OR email = :email LIMIT 1;",
     "insertActivationToken": "INSERT INTO activation_tokens (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at);",
     "insertRefreshToken": "INSERT INTO refresh_tokens ( user_id, token_hash, user_agent, ip, device_fingerprint, expires_at, last_used_at ) VALUES ( :user_id, :token_hash, :user_agent, :ip, :device_fingerprint, :expires_at, datetime('now') );",
     "insertResetPasswordToken": "INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (:user_id, :token_hash, :expires_at);",

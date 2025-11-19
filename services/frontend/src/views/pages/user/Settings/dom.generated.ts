@@ -68,11 +68,7 @@ export class SettingsDOM {
 
   fragActivateMail2FA!: DocumentFragment;
   activateMailF2aStatusTagSpan!: HTMLSpanElement;
-  activateMail2faStepEmailDiv!: HTMLInputElement;
-  activateMail2faForm!: HTMLFormElement;
-  activateMail2faInput!: HTMLInputElement;
-  activateMail2faSendBtn!: HTMLButtonElement;
-  activateMail2faStepOtpDiv!: HTMLDivElement;
+  activateMailF2aText!: HTMLElement;
   activateMail2faOtpForm!: HTMLFormElement;
   activateMail2faOtpInput!: HTMLInputElement;
   activateMail2faOtpSubmitBtn!: HTMLButtonElement;
@@ -130,8 +126,9 @@ export class SettingsDOM {
   sessionAction!: HTMLElement;
 
   fragMethode2FA!: DocumentFragment;
-  methodeF2aStatusTagSpan!: HTMLSpanElement;
   methode2faForm!: HTMLFormElement;
+  methodeF2aStatusTagAppSpan!: HTMLSpanElement;
+  methodeF2aStatusTagMailSpan!: HTMLSpanElement;
   methode2faFormBtn!: HTMLButtonElement;
 
   createActivate2FAFrag() {
@@ -184,29 +181,9 @@ export class SettingsDOM {
       this.activateMailF2aStatusTagSpan = el;
     }
     {
-      const el = frag.querySelector<HTMLInputElement>("#activate-mail-2fa-step-email-div");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-step-email-div in template ActivateMail2FA");
-      this.activateMail2faStepEmailDiv = el;
-    }
-    {
-      const el = frag.querySelector<HTMLFormElement>("#activate-mail-2fa-form");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-form in template ActivateMail2FA");
-      this.activateMail2faForm = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#activate-mail-2fa-input");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-input in template ActivateMail2FA");
-      this.activateMail2faInput = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#activate-mail-2fa-send-btn");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-send-btn in template ActivateMail2FA");
-      this.activateMail2faSendBtn = el;
-    }
-    {
-      const el = frag.querySelector<HTMLDivElement>("#activate-mail-2fa-step-otp-div");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-step-otp-div in template ActivateMail2FA");
-      this.activateMail2faStepOtpDiv = el;
+      const el = frag.querySelector<HTMLElement>("#activate-mail-f2a-text");
+      if (!el) throw new Error("Missing element #activate-mail-f2a-text in template ActivateMail2FA");
+      this.activateMailF2aText = el;
     }
     {
       const el = frag.querySelector<HTMLFormElement>("#activate-mail-2fa-otp-form");
@@ -462,14 +439,19 @@ export class SettingsDOM {
     this.fragMethode2FA = cloneTemplate(methode2FAHTML);
     const frag = this.fragMethode2FA!;
     {
-      const el = frag.querySelector<HTMLSpanElement>("#methode-f2a-status-tag-span");
-      if (!el) throw new Error("Missing element #methode-f2a-status-tag-span in template methode2FA");
-      this.methodeF2aStatusTagSpan = el;
-    }
-    {
       const el = frag.querySelector<HTMLFormElement>("#methode-2fa-form");
       if (!el) throw new Error("Missing element #methode-2fa-form in template methode2FA");
       this.methode2faForm = el;
+    }
+    {
+      const el = frag.querySelector<HTMLSpanElement>("#methode-f2a-status-tag-app-span");
+      if (!el) throw new Error("Missing element #methode-f2a-status-tag-app-span in template methode2FA");
+      this.methodeF2aStatusTagAppSpan = el;
+    }
+    {
+      const el = frag.querySelector<HTMLSpanElement>("#methode-f2a-status-tag-mail-span");
+      if (!el) throw new Error("Missing element #methode-f2a-status-tag-mail-span in template methode2FA");
+      this.methodeF2aStatusTagMailSpan = el;
     }
     {
       const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-form-btn");

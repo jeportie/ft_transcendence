@@ -1,18 +1,19 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   checkF2aByMail.sql                                 :+:      :+:    :+:   --
+--   findMfaMethodByType.sql                            :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/26 15:24:36 by jeportie          #+#    #+#             --
---   Updated: 2025/10/04 10:07:01 by jeportie         ###   ########.fr       --
+--   Created: 2025/11/19 12:12:44 by jeportie          #+#    #+#             --
+--   Updated: 2025/11/19 12:12:58 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
 SELECT
-    f2a_enabled
+    *
 FROM
-    users
+    mfa_methods
 WHERE
-    email = :email
+    user_id = :user_id
+AND type = :type

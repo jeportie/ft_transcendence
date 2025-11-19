@@ -12,7 +12,6 @@
 
 <template>
     <h1 class="app-card-title mb-2">Two-Factor Authentication</h1>
-    <span id="methode-f2a-status-tag-span" class="app-status-tag-disabled mb-4"></span>
 
     <p class="app-text mb-6">
         Choose an authentication method. You can switch later.
@@ -37,6 +36,7 @@
                                      bg-blue-500/20 text-blue-300 border border-blue-400/30">
                             Recommended
                         </span>
+                        <span id="methode-f2a-status-tag-app-span" class="app-status-tag-disabled mb-4"></span>
                     </h3>
                     <p class="app-item-desc mt-1">
                         Use apps like Google Authenticator, Authy, Microsoft Authenticator, etc.
@@ -52,7 +52,9 @@
                     class="mt-1 h-4 w-4 text-blue-400 border-white/20 bg-transparent" />
 
                 <div class="flex flex-col">
-                    <h3 class="font-semibold text-white/95">Email</h3>
+                    <h3 class="font-semibold text-white/95">Email
+                        <span id="methode-f2a-status-tag-mail-span" class="app-status-tag-disabled mb-4"></span>
+                    </h3>
                     <p class="app-item-desc mt-1">
                         Receive a 6-digit verification code via email.
                     </p>

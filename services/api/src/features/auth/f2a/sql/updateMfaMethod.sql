@@ -1,18 +1,19 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   checkF2a.sql                                       :+:      :+:    :+:   --
+--   updateMfaMethod.sql                                :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/26 15:24:36 by jeportie          #+#    #+#             --
---   Updated: 2025/10/04 10:07:13 by jeportie         ###   ########.fr       --
+--   Created: 2025/11/19 12:14:18 by jeportie          #+#    #+#             --
+--   Updated: 2025/11/19 12:14:44 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-SELECT
-    f2a_enabled
-FROM
-    users
+UPDATE mfa_methods
+SET
+    enabled = :enabled,
+    secret = :secret,
+    updated_at = datetime('now')
 WHERE
-    username = :username;
+    id = :id

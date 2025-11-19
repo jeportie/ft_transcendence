@@ -1,27 +1,18 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   findUserByUsernameOrEmail.sql                      :+:      :+:    :+:   --
+--   disableMfaMethod.sql                               :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/09/26 15:52:28 by jeportie          #+#    #+#             --
---   Updated: 2025/09/26 16:03:55 by jeportie         ###   ########.fr       --
+--   Created: 2025/11/19 12:15:39 by jeportie          #+#    #+#             --
+--   Updated: 2025/11/19 12:16:05 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-SELECT
-    id,
-    username,
-    email,
-    password_hash,
-    role,
-    is_active
-FROM
-    users
+UPDATE
+    mfa_methods
+SET
+    enabled = 0, updated_at = datetime('now')
 WHERE
-    username = :username
-OR
-    email = :email 
-LIMIT
-    1;
+    user_id = :user_id AND type = :type
