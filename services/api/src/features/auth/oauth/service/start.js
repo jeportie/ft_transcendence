@@ -36,6 +36,7 @@ export async function startOAuth(fastify, providerName, next, reply) {
         sameSite: "lax",
         maxAge: 10 * 60, // 10 minutes
         secure: !!fastify.config.COOKIE_SECURE,
+        signed: true,
     });
 
     // Providers are free to ignore codeChallenge if they don't need it

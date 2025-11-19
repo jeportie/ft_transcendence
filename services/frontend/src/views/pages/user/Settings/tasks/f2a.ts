@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/30 14:28:44 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/18 18:47:17 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/19 19:27:56 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -18,7 +18,8 @@ import * as STYLES from "@components/themes/index.js";
 import { logger } from "@system/core/logger.js";
 
 let off: Array<() => void> = [];
-const styles = STYLES.liquidGlass;
+const glass = STYLES.liquidGlass;
+const panel = STYLES.liquidPanel;
 
 // API routes
 const enable = API.routes.auth.f2a.enable;
@@ -49,44 +50,54 @@ export async function setupF2a({ ASSETS }) {
 
     async function openF2aMethode() {
         DOM.createMethode2FAFrag();
-        const form = DOM.methode2faForm;
-        const appStatus = DOM.methodeF2aStatusTagAppSpan;
-        const mailStatus = DOM.methodeF2aStatusTagMailSpan;
+        const frag = DOM.fragMethode2FA;
+        const totpStatus = DOM.methode2faTotpStatusSpan;
+        const totpBtn = DOM.methode2faTotpActionBtn;
+        const emailStatus = DOM.methode2faEmailStatusSpan;
+        const emailBtn = DOM.methode2faEmailActionBtn;
+        const smsStatus = DOM.methode2faSmsStatusSpan;
+        const backupStatus = DOM.methode2faBackupStatusSpan;
+        const backupBtn = DOM.methode2faBackupActionBtn;
 
-        const modal = new Modal({ styles });
-        modal.render(DOM.fragMethode2FA);
+        const modal = new Modal({ styles: panel });
+        modal.render(frag);
 
         await UserState.refresh();
-        user = await UserState.get();
+        const user = await UserState.get();
 
-        if (user?.f2a_enabled) {
-            setStatus(appStatus, true);
-        } else {
-            setStatus(appStatus, false);
-        }
+        const isTotp = user?.mfa?.totp === true;
+        setStatus(totpStatus, isTotp);
+        totpBtn.textContent = isTotp ? "Disable" : "Enable";
 
-        if (user?.f2a_email_enabled) {
-            setStatus(mailStatus, true);
-        } else {
-            setStatus(mailStatus, false);
-        }
+        const isEmail = user?.mfa?.email === true;
+        setStatus(emailStatus, isEmail);
+        emailBtn.textContent = isEmail ? "Disable" : "Enable";
 
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
+        // ====== SMS (always disabled for now) ======
+        setStatus(smsStatus, false);
 
-            const data = new FormData(form);
-            const method = data.get("auth-method");
+        // ====== BACKUP STATUS ======
+        const hasBackup =
+            Array.isArray(user?.mfa?.backup) &&
+            user.mfa.backup.length > 0;
 
-            if (method === "app") {
-                if (user?.f2a_enabled)
-                    openOtpForm();
-                else
-                    activate2FA();
-            }
-            if (method === "mail")
-                activateMail2FA();
+        setStatus(backupStatus, hasBackup);
+        backupBtn.textContent = hasBackup ? "View" : "Generate";
+
+        totpBtn.addEventListener("click", async () => {
+            activate2FA();
             modal.remove();
-        })
+        });
+
+        emailBtn.addEventListener("click", async () => {
+            activateMail2FA();
+            modal.remove();
+        });
+
+        backupBtn.addEventListener("click", async () => {
+            diplayBackupCodes();
+            modal.remove();
+        });
     }
 
     async function activateMail2FA() {
@@ -99,7 +110,7 @@ export async function setupF2a({ ASSETS }) {
 
         const email = user?.email;
 
-        const modal = new Modal({ styles });
+        const modal = new Modal({ styles: glass });
         modal.render(DOM.fragActivateMail2FA);
         setStatus(status, false);
         text.innerText = `Enter the 6-digit code we sent to ${email}.`
@@ -146,7 +157,7 @@ export async function setupF2a({ ASSETS }) {
         const qrImg = DOM.activateF2aQrImg;
         const otpInput = DOM.activateF2aOtpInput;
 
-        const modal = new Modal({ styles });
+        const modal = new Modal({ styles: glass });
         modal.render(DOM.fragActivate2FA);
         setStatus(statusTag, false);
 
@@ -193,7 +204,7 @@ export async function setupF2a({ ASSETS }) {
         DOM.createDisplayBackupCodesFrag();
         const backupTbody = DOM.displayBackupTableTbody;
 
-        const modal = new Modal({ styles });
+        const modal = new Modal({ styles: glass });
         modal.render(DOM.fragDisplayBackupCodes);
         setStatus(DOM.displayBackupStatusTagSpan, true);
 
@@ -236,7 +247,7 @@ export async function setupF2a({ ASSETS }) {
 
     function openOtpForm() {
         DOM.createCheck2FAFrag();
-        const modal = new Modal({ styles });
+        const modal = new Modal({ styles: glass });
         modal.render(DOM.fragCheck2FA);
         DOM.check2faTitle.innerText = "Enter your current authenticator code to disable two-factor authentication."
 
@@ -261,7 +272,7 @@ export async function setupF2a({ ASSETS }) {
 
     function openBackupForm() {
         DOM.createCheckBackupFrag();
-        const modal = new Modal({ styles });
+        const modal = new Modal({ styles: glass });
         modal.render(DOM.fragCheckBackup);
         DOM.checkBackupTitle.innerText = "Enter your current backup code to disable two-factor authentication."
 
@@ -286,7 +297,7 @@ export async function setupF2a({ ASSETS }) {
 
     function openOtpMailForm() {
         DOM.createCheck2FAMailFrag();
-        const modal = new Modal({ styles });
+        const modal = new Modal({ styles: glass });
         modal.render(DOM.fragCheck2FAMail);
         DOM.check2faMailTitle.innerText = "Enter your current email code to disable two-factor authentication."
 
@@ -305,19 +316,6 @@ export async function setupF2a({ ASSETS }) {
             activate2FA();
         });
     }
-
-    // const onClick = async () => {
-    //     const user = await UserState.get(true);
-    //     if (!user)
-    //         return alert("Failed to fetch user info.");
-    //     if (user.f2a_enabled) {
-    //         openOtpForm();
-    //     } else if (user.f2a_email_enabled) {
-    //         openOtpMailForm();
-    //     } else {
-    //         openF2aMethode();
-    //     }
-    // };
 
     btn.addEventListener("click", openF2aMethode);
     off.push(() => btn.removeEventListener("click", openF2aMethode));

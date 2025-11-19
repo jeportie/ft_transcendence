@@ -6,64 +6,98 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/11/18 14:20:59 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/11/18 16:19:53 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/11/19 19:22:02 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
 <template>
-    <h1 class="app-card-title mb-2">Two-Factor Authentication</h1>
+    <h1 class="app-card-title mb-4">Two-Factor Authentication</h1>
 
-    <p class="app-text mb-6">
-        Choose an authentication method. You can switch later.
-    </p>
+    <div class="flex flex-col gap-8 mt-4">
+        <div class="rounded-lg p-6 bg-white/5 border border-white/10 backdrop-blur-md">
 
-    <form id="methode-2fa-form" class="flex flex-col gap-6 w-full">
-
-        <fieldset class="flex flex-col gap-4 w-full">
-            <legend class="sr-only">Authentication method</legend>
-
-            <!-- APP OPTION -->
-            <label class="flex items-start gap-4 p-4 rounded-lg cursor-pointer
-                       bg-white/5 border border-white/10 hover:bg-white/10
-                       transition-all duration-150">
-                <input type="radio" name="auth-method" value="app" checked
-                    class="mt-1 h-4 w-4 text-blue-400 border-white/20 bg-transparent" />
-
-                <div class="flex flex-col">
-                    <h3 class="font-semibold text-white/95 flex items-center gap-2">
-                        Authentication App
-                        <span class="text-[10px] uppercase px-2 py-0.5 rounded-full
-                                     bg-blue-500/20 text-blue-300 border border-blue-400/30">
-                            Recommended
-                        </span>
-                        <span id="methode-f2a-status-tag-app-span" class="app-status-tag-disabled mb-4"></span>
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="app-item-title flex items-center gap-2">
+                        Authenticator App (TOTP)
+                        <span
+                            class="text-[10px] uppercase px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                            Recommended </span>
+                        <span id="methode-2fa-totp-status-span" class="app-status-tag-disabled"></span>
                     </h3>
+
                     <p class="app-item-desc mt-1">
-                        Use apps like Google Authenticator, Authy, Microsoft Authenticator, etc.
+                        Use apps like Google Authenticator, Authy, or 1Password.
                     </p>
                 </div>
-            </label>
 
-            <!-- MAIL OPTION -->
-            <label class="flex items-start gap-4 p-4 rounded-lg cursor-pointer
-                       bg-white/5 border border-white/10 hover:bg-white/10
-                       transition-all duration-150">
-                <input type="radio" name="auth-method" value="mail"
-                    class="mt-1 h-4 w-4 text-blue-400 border-white/20 bg-transparent" />
+                <button id="methode-2fa-totp-action-btn" class="app-btn-primary min-w-[6rem]">
+                    <!-- will be: Enable / Disable -->
+                </button>
+            </div>
 
-                <div class="flex flex-col">
-                    <h3 class="font-semibold text-white/95">Email
-                        <span id="methode-f2a-status-tag-mail-span" class="app-status-tag-disabled mb-4"></span>
+        </div>
+
+        <div class="rounded-lg p-6 bg-white/5 border border-white/10 backdrop-blur-md">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="app-item-title flex items-center gap-2">
+                        Email Verification
+                        <span id="methode-2fa-email-status-span" class="app-status-tag-disabled"></span>
                     </h3>
+
                     <p class="app-item-desc mt-1">
                         Receive a 6-digit verification code via email.
                     </p>
                 </div>
-            </label>
-        </fieldset>
 
-        <button id="methode-2fa-form-btn" type="submit" class="app-btn-primary w-full mt-2">
-            Continue
-        </button>
-    </form>
+                <button id="methode-2fa-email-action-btn" class="app-btn-primary min-w-[6rem]">
+                    <!-- will be: Enable / Disable -->
+                </button>
+            </div>
+
+        </div>
+
+        <div class="rounded-lg p-5 bg-white/5 border border-white/10 backdrop-blur-md">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="app-item-title flex items-center gap-2">
+                        SMS Codes
+                        <span id="methode-2fa-sms-status-span" class="app-status-tag-disabled"></span>
+                    </h3>
+
+                    <p class="app-item-desc mt-1">
+                        SMS verification will be available soon.
+                    </p>
+                </div>
+
+                <button class="app-btn-primary min-w-[6rem]" disabled>
+                    Coming Soon
+                </button>
+            </div>
+
+        </div>
+
+
+        <div class="rounded-lg p-6 bg-white/5 border border-white/10 backdrop-blur-md">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="app-item-title flex items-center gap-2">
+                        Backup Codes
+                        <span id="methode-2fa-backup-status-span" class="app-status-tag-disabled"></span>
+                    </h3>
+
+                    <p class="app-item-desc mt-1">
+                        Use backup codes when you lose access to your device.
+                    </p>
+                </div>
+
+                <button id="methode-2fa-backup-action-btn" class="app-btn-primary min-w-[6rem]">
+                    <!-- will be: View / Generate / Regenerate -->
+                </button>
+            </div>
+
+        </div>
+
+    </div>
 </template>

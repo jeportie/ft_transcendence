@@ -126,10 +126,13 @@ export class SettingsDOM {
   sessionAction!: HTMLElement;
 
   fragMethode2FA!: DocumentFragment;
-  methode2faForm!: HTMLFormElement;
-  methodeF2aStatusTagAppSpan!: HTMLSpanElement;
-  methodeF2aStatusTagMailSpan!: HTMLSpanElement;
-  methode2faFormBtn!: HTMLButtonElement;
+  methode2faTotpStatusSpan!: HTMLSpanElement;
+  methode2faTotpActionBtn!: HTMLButtonElement;
+  methode2faEmailStatusSpan!: HTMLInputElement;
+  methode2faEmailActionBtn!: HTMLButtonElement;
+  methode2faSmsStatusSpan!: HTMLSpanElement;
+  methode2faBackupStatusSpan!: HTMLSpanElement;
+  methode2faBackupActionBtn!: HTMLButtonElement;
 
   createActivate2FAFrag() {
     this.fragActivate2FA = cloneTemplate(Activate2FAHTML);
@@ -439,24 +442,39 @@ export class SettingsDOM {
     this.fragMethode2FA = cloneTemplate(methode2FAHTML);
     const frag = this.fragMethode2FA!;
     {
-      const el = frag.querySelector<HTMLFormElement>("#methode-2fa-form");
-      if (!el) throw new Error("Missing element #methode-2fa-form in template methode2FA");
-      this.methode2faForm = el;
+      const el = frag.querySelector<HTMLSpanElement>("#methode-2fa-totp-status-span");
+      if (!el) throw new Error("Missing element #methode-2fa-totp-status-span in template methode2FA");
+      this.methode2faTotpStatusSpan = el;
     }
     {
-      const el = frag.querySelector<HTMLSpanElement>("#methode-f2a-status-tag-app-span");
-      if (!el) throw new Error("Missing element #methode-f2a-status-tag-app-span in template methode2FA");
-      this.methodeF2aStatusTagAppSpan = el;
+      const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-totp-action-btn");
+      if (!el) throw new Error("Missing element #methode-2fa-totp-action-btn in template methode2FA");
+      this.methode2faTotpActionBtn = el;
     }
     {
-      const el = frag.querySelector<HTMLSpanElement>("#methode-f2a-status-tag-mail-span");
-      if (!el) throw new Error("Missing element #methode-f2a-status-tag-mail-span in template methode2FA");
-      this.methodeF2aStatusTagMailSpan = el;
+      const el = frag.querySelector<HTMLInputElement>("#methode-2fa-email-status-span");
+      if (!el) throw new Error("Missing element #methode-2fa-email-status-span in template methode2FA");
+      this.methode2faEmailStatusSpan = el;
     }
     {
-      const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-form-btn");
-      if (!el) throw new Error("Missing element #methode-2fa-form-btn in template methode2FA");
-      this.methode2faFormBtn = el;
+      const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-email-action-btn");
+      if (!el) throw new Error("Missing element #methode-2fa-email-action-btn in template methode2FA");
+      this.methode2faEmailActionBtn = el;
+    }
+    {
+      const el = frag.querySelector<HTMLSpanElement>("#methode-2fa-sms-status-span");
+      if (!el) throw new Error("Missing element #methode-2fa-sms-status-span in template methode2FA");
+      this.methode2faSmsStatusSpan = el;
+    }
+    {
+      const el = frag.querySelector<HTMLSpanElement>("#methode-2fa-backup-status-span");
+      if (!el) throw new Error("Missing element #methode-2fa-backup-status-span in template methode2FA");
+      this.methode2faBackupStatusSpan = el;
+    }
+    {
+      const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-backup-action-btn");
+      if (!el) throw new Error("Missing element #methode-2fa-backup-action-btn in template methode2FA");
+      this.methode2faBackupActionBtn = el;
     }
     return this;
   }
