@@ -10,7 +10,7 @@
 //                                                                            //
 // ************************************************************************** //
 
-import { showLoading, hideLoading } from "@views/loading";
+import { showLoading, hideLoading } from "./LoadingOverlay.js";
 import { logger } from "@system/core/logger";
 import { isDev } from "@system";
 import { auth } from "@auth";
