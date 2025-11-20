@@ -99,6 +99,10 @@ restore-grafana:
 		busybox tar xvf /backup/grafana.tar -C /
 	@echo "✅ Grafana restored from $(BACKUP_DIR)/grafana.tar"
 
+reset-db:
+	rm -rf $(HOME)/data/sqlite
+	mkdir -p $(HOME)/data/sqlite
+
 backup-db:
 	mkdir -p $(BACKUP_DIR)
 	docker run --rm \
