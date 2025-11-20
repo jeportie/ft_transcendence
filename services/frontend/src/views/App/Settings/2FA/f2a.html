@@ -1,21 +1,25 @@
 <!-- *********************************************************************** -->
 <!--                                                                         -->
 <!--                                                      :::      ::::::::  -->
-<!-- methode2FA.html                                    :+:      :+:    :+:  -->
+<!-- f2a.html                                           :+:      :+:    :+:  -->
 <!--                                                  +:+ +:+         +:+    -->
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
-<!-- Created: 2025/11/18 14:20:59 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/11/19 19:22:02 by jeportie         ###   ########.fr      -->
+<!-- Created: 2025/11/20 11:39:14 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/20 11:42:16 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
-<template>
-    <h1 class="app-card-title mb-4">Two-Factor Authentication</h1>
+<section id="settings-section" class="app-view-zone app-card">
+    <header class="mb-8">
+        <h1 class="app-title">Two-Factor Authentication</h1>
+        <p class="app-text mt-1">
+            Manage two-factor authentication.
+        </p>
+    </header>
 
     <div class="flex flex-col gap-8 mt-4">
         <div class="rounded-lg p-6 bg-white/5 border border-white/10 backdrop-blur-md">
-
             <div class="flex justify-between items-center">
                 <div>
                     <h3 class="app-item-title flex items-center gap-2">
@@ -25,19 +29,15 @@
                             Recommended </span>
                         <span id="methode-2fa-totp-status-span" class="app-status-tag-disabled"></span>
                     </h3>
-
                     <p class="app-item-desc mt-1">
                         Use apps like Google Authenticator, Authy, or 1Password.
                     </p>
                 </div>
-
                 <button id="methode-2fa-totp-action-btn" class="app-btn-primary min-w-[6rem]">
                     <!-- will be: Enable / Disable -->
                 </button>
             </div>
-
         </div>
-
         <div class="rounded-lg p-6 bg-white/5 border border-white/10 backdrop-blur-md">
             <div class="flex justify-between items-center">
                 <div>
@@ -45,19 +45,14 @@
                         Email Verification
                         <span id="methode-2fa-email-status-span" class="app-status-tag-disabled"></span>
                     </h3>
-
                     <p class="app-item-desc mt-1">
                         Receive a 6-digit verification code via email.
                     </p>
                 </div>
-
                 <button id="methode-2fa-email-action-btn" class="app-btn-primary min-w-[6rem]">
-                    <!-- will be: Enable / Disable -->
                 </button>
             </div>
-
         </div>
-
         <div class="rounded-lg p-5 bg-white/5 border border-white/10 backdrop-blur-md">
             <div class="flex justify-between items-center">
                 <div>
@@ -65,20 +60,15 @@
                         SMS Codes
                         <span id="methode-2fa-sms-status-span" class="app-status-tag-disabled"></span>
                     </h3>
-
                     <p class="app-item-desc mt-1">
                         SMS verification will be available soon.
                     </p>
                 </div>
-
                 <button class="app-btn-primary min-w-[6rem]" disabled>
                     Coming Soon
                 </button>
             </div>
-
         </div>
-
-
         <div class="rounded-lg p-6 bg-white/5 border border-white/10 backdrop-blur-md">
             <div class="flex justify-between items-center">
                 <div>
@@ -91,13 +81,10 @@
                         Use backup codes when you lose access to your device.
                     </p>
                 </div>
-
                 <button id="methode-2fa-backup-action-btn" class="app-btn-primary min-w-[6rem]">
                     <!-- will be: View / Generate / Regenerate -->
                 </button>
             </div>
-
         </div>
-
     </div>
-</template>
+</section>

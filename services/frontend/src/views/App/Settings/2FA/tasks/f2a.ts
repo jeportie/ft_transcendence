@@ -64,6 +64,7 @@ export async function setupF2a({ ASSETS }) {
 
         await UserState.refresh();
         const user = await UserState.get();
+        console.log(user?.mfa);
 
         const isTotp = user?.mfa?.totp === true;
         setStatus(totpStatus, isTotp);
@@ -85,8 +86,13 @@ export async function setupF2a({ ASSETS }) {
         backupBtn.textContent = hasBackup ? "View" : "Generate";
 
         totpBtn.addEventListener("click", async () => {
-            activate2FA();
-            modal.remove();
+            if (user?.mfa.totp) {
+                modal.remove();
+                openOtpForm();
+            } else {
+                modal.remove();
+                activate2FA();
+            }
         });
 
         emailBtn.addEventListener("click", async () => {
