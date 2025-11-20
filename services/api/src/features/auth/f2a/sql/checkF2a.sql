@@ -1,14 +1,18 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   insertEmailToken.sql                               :+:      :+:    :+:   --
+--   checkF2a.sql                                       :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/11/18 12:14:23 by jeportie          #+#    #+#             --
---   Updated: 2025/11/18 12:14:28 by jeportie         ###   ########.fr       --
+--   Created: 2025/09/26 15:24:36 by jeportie          #+#    #+#             --
+--   Updated: 2025/10/04 10:07:13 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
-INSERT INTO email_tokens (user_id, token_hash, expires_at)
-VALUES (:user_id, :token_hash, :expires_at);
+SELECT
+    f2a_enabled
+FROM
+    users
+WHERE
+    username = :username;

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/05 16:51:02 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/18 12:23:34 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/17 13:24:30 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -50,7 +50,7 @@ export async function sendActivationEmail(to, link) {
 /**
  * Send a reset password email using Resend
  * @param {string} to - recipient email
- * @param {string} link - reset link
+ * @param {string} link - activation link
  */
 export async function sendResetPwdEmail(to, link) {
     try {
@@ -75,38 +75,6 @@ export async function sendResetPwdEmail(to, link) {
         return data;
     } catch (err) {
         console.error("[Mailer] ❌ Failed to send password reset email:", err);
-        throw err;
-    }
-}
-
-/**
- * Send a 2FA code email using Resend
- * @param {string} to - recipient email
- * @param {string} link - activation link
- */
-export async function send2FAEmail(to, code) {
-    try {
-        const { data, error } = await resend.emails.send({
-            from: 'jeportie <onboarding@resend.dev>',
-            to,
-            subject: "No-Reply - 2FA code",
-            html: `
-                <h2>Important !</h2>
-                <p>Your Authentication code is:</p>
-                <p>${code}</p>
-                <p>This code will expire in 10 minutes.</p>
-            `,
-        });
-
-        if (error) {
-            console.error("[Mailer] ❌ Resend API error:", error);
-            throw error;
-        }
-
-        console.log(`[Mailer] ✅ 2FA code email sent to ${to}`);
-        return data;
-    } catch (err) {
-        console.error("[Mailer] ❌ Failed to send 2FA code email:", err);
         throw err;
     }
 }

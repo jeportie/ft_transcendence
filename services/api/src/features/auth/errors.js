@@ -71,8 +71,6 @@ export const F2AErrors = {
             "[Auth 2FA] QR code generation failed"),
     Invalid2FACode: () =>
         new AppError("INVALID_2FA_CODE", "Invalid 2FA code", 401),
-    Expired2FACode: () =>
-        new AppError("EXPIRED_2FA_CODE", "Expired 2FA code", 401),
     BackupGenerateFailed: () =>
         new AppError("BACKUP_GENERATE_FAILED", "Failed to generate backup codes", 500,
             "[Auth 2FA] Backup codes generation failed"),

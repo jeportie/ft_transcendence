@@ -18,6 +18,8 @@ SELECT
     users.role,
     users.created_at,
     users.updated_at,
+    users.f2a_secret,
+    users.f2a_enabled,
     users.is_active
 FROM
     user_oauth_providers

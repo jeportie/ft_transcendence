@@ -16,28 +16,24 @@ import PersistentAnimationHook from "@styles/transitions/hooks/PersistentAnimati
 import { guards } from "@system/config/routes/guards.js";
 
 // Landing layout
-const LandingLayout = () => import("./Landing/_Layout/LandingLayout.js");
-const Landing = () => import("./Landing/Landing/Landing.js");
-const ServiceTerms = () => import("./Landing/Terms/ServiceTerms.js");
-const PrivacyPolity = () => import("./Landing/Policy/PrivacyPolicy.js");
-const Login = () => import("./Landing/Login/Login.js");
-const Signup = () => import("./Landing/Signup/Signup.js");
-const Forgot = () => import("./Landing/ForgotPwd/ForgotPwd.js");
-const F2aLogin = () => import("./Landing/F2A/F2aLogin.js");
-const BackupLogin = () => import("./Landing/Backup/BackupLogin.js");
-const Activate = () => import("./Landing/Activate/Activate.js");
-const Reset = () => import("./Landing/Reset/ResetPwd.js");
+const LandingLayout = () => import("./layouts/LandingLayout/LandingLayout.js");
+const Landing = () => import("./pages/landing/Landing/Landing.js");
+const ServiceTerms = () => import("./pages/landing/Terms/ServiceTerms.js");
+const PrivacyPolity = () => import("./pages/landing/Policy/PrivacyPolicy.js");
+const Login = () => import("./pages/auth/Login/Login.js");
+const Signup = () => import("./pages/auth/Signup/Signup.js");
+const Forgot = () => import("./pages/auth/ForgotPwd/ForgotPwd.js");
+const F2aLogin = () => import("./pages/auth/F2A/F2aLogin.js");
+const BackupLogin = () => import("./pages/auth/Backup/BackupLogin.js");
+const Activate = () => import("./pages/auth/Activate/Activate.js");
+const Reset = () => import("./pages/auth/Reset/ResetPwd.js");
 
 // App layout
-const AppLayout = () => import("./App/_Layout/AppLayout.js");
-const Dashboard = () => import("./App/Dashboard/Dashboard.js");
-
-const Settings = () => import("./App/Settings/Menu/Settings.js");
-
-const Game = () => import("./App/Match/Pong.js");
-
-// NotFound Layout
-const NotFound = () => import("./NotFound/NotFound.js");
+const AppLayout = () => import("./layouts/AppLayout/AppLayout.js");
+const Dashboard = () => import("./pages/user/Dashboard/Dashboard.js");
+const Settings = () => import("./pages/user/Settings/Settings.js");
+const Game = () => import("./pages/pong/Match/Pong.js");
+const NotFound = () => import("./pages/error/NotFound.js");
 
 const appHook = new PersistentAnimationHook();
 const landingHook = new OverlayAnimationHook();

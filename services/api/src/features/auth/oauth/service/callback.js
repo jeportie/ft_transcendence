@@ -116,13 +116,10 @@ export async function handleOAuthCallback(fastify, providerName, code, state, re
     // --- (6) Redirect depending on 2FA status ---
     if (loginResult.f2a_required) {
         const redirectUrl =
-            `/f2a-login?provider=${providerName}` +
-            `&userId=${loginResult.user_id}` +
+            `/f2a-login?userId=${loginResult.user_id}` +
             `&next=${encodeURIComponent(next)}`;
-
         return reply.redirect(redirectUrl);
     }
-
 
     return { redirect: String(next) };
 }

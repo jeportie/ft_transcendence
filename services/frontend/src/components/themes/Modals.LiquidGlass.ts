@@ -6,13 +6,13 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/04 11:17:57 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/19 19:04:52 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/04 12:05:46 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import type { ModalTheme } from "../abstract/Modal.js";
+import type { ModalStyles } from "../abstract/Modal.js";
 
-export const liquidGlass: ModalTheme = {
+export const liquidGlass: ModalStyles = {
     createOverlay() {
         const el = document.createElement("div");
         el.dataset.modal = "overlay";

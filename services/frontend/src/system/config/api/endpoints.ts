@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/10 17:04:58 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/18 18:18:39 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/10 18:42:54 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -42,8 +42,6 @@ export const API_ROUTES = {
             disable: "/auth/disable",           // POST (auth)
             backup: "/auth/backup",             // POST (auth) generate codes
             check: "/auth/check-2fa",           // POST
-            enableEmail: "/auth/email/enable",  // POST (auth)
-            verifyEmail: "/auth/email/verify",  // POST (auth)
         },
 
         oauth: {

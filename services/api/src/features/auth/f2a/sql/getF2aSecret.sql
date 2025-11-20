@@ -1,23 +1,20 @@
 -- ************************************************************************** --
 --                                                                            --
 --                                                        :::      ::::::::   --
---   findEmailToken.sql                                 :+:      :+:    :+:   --
+--   getF2aSecret.sql                                   :+:      :+:    :+:   --
 --                                                    +:+ +:+         +:+     --
 --   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        --
 --                                                +#+#+#+#+#+   +#+           --
---   Created: 2025/11/18 12:15:26 by jeportie          #+#    #+#             --
---   Updated: 2025/11/18 12:18:32 by jeportie         ###   ########.fr       --
+--   Created: 2025/09/28 00:20:11 by jeportie          #+#    #+#             --
+--   Updated: 2025/09/28 00:21:46 by jeportie         ###   ########.fr       --
 --                                                                            --
 -- ************************************************************************** --
 
 SELECT
-    id,
-    user_id,
-    token_hash,
-    created_at,
-    expires_at
+    f2a_secret
 FROM
-    email_tokens
+    users
 WHERE
-    user_id = :user_id
-LIMIT 1
+    id = :user_id
+LIMIT
+    1;

@@ -16,6 +16,7 @@ SELECT
     email,
     password_hash,
     role,
+    f2a_enabled,
     is_active
 FROM
     users

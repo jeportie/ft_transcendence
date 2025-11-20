@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/10 17:23:24 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/19 12:42:25 by jeportie         ###   ########.fr       //
+//   Updated: 2025/10/02 21:25:26 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -37,16 +37,8 @@ export const meSchema = {
                             format: "date-time",
                             example: "2025-09-05T14:00:00.000Z"
                         },
-                        oauth: { type: "boolean" },
-                        mfa: {
-                            type: "object",
-                            properties: {
-                                totp: { type: "boolean" },
-                                email: { type: "boolean" },
-                                sms: { type: "boolean" },
-                                backup: { type: "boolean" }
-                            }
-                        }
+                        f2a_enabled: { type: "boolean" },
+                        oauth: { type: "boolean" }
                     }
                 }
             }

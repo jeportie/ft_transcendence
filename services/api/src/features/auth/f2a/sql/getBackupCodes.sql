@@ -18,3 +18,5 @@ FROM
     backup_codes
 WHERE
     user_id = :user_id
+-- AND
+    -- used_at IS NULL;

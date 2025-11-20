@@ -3,15 +3,12 @@
 // Created by scripts/generateDomRegistry.mjs
 
 import Activate2FAHTML from "./templates/Activate2FA.html";
-import ActivateMail2FAHTML from "./templates/ActivateMail2FA.html";
 import ChangePwdHTML from "./templates/ChangePwd.html";
 import Check2FAHTML from "./templates/Check2FA.html";
-import Check2FAMailHTML from "./templates/Check2FAMail.html";
 import CheckBackupHTML from "./templates/CheckBackup.html";
 import DeleteAcountHTML from "./templates/DeleteAcount.html";
 import DisplayBackupCodesHTML from "./templates/DisplayBackupCodes.html";
 import SessionRowHTML from "./templates/SessionRow.html";
-import methode2FAHTML from "./templates/methode2FA.html";
 
 function cloneTemplate(html: string): DocumentFragment {
   const tpl = document.createElement("template");
@@ -66,14 +63,6 @@ export class SettingsDOM {
   activateF2aOtpInput!: HTMLInputElement;
   activate2faFormBtn!: HTMLButtonElement;
 
-  fragActivateMail2FA!: DocumentFragment;
-  activateMailF2aStatusTagSpan!: HTMLSpanElement;
-  activateMailF2aText!: HTMLElement;
-  activateMail2faOtpForm!: HTMLFormElement;
-  activateMail2faOtpInput!: HTMLInputElement;
-  activateMail2faOtpSubmitBtn!: HTMLButtonElement;
-  activateMail2faResendBtn!: HTMLButtonElement;
-
   fragChangePwd!: DocumentFragment;
   changePwdDiv!: HTMLInputElement;
   changePwdForm!: HTMLFormElement;
@@ -87,13 +76,6 @@ export class SettingsDOM {
   check2faOtpInput!: HTMLInputElement;
   check2faFormBtn!: HTMLButtonElement;
   check2faGotoBackupBtn!: HTMLButtonElement;
-
-  fragCheck2FAMail!: DocumentFragment;
-  check2faMailTitle!: HTMLElement;
-  check2faMailForm!: HTMLFormElement;
-  check2faMailOtpInput!: HTMLInputElement;
-  check2faMailFormBtn!: HTMLButtonElement;
-  check2faMailGotoBackupBtn!: HTMLButtonElement;
 
   fragCheckBackup!: DocumentFragment;
   checkBackupTitle!: HTMLElement;
@@ -124,15 +106,6 @@ export class SettingsDOM {
   sessionLastActive!: HTMLElement;
   sessionExpiry!: HTMLElement;
   sessionAction!: HTMLElement;
-
-  fragMethode2FA!: DocumentFragment;
-  methode2faTotpStatusSpan!: HTMLSpanElement;
-  methode2faTotpActionBtn!: HTMLButtonElement;
-  methode2faEmailStatusSpan!: HTMLInputElement;
-  methode2faEmailActionBtn!: HTMLButtonElement;
-  methode2faSmsStatusSpan!: HTMLSpanElement;
-  methode2faBackupStatusSpan!: HTMLSpanElement;
-  methode2faBackupActionBtn!: HTMLButtonElement;
 
   createActivate2FAFrag() {
     this.fragActivate2FA = cloneTemplate(Activate2FAHTML);
@@ -171,42 +144,6 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLButtonElement>("#activate-2fa-form-btn");
       if (!el) throw new Error("Missing element #activate-2fa-form-btn in template Activate2FA");
       this.activate2faFormBtn = el;
-    }
-    return this;
-  }
-
-  createActivateMail2FAFrag() {
-    this.fragActivateMail2FA = cloneTemplate(ActivateMail2FAHTML);
-    const frag = this.fragActivateMail2FA!;
-    {
-      const el = frag.querySelector<HTMLSpanElement>("#activate-mail-f2a-status-tag-span");
-      if (!el) throw new Error("Missing element #activate-mail-f2a-status-tag-span in template ActivateMail2FA");
-      this.activateMailF2aStatusTagSpan = el;
-    }
-    {
-      const el = frag.querySelector<HTMLElement>("#activate-mail-f2a-text");
-      if (!el) throw new Error("Missing element #activate-mail-f2a-text in template ActivateMail2FA");
-      this.activateMailF2aText = el;
-    }
-    {
-      const el = frag.querySelector<HTMLFormElement>("#activate-mail-2fa-otp-form");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-otp-form in template ActivateMail2FA");
-      this.activateMail2faOtpForm = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#activate-mail-2fa-otp-input");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-otp-input in template ActivateMail2FA");
-      this.activateMail2faOtpInput = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#activate-mail-2fa-otp-submit-btn");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-otp-submit-btn in template ActivateMail2FA");
-      this.activateMail2faOtpSubmitBtn = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#activate-mail-2fa-resend-btn");
-      if (!el) throw new Error("Missing element #activate-mail-2fa-resend-btn in template ActivateMail2FA");
-      this.activateMail2faResendBtn = el;
     }
     return this;
   }
@@ -269,37 +206,6 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLButtonElement>("#check-2fa-goto-backup-btn");
       if (!el) throw new Error("Missing element #check-2fa-goto-backup-btn in template Check2FA");
       this.check2faGotoBackupBtn = el;
-    }
-    return this;
-  }
-
-  createCheck2FAMailFrag() {
-    this.fragCheck2FAMail = cloneTemplate(Check2FAMailHTML);
-    const frag = this.fragCheck2FAMail!;
-    {
-      const el = frag.querySelector<HTMLElement>("#check-2fa-mail-title");
-      if (!el) throw new Error("Missing element #check-2fa-mail-title in template Check2FAMail");
-      this.check2faMailTitle = el;
-    }
-    {
-      const el = frag.querySelector<HTMLFormElement>("#check-2fa-mail-form");
-      if (!el) throw new Error("Missing element #check-2fa-mail-form in template Check2FAMail");
-      this.check2faMailForm = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#check-2fa-mail-otp-input");
-      if (!el) throw new Error("Missing element #check-2fa-mail-otp-input in template Check2FAMail");
-      this.check2faMailOtpInput = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#check-2fa-mail-form-btn");
-      if (!el) throw new Error("Missing element #check-2fa-mail-form-btn in template Check2FAMail");
-      this.check2faMailFormBtn = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#check-2fa-mail-goto-backup-btn");
-      if (!el) throw new Error("Missing element #check-2fa-mail-goto-backup-btn in template Check2FAMail");
-      this.check2faMailGotoBackupBtn = el;
     }
     return this;
   }
@@ -434,47 +340,6 @@ export class SettingsDOM {
       const el = frag.querySelector<HTMLElement>("#session-action");
       if (!el) throw new Error("Missing element #session-action in template SessionRow");
       this.sessionAction = el;
-    }
-    return this;
-  }
-
-  createMethode2FAFrag() {
-    this.fragMethode2FA = cloneTemplate(methode2FAHTML);
-    const frag = this.fragMethode2FA!;
-    {
-      const el = frag.querySelector<HTMLSpanElement>("#methode-2fa-totp-status-span");
-      if (!el) throw new Error("Missing element #methode-2fa-totp-status-span in template methode2FA");
-      this.methode2faTotpStatusSpan = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-totp-action-btn");
-      if (!el) throw new Error("Missing element #methode-2fa-totp-action-btn in template methode2FA");
-      this.methode2faTotpActionBtn = el;
-    }
-    {
-      const el = frag.querySelector<HTMLInputElement>("#methode-2fa-email-status-span");
-      if (!el) throw new Error("Missing element #methode-2fa-email-status-span in template methode2FA");
-      this.methode2faEmailStatusSpan = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-email-action-btn");
-      if (!el) throw new Error("Missing element #methode-2fa-email-action-btn in template methode2FA");
-      this.methode2faEmailActionBtn = el;
-    }
-    {
-      const el = frag.querySelector<HTMLSpanElement>("#methode-2fa-sms-status-span");
-      if (!el) throw new Error("Missing element #methode-2fa-sms-status-span in template methode2FA");
-      this.methode2faSmsStatusSpan = el;
-    }
-    {
-      const el = frag.querySelector<HTMLSpanElement>("#methode-2fa-backup-status-span");
-      if (!el) throw new Error("Missing element #methode-2fa-backup-status-span in template methode2FA");
-      this.methode2faBackupStatusSpan = el;
-    }
-    {
-      const el = frag.querySelector<HTMLButtonElement>("#methode-2fa-backup-action-btn");
-      if (!el) throw new Error("Missing element #methode-2fa-backup-action-btn in template methode2FA");
-      this.methode2faBackupActionBtn = el;
     }
     return this;
   }

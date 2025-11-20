@@ -16,7 +16,8 @@ SELECT
     password_hash,
     email,
     role,
-    created_at
+    created_at,
+    f2a_enabled
 FROM
     users
 WHERE

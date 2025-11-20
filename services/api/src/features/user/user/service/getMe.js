@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/09/23 15:14:55 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/19 12:41:49 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/17 16:55:30 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -15,28 +15,15 @@ import { UserErrors } from "../../errors.js";
 export async function getMe(fastify, request, reply) {
     const db = await fastify.getDb();
     const getMeSql = fastify.sql.user.getMe;
-    const getMfaSql = fastify.sql.user.getMfaMethods;
 
-    const jwt = request.user;
-    const row = await db.get(getMeSql, { ":id": jwt.sub });
-
+    const jwtClaim = request.user;
+    const row = await db.get(getMeSql, { ":id": jwtClaim.sub });
     if (!row)
-        throw UserErrors.UserNotFound(jwt.sub);
+        throw UserErrors.UserNotFound(jwtClaim.sub);
 
-    // detect OAuth accounts
-    const oauth = row.password_hash === "<oauth>";
-
-    // load MFA methods
-    const methods = await db.all(getMfaSql, { ":user_id": row.id });
-    console.log(methods);
-
-    // Normalize output
-    const mfa = {
-        totp: methods.some(m => m.type === "totp" && m.enabled === 1),
-        email: methods.some(m => m.type === "email" && m.enabled === 1),
-        sms: methods.some(m => m.type === "sms" && m.enabled === 1),
-        backup: true, // you always generate, so enabled doesn't apply
-    };
+    let oauth = false;
+    if (row.password_hash === "<oauth>")
+        oauth = true;
 
     const me = {
         id: row.id,
@@ -44,9 +31,8 @@ export async function getMe(fastify, request, reply) {
         email: row.email,
         role: row.role,
         created_at: row.created_at,
+        f2a_enabled: row.f2a_enabled,
         oauth,
-        mfa,
     };
-
     return { me };
 }
