@@ -14,10 +14,22 @@ import { AuthService } from "@jeportie/mini-auth";
 import { logger } from "@system/core/logger";
 import { refreshToken } from "./refreshToken.js";
 
+const PUBLIC_PAGES = ["/", "/login", "/signup", "/forgot-pwd"];
+
 export const auth = new AuthService({
     refreshFn: async () => {
-        const tok = await refreshToken();  // includes headers
-        return tok ?? null;
+        const path = location.pathname;
+        const isPublic = PUBLIC_PAGES.includes(path);
+        const hasToken = !!auth.getToken();
+
+        if (!hasToken && isPublic) {
+            return null;
+        }
+        if (hasToken && isPublic) {
+            return null;
+        }
+        return await refreshToken();
     },
     logger,
 });
+
