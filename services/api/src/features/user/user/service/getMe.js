@@ -28,6 +28,7 @@ export async function getMe(fastify, request, reply) {
 
     // load MFA methods
     const methods = await db.all(getMfaSql, { ":user_id": row.id });
+    console.log(methods);
 
     // Normalize output
     const mfa = {
