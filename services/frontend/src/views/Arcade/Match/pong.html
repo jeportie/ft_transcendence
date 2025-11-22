@@ -1,0 +1,54 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- pong.html                                          :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/09/23 13:26:58 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/22 11:50:09 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<h1 class="ui-title mb-6 text-center text-3xl">Quick Match</h1>
+
+<div class="w-full h-full flex justify-center items-center px-6 overflow-hidden">
+
+    <div class="grid grid-cols-3 gap-8 w-full max-w-6xl">
+
+        <!-- Player 1 Card -->
+        <div class="ui-card flex flex-col">
+            <h2 class="ui-title text-center text-2xl mb-4">Player 1</h2>
+            <div id="player1-slot" class="flex-1"></div>
+        </div>
+
+        <!-- Game -->
+        <div class="flex flex-col items-center justify-center">
+
+            <div class="w-full max-w-[min(80vh,800px)]">
+                <canvas id="pong-canvas" class="rounded-xl border border-white/10 w-full aspect-square mb-6">
+                </canvas>
+            </div>
+
+            <button id="pong-start-btn" class="ui-btn-primary hidden w-full mt-3">Start Match</button>
+            <button id="pong-stop-btn" class="ui-btn-secondary w-full mt-3">Stop</button>
+
+            <div id="match-end-screen" class="ui-card hidden mt-6 w-full">
+                <div class="ui-card-inner text-center">
+                    <h3 class="ui-subtitle mb-2">Match Finished</h3>
+                    <p id="match-result-text" class="ui-text-muted mb-4"></p>
+                    <button id="rematch-btn" class="ui-btn-primary w-full mb-2">Play Again</button>
+                    <button id="quit-btn" class="ui-btn-secondary w-full">Quit</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Player 2 Card -->
+        <div class="ui-card flex flex-col">
+            <h2 class="ui-title text-center text-2xl mb-4">Player 2</h2>
+            <div id="player2-slot" class="flex-1"></div>
+        </div>
+
+    </div>
+</div>

@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/08/26 10:53:03 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/29 22:05:47 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/21 16:07:37 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -33,14 +33,17 @@ const AppLayout = () => import("./App/_Layout/AppLayout.js");
 const Dashboard = () => import("./App/Dashboard/Dashboard.js");
 const Settings = () => import("./App/Settings/Settings.js");
 
-// Game Layout
-const Game = () => import("./Game/Match/Pong.js");
+// Arcade Layout
+const ArcadeLayout = () => import("./Arcade/_Layout/ArcadeLayout.js");
+const ArcadeMenu = () => import("./Arcade/Menu/Menu.js");
+const ArcadeMatch = () => import("./Arcade/Match/Pong.js");
 
 // Not Found Layout
 const NotFound = () => import("./NotFound/NotFound.js");
 
 const appHook = new PersistentAnimationHook();
 const landingHook = new OverlayAnimationHook();
+const arcadeHook = null;
 
 export const routes = [
     {
@@ -62,16 +65,24 @@ export const routes = [
     },
     {
         path: "/",
+        layout: ArcadeLayout,
+        animationHook: landingHook,
+        children: [
+            { path: "arcade", component: ArcadeMenu },             // new menu
+            { path: "arcade/play", component: ArcadeMatch },        // your current Pong.ts
+            // { path: "arcade/tournament", component: ArcadeTournamentSetup },
+            // { path: "arcade/tournament/bracket", component: ArcadeTournamentBracket },
+        ],
+    },
+    {
+        path: "/",
         layout: AppLayout,
         animationHook: appHook,
         children: [
             { path: "dashboard", component: Dashboard, beforeEnter: guards.requireAuth },
             { path: "settings", component: Settings, beforeEnter: guards.requireAuth },
-            { path: "pong", component: Game, beforeEnter: guards.requireAuth },
         ],
     },
 
     { path: "*", component: NotFound },
 ];
-
-// Add feature to router : possibility to have a global beforeEnter per layout

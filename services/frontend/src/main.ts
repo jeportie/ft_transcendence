@@ -13,7 +13,7 @@
 // @ts-ignore
 import { defineMiniRouter, setupMiniRouter } from "@jeportie/mini-spa";
 import { routes } from "@views/routes";
-import { hideLoading } from "@views/loading";
+import { hideLoading } from "@system/app/LoadingOverlay.js";
 import { bootstrap } from "@system/app/bootstrap.js";
 import { wireGlobals } from "@system/app/wireGlobals.js";
 import { logger } from "@system/core/logger";
