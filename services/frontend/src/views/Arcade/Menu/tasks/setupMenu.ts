@@ -24,17 +24,4 @@ export async function setupMenu() {
     DOM.arcadeTournamentBtn?.addEventListener("click", () => {
         window.navigateTo("/arcade/tournament");
     });
-
-    // Login
-    DOM.arcadeLoginBtn?.addEventListener("click", () => {
-        window.navigateTo("/login");
-    });
-
-    // Continue as guest
-    DOM.arcadeGuestBtn?.addEventListener("click", () => {
-        // Universal rule:
-        // Set a temporary guest identity in localStorage or memory
-        localStorage.setItem("pong_guest", "1");
-        window.navigateTo("/arcade/play");
-    });
 }
