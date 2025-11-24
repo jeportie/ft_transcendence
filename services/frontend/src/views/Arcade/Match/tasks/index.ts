@@ -6,14 +6,18 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/15 23:18:37 by jeportie          #+#    #+#             //
-//   Updated: 2025/10/17 15:25:11 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/24 14:20:15 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { setupPong } from "./setupPong.js";
+import { setupPlayers } from "./setupPlayer.js";
+import { setupLoginEnhancers } from "./setupLoginEnhancers.js";
 
 export const tasks = {
     init: [],
-    ready: [setupPong],
+    ready: [
+        setupPlayers,
+        setupLoginEnhancers,   // ← ADD THIS LINE
+    ],
     teardown: [],
 };

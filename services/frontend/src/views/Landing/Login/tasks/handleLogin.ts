@@ -6,7 +6,7 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/10/11 11:33:11 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/11 11:43:58 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/24 11:41:36 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -59,7 +59,6 @@ export function handleLogin({ logo, addCleanup, view }) {
         setTimeout(() => {
             if (data?.activation_required) {
                 view.swapContent(notActiveHtml).then(() => {
-                    // @ts-expect-error
                     DOM.inactiveP.innerHTML = `
                         Sorry <strong>${data?.username}</strong>, your account is not active yet.
                         Please validate your account with the validation link we sent 

@@ -1,0 +1,59 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- PlayerLoginForm.html                               :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/24 11:37:32 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/24 17:03:25 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <div id="player-login-card" class="ui-card-inner flex flex-col">
+
+        <p class="ui-text-muted mt-2">
+            Don't have an account?
+            <a href="/signup" data-link class="ui-hint-link">Sign up.</a>
+        </p>
+
+        <form id="player-login-form" class="ui-form mt-4">
+            <div class="ui-card-title mt-2">Username or Email</div>
+            <input id="player-login-user-input" class="ui-input" type="text" placeholder="yourname@example.com"
+                autocomplete="username" />
+
+            <div class="ui-card-title mt-4">Password</div>
+            <input id="player-login-pwd-input" class="ui-input" type="password" placeholder="••••••••"
+                autocomplete="current-password" />
+
+            <a href="/forgot-password" data-link class="flex justify-end ui-text-small mt-1">Forgot your password?</a>
+
+            <button id="player-login-form-btn" class="ui-btn-primary w-full mt-3">Sign in</button>
+        </form>
+
+        <div id="player-login-error-div" class="ui-error hidden mt-2"></div>
+
+        <div class="ui-separator"><span>OR</span></div>
+
+        <button id="player-login-google-btn"
+            class="ui-btn-secondary w-full mt-2 relative flex items-center justify-center">
+            Continue with Google
+        </button>
+
+        <button id="player-login-github-btn"
+            class="ui-btn-secondary w-full mt-2 relative flex items-center justify-center">
+            Continue with Github
+        </button>
+
+        <button id="player-login-fortytwo-btn"
+            class="ui-btn-secondary w-full mt-2 relative flex items-center justify-center">
+            Continue with 42
+        </button>
+
+        <button id="player-login-back-btn" class="ui-btn-secondary w-full mt-4">
+            ← Back
+        </button>
+
+    </div>
+</template>

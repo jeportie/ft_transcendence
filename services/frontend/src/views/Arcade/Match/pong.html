@@ -6,7 +6,7 @@
 <!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
 <!--                                              +#+#+#+#+#+   +#+          -->
 <!-- Created: 2025/09/23 13:26:58 by jeportie          #+#    #+#            -->
-<!-- Updated: 2025/11/22 11:50:09 by jeportie         ###   ########.fr      -->
+<!-- Updated: 2025/11/24 11:47:58 by jeportie         ###   ########.fr      -->
 <!--                                                                         -->
 <!-- *********************************************************************** -->
 
@@ -15,71 +15,21 @@
 <div class="w-full h-full flex justify-center items-center px-6 overflow-hidden">
 
     <div class="grid grid-cols-3 gap-8 w-full max-w-6xl">
-
-        <!-- Player 1 Card -->
+        <!-- Player 1 -->
         <div class="ui-card flex flex-col">
             <h2 class="ui-title text-center text-2xl mb-4">Player 1</h2>
-            <div id="login-card" class="ui-card">
-                <p class="ui-text-muted mt-3">
-                    Don't have an account?
-                    <a href="/signup" data-link class="ui-hint-link">Sign up.</a>
-                </p>
-                <br>
-                <form id="login-form" class="ui-form">
-                    <div class="ui-card-title mt-2">Username or Email</div>
-                    <input id="login-user-input" class="ui-input" type="text" placeholder="yourname@example.com"
-                        autocomplete="username" />
-                    <div class="ui-card-title mt-2">Password</div>
-                    <input id="login-pwd-input" class="ui-input" type="password" placeholder="••••••••"
-                        autocomplete="current-password" />
-                    <a href="/forgot-password" data-link class="flex justify-end ui-text-small">Forgot your
-                        password?</a>
-                    <button id="login-form-btn" class="ui-btn-primary w-full mt-1">Sign in</button>
-                </form>
-                <div id="login-error-div" class="ui-error hidden mt-2"></div>
-                <div class="ui-separator"><span>OR</span></div>
-                <button id="login-google-btn"
-                    class="ui-btn-secondary w-full mt-2 relative flex items-center justify-center">
-                    Continue with Google
-                </button>
-                <button id="login-github-btn"
-                    class="ui-btn-secondary w-full mt-2 relative flex items-center justify-center">
-                    Continue with Github
-                </button>
-                <button id="login-fortytwo-btn"
-                    class="ui-btn-secondary w-full mt-2 relative flex items-center justify-center">
-                    Continue with 42
-                </button>
-            </div>
+            <div id="player1-slot" class="flex-1"></div>
         </div>
 
         <!-- Game -->
         <div class="flex flex-col items-center justify-center">
-
-            <div class="w-full">
-                <canvas id="pong-canvas" class="rounded-xl border border-white/10 w-full aspect-square mb-6">
-                </canvas>
-            </div>
-
-            <button id="pong-start-btn" class="ui-btn-primary hidden w-full mt-3">Start Match</button>
-            <button id="pong-stop-btn" class="ui-btn-secondary w-full mt-3">Stop</button>
-
-            <div id="match-end-screen" class="ui-card hidden mt-6 w-full">
-                <div class="ui-card-inner text-center">
-                    <h3 class="ui-subtitle mb-2">Match Finished</h3>
-                    <p id="match-result-text" class="ui-text-muted mb-4"></p>
-                    <button id="rematch-btn" class="ui-btn-primary w-full mb-2">Play Again</button>
-                    <button id="quit-btn" class="ui-btn-secondary w-full">Quit</button>
-                </div>
-            </div>
-
+            <div id="game-slot" class="w-full"></div>
         </div>
 
-        <!-- Player 2 Card -->
+        <!-- Player 2 -->
         <div class="ui-card flex flex-col">
             <h2 class="ui-title text-center text-2xl mb-4">Player 2</h2>
             <div id="player2-slot" class="flex-1"></div>
         </div>
-
     </div>
 </div>

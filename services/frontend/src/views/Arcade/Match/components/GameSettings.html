@@ -1,0 +1,71 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- GameSettings.html                                  :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/24 14:15:49 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/24 14:16:05 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <div id="game-settings-root" class="ui-card w-full">
+        <div class="ui-card-inner flex flex-col gap-4">
+
+            <h2 class="ui-title mb-2">Match Settings</h2>
+            <p class="ui-text-muted text-sm">
+                Both players are ready. Review the setup below before starting the match.
+            </p>
+
+            <!-- Debug / info table -->
+            <div class="overflow-x-auto rounded-lg border border-white/10 mt-2">
+                <table class="min-w-full text-sm text-left">
+                    <thead class="bg-white/5">
+                        <tr>
+                            <th class="px-3 py-2">Player</th>
+                            <th class="px-3 py-2">Mode</th>
+                            <th class="px-3 py-2">Identifier</th>
+                            <th class="px-3 py-2">User ID</th>
+                            <th class="px-3 py-2">Ready</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr>
+                            <td class="px-3 py-2 font-medium">Player 1</td>
+                            <td id="gs-p1-mode" class="px-3 py-2 text-slate-200">-</td>
+                            <td id="gs-p1-id" class="px-3 py-2 text-slate-300/90">-</td>
+                            <td id="gs-p1-userid" class="px-3 py-2 text-slate-300/90">-</td>
+                            <td id="gs-p1-ready" class="px-3 py-2 text-slate-200">-</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 font-medium">Player 2</td>
+                            <td id="gs-p2-mode" class="px-3 py-2 text-slate-200">-</td>
+                            <td id="gs-p2-id" class="px-3 py-2 text-slate-300/90">-</td>
+                            <td id="gs-p2-userid" class="px-3 py-2 text-slate-300/90">-</td>
+                            <td id="gs-p2-ready" class="px-3 py-2 text-slate-200">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Raw JSON debug -->
+            <div class="mt-2">
+                <div class="ui-card-title text-sm mb-1">Raw state (debug)</div>
+                <pre id="gs-debug-json"
+                    class="text-xs bg-black/40 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap max-h-48"></pre>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-3 mt-3">
+                <button id="gs-btn-continue" class="ui-btn-primary flex-1">
+                    Continue to game
+                </button>
+                <button id="gs-btn-reset" class="ui-btn-secondary flex-1">
+                    Reset match
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

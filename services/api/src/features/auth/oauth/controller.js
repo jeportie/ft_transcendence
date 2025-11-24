@@ -36,13 +36,13 @@ export async function handleOAuth(req, reply) {
             req.server, provider, code, state, req, reply
         );
 
-        return reply.type("text/html").send(`
-          <script>
-            window.location.href = "${data.redirect}";
-          </script>
-        `);
+        return reply.redirect(data.redirect);
+        // return reply.type("text/html").send(`
+        //   <script>
+        //     window.location.href = "${data.redirect}";
+        //   </script>
+        // `);
     } catch (err) {
         return AppError.handle(err, req, reply, DOMAIN);
     }
 }
-

@@ -1,0 +1,41 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- PlayerGuestForm.html                               :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/11/24 13:41:18 by jeportie          #+#    #+#            -->
+<!-- Updated: 2025/11/24 17:03:43 by jeportie         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<template>
+    <div id="player-guest-card" class="ui-card-inner flex flex-col">
+
+        <p class="ui-text-muted">
+            Play without creating an account.
+        </p>
+
+        <form id="player-guest-form" class="ui-form mt-4">
+
+            <div class="ui-card-title">Alias</div>
+            <input id="player-guest-alias-input" class="ui-input" type="text" placeholder="Player123"
+                autocomplete="off" />
+
+            <button id="player-guest-random-btn" type="button" class="ui-btn-secondary w-full mt-3">
+                Random Alias
+            </button>
+
+            <button id="player-guest-submit-btn" class="ui-btn-primary w-full mt-3">
+                Continue
+            </button>
+        </form>
+
+        <div id="player-guest-error-div" class="ui-error hidden mt-2"></div>
+
+        <button id="guest-back-btn" class="ui-btn-secondary w-full mt-4">
+            ← Back
+        </button>
+    </div>
+</template>

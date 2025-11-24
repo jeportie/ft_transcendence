@@ -66,8 +66,8 @@ function findHTMLFiles(dir) {
 /* -------------------------------------------------------------------------- */
 function isTemplateFile(content) {
     const clean = content
-        .replace(/^\uFEFF/, "")
-        .replace(/<!--[\s\S]*?-->/g, "")
+        .replace(/^\uFEFF/, "") // strip BOM
+        .replace(/<!--[\s\S]*?-->/g, "") // strip comments
         .trimStart();
     return /^<template[\s>]/i.test(clean);
 }
@@ -94,6 +94,7 @@ function generateForTarget(targetPath) {
         else normalFiles.push(file);
     }
 
+    // Collect IDs for normal HTML
     const allEntries = new Map();
     for (const file of normalFiles) {
         const content = fs.readFileSync(file, "utf8");
@@ -108,12 +109,14 @@ function generateForTarget(targetPath) {
         }
     }
 
+    // Prepare template blocks
     const templateBlocks = templateFiles.map((file) => {
         const content = fs.readFileSync(file, "utf8");
         const ids = [...content.matchAll(idRegex)].map((m) => m[1]);
         const base = path.basename(file, ".html");
         const name = pascalCase(base);
         const importName = `${camelCase(base)}HTML`;
+        const fragName = `frag${name}`;
         const methodName = `create${name}Frag`;
 
         const entries = ids.map((id) => ({
@@ -122,28 +125,37 @@ function generateForTarget(targetPath) {
             type: guessType(id),
         }));
 
-        const returnObj = entries
+        const fields = [
+            `  ${fragName}!: DocumentFragment;`,
+            ...entries.map(({ camel, type }) => `  ${camel}!: ${type};`),
+        ].join("\n");
+
+        const assigns = entries
             .map(
-                ({ id, camel, type }) =>
-                    `      ${camel}: frag.querySelector<${type}>("#${id}")!,`
+                ({ id, camel, type }) => `    {
+      const el = frag.querySelector<${type}>("#${id}");
+      if (!el) throw new Error("Missing element #${id} in template ${base}");
+      this.${camel} = el;
+    }`
             )
             .join("\n");
 
         const method = `
   ${methodName}() {
-    const frag = cloneTemplate(${importName});
-    return {
-      frag,
-${returnObj}
-    };
+    this.${fragName} = cloneTemplate(${importName});
+    const frag = this.${fragName}!;
+${assigns}
+    return this;
   }`;
 
         return {
             importLine: `import ${importName} from "./${path.relative(folder, file).replace(/\\/g, "/")}";`,
+            fields,
             method,
         };
     });
 
+    // Prepare normal ID getters
     const normalGetters = Array.from(allEntries.values())
         .map(
             ({ id, camel, type }) => `  get ${camel}(): ${type} {
@@ -173,8 +185,12 @@ function cloneTemplate(html: string): DocumentFragment {
   return tpl.content.cloneNode(true) as DocumentFragment;
 }
 
+/**
+ * ${className} — Unified DOM accessor for views and templates
+ */
 export class ${className} {
 ${normalGetters ? normalGetters + "\n" : ""}
+${templateBlocks.map((t) => t.fields).join("\n\n")}
 ${templateBlocks.map((t) => t.method).join("\n")}
 }
 
@@ -183,11 +199,13 @@ export const DOM = new ${className}();
 
     fs.writeFileSync(outFile, outContent, "utf8");
 
-    console.log(`✅ Generated ${outFile}`);
+    console.log(
+        `✅ Generated ${outFile} (${allEntries.size} normal IDs, ${templateBlocks.length} template${templateBlocks.length !== 1 ? "s" : ""})`
+    );
 }
 
 /* -------------------------------------------------------------------------- */
-/* 🚀 CLI Mode / Default Mode                                                 */
+/* 🚀 CLI Mode: process a single file, a folder, or all views                 */
 /* -------------------------------------------------------------------------- */
 const args = process.argv.slice(2);
 if (args.length > 0) {
@@ -196,18 +214,20 @@ if (args.length > 0) {
         console.error(`❌ Path not found: ${target}`);
         process.exit(1);
     }
+
     generateForTarget(target);
     process.exit(0);
 }
 
-if (!fs.existsSync(VIEWS_DIR)) {
-    console.error("❌ No src/views directory found");
-    process.exit(1);
-}
-
-for (const dir of fs.readdirSync(VIEWS_DIR)) {
+/* -------------------------------------------------------------------------- */
+/* 🏗️ Default mode: process all views in src/views                            */
+/* -------------------------------------------------------------------------- */
+const viewDirs = fs.existsSync(VIEWS_DIR) ? fs.readdirSync(VIEWS_DIR) : [];
+for (const dir of viewDirs) {
     const full = path.join(VIEWS_DIR, dir);
-    if (fs.statSync(full).isDirectory()) generateForTarget(full);
+    if (fs.statSync(full).isDirectory()) {
+        generateForTarget(full);
+    }
 }
 
 console.log("✨ Done — DOM registries generated for all views.");

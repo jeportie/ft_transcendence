@@ -12,8 +12,16 @@
 
 // @ts-expect-error
 import { AbstractView } from "@jeportie/mini-spa";
-import pongHTML from "./pong.html";
 import { tasks } from "./tasks/index.js";
+import pongHTML from "./pong.html";
+
+import googleIcon from "@assets/google.png";
+import githubIcon from "@assets/github.png";
+import fortyTwoIcon from "@assets/42.png";
+import hideIcon from "@assets/hide.png";
+import showIcon from "@assets/show.png";
+
+export const ASSETS = { googleIcon, githubIcon, fortyTwoIcon, hideIcon, showIcon };
 
 export default class Game extends AbstractView {
 
@@ -28,7 +36,8 @@ export default class Game extends AbstractView {
     }
 
     async mount() {
-        await super.mount({ tasks });
+        (this as any).layout?.reloadOnExit?.();
+        await super.mount({ tasks, ASSETS });
     }
 
     async destroy() {
