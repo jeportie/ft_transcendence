@@ -3,10 +3,10 @@
 //                                                        :::      ::::::::   //
 //   Player1Controller.ts                               :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
-//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/11/24 17:00:14 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/24 17:06:59 by jeportie         ###   ########.fr       //
+//   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+       //
+//                                                +#+#+#+#+#+   +#+          //
+//   Created: 2025/11/24 17:00:14 by jeportie          #+#    #+#            //
+//   Updated: 2025/11/24 17:40:00 by jeportie         ###   ########.fr      //
 //                                                                            //
 // ************************************************************************** //
 
@@ -38,16 +38,13 @@ export class Player1Controller {
 
         selectLoginBtn.addEventListener("click", () => this.showLoginForm());
         selectGuestBtn.addEventListener("click", () => this.showGuestForm());
-
-        selectGuestBtn.addEventListener("click", () =>
-            log.info("Guest mode selected")
-        );
     }
 
     // -------------------------------------------------------------
     // LOGIN FORM
     // -------------------------------------------------------------
     showLoginForm() {
+        const fragData = DOM.createPlayerLoginFormFrag();
         const {
             frag,
             playerLoginForm,
@@ -58,19 +55,25 @@ export class Player1Controller {
             playerLoginGithubBtn,
             playerLoginFortytwoBtn,
             playerLoginBackBtn,
-        } = DOM.createPlayerLoginFormFrag();
+        } = fragData;
 
         this.slot.innerHTML = "";
         this.slot.appendChild(frag);
 
-        // Optional enhancers (password eye, OAuth icons...)
+        // Setup enhancers with explicit refs
         setupLoginEnhancers({
             ASSETS,
             addCleanup: () => { },
             player: "player1",
-        });
+            pwdInput: playerLoginPwdInput,
+            googleBtn: playerLoginGoogleBtn,
+            githubBtn: playerLoginGithubBtn,
+            fortyTwoBtn: playerLoginFortytwoBtn,
+        }, GAME);
 
-        // ---- SUBMIT LOCAL LOGIN ----
+        // ============================================================
+        // LOCAL LOGIN SUBMIT
+        // ============================================================
         playerLoginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
 
@@ -82,6 +85,7 @@ export class Player1Controller {
                 playerLoginErrorDiv.classList.remove("hidden");
                 return;
             }
+
             playerLoginErrorDiv.classList.add("hidden");
 
             log.info("Local login attempt:", identifier);
@@ -100,10 +104,7 @@ export class Player1Controller {
             try {
                 const res = await API.Post<{ token?: string; me?: any }>(
                     API.routes.auth.local.login,
-                    {
-                        user: identifier,
-                        pwd,
-                    }
+                    { user: identifier, pwd }
                 );
 
                 if (res.error) {
@@ -121,11 +122,10 @@ export class Player1Controller {
                         },
                         "P1 local login (error)"
                     );
-                    log.warn("Login failed:", res.error);
                     return;
                 }
 
-                const me = res.data?.me || null;
+                const me = res.data?.me;
 
                 GAME.setPlayer1(
                     {
@@ -135,14 +135,11 @@ export class Player1Controller {
                         userId: me?.id,
                         avatarUrl: me?.avatar_url,
                         lastLoginSource: "local",
-                        lastLoginError: null,
                     },
                     "P1 local login (success)"
                 );
 
-                log.info("Login success:", me || { username: identifier });
-
-            } catch (err: any) {
+            } catch (err) {
                 const msg = "Network error during login.";
                 playerLoginErrorDiv.textContent = msg;
                 playerLoginErrorDiv.classList.remove("hidden");
@@ -157,34 +154,7 @@ export class Player1Controller {
                     },
                     "P1 local login (exception)"
                 );
-
-                log.error("Login exception:", err);
             }
-        });
-
-        // ---- OAUTH ----
-        playerLoginGoogleBtn.addEventListener("click", () => {
-            log.info("OAuth Google clicked");
-            GAME.setPlayer1(
-                { lastLoginSource: "oauth-google" },
-                "P1 oauth-google click"
-            );
-        });
-
-        playerLoginGithubBtn.addEventListener("click", () => {
-            log.info("OAuth GitHub clicked");
-            GAME.setPlayer1(
-                { lastLoginSource: "oauth-github" },
-                "P1 oauth-github click"
-            );
-        });
-
-        playerLoginFortytwoBtn.addEventListener("click", () => {
-            log.info("OAuth 42 clicked");
-            GAME.setPlayer1(
-                { lastLoginSource: "oauth-42" },
-                "P1 oauth-42 click"
-            );
         });
 
         playerLoginBackBtn?.addEventListener("click", () => this.showSelectMode());
@@ -206,13 +176,12 @@ export class Player1Controller {
         this.slot.innerHTML = "";
         this.slot.appendChild(frag);
 
-        // Random alias
+        // Random alias button
         playerGuestRandomBtn.addEventListener("click", () => {
-            playerGuestAliasInput.value =
-                "Guest" + Math.floor(Math.random() * 9999);
+            playerGuestAliasInput.value = "Guest" + Math.floor(Math.random() * 9999);
         });
 
-        // Submit
+        // Submit alias
         playerGuestForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
@@ -226,20 +195,11 @@ export class Player1Controller {
             playerGuestErrorDiv.classList.add("hidden");
 
             GAME.setPlayer1(
-                {
-                    type: "guest",
-                    ready: true,
-                    alias,
-                    lastLoginSource: undefined,
-                    lastLoginError: null,
-                },
+                { type: "guest", ready: true, alias },
                 "P1 guest ready"
             );
-
-            log.info("Guest alias selected:", alias);
-
-            guestBackBtn?.addEventListener("click", () => this.showSelectMode());
         });
+
+        guestBackBtn?.addEventListener("click", () => this.showSelectMode());
     }
 }
-

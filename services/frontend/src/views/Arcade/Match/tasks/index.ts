@@ -11,13 +11,11 @@
 // ************************************************************************** //
 
 import { setupPlayers } from "./setupPlayer.js";
-import { setupLoginEnhancers } from "./setupLoginEnhancers.js";
 
 export const tasks = {
     init: [],
     ready: [
         setupPlayers,
-        setupLoginEnhancers,   // ← ADD THIS LINE
     ],
     teardown: [],
 };

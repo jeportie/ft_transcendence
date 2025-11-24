@@ -6,64 +6,77 @@
 //   By: jeportie <jeportie@42.fr>                  +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2025/11/24 13:28:51 by jeportie          #+#    #+#             //
-//   Updated: 2025/11/24 15:29:34 by jeportie         ###   ########.fr       //
+//   Updated: 2025/11/24 17:46:44 by jeportie         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-import { DOM } from "../dom.generated.js";
 import { API } from "@system";
 import { togglePassword } from "@components/shared/togglePassword.js";
 import { handleGoogleButton } from "@components/shared/handleGoogleButton.js";
 import { handleGithubButton } from "@components/shared/handleGithubButton.js";
 import { handle42Button } from "@components/shared/handle42Button.js";
+import { GameController } from "../GameController";
 
-export function setupLoginEnhancers(ctx: any) {
-    if (!DOM.playerLoginForm) return;
+export interface LoginEnhancerContext {
+    ASSETS: any;
+    addCleanup: () => void;
+    player: "player1" | "player2";
 
-    // Password eye toggle
+    // Explicit element references
+    pwdInput: HTMLInputElement;
+    googleBtn: HTMLButtonElement;
+    githubBtn: HTMLButtonElement;
+    fortyTwoBtn: HTMLButtonElement;
+}
+
+export function setupLoginEnhancers(ctx: LoginEnhancerContext, GAME: GameController) {
+    const { ASSETS, addCleanup, player, pwdInput, googleBtn, githubBtn, fortyTwoBtn } = ctx;
+
+    // -------------------------------------------------------------
+    // PASSWORD EYE ICON
+    // -------------------------------------------------------------
     togglePassword({
-        ASSETS: ctx.ASSETS,
-        input: DOM.playerLoginPwdInput,
-        addCleanup: ctx.addCleanup,
+        ASSETS,
+        input: pwdInput,
+        addCleanup,
     });
 
-    // --- Google -------------------------------------------------------------
-    handleGoogleButton({
-        ASSETS: ctx.ASSETS,
-        btn: DOM.playerLoginGoogleBtn,
-        addCleanup: ctx.addCleanup,
-    });
-
-    DOM.playerLoginGoogleBtn?.addEventListener("click", () => {
-        sessionStorage.setItem("oauth_player", ctx.player); // "player1" or "player2"
+    // -------------------------------------------------------------
+    // GOOGLE
+    // -------------------------------------------------------------
+    handleGoogleButton({ ASSETS, btn: googleBtn, addCleanup });
+    googleBtn.addEventListener("click", () => {
+        sessionStorage.setItem("oauth_provider", "oauth-google");
+        sessionStorage.setItem("oauth_player", player);
+        sessionStorage.setItem("game_p1", JSON.stringify(GAME.p1));
+        sessionStorage.setItem("game_p2", JSON.stringify(GAME.p2));
         window.location.href =
             "/api" + API.routes.auth.oauth.start("google") + "?next=/arcade/play";
     });
 
-    // --- GitHub --------------------------------------------------------------
-    handleGithubButton({
-        ASSETS: ctx.ASSETS,
-        btn: DOM.playerLoginGithubBtn,
-        addCleanup: ctx.addCleanup,
-    });
-
-    DOM.playerLoginGithubBtn?.addEventListener("click", () => {
-        sessionStorage.setItem("oauth_player", ctx.player);
+    // -------------------------------------------------------------
+    // GITHUB
+    // -------------------------------------------------------------
+    handleGithubButton({ ASSETS, btn: githubBtn, addCleanup });
+    githubBtn.addEventListener("click", () => {
+        sessionStorage.setItem("oauth_provider", "oauth-github");
+        sessionStorage.setItem("oauth_player", player);
+        sessionStorage.setItem("game_p1", JSON.stringify(GAME.p1));
+        sessionStorage.setItem("game_p2", JSON.stringify(GAME.p2));
         window.location.href =
             "/api" + API.routes.auth.oauth.start("github") + "?next=/arcade/play";
     });
 
-    // --- 42 ------------------------------------------------------------------
-    handle42Button({
-        ASSETS: ctx.ASSETS,
-        btn: DOM.playerLoginFortytwoBtn,
-        addCleanup: ctx.addCleanup,
-    });
-
-    DOM.playerLoginFortytwoBtn?.addEventListener("click", () => {
-        sessionStorage.setItem("oauth_player", ctx.player);
+    // -------------------------------------------------------------
+    // 42
+    // -------------------------------------------------------------
+    handle42Button({ ASSETS, btn: fortyTwoBtn, addCleanup });
+    fortyTwoBtn.addEventListener("click", () => {
+        sessionStorage.setItem("oauth_provider", "oauth-42");
+        sessionStorage.setItem("oauth_player", player);
+        sessionStorage.setItem("game_p1", JSON.stringify(GAME.p1));
+        sessionStorage.setItem("game_p2", JSON.stringify(GAME.p2));
         window.location.href =
             "/api" + API.routes.auth.oauth.start("42") + "?next=/arcade/play";
     });
 }
-
